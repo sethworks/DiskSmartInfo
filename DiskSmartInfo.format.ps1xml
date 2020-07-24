@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+    <ViewDefinitions>
+        <View>
+            <Name>DiskSmartInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <Text>Model:        </Text>
+                            <ExpressionBinding>
+                                <PropertyName>Model</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                            <Text>InstanceId:   </Text>
+                            <ExpressionBinding>
+                                <PropertyName>InstanceId</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                            <Text>SMARTData:    </Text>
+                            <NewLine/>
+                            <Frame>
+                                <LeftIndent>14</LeftIndent>
+                                <CustomItem>
+                                    <ExpressionBinding>
+                                        <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
+                                    </ExpressionBinding>
+                                    <NewLine/>
+                                </CustomItem>
+                            </Frame>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>DiskSmartAttribute</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartAttribute</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IDHex</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>AttributeName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Threshold</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+    </ViewDefinitions>
+</Configuration>
