@@ -1,6 +1,7 @@
 @{
     ExcludeRules = @(
         'PSUseDeclaredVarsMoreThanAssignments',
-        'PSReviewUnusedParameter'
+        'PSReviewUnusedParameter',
+        'PSAvoidUsingWMICmdlet'
     )
 }
