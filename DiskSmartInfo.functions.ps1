@@ -2,7 +2,7 @@ function Get-DiskSmartInfo
 {
     Param(
         [string[]]$ComputerName,
-        [switch]$WMIFallback
+        [switch]$NoWMIFallback
     )
 
     if ($ComputerName)
@@ -13,7 +13,7 @@ function Get-DiskSmartInfo
 
             foreach ($cimSession in $cimSessions)
             {
-                inGetDiskSmartInfo -Session $cimSession -WMIFallback:$WMIFallback
+                inGetDiskSmartInfo -Session $cimSession -NoWMIFallback:$NoWMIFallback
             }
         }
         finally
@@ -31,7 +31,7 @@ function inGetDiskSmartInfo
 {
     Param (
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
-        [switch]$WMIFallback
+        [switch]$NoWMIFallback
     )
 
     $namespaceWMI = 'root/WMI'
@@ -57,7 +57,7 @@ function inGetDiskSmartInfo
     }
     catch
     {
-        if ($WMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
+        if (-not $NoWMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
         {
             try
             {
