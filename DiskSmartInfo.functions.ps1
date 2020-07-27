@@ -5,14 +5,6 @@ function Get-DiskSmartInfo
         [switch]$WMIFallback
     )
 
-    $Namespace = 'root/WMI'
-    $ClassSMARTData = 'MSStorageDriver_ATAPISmartData'
-    $ClassThresholds = 'MSStorageDriver_FailurePredictThresholds'
-    $ClassDiskDrive = 'Win32_DiskDrive'
-
-    $initialOffset = 2
-    $attributeLength = 12
-
     if ($ComputerName)
     {
         try
@@ -26,7 +18,7 @@ function Get-DiskSmartInfo
         }
         finally
         {
-            Remove-CimSession -CimSession $cimSession
+            Remove-CimSession -CimSession $cimSessions
         }
     }
     else
@@ -42,6 +34,14 @@ function inGetDiskSmartInfo
         [switch]$WMIFallback
     )
 
+    $namespaceWMI = 'root/WMI'
+    $classSMARTData = 'MSStorageDriver_ATAPISmartData'
+    $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
+    $classDiskDrive = 'Win32_DiskDrive'
+
+    $initialOffset = 2
+    $attributeLength = 12
+
     $parameters = @{}
 
     if ($Session)
@@ -51,9 +51,9 @@ function inGetDiskSmartInfo
 
     try
     {
-        $disksInfo = Get-CimInstance -Namespace $Namespace -ClassName $ClassSMARTData @parameters -ErrorAction Stop
-        $disksThresholds = Get-CimInstance -Namespace $Namespace -ClassName $ClassThresholds @parameters
-        $diskDrives = Get-CimInstance -ClassName $ClassDiskDrive @parameters
+        $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
+        $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
+        $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
     catch
     {
@@ -61,9 +61,9 @@ function inGetDiskSmartInfo
         {
             try
             {
-                $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassSMARTData } -Session $psSession
-                $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassThresholds } -Session $psSession
-                $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:ClassDiskDrive } -Session $psSession
+                $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classSMARTData } -Session $psSession
+                $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classThresholds } -Session $psSession
+                $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:classDiskDrive } -Session $psSession
             }
             finally
             {
