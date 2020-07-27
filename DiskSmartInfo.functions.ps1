@@ -57,13 +57,18 @@ function inGetDiskSmartInfo
     }
     catch
     {
-        if ($WMIFallback)
+        if ($WMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
         {
-            $psSession = New-PSSession -ComputerName $Session.ComputerName
-
-            $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassSMARTData } -Session $psSession
-            $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassThresholds } -Session $psSession
-            $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:ClassDiskDrive } -Session $psSession
+            try
+            {
+                $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassSMARTData } -Session $psSession
+                $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassThresholds } -Session $psSession
+                $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:ClassDiskDrive } -Session $psSession
+            }
+            finally
+            {
+                Remove-PSSession -Session $psSession
+            }
         }
     }
 
@@ -109,11 +114,6 @@ function inGetDiskSmartInfo
         $hash.Add("SmartData", $attributes)
         $diskSmartInfo = [PSCustomObject]$hash
         $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo" -PassThru
-    }
-
-    if ($psSession)
-    {
-        Remove-PSSession -Session $psSession
     }
 }
 
