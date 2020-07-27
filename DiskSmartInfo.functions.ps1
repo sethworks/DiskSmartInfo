@@ -1,50 +1,97 @@
 function Get-DiskSmartInfo
 {
     Param(
-        [string[]]$ComputerName
+        [string[]]$ComputerName,
+        [switch]$NoWMIFallback
     )
-
-    $Namespace = 'root/WMI'
-    $ClassSMARTData = 'MSStorageDriver_ATAPISmartData'
-    $ClassThresholds = 'MSStorageDriver_FailurePredictThresholds'
 
     if ($ComputerName)
     {
-        $disksInfo = Get-CimInstance -Namespace $Namespace -ClassName $ClassSMARTData -ComputerName $ComputerName
-        $disksThresholds = Get-CimInstance -Namespace $Namespace -ClassName $ClassThresholds -ComputerName $ComputerName
+        try
+        {
+            $cimSessions = New-CimSession -ComputerName $ComputerName
+
+            foreach ($cimSession in $cimSessions)
+            {
+                inGetDiskSmartInfo -Session $cimSession -NoWMIFallback:$NoWMIFallback
+            }
+        }
+        finally
+        {
+            Remove-CimSession -CimSession $cimSessions
+        }
     }
     else
     {
-        $disksInfo = Get-CimInstance -Namespace $Namespace -ClassName $ClassSMARTData
-        $disksThresholds = Get-CimInstance -Namespace $Namespace -ClassName $ClassThresholds
+        inGetDiskSmartInfo
     }
+}
+
+function inGetDiskSmartInfo
+{
+    Param (
+        [Microsoft.Management.Infrastructure.CimSession[]]$Session,
+        [switch]$NoWMIFallback
+    )
+
+    $namespaceWMI = 'root/WMI'
+    $classSMARTData = 'MSStorageDriver_ATAPISmartData'
+    $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
+    $classDiskDrive = 'Win32_DiskDrive'
 
     $initialOffset = 2
     $attributeLength = 12
+
+    $parameters = @{}
+
+    if ($Session)
+    {
+        $parameters.Add('CimSession', $Session)
+    }
+
+    try
+    {
+        $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
+        $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
+        $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
+    }
+    catch
+    {
+        if (-not $NoWMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
+        {
+            try
+            {
+                $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classSMARTData } -Session $psSession
+                $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classThresholds } -Session $psSession
+                $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:classDiskDrive } -Session $psSession
+            }
+            finally
+            {
+                Remove-PSSession -Session $psSession
+            }
+        }
+    }
 
     foreach ($diskInfo in $disksInfo)
     {
         $instanceName = $diskInfo.InstanceName
         $smartData = $diskInfo.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript {$_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName}  | ForEach-Object -MemberName VendorSpecific
 
         # remove '_0' at the end
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
-        $escapedInstanceId = $instanceId -replace '\\', '\\'
 
-        if ($ComputerName)
+        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+
+        $hash = [ordered]@{}
+
+        if ($Session)
         {
-            $diskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter "PNPDeviceID = '$escapedInstanceId'" -ComputerName $ComputerName
-        }
-        else
-        {
-            $diskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter "PNPDeviceID = '$escapedInstanceId'"
+            $hash.Add('ComputerName', $Session.ComputerName)
         }
 
-        $hash = [ordered]@{
-            Model = $diskDrive.Model
-            InstanceId = $instanceId
-        }
+        $hash.Add('Model', $diskDrive.Model)
+        $hash.Add('InstanceId', $instanceId)
 
         $attributes = @()
 
@@ -67,12 +114,11 @@ function Get-DiskSmartInfo
 
                 $attributes += $attributeObject
             }
-
         }
 
         $hash.Add("SmartData", $attributes)
-        $j = [PSCustomObject]$hash
-        $j | Add-Member -TypeName "DiskSmartInfo" -PassThru
+        $diskSmartInfo = [PSCustomObject]$hash
+        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo" -PassThru
     }
 }
 

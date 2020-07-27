@@ -6,10 +6,38 @@
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo</TypeName>
             </ViewSelectedBy>
+            <Controls>
+                <Control>
+                    <Name>ComputerNameControl</Name>
+                    <CustomControl>
+                        <CustomEntries>
+                            <CustomEntry>
+                                <EntrySelectedBy>
+                                    <SelectionCondition>
+                                        <TypeName>DiskSmartInfo</TypeName>
+                                        <PropertyName>ComputerName</PropertyName>
+                                    </SelectionCondition>
+                                </EntrySelectedBy>
+                                <CustomItem>
+                                    <Text>ComputerName: </Text>
+                                    <ExpressionBinding>
+                                        <PropertyName>ComputerName</PropertyName>
+                                    </ExpressionBinding>
+                                    <NewLine/>
+                                </CustomItem>
+                            </CustomEntry>
+                            <CustomEntry/>
+                        </CustomEntries>
+                    </CustomControl>
+                </Control>
+            </Controls>
             <CustomControl>
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>ComputerNameControl</CustomControlName>
+                            </ExpressionBinding>
                             <Text>Model:        </Text>
                             <ExpressionBinding>
                                 <PropertyName>Model</PropertyName>
