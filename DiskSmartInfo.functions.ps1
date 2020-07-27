@@ -83,10 +83,15 @@ function inGetDiskSmartInfo
 
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
 
-        $hash = [ordered]@{
-            Model = $diskDrive.Model
-            InstanceId = $instanceId
+        $hash = [ordered]@{}
+
+        if ($Session)
+        {
+            $hash.Add('ComputerName', $Session.ComputerName)
         }
+
+        $hash.Add('Model', $diskDrive.Model)
+        $hash.Add('InstanceId', $instanceId)
 
         $attributes = @()
 
