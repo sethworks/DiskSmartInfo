@@ -8,6 +8,7 @@ function Get-DiskSmartInfo
     $Namespace = 'root/WMI'
     $ClassSMARTData = 'MSStorageDriver_ATAPISmartData'
     $ClassThresholds = 'MSStorageDriver_FailurePredictThresholds'
+    $ClassDiskDrive = 'Win32_DiskDrive'
 
     $initialOffset = 2
     $attributeLength = 12
@@ -41,7 +42,6 @@ function inGetDiskSmartInfo
         [switch]$WMIFallback
     )
 
-    $fallback = $false
     $parameters = @{}
 
     if ($Session)
@@ -53,16 +53,17 @@ function inGetDiskSmartInfo
     {
         $disksInfo = Get-CimInstance -Namespace $Namespace -ClassName $ClassSMARTData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $Namespace -ClassName $ClassThresholds @parameters
+        $diskDrives = Get-CimInstance -ClassName $ClassDiskDrive @parameters
     }
     catch
     {
         if ($WMIFallback)
         {
-            $fallback = $true
             $psSession = New-PSSession -ComputerName $Session.ComputerName
 
             $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassSMARTData } -Session $psSession
             $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:Namespace -Class $Using:ClassThresholds } -Session $psSession
+            $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:ClassDiskDrive } -Session $psSession
         }
     }
 
@@ -70,20 +71,12 @@ function inGetDiskSmartInfo
     {
         $instanceName = $diskInfo.InstanceName
         $smartData = $diskInfo.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript {$_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName}  | ForEach-Object -MemberName VendorSpecific
 
         # remove '_0' at the end
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
-        $escapedInstanceId = $instanceId -replace '\\', '\\'
 
-        if ($fallback)
-        {
-            $diskDrive = Invoke-Command -ScriptBlock { Get-WMIObject -Class Win32_DiskDrive -Filter "PNPDeviceID = '$Using:escapedInstanceId'" } -Session $psSession
-        }
-        else
-        {
-            $diskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter "PNPDeviceID = '$escapedInstanceId'" @parameters
-        }
+        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
 
         $hash = [ordered]@{
             Model = $diskDrive.Model
@@ -118,10 +111,6 @@ function inGetDiskSmartInfo
         $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo" -PassThru
     }
 
-    if ($fallback)
-    {
-        $fallback = $false
-    }
     if ($psSession)
     {
         Remove-PSSession -Session $psSession
