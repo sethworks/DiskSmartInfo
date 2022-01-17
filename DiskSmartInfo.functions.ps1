@@ -168,7 +168,7 @@ function inGetAttributeValue
     if ($smartData[$a] -eq 194) # Temperature
     {
         # 10, 8, 6
-        $result = @()
+        $temps = @()
 
         for ($i = 10; $i -ge 6; $i -= 2)
         {
@@ -176,14 +176,22 @@ function inGetAttributeValue
 
             if ($value)
             {
-                $result += $value
+                $temps += $value
             }
         }
 
-        $result
+        return $temps
     }
     else
     {
-        ($smartData[$a + 6] * 256) + $smartData[$a + 5]
+        $result = 0
+        $dataStartOffset = $a + 5
+
+        for ($offset = 0; $offset -le 6; $offset++)
+        {
+            $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+        }
+
+        return $result
     }
 }
