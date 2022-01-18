@@ -76,6 +76,8 @@
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -90,10 +92,16 @@
                                 <PropertyName>AttributeName</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <PropertyName>Threshold</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
                                 <PropertyName>Value</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Threshold</PropertyName>
+                                <PropertyName>Worst</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
