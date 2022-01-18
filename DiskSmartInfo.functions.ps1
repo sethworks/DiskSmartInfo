@@ -107,6 +107,8 @@ function inGetDiskSmartInfo
                 $attribute.Add("IDhex", [convert]::ToString($attributeID,16).ToUpper())
                 $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                 $attribute.Add("Threshold", $thresholdsData[$a + 1])
+                $attribute.Add("Value", $smartData[$a + 3])
+                $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
                 $attributeObject = [PSCustomObject]$attribute

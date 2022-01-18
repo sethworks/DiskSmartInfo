@@ -76,6 +76,8 @@
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -91,6 +93,12 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Worst</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Data</PropertyName>
