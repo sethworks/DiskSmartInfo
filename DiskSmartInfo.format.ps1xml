@@ -90,10 +90,10 @@
                                 <PropertyName>AttributeName</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Data</PropertyName>
+                                <PropertyName>Threshold</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Threshold</PropertyName>
+                                <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
