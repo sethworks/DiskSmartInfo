@@ -90,7 +90,7 @@
                                 <PropertyName>AttributeName</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>Value</PropertyName>
+                                <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
