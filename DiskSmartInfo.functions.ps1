@@ -212,9 +212,9 @@ function inConvertData
 
     switch ($smartData[$a])
     {
-        241 # TotalLBAsWritten
+        241 # Total LBAs Written
         {
-            return $($data * $diskDrive.BytesPerSector / 1Tb)
+            return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
         }
 
         default

@@ -149,6 +149,7 @@
                                 <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
+                                <Alignment>Right</Alignment>
                                 <PropertyName>ConvertedData</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
