@@ -212,6 +212,11 @@ function inConvertData
 
     switch ($smartData[$a])
     {
+        9 # Power-On Hours
+        {
+            return "{0:f} Days" -f $($data / 24)
+        }
+
         241 # Total LBAs Written
         {
             return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
