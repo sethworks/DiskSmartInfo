@@ -2,6 +2,7 @@ function Get-DiskSmartInfo
 {
     Param(
         [string[]]$ComputerName,
+        [switch]$ShowConvertedData,
         [switch]$NoWMIFallback
     )
 
@@ -114,6 +115,11 @@ function inGetDiskSmartInfo
                 $attributeObject = [PSCustomObject]$attribute
                 $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
+                if ($ShowConvertedData)
+                {
+                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -data $attribute.Data) -TypeName 'DiskSmartAttribute#ConvertedData'
+                }
+
                 $attributes += $attributeObject
             }
         }
@@ -195,5 +201,25 @@ function inGetAttributeData
         }
 
         return $result
+    }
+}
+
+function inConvertData
+{
+    Param(
+        $data
+    )
+
+    switch ($smartData[$a])
+    {
+        241 # TotalLBAsWritten
+        {
+            return $($data * $diskDrive.BytesPerSector / 1Tb)
+        }
+
+        default
+        {
+            return $null
+        }
     }
 }
