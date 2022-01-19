@@ -212,6 +212,11 @@ function inConvertData
 
     switch ($smartData[$a])
     {
+        3 # Spin-Up Time
+        {
+            return "{0:f3} Sec" -f $($data / 1000)
+        }
+
         9 # Power-On Hours
         {
             return "{0:f} Days" -f $($data / 24)
