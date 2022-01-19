@@ -217,6 +217,11 @@ function inConvertData
             return "{0:f} Days" -f $($data / 24)
         }
 
+        190 # Temperature Difference
+        {
+            return "{0:n0} C" -f $(100 - $data)
+        }
+
         241 # Total LBAs Written
         {
             return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
