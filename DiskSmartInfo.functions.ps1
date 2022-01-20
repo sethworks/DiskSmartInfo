@@ -3,6 +3,7 @@ function Get-DiskSmartInfo
     Param(
         [string[]]$ComputerName,
         [switch]$ShowConvertedData,
+        [switch]$CriticalAttributesOnly,
         [switch]$NoWMIFallback
     )
 
@@ -14,7 +15,7 @@ function Get-DiskSmartInfo
 
             foreach ($cimSession in $cimSessions)
             {
-                inGetDiskSmartInfo -Session $cimSession -NoWMIFallback:$NoWMIFallback
+                inGetDiskSmartInfo -Session $cimSession -NoWMIFallback:$NoWMIFallback -CriticalAttributesOnly:$CriticalAttributesOnly
             }
         }
         finally
@@ -24,7 +25,7 @@ function Get-DiskSmartInfo
     }
     else
     {
-        inGetDiskSmartInfo
+        inGetDiskSmartInfo -CriticalAttributesOnly:$CriticalAttributesOnly
     }
 }
 
@@ -32,6 +33,7 @@ function inGetDiskSmartInfo
 {
     Param (
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
+        [switch]$CriticalAttributesOnly,
         [switch]$NoWMIFallback
     )
 
@@ -102,7 +104,9 @@ function inGetDiskSmartInfo
 
             $attributeID = $smartData[$a]
 
-            if ($attributeID)
+            if ($attributeID -and
+                (   (-not $CriticalAttributesOnly) -or
+                    ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
             {
                 $attribute.Add("ID", $attributeID)
                 $attribute.Add("IDhex", [convert]::ToString($attributeID,16).ToUpper())
