@@ -2,6 +2,7 @@ function Get-DiskSmartInfo
 {
     Param(
         [string[]]$ComputerName,
+        [switch]$ShowConvertedData,
         [switch]$NoWMIFallback
     )
 
@@ -114,6 +115,11 @@ function inGetDiskSmartInfo
                 $attributeObject = [PSCustomObject]$attribute
                 $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
+                if ($ShowConvertedData)
+                {
+                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -data $attribute.Data) -TypeName 'DiskSmartAttribute#ConvertedData'
+                }
+
                 $attributes += $attributeObject
             }
         }
@@ -195,5 +201,40 @@ function inGetAttributeData
         }
 
         return $result
+    }
+}
+
+function inConvertData
+{
+    Param(
+        $data
+    )
+
+    switch ($smartData[$a])
+    {
+        3 # Spin-Up Time
+        {
+            return "{0:f3} Sec" -f $($data / 1000)
+        }
+
+        9 # Power-On Hours
+        {
+            return "{0:f} Days" -f $($data / 24)
+        }
+
+        190 # Temperature Difference
+        {
+            return "{0:n0} C" -f $(100 - $data)
+        }
+
+        241 # Total LBAs Written
+        {
+            return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
+        }
+
+        default
+        {
+            return $null
+        }
     }
 }
