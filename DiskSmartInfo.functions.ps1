@@ -91,14 +91,7 @@ function inGetDiskSmartInfo
 
     foreach ($diskInfo in $disksInfo)
     {
-        if ($SilenceIfNotInWarningOrCriticalState)
-        {
-            $Silence = 1
-        }
-        else
-        {
-            $Silence = 0
-        }
+        $Silence = $SilenceIfNotInWarningOrCriticalState
 
         $instanceName = $diskInfo.InstanceName
         $smartData = $diskInfo.VendorSpecific
