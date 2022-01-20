@@ -1,9 +1,13 @@
 function Get-DiskSmartInfo
 {
+    [CmdletBinding(DefaultParameterSetName='DefaultParameterSet')]
     Param(
         [string[]]$ComputerName,
         [switch]$ShowConvertedData,
+        [Parameter(ParameterSetName='DefaultParameterSet')]
         [switch]$CriticalAttributesOnly,
+        [Parameter(ParameterSetName='Silence')]
+        [switch]$SilenceIfNotInWarningOrCriticalState,
         [switch]$NoWMIFallback
     )
 
@@ -15,7 +19,12 @@ function Get-DiskSmartInfo
 
             foreach ($cimSession in $cimSessions)
             {
-                inGetDiskSmartInfo -Session $cimSession -NoWMIFallback:$NoWMIFallback -CriticalAttributesOnly:$CriticalAttributesOnly
+                inGetDiskSmartInfo `
+                    -Session $cimSession `
+                    -ShowConvertedData:$ShowConvertedData `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
+                    -NoWMIFallback:$NoWMIFallback `
             }
         }
         finally
@@ -25,7 +34,10 @@ function Get-DiskSmartInfo
     }
     else
     {
-        inGetDiskSmartInfo -CriticalAttributesOnly:$CriticalAttributesOnly
+        inGetDiskSmartInfo `
+            -ShowConvertedData:$ShowConvertedData `
+            -CriticalAttributesOnly:$CriticalAttributesOnly `
+            -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
     }
 }
 
@@ -33,7 +45,9 @@ function inGetDiskSmartInfo
 {
     Param (
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
+        [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [switch]$SilenceIfNotInWarningOrCriticalState,
         [switch]$NoWMIFallback
     )
 
@@ -77,9 +91,11 @@ function inGetDiskSmartInfo
 
     foreach ($diskInfo in $disksInfo)
     {
+        $Silence = $SilenceIfNotInWarningOrCriticalState
+
         $instanceName = $diskInfo.InstanceName
         $smartData = $diskInfo.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName}  | ForEach-Object -MemberName VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
 
         # remove '_0' at the end
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
@@ -116,6 +132,19 @@ function inGetDiskSmartInfo
                 $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
+                if ($SilenceIfNotInWarningOrCriticalState)
+                {
+                    if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
+                         ($attribute.Value -le $attribute.Threshold) )
+                    {
+                        $Silence = 0
+                    }
+                    else
+                    {
+                        continue
+                    }
+                }
+
                 $attributeObject = [PSCustomObject]$attribute
                 $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
@@ -126,6 +155,11 @@ function inGetDiskSmartInfo
 
                 $attributes += $attributeObject
             }
+        }
+
+        if ($Silence)
+        {
+            continue
         }
 
         $hash.Add("SmartData", $attributes)
