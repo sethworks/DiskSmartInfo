@@ -15,7 +15,7 @@ RootModule = 'DiskSmartInfo.psm1'
 ModuleVersion = '0.3'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @('Core', 'Desktop')
 
 # ID used to uniquely identify this module
 GUID = '7da6c80e-01da-4c70-98c1-3dc2f877a8ba'
@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) Sergey Vasin. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'PowerShell Disk SMART Info'
+Description = 'Disk SMART Info'
 
 # Minimum version of the PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -70,16 +70,16 @@ NestedModules = @('DiskSmartInfo.functions.ps1',
                'smartAttributes.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = '*'
+FunctionsToExport = @('Get-DiskSmartInfo', 'Get-DiskSmartAttributeDescription')
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = '*'
+CmdletsToExport = @()
 
 # Variables to export from this module
-VariablesToExport = '*'
+VariablesToExport = @()
 
 # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = '*'
+AliasesToExport = @()
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
@@ -88,7 +88,7 @@ AliasesToExport = '*'
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1'
+FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1', 'DiskSmartInfo.functions.ps1', 'smartAttributes.ps1', 'DiskSmartInfo.format.ps1xml'
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{

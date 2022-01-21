@@ -1,1 +1,1 @@
-Export-ModuleMember -Function "*"
+Export-ModuleMember -Function 'Get-DiskSmartInfo', 'Get-DiskSmartAttributeDescription'
