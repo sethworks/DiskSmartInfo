@@ -18,7 +18,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AttributeID</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AttributeID Description }}</maml:para>
+            <maml:para>Specifies attribute id.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -33,7 +33,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AttributeIDHex</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AttributeIDHex Description }}</maml:para>
+            <maml:para>Specifies attribute id in hexadecimal.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -48,7 +48,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CriticalOnly</maml:name>
           <maml:description>
-            <maml:para>{{ Fill CriticalOnly Description }}</maml:para>
+            <maml:para>Displays critical attributes only.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -62,7 +62,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AttributeID</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AttributeID Description }}</maml:para>
+          <maml:para>Specifies attribute id.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -74,7 +74,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AttributeIDHex</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AttributeIDHex Description }}</maml:para>
+          <maml:para>Specifies attribute id in hexadecimal.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -86,7 +86,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CriticalOnly</maml:name>
         <maml:description>
-          <maml:para>{{ Fill CriticalOnly Description }}</maml:para>
+          <maml:para>Displays critical attributes only.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -150,7 +150,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ComputerName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ComputerName Description }}</maml:para>
+            <maml:para>Specifies computer names to get data.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -162,7 +162,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+            <maml:para>Adds converted data for some of the attributes.</maml:para>
+            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -173,7 +174,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CriticalAttributesOnly</maml:name>
           <maml:description>
-            <maml:para>{{ Fill CriticalAttributesOnly Description }}</maml:para>
+            <maml:para>Displays only critical attributes.</maml:para>
+            <maml:para>You can get the list of such attributes by using the Get-DiskSmartAttributeDescription -CriticalOnly command.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -198,7 +200,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ComputerName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ComputerName Description }}</maml:para>
+            <maml:para>Specifies computer names to get data.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -210,7 +212,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+            <maml:para>Adds converted data for some of the attributes.</maml:para>
+            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -221,7 +224,9 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
           <maml:description>
-            <maml:para>{{ Fill SilenceIfNotInWarningOrCriticalState Description }}</maml:para>
+            <maml:para>Displays only attributes, whose value is in Warning or Critical state.</maml:para>
+            <maml:para>If attribute if critical, it is shown, if its Data greater than 0. If attribute is not critical, it is shown, if its Value is less or equal to its threshold.</maml:para>
+            <maml:para>If disk does not have attributes with values in Warning or Critical state, it is not shown.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -246,7 +251,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ComputerName</maml:name>
         <maml:description>
-          <maml:para>{{ Fill ComputerName Description }}</maml:para>
+          <maml:para>Specifies computer names to get data.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -258,7 +263,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ShowConvertedData</maml:name>
         <maml:description>
-          <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+          <maml:para>Adds converted data for some of the attributes.</maml:para>
+          <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -270,7 +276,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CriticalAttributesOnly</maml:name>
         <maml:description>
-          <maml:para>{{ Fill CriticalAttributesOnly Description }}</maml:para>
+          <maml:para>Displays only critical attributes.</maml:para>
+          <maml:para>You can get the list of such attributes by using the Get-DiskSmartAttributeDescription -CriticalOnly command.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -282,7 +289,9 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
         <maml:description>
-          <maml:para>{{ Fill SilenceIfNotInWarningOrCriticalState Description }}</maml:para>
+          <maml:para>Displays only attributes, whose value is in Warning or Critical state.</maml:para>
+          <maml:para>If attribute if critical, it is shown, if its Data greater than 0. If attribute is not critical, it is shown, if its Value is less or equal to its threshold.</maml:para>
+          <maml:para>If disk does not have attributes with values in Warning or Critical state, it is not shown.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>

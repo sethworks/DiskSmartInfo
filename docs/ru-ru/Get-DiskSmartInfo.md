@@ -39,7 +39,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -ComputerName
-{{ Fill ComputerName Description }}
+Параметр указывает имена компьютеров для получения информации.
 
 ```yaml
 Type: String[]
@@ -54,8 +54,12 @@ Accept wildcard characters: False
 ```
 
 ### -ShowConvertedData
-{{ Fill ShowConvertedData Description }}
+Параметр добавляет ковертированные данные для некоторых атрибутов.
 
+Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах),
+"Power-On Hours" (показывает данные в днях),
+"Temperature Difference" (показывает действительную температуру),
+и "Total LBAs Written" (показывает данные в терабайтах).
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -69,7 +73,10 @@ Accept wildcard characters: False
 ```
 
 ### -CriticalAttributesOnly
-{{ Fill CriticalAttributesOnly Description }}
+Параметр отображает только критические атрибуты.
+
+Вы можете получить список критических атрибутов при помощи команды
+Get-DiskSmartAttributeDescription -CriticalOnly
 
 ```yaml
 Type: SwitchParameter
@@ -84,7 +91,12 @@ Accept wildcard characters: False
 ```
 
 ### -SilenceIfNotInWarningOrCriticalState
-{{ Fill SilenceIfNotInWarningOrCriticalState Description }}
+Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.
+
+Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.
+Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).
+
+Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
 
 ```yaml
 Type: SwitchParameter

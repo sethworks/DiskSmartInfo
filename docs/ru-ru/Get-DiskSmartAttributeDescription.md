@@ -47,7 +47,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -AttributeID
-{{ Fill AttributeID Description }}
+Параметр указывает id атрибута.
 
 ```yaml
 Type: Int32
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -AttributeIDHex
-{{ Fill AttributeIDHex Description }}
+Параметр указывает id атрибута в шестнадцатеричном формате.
 
 ```yaml
 Type: String
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -CriticalOnly
-{{ Fill CriticalOnly Description }}
+Параметр задает, что выводиться должны только критические атрибуты.
 
 ```yaml
 Type: SwitchParameter

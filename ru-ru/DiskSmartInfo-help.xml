@@ -18,7 +18,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AttributeID</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AttributeID Description }}</maml:para>
+            <maml:para>Параметр указывает id атрибута.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
           <dev:type>
@@ -33,7 +33,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>AttributeIDHex</maml:name>
           <maml:description>
-            <maml:para>{{ Fill AttributeIDHex Description }}</maml:para>
+            <maml:para>Параметр указывает id атрибута в шестнадцатеричном формате.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -48,7 +48,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CriticalOnly</maml:name>
           <maml:description>
-            <maml:para>{{ Fill CriticalOnly Description }}</maml:para>
+            <maml:para>Параметр задает, что выводиться должны только критические атрибуты.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -62,7 +62,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AttributeID</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AttributeID Description }}</maml:para>
+          <maml:para>Параметр указывает id атрибута.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
         <dev:type>
@@ -74,7 +74,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>AttributeIDHex</maml:name>
         <maml:description>
-          <maml:para>{{ Fill AttributeIDHex Description }}</maml:para>
+          <maml:para>Параметр указывает id атрибута в шестнадцатеричном формате.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -86,7 +86,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CriticalOnly</maml:name>
         <maml:description>
-          <maml:para>{{ Fill CriticalOnly Description }}</maml:para>
+          <maml:para>Параметр задает, что выводиться должны только критические атрибуты.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -150,7 +150,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ComputerName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ComputerName Description }}</maml:para>
+            <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -162,7 +162,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+            <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
+            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -173,7 +174,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>CriticalAttributesOnly</maml:name>
           <maml:description>
-            <maml:para>{{ Fill CriticalAttributesOnly Description }}</maml:para>
+            <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+            <maml:para>Вы можете получить список критических атрибутов при помощи команды Get-DiskSmartAttributeDescription -CriticalOnly</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -198,7 +200,7 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ComputerName</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ComputerName Description }}</maml:para>
+            <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
           <dev:type>
@@ -210,7 +212,8 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
-            <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+            <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
+            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -221,7 +224,9 @@
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
           <maml:description>
-            <maml:para>{{ Fill SilenceIfNotInWarningOrCriticalState Description }}</maml:para>
+            <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
+            <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0. Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
+            <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -246,7 +251,7 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ComputerName</maml:name>
         <maml:description>
-          <maml:para>{{ Fill ComputerName Description }}</maml:para>
+          <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
@@ -258,7 +263,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>ShowConvertedData</maml:name>
         <maml:description>
-          <maml:para>{{ Fill ShowConvertedData Description }}</maml:para>
+          <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
+          <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -270,7 +276,8 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>CriticalAttributesOnly</maml:name>
         <maml:description>
-          <maml:para>{{ Fill CriticalAttributesOnly Description }}</maml:para>
+          <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+          <maml:para>Вы можете получить список критических атрибутов при помощи команды Get-DiskSmartAttributeDescription -CriticalOnly</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -282,7 +289,9 @@
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
         <maml:description>
-          <maml:para>{{ Fill SilenceIfNotInWarningOrCriticalState Description }}</maml:para>
+          <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
+          <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0. Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
+          <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>

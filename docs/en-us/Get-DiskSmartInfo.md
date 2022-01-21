@@ -39,7 +39,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -ComputerName
-{{ Fill ComputerName Description }}
+Specifies computer names to get data.
 
 ```yaml
 Type: String[]
@@ -54,7 +54,12 @@ Accept wildcard characters: False
 ```
 
 ### -ShowConvertedData
-{{ Fill ShowConvertedData Description }}
+Adds converted data for some of the attributes.
+
+Such attributes are: "Spin-Up Time" (displays value in seconds),
+"Power-On Hours" (displays value in days),
+"Temperature Difference" (shows actual temperature),
+and "Total LBAs Written" (shows value in Tb).
 
 ```yaml
 Type: SwitchParameter
@@ -69,7 +74,10 @@ Accept wildcard characters: False
 ```
 
 ### -CriticalAttributesOnly
-{{ Fill CriticalAttributesOnly Description }}
+Displays only critical attributes.
+
+You can get the list of such attributes by using the Get-DiskSmartAttributeDescription -CriticalOnly
+command.
 
 ```yaml
 Type: SwitchParameter
@@ -84,7 +92,12 @@ Accept wildcard characters: False
 ```
 
 ### -SilenceIfNotInWarningOrCriticalState
-{{ Fill SilenceIfNotInWarningOrCriticalState Description }}
+Displays only attributes, whose value is in Warning or Critical state.
+
+If attribute if critical, it is shown, if its Data greater than 0.
+If attribute is not critical, it is shown, if its Value is less or equal to its threshold.
+
+If disk does not have attributes with values in Warning or Critical state, it is not shown.
 
 ```yaml
 Type: SwitchParameter

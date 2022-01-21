@@ -47,7 +47,7 @@ PS C:\> {{ Add example code here }}
 ## PARAMETERS
 
 ### -AttributeID
-{{ Fill AttributeID Description }}
+Specifies attribute id.
 
 ```yaml
 Type: Int32
@@ -62,7 +62,7 @@ Accept wildcard characters: False
 ```
 
 ### -AttributeIDHex
-{{ Fill AttributeIDHex Description }}
+Specifies attribute id in hexadecimal.
 
 ```yaml
 Type: String
@@ -77,7 +77,7 @@ Accept wildcard characters: False
 ```
 
 ### -CriticalOnly
-{{ Fill CriticalOnly Description }}
+Displays critical attributes only.
 
 ```yaml
 Type: SwitchParameter
