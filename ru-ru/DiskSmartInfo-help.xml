@@ -143,6 +143,8 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 ...</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибутов SMART</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -157,6 +159,8 @@ IsCritical     :
 Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибута с ID 192.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -171,6 +175,8 @@ IsCritical     :
 Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибута с IDHex C2.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -292,7 +298,8 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
-            <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0. Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
+            <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
+            <maml:para>Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
             <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
           </maml:description>
           <dev:type>
@@ -357,7 +364,8 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
-          <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0. Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
+          <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
+          <maml:para>Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
           <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
@@ -432,6 +440,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -460,6 +470,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069      5.923 Tb</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для некоторых атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -479,6 +491,8 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков и выводит данные только критических атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
