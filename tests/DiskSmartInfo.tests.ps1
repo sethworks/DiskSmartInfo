@@ -104,11 +104,22 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
             }
 
-        }
+            It "Has SMARTData property with 22 DiskSmartAttribute objects" {
+                $diskSmartInfo.SMARTData | Should -HaveCount 22
+                $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+            }
 
-        It "Should return something" {
-            $result = Get-DiskSmartInfo
-            $result | Should -BeTrue
+            It "Has correct DiskSmartAttribute objects" {
+                $diskSmartInfo.SMARTData[0].ID | Should -Be 1
+                $diskSmartInfo.SMARTData[12].IDHex | Should -BeExactly 'C0'
+                $diskSmartInfo.SMARTData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+                $diskSmartInfo.SMARTData[2].Threshold | Should -Be 25
+                $diskSmartInfo.SMARTData[2].Value | Should -Be 71
+                $diskSmartInfo.SMARTData[2].Worst | Should -Be 69
+                $diskSmartInfo.SMARTData[3].Data | Should -Be 25733
+                $diskSmartInfo.SMARTData[13].Data | Should -HaveCount 3
+                $diskSmartInfo.SMARTData[13].Data | Should -Be @(47, 14, 39)
+            }
         }
     }
 }
