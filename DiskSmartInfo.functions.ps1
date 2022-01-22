@@ -262,7 +262,7 @@ function inConvertData
 
         190 # Temperature Difference
         {
-            return "{0:n0} C" -f $(100 - $data)
+            return "{0:n0} °C" -f $(100 - $data)
         }
 
         241 # Total LBAs Written
