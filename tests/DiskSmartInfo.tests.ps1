@@ -87,6 +87,25 @@ Describe "DiskSmartInfo" {
             $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
         }
 
+        Context "Without parameters" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo
+            }
+
+            It "Returns DiskSmartInfo object" {
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            }
+
+            It "Has Model and InstanceId properties" {
+                $diskSmartInfo.Model | Should -BeExactly $testsData.Model_HDD1
+                $diskSmartInfo.InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            }
+
+        }
+
         It "Should return something" {
             $result = Get-DiskSmartInfo
             $result | Should -BeTrue
