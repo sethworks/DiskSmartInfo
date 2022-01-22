@@ -20,6 +20,80 @@
                 "showReuseMessage": false,
                 "clear": true
             }
+        },
+        {
+            "label": "InvokePester",
+            "type": "shell",
+            "command": ". .\\tests\\PesterConfiguration.ps1; ${input:codeCoverage} Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+        },
+        {
+            "label": "InvokePester2",
+            "type": "shell",
+            "command": ". .\\tests\\pesterPreference.ps1; Invoke-Pester -Script .\\tests\\DiskSmartInfo.tests.ps1 ${input:codeCoverage2}",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+        }
+    ],
+    "inputs": [
+        {
+            "id": "codeCoverage",
+            "type": "pickString",
+            "description": "Code Coverage Option",
+            "default": "",
+            "options": [
+                {
+                    "label": "Without code coverage",
+                    "value": ""
+                },
+                {
+                    "label": "With code coverage",
+                    "value": ". .\\tests\\PesterConfiguration.CodeCoverage.ps1;"
+                }
+            ]
+        },
+        {
+            "id": "codeCoverage2",
+            "type": "pickString",
+            "description": "Code Coverage Option",
+            "default": "",
+            "options": [
+                {
+                    "label": "Without code coverage",
+                    "value": ""
+                },
+                {
+                    "label": "With code coverage",
+                    "value": "-CodeCoverage '.\\DiskSmartInfo.functions.ps1'"
+                }
+            ]
         }
     ]
 }
