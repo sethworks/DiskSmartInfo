@@ -80,6 +80,7 @@
     Model_HDD1 = "HDD1"
     InstanceName_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0_0'
     PNPDeviceID_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+    BytesPerSector_HDD1 = 512
 
     # HDD2
     AtapiSMARTData_VendorSpecific_HDD2 = 16, 0,
@@ -162,6 +163,7 @@
     Model_HDD2 = "HDD2"
     InstanceName_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0_0'
     PNPDeviceID_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
+    BytesPerSector_HDD2 = 512
 
     AtapiSMARTData_VendorSpecific_SSD1 = 1, 0,
     5,   51, 0, 100, 100, 0,   0,   0,   0,   0, 0, 0,
@@ -243,4 +245,5 @@
     Model_SSD1 = "SSD1"
     InstanceName_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0_0'
     PNPDeviceID_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+    BytesPerSector_SSD1 = 512
 }
