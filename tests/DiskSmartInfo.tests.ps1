@@ -146,5 +146,47 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[1].SMARTData[13].ConvertedData | Should -BeExactly '5.933 Tb'
             }
         }
+
+        Context "-CriticalAttributesOnly" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+            }
+
+            It "Has SMARTData property with 5 DiskSmartAttribute objects" {
+                $diskSmartInfo.SMARTData | Should -HaveCount 5
+                $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+            }
+
+            It "Has critical attributes only" {
+                $diskSmartInfo.SMARTData.Id | Should -Be @(5, 10, 196, 197, 198)
+            }
+        }
+
+        Context "-SilenceIfNotInWarningOrCriticalState" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -SilenceIfNotInWarningOrCriticalState
+            }
+
+            It "Has 1 DiskSmartInfo object" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            }
+
+            It "Has SMARTData property with 2 DiskSmartAttribute objects" {
+                $diskSmartInfo.SMARTData | Should -HaveCount 2
+                $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+            }
+
+            It "Has attributes in Warning or Critical state only" {
+                $diskSmartInfo.SMARTData.Id | Should -Be @(197, 198)
+                $diskSmartInfo.SMARTData.Data | Should -Be @(20, 20)
+            }
+        }
     }
 }
