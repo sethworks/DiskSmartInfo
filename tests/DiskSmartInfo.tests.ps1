@@ -121,5 +121,30 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.SMARTData[13].Data | Should -Be @(47, 14, 39)
             }
         }
+
+        Context "-ShowConvertedData" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -ShowConvertedData
+            }
+
+            It "Converts Spin-Up Time" {
+                $diskSmartInfo[0].SMARTData[2].ConvertedData | Should -BeExactly '9.059 Sec'
+            }
+
+            It "Converts Power-On Hours" {
+                $diskSmartInfo[0].SMARTData[7].ConvertedData | Should -BeExactly '3060.12 Days'
+            }
+
+            It "Converts Temperature Difference" {
+                $diskSmartInfo[1].SMARTData[9].ConvertedData | Should -BeExactly '60 °C'
+            }
+
+            It "Converts Total LBAs Written" {
+                $diskSmartInfo[1].SMARTData[13].ConvertedData | Should -BeExactly '5.933 Tb'
+            }
+        }
     }
 }
