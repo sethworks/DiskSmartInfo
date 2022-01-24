@@ -520,22 +520,6 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 5: Silence if critical attributes are not in warning or critical state</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
-
-Model:        Disk model
-InstanceId:   Disk Instance Id
-SMARTData:
-
-              ID  IDHex AttributeName                      Threshold Value Worst Data
-              --  ----- -------------                      --------- ----- ----- ----
-              197 C5    Current Pending Sector Count       0         200   200   20
-              198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
-        <dev:remarks>
-          <maml:para>The command gets disk SMART information and displays only the the critical attributes with values in Warning or Critical state. Disks that does not have critical attributes with values in such states does not display.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
         <maml:title>----- Example 6: Get disk SMART info from remote computers -----</maml:title>
         <dev:code>Get-DiskSmartInfo -ComputerName SomeComputer
 
