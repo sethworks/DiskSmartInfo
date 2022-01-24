@@ -178,12 +178,36 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
 
+            It "Has SMARTData property with 3 DiskSmartAttribute objects" {
+                $diskSmartInfo.SMARTData | Should -HaveCount 3
+                $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+            }
+
+            It "Has attributes in Warning or Critical state only" {
+                $diskSmartInfo.SMARTData.Id | Should -Be @(3, 197, 198)
+                $diskSmartInfo.SMARTData.Data | Should -Be @(6825, 20, 20)
+            }
+        }
+
+        Context "-CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
+            }
+
+            It "Has 1 DiskSmartInfo object" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            }
+
             It "Has SMARTData property with 2 DiskSmartAttribute objects" {
                 $diskSmartInfo.SMARTData | Should -HaveCount 2
                 $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
             }
 
-            It "Has attributes in Warning or Critical state only" {
+            It "Has only critical attributes that are in Warning or Critical state" {
                 $diskSmartInfo.SMARTData.Id | Should -Be @(197, 198)
                 $diskSmartInfo.SMARTData.Data | Should -Be @(20, 20)
             }
