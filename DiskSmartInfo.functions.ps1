@@ -75,29 +75,10 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    # try
-    # {
-        $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
-        $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
-        $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
-    # }
-<#    catch
-    {
-        if (-not $NoWMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
-        {
-            try
-            {
-                $disksInfo = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classSMARTData } -Session $psSession
-                $disksThresholds = Invoke-Command -ScriptBlock { Get-WMIObject -Namespace $Using:namespaceWMI -Class $Using:classThresholds } -Session $psSession
-                $diskDrives = Invoke-Command -ScriptBlock { Get-WMIObject -Class $Using:classDiskDrive } -Session $psSession
-            }
-            finally
-            {
-                Remove-PSSession -Session $psSession
-            }
-        }
-    }
-#>
+    $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters
+    $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
+    $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
+
     foreach ($diskInfo in $disksInfo)
     {
         $Silence = $SilenceIfNotInWarningOrCriticalState
