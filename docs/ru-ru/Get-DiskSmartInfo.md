@@ -217,6 +217,7 @@ SMARTData:
 
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
+              3   3     Spin-Up Time                       21        20    20    6825
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
@@ -224,6 +225,26 @@ SMARTData:
 Команда получает информацию SMART жестких дисков и отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.
 
 Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
+
+### Example 5: Silence if critical attributes are not in warning or critical state
+```powershell
+Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
+```
+
+```
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              197 C5    Current Pending Sector Count       0         200   200   20
+              198 C6    Offline Uncorrectable Sector Count 0         200   200   20
+```
+
+Команда получает информацию SMART жестких дисков и отображает только те критические атрибуты, чьи значения находятся в состоянии Warning или Critical.
+
+Если диск не содержит критических атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
 
 ## INPUTS
 
