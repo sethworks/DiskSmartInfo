@@ -17,10 +17,10 @@ function Get-DiskSmartInfo
         {
             $cimSessions = New-CimSession -ComputerName $ComputerName
 
-            foreach ($cimSession in $cimSessions)
+            foreach ($cim in $cimSessions)
             {
                 inGetDiskSmartInfo `
-                    -Session $cimSession `
+                    -Session $cim `
                     -ShowConvertedData:$ShowConvertedData `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
                     -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
@@ -29,6 +29,17 @@ function Get-DiskSmartInfo
         finally
         {
             Remove-CimSession -CimSession $cimSessions
+        }
+    }
+    elseif ($CimSession)
+    {
+        foreach ($cim in $CimSession)
+        {
+            inGetDiskSmartInfo `
+                -Session $cim `
+                -ShowConvertedData:$ShowConvertedData `
+                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
         }
     }
     else
