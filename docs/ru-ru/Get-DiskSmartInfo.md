@@ -34,7 +34,24 @@ Get-DiskSmartInfo [-ComputerName <String[]>] [-ShowConvertedData] [-SilenceIfNot
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimSession
+Параметр указывает объекты CimSession для получения информации.
+
+Возможно использование как WSMAN так и DCOM типов сессий.
+
+```yaml
+Type: CimSession[]
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
@@ -71,7 +88,7 @@ Get-DiskSmartAttributeDescription -CriticalOnly
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: DefaultParameterSet
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -89,21 +106,6 @@ Accept wildcard characters: False
 Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).
 
 Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Silence
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoWMIFallback
-{{ Fill NoWMIFallback Description }}
 
 ```yaml
 Type: SwitchParameter
