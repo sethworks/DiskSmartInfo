@@ -1,14 +1,14 @@
 function Get-DiskSmartInfo
 {
-    [CmdletBinding(DefaultParameterSetName='DefaultParameterSet')]
+    [CmdletBinding(DefaultParameterSetName='ComputerName')]
     Param(
+        [Parameter(ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
+        [Parameter(ParameterSetName='CimSession')]
+        [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
-        [Parameter(ParameterSetName='DefaultParameterSet')]
         [switch]$CriticalAttributesOnly,
-        [Parameter(ParameterSetName='Silence')]
-        [switch]$SilenceIfNotInWarningOrCriticalState,
-        [switch]$NoWMIFallback
+        [switch]$SilenceIfNotInWarningOrCriticalState
     )
 
     if ($ComputerName)
@@ -24,7 +24,6 @@ function Get-DiskSmartInfo
                     -ShowConvertedData:$ShowConvertedData `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
                     -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
-                    -NoWMIFallback:$NoWMIFallback `
             }
         }
         finally
@@ -47,8 +46,7 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
-        [switch]$SilenceIfNotInWarningOrCriticalState,
-        [switch]$NoWMIFallback
+        [switch]$SilenceIfNotInWarningOrCriticalState
     )
 
     $namespaceWMI = 'root/WMI'
@@ -66,13 +64,13 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    try
-    {
+    # try
+    # {
         $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
-    }
-    catch
+    # }
+<#    catch
     {
         if (-not $NoWMIFallback -and ($psSession = New-PSSession -ComputerName $Session.ComputerName))
         {
@@ -88,7 +86,7 @@ function inGetDiskSmartInfo
             }
         }
     }
-
+#>
     foreach ($diskInfo in $disksInfo)
     {
         $Silence = $SilenceIfNotInWarningOrCriticalState
