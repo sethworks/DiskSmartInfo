@@ -205,7 +205,7 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков и выводит данные только критических атрибутов.
 
-### Example 4: Вывод данных только тех атрибутов, чьи значения находятся в состоянии Warning или Critical
+### Example 4: Вывод только тех атрибутов, чьи значения находятся в состоянии Warning или Critical
 ```powershell
 Get-DiskSmartInfo -SilenceIfNotInWarningOrCriticalState
 ```
@@ -226,7 +226,7 @@ SMARTData:
 
 Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
 
-### Example 5: Silence if critical attributes are not in warning or critical state
+### Example 5: Вывод только тех критических атрибутов, чьи значения находятся в состоянии Warning или Critical
 ```powershell
 Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
 ```
@@ -245,6 +245,88 @@ SMARTData:
 Команда получает информацию SMART жестких дисков и отображает только те критические атрибуты, чьи значения находятся в состоянии Warning или Critical.
 
 Если диск не содержит критических атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
+
+
+### Example 6: Получение данных SMART с удаленных компьютеров
+```powershell
+Get-DiskSmartInfo -ComputerName SomeComputer
+```
+
+```
+ComputerName: SomeComputer
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+```
+
+Команда получает информацию SMART жестких дисков с удаленного компьютера.
+
+### Example 7: Получение данных SMART с удаленных компьютеров с использованием объектов CimSession
+```powershell
+$Credential = Get-Credential
+$CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
+
+$SessionOption = New-CimSessionOption -Protocol Dcom
+$CimSession_DCOM = New-CimSession -ComputerName SomeAnotherComputer -SessionOption $SessionOption -Credential $Credential
+
+Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
+```
+
+```
+ComputerName: SomeComputer
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+
+
+ComputerName: SomeAnotherComputer
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    9584
+              12  C     Power Cycle Count                             0         99    99    80
+...
+```
+
+Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием объектов CimSession.
 
 ## INPUTS
 
