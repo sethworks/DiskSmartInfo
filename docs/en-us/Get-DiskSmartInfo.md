@@ -34,7 +34,24 @@ Specifies computer names to get data.
 
 ```yaml
 Type: String[]
-Parameter Sets: (All)
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -CimSession
+Specifies CimSessions to get data.
+
+You can use both WSMAN and DCOM types of sessions.
+
+```yaml
+Type: CimSession[]
+Parameter Sets: CimSession
 Aliases:
 
 Required: False
@@ -72,7 +89,7 @@ command.
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: DefaultParameterSet
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -89,21 +106,6 @@ If attribute if critical, it is shown, if its Data greater than 0.
 If attribute is not critical, it is shown, if its Value is less or equal to its threshold.
 
 If disk does not have attributes with values in Warning or Critical state, it is not shown.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: Silence
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -NoWMIFallback
-{{ Fill NoWMIFallback Description }}
 
 ```yaml
 Type: SwitchParameter

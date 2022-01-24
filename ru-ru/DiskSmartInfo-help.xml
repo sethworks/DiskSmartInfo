@@ -143,8 +143,6 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 ...</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибутов SMART</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -159,8 +157,6 @@ IsCritical     :
 Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибута с ID 192.</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -175,8 +171,6 @@ IsCritical     :
 Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).</dev:code>
         <dev:remarks>
           <maml:para>Команда отображает описание атрибута с IDHex C2.</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -257,9 +251,12 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NoWMIFallback</maml:name>
+          <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
           <maml:description>
-            <maml:para>{{ Fill NoWMIFallback Description }}</maml:para>
+            <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
+            <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
+            <maml:para>Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
+            <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -271,13 +268,14 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
       <command:syntaxItem>
         <maml:name>Get-DiskSmartInfo</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ComputerName</maml:name>
+          <maml:name>CimSession</maml:name>
           <maml:description>
-            <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
+            <maml:para>Параметр указывает объекты CimSession для получения информации.</maml:para>
+            <maml:para>Возможно использование как WSMAN так и DCOM типов сессий.</maml:para>
           </maml:description>
-          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <command:parameterValue required="true" variableLength="false">CimSession[]</command:parameterValue>
           <dev:type>
-            <maml:name>String[]</maml:name>
+            <maml:name>CimSession[]</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -287,6 +285,18 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
             <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CriticalAttributesOnly</maml:name>
+          <maml:description>
+            <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+            <maml:para>Вы можете получить список критических атрибутов при помощи команды Get-DiskSmartAttributeDescription -CriticalOnly</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -308,17 +318,6 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>NoWMIFallback</maml:name>
-          <maml:description>
-            <maml:para>{{ Fill NoWMIFallback Description }}</maml:para>
-          </maml:description>
-          <dev:type>
-            <maml:name>SwitchParameter</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>False</dev:defaultValue>
-        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
@@ -330,6 +329,19 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
         <dev:type>
           <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает объекты CimSession для получения информации.</maml:para>
+          <maml:para>Возможно использование как WSMAN так и DCOM типов сессий.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">CimSession[]</command:parameterValue>
+        <dev:type>
+          <maml:name>CimSession[]</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -367,18 +379,6 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
           <maml:para>Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).</maml:para>
           <maml:para>Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.</maml:para>
-        </maml:description>
-        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
-        <dev:type>
-          <maml:name>SwitchParameter</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>False</dev:defaultValue>
-      </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>NoWMIFallback</maml:name>
-        <maml:description>
-          <maml:para>{{ Fill NoWMIFallback Description }}</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -440,8 +440,6 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -470,8 +468,6 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069      5.923 Tb</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для некоторых атрибутов.</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -491,8 +487,6 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0</dev:code>
         <dev:remarks>
           <maml:para>Команда получает информацию SMART жестких дисков и выводит данные только критических атрибутов.</maml:para>
-          <maml:para/>
-          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
