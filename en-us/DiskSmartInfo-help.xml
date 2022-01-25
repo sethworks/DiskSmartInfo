@@ -214,7 +214,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-DiskSmartInfo</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>ComputerName</maml:name>
           <maml:description>
             <maml:para>Specifies computer names to get data.</maml:para>
@@ -319,7 +319,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>ComputerName</maml:name>
         <maml:description>
           <maml:para>Specifies computer names to get data.</maml:para>
@@ -407,7 +407,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
     </command:returnValues>
     <maml:alertSet>
       <maml:alert>
-        <maml:para></maml:para>
+        <maml:para>You can get original error objects by using -Debug parameter.</maml:para>
       </maml:alert>
     </maml:alertSet>
     <command:examples>
@@ -549,7 +549,36 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 7: Get disk SMART info from remote computers using CimSessions.</maml:title>
+        <maml:title>Example 7: Get disk SMART info from remote computers without specifying -ComputerName parameter name</maml:title>
+        <dev:code>Get-DiskSmartInfo SomeComputer
+
+ComputerName: SomeComputer
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>The command gets disk SMART information from remote computer.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 8: Get disk SMART info from remote computers using CimSessions.</maml:title>
         <dev:code>$Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
