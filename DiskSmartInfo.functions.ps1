@@ -217,7 +217,7 @@ function Get-DiskSmartAttributeDescription
 {
     [CmdletBinding(DefaultParameterSetName='AllAttributes')]
     Param(
-        [Parameter(ParameterSetName='AttributeID')]
+        [Parameter(Position=0,ParameterSetName='AttributeID')]
         [int]$AttributeID,
         [Parameter(ParameterSetName='AttributeIDHex')]
         [string]$AttributeIDHex,

@@ -247,6 +247,16 @@ Describe "DiskSmartInfo" {
             }
         }
 
+        Context "-AttributeID without parameter name" {
+            BeforeAll {
+                $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription 190
+            }
+
+            It "Has correct attribute" {
+                $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Temperature Difference'
+            }
+        }
+
         Context "-AttributeIDHex" {
             BeforeAll {
                 $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeIDHex C1

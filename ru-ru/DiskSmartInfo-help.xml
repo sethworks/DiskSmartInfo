@@ -15,7 +15,7 @@
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Get-DiskSmartAttributeDescription</maml:name>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
           <maml:name>AttributeID</maml:name>
           <maml:description>
             <maml:para>Параметр указывает id атрибута.</maml:para>
@@ -59,7 +59,7 @@
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
         <maml:name>AttributeID</maml:name>
         <maml:description>
           <maml:para>Параметр указывает id атрибута.</maml:para>
@@ -160,7 +160,21 @@ Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Uns
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------- Example 3: Получение описания атрибута по IDHex -------</maml:title>
+        <maml:title>Example 3: Получение описания атрибута по ID без указания имени параметра AttributeID</maml:title>
+        <dev:code>Get-DiskSmartAttributeDescription 192
+
+AttributeID    : 192
+AttributeIDHex : C0
+AttributeName  : Power-off Retract Count
+BetterValue    : Low
+IsCritical     :
+Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.</dev:code>
+        <dev:remarks>
+          <maml:para>Команда отображает описание атрибута с ID 192.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------- Example 4: Получение описания атрибута по IDHex -------</maml:title>
         <dev:code>Get-DiskSmartAttributeDescription -AttributeIDHex C2
 
 AttributeID    : 194
@@ -174,7 +188,7 @@ Description    : Indicates the device temperature, if the appropriate sensor is 
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>----- Example 4: Получение описания критических атрибутов -----</maml:title>
+        <maml:title>----- Example 5: Получение описания критических атрибутов -----</maml:title>
         <dev:code>Get-DiskSmartAttributeDescription -CriticalOnly
 
 AttributeID    : 5
