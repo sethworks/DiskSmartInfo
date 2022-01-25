@@ -143,6 +143,8 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 ...</dev:code>
         <dev:remarks>
           <maml:para>The command gets SMART attributes description.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -157,6 +159,8 @@ IsCritical     :
 Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.</dev:code>
         <dev:remarks>
           <maml:para>The command gets description for attribute with ID 192.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -171,6 +175,8 @@ IsCritical     :
 Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.</dev:code>
         <dev:remarks>
           <maml:para>The command gets description for attribute with ID 192.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -185,6 +191,8 @@ IsCritical     :
 Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).</dev:code>
         <dev:remarks>
           <maml:para>The command gets description for attribute with IDHex C2.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -451,6 +459,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -479,6 +489,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069      5.923 Tb</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information and adds converted data for some of the attributes.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -498,6 +510,8 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information and displays only critical attributes.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -515,6 +529,8 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information and displays only the attributes with values in Warning or Critical state. Disks that does not have attributes with values in such states does not display.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -531,6 +547,8 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information and displays only the the critical attributes with values in Warning or Critical state. Disks that does not have critical attributes with values in such states does not display.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -560,6 +578,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information from remote computer.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
@@ -589,6 +609,8 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information from remote computer.</maml:para>
+          <maml:para/>
+          <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
