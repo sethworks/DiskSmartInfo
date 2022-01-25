@@ -19,7 +19,7 @@ Get-DiskSmartAttributeDescription [<CommonParameters>]
 
 ### AttributeID
 ```
-Get-DiskSmartAttributeDescription [-AttributeID <Int32>] [<CommonParameters>]
+Get-DiskSmartAttributeDescription [[-AttributeID] <Int32>] [<CommonParameters>]
 ```
 
 ### AttributeIDHex
@@ -46,7 +46,7 @@ Parameter Sets: AttributeID
 Aliases:
 
 Required: False
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -128,7 +128,23 @@ Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Uns
 
 The command gets description for attribute with ID 192.
 
-### Example 3: Get attribute description by IDHex
+### Example 3: Get attribute description by ID without specifying AttributeID parameter name
+```powershell
+Get-DiskSmartAttributeDescription 192
+```
+
+```
+AttributeID    : 192
+AttributeIDHex : C0
+AttributeName  : Power-off Retract Count
+BetterValue    : Low
+IsCritical     :
+Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
+```
+
+The command gets description for attribute with ID 192.
+
+### Example 4: Get attribute description by IDHex
 ```powershell
 Get-DiskSmartAttributeDescription -AttributeIDHex C2
 ```
@@ -144,7 +160,7 @@ Description    : Indicates the device temperature, if the appropriate sensor is 
 
 The command gets description for attribute with IDHex C2.
 
-### Example 4: Get critical attributes description
+### Example 5: Get critical attributes description
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
