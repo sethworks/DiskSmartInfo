@@ -20,7 +20,6 @@ function Get-DiskSmartInfo
     {
         try
         {
-            # $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable ErrorCreatingCimSession -ErrorAction SilentlyContinue
             if ($DebugPreference -eq 'Continue')
             {
                 $cimSessions = New-CimSession -ComputerName $ComputerName
@@ -46,12 +45,6 @@ function Get-DiskSmartInfo
                 Remove-CimSession -CimSession $cimSessions
             }
         }
-
-        # foreach ($eccs in $ErrorCreatingCimSession)
-        # foreach ($eccs in $Errors)
-        # {
-        #     Write-Error -Message "Can't connect to '$($eccs.OriginInfo.PSComputerName)'."
-        # }
     }
 
     # CimSession
@@ -72,10 +65,6 @@ function Get-DiskSmartInfo
                 $Script:ErrorAccessingCimSession += $cim.ComputerName
             }
         }
-        # foreach ($eacs in $ErrorAccessingCimSession)
-        # {
-        #     Write-Error -Message "Can't connect to '$eacs'."
-        # }
     }
 
     # Localhost
@@ -87,11 +76,7 @@ function Get-DiskSmartInfo
             -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
     }
 
-    # foreach ($eac in $Script:ErrorAccessingClass)
-    # {
-    #     Write-Error -Message $eac
-    # }
-
+    # Error reporting
     foreach ($e in $Script:ErrorCreatingCimSession)
     {
         Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
@@ -99,12 +84,10 @@ function Get-DiskSmartInfo
     foreach ($e in $Script:ErrorAccessingCimSession)
     {
         Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
-        # Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
     }
     foreach ($e in $Script:ErrorAccessingClass)
     {
         Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
-        # $Script:ErrorAccessingClass += "ComputerName: ""$($Session.ComputerName)"", Protocol: $($Session.Protocol)`n$($_.Exception.Message)"
     }
 }
 
@@ -148,7 +131,6 @@ function inGetDiskSmartInfo
         {
             $Script:ErrorAccessingClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
         }
-        # $Script:ErrorAccessingClass += "ComputerName: ""$($Session.ComputerName)"", Protocol: $($Session.Protocol)`n$($_.Exception.Message)"
         continue
     }
 
