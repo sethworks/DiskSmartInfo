@@ -12,16 +12,16 @@ schema: 2.0.0
 
 ## SYNTAX
 
-### DefaultParameterSet (Default)
+### ComputerName (Default)
 ```
-Get-DiskSmartInfo [-ComputerName <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] [-NoWMIFallback]
- [<CommonParameters>]
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] 
+[-SilenceIfNotInWarningOrCriticalState] [<CommonParameters>]
 ```
 
-### Silence
+### CimSession
 ```
-Get-DiskSmartInfo [-ComputerName <String[]>] [-ShowConvertedData] [-SilenceIfNotInWarningOrCriticalState]
- [-NoWMIFallback] [<CommonParameters>]
+Get-DiskSmartInfo -CimSession <String[]> [-ShowConvertedData] [-CriticalAttributesOnly] 
+[-SilenceIfNotInWarningOrCriticalState] CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -38,7 +38,7 @@ Parameter Sets: ComputerName
 Aliases:
 
 Required: False
-Position: Named
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -278,7 +278,38 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера.
 
-### Example 7: Получение данных SMART с удаленных компьютеров с использованием объектов CimSession
+### Example 7: Получение данных SMART с удаленных компьютеров без указания имени параметра ComputerName
+```powershell
+Get-DiskSmartInfo SomeComputer
+```
+
+```
+ComputerName: SomeComputer
+Model:        Disk model
+InstanceId:   Disk Instance Id
+SMARTData:
+
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+```
+
+Команда получает информацию SMART жестких дисков с удаленного компьютера.
+
+### Example 8: Получение данных SMART с удаленных компьютеров с использованием объектов CimSession
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
@@ -336,5 +367,7 @@ SMARTData:
 
 ### System.Object
 ## NOTES
+
+Указание параметра -Debug позволяет получить оригинальные объекты ошибок.
 
 ## RELATED LINKS
