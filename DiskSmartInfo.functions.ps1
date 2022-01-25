@@ -21,7 +21,15 @@ function Get-DiskSmartInfo
         try
         {
             # $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable ErrorCreatingCimSession -ErrorAction SilentlyContinue
-            $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+            if ($DebugPreference -eq 'Continue')
+            {
+                $cimSessions = New-CimSession -ComputerName $ComputerName
+            }
+            else
+            {
+                $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+            }
+
             foreach ($cim in $cimSessions)
             {
                 inGetDiskSmartInfo `
@@ -132,8 +140,15 @@ function inGetDiskSmartInfo
     }
     catch
     {
+        if ($DebugPreference -eq 'Continue')
+        {
+            $_
+        }
+        else
+        {
+            $Script:ErrorAccessingClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
+        }
         # $Script:ErrorAccessingClass += "ComputerName: ""$($Session.ComputerName)"", Protocol: $($Session.Protocol)`n$($_.Exception.Message)"
-        $Script:ErrorAccessingClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
         continue
     }
 
