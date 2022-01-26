@@ -8,7 +8,7 @@ Locale: en-us
 
 # DiskSmartInfo Module
 ## Description
-Gets disk SMART (Self-Monitoring, Analysis and Reporting Technology) information
+Get disk SMART (Self-Monitoring, Analysis and Reporting Technology) information
 
 ## DiskSmartInfo Cmdlets
 ### [Get-DiskSmartAttributeDescription](Get-DiskSmartAttributeDescription.md)
