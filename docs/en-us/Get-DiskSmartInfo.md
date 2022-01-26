@@ -67,7 +67,8 @@ Adds converted data for some of the attributes.
 Such attributes are: "Spin-Up Time" (displays value in seconds),
 "Power-On Hours" (displays value in days),
 "Temperature Difference" (shows actual temperature),
-and "Total LBAs Written" (shows value in Tb).
+"Total LBAs Written" (shows value in Tb),
+and "Total LBAs Read" (shows value in Tb).
 
 ```yaml
 Type: SwitchParameter
