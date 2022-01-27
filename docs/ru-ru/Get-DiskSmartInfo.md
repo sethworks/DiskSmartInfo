@@ -67,7 +67,8 @@ Accept wildcard characters: False
 Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах),
 "Power-On Hours" (показывает данные в днях),
 "Temperature Difference" (показывает действительную температуру),
-и "Total LBAs Written" (показывает данные в терабайтах).
+"Total LBAs Written" (показывает данные в терабайтах)
+и "Total LBAs Read" (показывает данные в терабайтах).
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)

@@ -252,7 +252,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
-            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
+            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -306,7 +306,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
-            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
+            <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -372,7 +372,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <maml:name>ShowConvertedData</maml:name>
         <maml:description>
           <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
-          <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), и "Total LBAs Written" (показывает данные в терабайтах).</maml:para>
+          <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>

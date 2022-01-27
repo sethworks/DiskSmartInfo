@@ -145,6 +145,10 @@ Describe "DiskSmartInfo" {
             It "Converts Total LBAs Written" {
                 $diskSmartInfo[1].SMARTData[13].ConvertedData | Should -BeExactly '5.933 Tb'
             }
+
+            It "Converts Total LBAs Read" {
+                $diskSmartInfo[1].SMARTData[14].ConvertedData | Should -BeExactly '4.450 Tb'
+            }
         }
 
         Context "-CriticalAttributesOnly" {

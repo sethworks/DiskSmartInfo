@@ -315,6 +315,11 @@ function inConvertData
             return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
         }
 
+        242 # Total LBAs Read
+        {
+            return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
+        }
+
         default
         {
             return $null

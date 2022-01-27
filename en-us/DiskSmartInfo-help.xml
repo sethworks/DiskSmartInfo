@@ -252,7 +252,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
             <maml:para>Adds converted data for some of the attributes.</maml:para>
-            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
+            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -305,7 +305,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <maml:name>ShowConvertedData</maml:name>
           <maml:description>
             <maml:para>Adds converted data for some of the attributes.</maml:para>
-            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
+            <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -370,7 +370,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <maml:name>ShowConvertedData</maml:name>
         <maml:description>
           <maml:para>Adds converted data for some of the attributes.</maml:para>
-          <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), and "Total LBAs Written" (shows value in Tb).</maml:para>
+          <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
