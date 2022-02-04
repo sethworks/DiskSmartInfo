@@ -6,18 +6,47 @@
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo</TypeName>
             </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <Text>Model:        </Text>
+                            <ExpressionBinding>
+                                <PropertyName>Model</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                            <Text>InstanceId:   </Text>
+                            <ExpressionBinding>
+                                <PropertyName>InstanceId</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                            <Text>SMARTData:    </Text>
+                            <NewLine/>
+                            <Frame>
+                                <LeftIndent>14</LeftIndent>
+                                <CustomItem>
+                                    <ExpressionBinding>
+                                        <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
+                                    </ExpressionBinding>
+                                    <NewLine/>
+                                </CustomItem>
+                            </Frame>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>DiskSmartInfo#ComputerName</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo#ComputerName</TypeName>
+            </ViewSelectedBy>
             <Controls>
                 <Control>
                     <Name>ComputerNameControl</Name>
                     <CustomControl>
                         <CustomEntries>
                             <CustomEntry>
-                                <EntrySelectedBy>
-                                    <SelectionCondition>
-                                        <TypeName>DiskSmartInfo</TypeName>
-                                        <PropertyName>ComputerName</PropertyName>
-                                    </SelectionCondition>
-                                </EntrySelectedBy>
                                 <CustomItem>
                                     <Text>ComputerName: </Text>
                                     <ExpressionBinding>
@@ -26,7 +55,6 @@
                                     <NewLine/>
                                 </CustomItem>
                             </CustomEntry>
-                            <CustomEntry/>
                         </CustomEntries>
                     </CustomControl>
                 </Control>

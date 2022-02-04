@@ -209,7 +209,14 @@ function inGetDiskSmartInfo
 
         $hash.Add("SmartData", $attributes)
         $diskSmartInfo = [PSCustomObject]$hash
-        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo" -PassThru
+        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+
+        if ($Session)
+        {
+            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+        }
+
+        $diskSmartInfo
     }
 }
 
