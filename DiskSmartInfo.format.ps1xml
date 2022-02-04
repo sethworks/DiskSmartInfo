@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Configuration>
-    <ViewDefinitions>
-        <View>
-            <Name>DiskSmartInfo</Name>
-            <ViewSelectedBy>
-                <TypeName>DiskSmartInfo</TypeName>
-            </ViewSelectedBy>
+    <Controls>
+        <Control>
+            <Name>ComputerNameControl</Name>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <Text>ComputerName: </Text>
+                            <ExpressionBinding>
+                                <PropertyName>ComputerName</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </Control>
+        <Control>
+            <Name>DiskSmartInfoControl</Name>
             <CustomControl>
                 <CustomEntries>
                     <CustomEntry>
@@ -35,30 +48,31 @@
                     </CustomEntry>
                 </CustomEntries>
             </CustomControl>
+        </Control>
+    </Controls>
+    <ViewDefinitions>
+        <View>
+            <Name>DiskSmartInfo</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
         </View>
         <View>
             <Name>DiskSmartInfo#ComputerName</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo#ComputerName</TypeName>
             </ViewSelectedBy>
-            <Controls>
-                <Control>
-                    <Name>ComputerNameControl</Name>
-                    <CustomControl>
-                        <CustomEntries>
-                            <CustomEntry>
-                                <CustomItem>
-                                    <Text>ComputerName: </Text>
-                                    <ExpressionBinding>
-                                        <PropertyName>ComputerName</PropertyName>
-                                    </ExpressionBinding>
-                                    <NewLine/>
-                                </CustomItem>
-                            </CustomEntry>
-                        </CustomEntries>
-                    </CustomControl>
-                </Control>
-            </Controls>
             <CustomControl>
                 <CustomEntries>
                     <CustomEntry>
@@ -66,27 +80,9 @@
                             <ExpressionBinding>
                                 <CustomControlName>ComputerNameControl</CustomControlName>
                             </ExpressionBinding>
-                            <Text>Model:        </Text>
                             <ExpressionBinding>
-                                <PropertyName>Model</PropertyName>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
-                            <NewLine/>
-                            <Text>InstanceId:   </Text>
-                            <ExpressionBinding>
-                                <PropertyName>InstanceId</PropertyName>
-                            </ExpressionBinding>
-                            <NewLine/>
-                            <Text>SMARTData:    </Text>
-                            <NewLine/>
-                            <Frame>
-                                <LeftIndent>14</LeftIndent>
-                                <CustomItem>
-                                    <ExpressionBinding>
-                                        <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
-                                    </ExpressionBinding>
-                                    <NewLine/>
-                                </CustomItem>
-                            </Frame>
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
