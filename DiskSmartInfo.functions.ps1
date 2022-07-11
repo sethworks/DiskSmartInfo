@@ -8,7 +8,8 @@ function Get-DiskSmartInfo
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
-        [switch]$SilenceIfNotInWarningOrCriticalState
+        [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
+        [switch]$QuietIfOK
     )
 
     $Script:ErrorCreatingCimSession = @()
@@ -35,7 +36,7 @@ function Get-DiskSmartInfo
                 -Session $cim `
                 -ShowConvertedData:$ShowConvertedData `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
-                -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
+                -QuietIfOK:$QuietIfOK
             }
         }
         finally
@@ -58,7 +59,7 @@ function Get-DiskSmartInfo
                 -Session $cim `
                 -ShowConvertedData:$ShowConvertedData `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
-                -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
+                -QuietIfOK:$QuietIfOK
             }
             else
             {
@@ -73,7 +74,7 @@ function Get-DiskSmartInfo
         inGetDiskSmartInfo `
             -ShowConvertedData:$ShowConvertedData `
             -CriticalAttributesOnly:$CriticalAttributesOnly `
-            -SilenceIfNotInWarningOrCriticalState:$SilenceIfNotInWarningOrCriticalState
+            -QuietIfOK:$QuietIfOK
     }
 
     # Error reporting
@@ -97,7 +98,7 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
-        [switch]$SilenceIfNotInWarningOrCriticalState
+        [switch]$QuietIfOK
     )
 
     $namespaceWMI = 'root/WMI'
@@ -136,7 +137,7 @@ function inGetDiskSmartInfo
 
     foreach ($diskInfo in $disksInfo)
     {
-        $Silence = $SilenceIfNotInWarningOrCriticalState
+        $Silence = $QuietIfOK
 
         $instanceName = $diskInfo.InstanceName
         $smartData = $diskInfo.VendorSpecific
@@ -177,7 +178,7 @@ function inGetDiskSmartInfo
                 $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                if ($SilenceIfNotInWarningOrCriticalState)
+                if ($QuietIfOK)
                 {
                     if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
                          ($attribute.Value -le $attribute.Threshold) )

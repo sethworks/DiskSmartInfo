@@ -273,7 +273,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
+          <maml:name>QuietIfOK</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
             <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -327,7 +327,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
+          <maml:name>QuietIfOK</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
             <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -395,7 +395,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>SilenceIfNotInWarningOrCriticalState</maml:name>
+        <maml:name>QuietIfOK</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
           <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -519,7 +519,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>Example 4: Вывод только тех атрибутов, чьи значения находятся в состоянии Warning или Critical</maml:title>
-        <dev:code>Get-DiskSmartInfo -SilenceIfNotInWarningOrCriticalState
+        <dev:code>Get-DiskSmartInfo -QuietIfOK
 
 Model:        Disk model
 InstanceId:   Disk Instance Id
@@ -539,7 +539,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>Example 5: Вывод только тех критических атрибутов, чьи значения находятся в состоянии Warning или Critical</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
+        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
 
 Model:        Disk model
 InstanceId:   Disk Instance Id

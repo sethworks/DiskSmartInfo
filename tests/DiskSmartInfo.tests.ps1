@@ -169,12 +169,12 @@ Describe "DiskSmartInfo" {
             }
         }
 
-        Context "-SilenceIfNotInWarningOrCriticalState" {
+        Context "-QuietIfOK" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -SilenceIfNotInWarningOrCriticalState
+                $diskSmartInfo = Get-DiskSmartInfo -QuietIfOK
             }
 
             It "Has 1 DiskSmartInfo object" {
@@ -193,12 +193,12 @@ Describe "DiskSmartInfo" {
             }
         }
 
-        Context "-CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState" {
+        Context "-CriticalAttributesOnly -QuietIfOK" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
+                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
             }
 
             It "Has 1 DiskSmartInfo object" {
