@@ -15,13 +15,13 @@ Gets disk SMART information
 ### ComputerName (Default)
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] 
-[-SilenceIfNotInWarningOrCriticalState] [<CommonParameters>]
+[-QuietIfOK] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
 Get-DiskSmartInfo -CimSession <String[]> [-ShowConvertedData] [-CriticalAttributesOnly] 
-[-SilenceIfNotInWarningOrCriticalState] CommonParameters>]
+[-QuietIfOK] CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -100,7 +100,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -SilenceIfNotInWarningOrCriticalState
+### -QuietIfOK
 Displays only attributes, whose value is in Warning or Critical state.
 
 If attribute if critical, it is shown, if its Data greater than 0.
@@ -208,7 +208,7 @@ The command gets disk SMART information and displays only critical attributes.
 
 ### Example 4: Silence if not in warning or critical state
 ```powershell
-Get-DiskSmartInfo -SilenceIfNotInWarningOrCriticalState
+Get-DiskSmartInfo -QuietIfOK
 ```
 
 ```
@@ -228,7 +228,7 @@ Disks that does not have attributes with values in such states does not display.
 
 ### Example 5: Silence if critical attributes are not in warning or critical state
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly -SilenceIfNotInWarningOrCriticalState
+Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
 ```
 
 ```
