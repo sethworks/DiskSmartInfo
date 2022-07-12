@@ -1,4 +1,4 @@
-# Модуль для PowerShell `DiskSmartInfo`
+# Модуль PowerShell `DiskSmartInfo`
 
 Модуль позволяет получать данные SMART (Self-Monitoring, Analysis and Reporting Technology)
 для HDD и SSD
