@@ -6,10 +6,10 @@ function Deploy-sthModule
     )
 
     $Path = Join-Path -Path $ModulePath -ChildPath $ModuleName
-    
+
     Remove-Item -Path $Path -Recurse -ErrorAction SilentlyContinue -Force
     New-Item -ItemType Directory -Path $Path
-    
+
     # Files starting with __ (two underlines) are temporary and should not be included in the module
     Copy-Item -Path .\* -Include *.psd1, *.psm1, *.ps1, *.ps1xml -Exclude __* -Destination $Path
     Copy-Item -Path .\Templates -Exclude __* -Destination $Path -Recurse

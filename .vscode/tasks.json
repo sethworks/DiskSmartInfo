@@ -6,7 +6,7 @@
         {
             "label": "DeployModule",
             "type": "shell",
-            "command": ".\\helpers\\deployModule.ps1",
+            "command": "Set-Location ${workspaceFolder}; .\\helpers\\deployModule.ps1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -24,7 +24,7 @@
         {
             "label": "InvokePester",
             "type": "shell",
-            "command": ". .\\tests\\PesterConfiguration.ps1; ${input:codeCoverage} Invoke-Pester -Configuration $PesterConfiguration",
+            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; ${input:codeCoverage} Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
                 "isDefault": true
