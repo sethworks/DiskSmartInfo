@@ -33,10 +33,10 @@ function Get-DiskSmartInfo
             foreach ($cim in $cimSessions)
             {
                 inGetDiskSmartInfo `
-                -Session $cim `
-                -ShowConvertedData:$ShowConvertedData `
-                -CriticalAttributesOnly:$CriticalAttributesOnly `
-                -QuietIfOK:$QuietIfOK
+                    -Session $cim `
+                    -ShowConvertedData:$ShowConvertedData `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -QuietIfOK:$QuietIfOK
             }
         }
         finally
@@ -56,10 +56,10 @@ function Get-DiskSmartInfo
             if ($cim.TestConnection())
             {
                 inGetDiskSmartInfo `
-                -Session $cim `
-                -ShowConvertedData:$ShowConvertedData `
-                -CriticalAttributesOnly:$CriticalAttributesOnly `
-                -QuietIfOK:$QuietIfOK
+                    -Session $cim `
+                    -ShowConvertedData:$ShowConvertedData `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -QuietIfOK:$QuietIfOK
             }
             else
             {
@@ -183,7 +183,7 @@ function inGetDiskSmartInfo
                     if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
                          ($attribute.Value -le $attribute.Threshold) )
                     {
-                        $Silence = 0
+                        $Silence = $false
                     }
                     else
                     {
