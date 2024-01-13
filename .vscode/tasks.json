@@ -6,7 +6,7 @@
         {
             "label": "DeployModule",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; .\\helpers\\deployModule.ps1",
+            "command": "Set-Location ${workspaceFolder}; .\\.helpers\\deployModule.ps1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
