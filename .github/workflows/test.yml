@@ -1,0 +1,15 @@
+name: Test
+on: push
+
+jobs:
+  WindowsTest:
+    name: Windows test
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          . .\tests\PesterConfiguration.ps1
+          Invoke-Pester -Configuration $PesterConfiguration
