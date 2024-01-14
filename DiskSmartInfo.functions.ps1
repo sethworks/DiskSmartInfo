@@ -353,7 +353,17 @@ function inAdjustAttributeSet
 
     foreach ($set in $overwrites)
     {
-        if ($model -match $set.ModelPattern)
+        $patternMatched = $false
+        foreach ($modelPattern in $set.ModelPatterns)
+        {
+            if ($model -match $modelPattern)
+            {
+                $patternMatched = $true
+                break
+            }
+        }
+
+        if ($patternMatched)
         {
             foreach ($attrib in $set.Attributes)
             {
@@ -370,8 +380,8 @@ function inAdjustAttributeSet
                     $result.Add([PSCustomObject]$attrib)
                 }
             }
+            break
         }
-        break
     }
 
     return $result
