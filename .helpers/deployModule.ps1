@@ -12,7 +12,8 @@ function Deploy-sthModule
 
     # Files starting with __ (two underlines) are temporary and should not be included in the module
     Copy-Item -Path .\* -Include *.psd1, *.psm1, *.ps1, *.ps1xml -Exclude __* -Destination $Path
-    Copy-Item -Path .\Templates -Exclude __* -Destination $Path -Recurse
+    # Copy-Item -Path .\Templates -Exclude __* -Destination $Path -Recurse
+    Copy-Item -Path .\attributes -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\tests -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\en-us -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\ru-ru -Destination $Path -Exclude __* -Recurse
