@@ -1,5 +1,6 @@
 $overwrites = @(
-    @{ModelPatterns = @('^Samsung SSD 870.*', '^Samsung SSD 860.*');
+    @{Family = 'Samsung test data'
+    ModelPatterns = @('^Samsung SSD 870.*', '^Samsung SSD 860.*')
     Attributes = @(
         [ordered]@{AttributeID = 1
             AttributeIDHex = '1'
@@ -38,7 +39,8 @@ $overwrites = @(
         }
     ) },
 
-    @{ModelPatterns = @('^HFS(128|256|512)G39TND.*', '^HFS(120|250|500)G32TND.*', '^HFS(128|256|512)G32TNF.*');
+    @{Family = 'SK hynix SATA SSDs'
+    ModelPatterns = @('^HFS(128|256|512)G39TND.*', '^HFS(120|250|500)G32TND.*', '^HFS(128|256|512)G32TNF.*')
     Attributes = @(
         [ordered]@{AttributeID = 5
             AttributeIDHex = '5'
