@@ -1,4 +1,4 @@
-$smartAttributesHash = @(
+$defaultAttributesHash = @(
     [ordered]@{
         AttributeID = 1
         AttributeIDHex = '1'
@@ -660,9 +660,9 @@ However, some drives will not immediately remap such sectors when written; inste
     }
 )
 
-$smartAttributes = [System.Collections.Generic.List[PSCustomObject]]::new()
+$defaultAttributes = [System.Collections.Generic.List[PSCustomObject]]::new()
 
-foreach ($smartAttributeHash in $smartAttributesHash)
+foreach ($defaultAttributeHash in $defaultAttributesHash)
 {
-    $smartAttributes.Add([PSCustomObject]$smartAttributeHash)
+    $defaultAttributes.Add([PSCustomObject]$defaultAttributeHash)
 }

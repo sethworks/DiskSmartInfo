@@ -118,7 +118,7 @@ function inGetDiskSmartInfo
 
     try
     {
-        $disksInfo = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters  -ErrorAction Stop
+        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters  -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
@@ -135,18 +135,19 @@ function inGetDiskSmartInfo
         continue
     }
 
-    foreach ($diskInfo in $disksInfo)
+    foreach ($diskSmartData in $disksSmartData)
     {
         $Silence = $QuietIfOK
 
-        $instanceName = $diskInfo.InstanceName
-        $smartData = $diskInfo.VendorSpecific
+        $instanceName = $diskSmartData.InstanceName
+        $smartData = $diskSmartData.VendorSpecific
         $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
 
         # remove '_0' at the end
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
 
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+        $model = $diskDrive.Model
 
         $hash = [ordered]@{}
 
@@ -155,10 +156,13 @@ function inGetDiskSmartInfo
             $hash.Add('ComputerName', $Session.ComputerName)
         }
 
-        $hash.Add('Model', $diskDrive.Model)
+        # $hash.Add('Model', $diskDrive.Model)
+        $hash.Add('Model', $model)
         $hash.Add('InstanceId', $instanceId)
 
         $attributes = @()
+
+        $smartAttributes = inAdjustAttributeSet -model $model
 
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
@@ -232,6 +236,9 @@ function Get-DiskSmartAttributeDescription
         [Parameter(ParameterSetName='CriticalOnly')]
         [switch]$CriticalOnly
     )
+
+    # $smartAttributes = $defaultAttributes
+    $smartAttributes = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
     switch ($PSCmdlet.ParameterSetName)
     {
@@ -333,4 +340,39 @@ function inConvertData
             return $null
         }
     }
+}
+
+function inAdjustAttributeSet
+{
+    Param (
+        [string]$model
+    )
+
+    # $result = $defaultAttributes
+    $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
+
+    foreach ($set in $overwrites)
+    {
+        if ($model -match $set.ModelPattern)
+        {
+            foreach ($attrib in $set.Attributes)
+            {
+                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
+                {
+                    # $result[$index].AttributeName = $attrib.AttributeName
+                    # $result[$index].BetterValue = $attrib.BetterValue
+                    # $result[$index].IsCritical = $attrib.IsCritical
+                    # $result[$index].Description = $attrib.Description
+                    $result[$index] = $attrib
+                }
+                else
+                {
+                    $result.Add([PSCustomObject]$attrib)
+                }
+            }
+        }
+        break
+    }
+
+    return $result
 }
