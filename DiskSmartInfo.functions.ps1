@@ -162,7 +162,7 @@ function inGetDiskSmartInfo
 
         $attributes = @()
 
-        $smartAttributes = inAdjustAttributeSet -model $model
+        $smartAttributes = inOverwriteAttributes -model $model
 
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
@@ -342,7 +342,7 @@ function inConvertData
     }
 }
 
-function inAdjustAttributeSet
+function inOverwriteAttributes
 {
     Param (
         [string]$model
