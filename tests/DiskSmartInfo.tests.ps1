@@ -73,18 +73,38 @@ Describe "DiskSmartInfo" {
                 BytesPerSector = $testsData.BytesPerSector_SSD1
             }
 
+            # HFSSSD1
+            $diskInfoPropertiesHFSSSD1 = @{
+                VendorSpecific = $testsData.AtapiSMARTData_VendorSpecific_HFSSSD1
+                InstanceName = $testsData.InstanceName_HFSSSD1
+            }
+
+            $diskThresholdsPropertiesHFSSSD1 = @{
+                VendorSpecific = $testsData.FailurePredictThresholds_VendorSpecific_HFSSSD1
+                InstanceName = $testsData.InstanceName_HFSSSD1
+            }
+
+            $diskDrivePropertiesHFSSSD1 = @{
+                PNPDeviceID = $testsData.PNPDeviceID_HFSSSD1
+                Model = $testsData.Model_HFSSSD1
+                BytesPerSector = $testsData.BytesPerSector_HFSSSD1
+            }
+
             # CIM object
             $diskInfoHDD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHDD1 -ClientOnly
             $diskInfoHDD2 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHDD2 -ClientOnly
             $diskInfoSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesSSD1 -ClientOnly
+            $diskInfoHFSSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHFSSSD1 -ClientOnly
 
             $diskThresholdsHDD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD1 -ClientOnly
             $diskThresholdsHDD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD2 -ClientOnly
             $diskThresholdsSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD1 -ClientOnly
+            $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
 
             $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
             $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD2 -ClientOnly
             $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
+            $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly
         }
 
         Context "Without parameters" {
@@ -214,6 +234,33 @@ Describe "DiskSmartInfo" {
             It "Has only critical attributes that are in Warning or Critical state" {
                 $diskSmartInfo.SMARTData.Id | Should -Be @(197, 198)
                 $diskSmartInfo.SMARTData.Data | Should -Be @(20, 20)
+            }
+        }
+
+        Context "Overwrite attribute definitions" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskInfoSSD1, $diskInfoHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo
+            }
+
+            It "Has 2 DiskSmartInfo objects" {
+                $diskSmartInfo | Should -HaveCount 2
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            }
+
+            # It "Has SMARTData property with 2 DiskSmartAttribute objects" {
+            #     $diskSmartInfo.SMARTData | Should -HaveCount 2
+            #     $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+            # }
+
+            # It "Has only critical attributes that are in Warning or Critical state" {
+            #     $diskSmartInfo.SMARTData.Id | Should -Be @(197, 198)
+            #     $diskSmartInfo.SMARTData.Data | Should -Be @(20, 20)
+            # }
+            It "Has default attribute definitions" {
+                $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
         }
     }
