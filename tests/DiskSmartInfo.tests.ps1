@@ -250,21 +250,20 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
 
-            # It "Has SMARTData property with 2 DiskSmartAttribute objects" {
-            #     $diskSmartInfo.SMARTData | Should -HaveCount 2
-            #     $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
-            # }
-
-            # It "Has only critical attributes that are in Warning or Critical state" {
-            #     $diskSmartInfo.SMARTData.Id | Should -Be @(197, 198)
-            #     $diskSmartInfo.SMARTData.Data | Should -Be @(20, 20)
-            # }
             It "Has default attribute definitions" {
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
+                $diskSmartInfo[0].SmartData[13].ID | Should -Be 241
+                $diskSmartInfo[0].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[0].SmartData[14].ID | Should -Be 242
+                $diskSmartInfo[0].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
             }
 
-            It "Has ovwerwritten attrubute definitions" {
+            It "Has overwritten attrubute definitions" {
                 $diskSmartInfo[1].SmartData | Should -HaveCount 30
+                $diskSmartInfo[1].SmartData[27].ID | Should -Be 241
+                $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
+                $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
+                $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
             }
         }
     }
