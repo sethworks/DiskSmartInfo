@@ -262,6 +262,10 @@ Describe "DiskSmartInfo" {
             It "Has default attribute definitions" {
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
+
+            It "Has ovwerwritten attrubute definitions" {
+                $diskSmartInfo[1].SmartData | Should -HaveCount 30
+            }
         }
     }
 }
