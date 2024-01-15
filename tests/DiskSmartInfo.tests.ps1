@@ -23,7 +23,7 @@ Describe "DiskSmartInfo" {
 
             # Properties
             # HDD1
-            $diskInfoPropertiesHDD1 = @{
+            $diskSmartDataPropertiesHDD1 = @{
                 VendorSpecific = $testsData.AtapiSMARTData_VendorSpecific_HDD1
                 InstanceName = $testsData.InstanceName_HDD1
             }
@@ -40,7 +40,7 @@ Describe "DiskSmartInfo" {
             }
 
             # HDD2
-            $diskInfoPropertiesHDD2 = @{
+            $diskSmartDataPropertiesHDD2 = @{
                 VendorSpecific = $testsData.AtapiSMARTData_VendorSpecific_HDD2
                 InstanceName = $testsData.InstanceName_HDD2
             }
@@ -57,7 +57,7 @@ Describe "DiskSmartInfo" {
             }
 
             # SSD1
-            $diskInfoPropertiesSSD1 = @{
+            $diskSmartDataPropertiesSSD1 = @{
                 VendorSpecific = $testsData.AtapiSMARTData_VendorSpecific_SSD1
                 InstanceName = $testsData.InstanceName_SSD1
             }
@@ -74,7 +74,7 @@ Describe "DiskSmartInfo" {
             }
 
             # HFSSSD1
-            $diskInfoPropertiesHFSSSD1 = @{
+            $diskSmartDataPropertiesHFSSSD1 = @{
                 VendorSpecific = $testsData.AtapiSMARTData_VendorSpecific_HFSSSD1
                 InstanceName = $testsData.InstanceName_HFSSSD1
             }
@@ -91,10 +91,10 @@ Describe "DiskSmartInfo" {
             }
 
             # CIM object
-            $diskInfoHDD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHDD1 -ClientOnly
-            $diskInfoHDD2 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHDD2 -ClientOnly
-            $diskInfoSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesSSD1 -ClientOnly
-            $diskInfoHFSSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskInfoPropertiesHFSSSD1 -ClientOnly
+            $diskSmartDataHDD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskSmartDataPropertiesHDD1 -ClientOnly
+            $diskSmartDataHDD2 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskSmartDataPropertiesHDD2 -ClientOnly
+            $diskSmartDataSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskSmartDataPropertiesSSD1 -ClientOnly
+            $diskSmartDataHFSSSD1 = New-CimInstance -CimClass $cimClassSMARTData -Property $diskSmartDataPropertiesHFSSSD1 -ClientOnly
 
             $diskThresholdsHDD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD1 -ClientOnly
             $diskThresholdsHDD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD2 -ClientOnly
@@ -109,7 +109,7 @@ Describe "DiskSmartInfo" {
 
         Context "Without parameters" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo
@@ -144,7 +144,7 @@ Describe "DiskSmartInfo" {
 
         Context "-ShowConvertedData" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo -ShowConvertedData
@@ -173,7 +173,7 @@ Describe "DiskSmartInfo" {
 
         Context "-CriticalAttributesOnly" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
@@ -191,7 +191,7 @@ Describe "DiskSmartInfo" {
 
         Context "-QuietIfOK" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo -QuietIfOK
@@ -215,7 +215,7 @@ Describe "DiskSmartInfo" {
 
         Context "-CriticalAttributesOnly -QuietIfOK" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoHDD1, $diskInfoHDD2, $diskInfoSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
@@ -239,7 +239,7 @@ Describe "DiskSmartInfo" {
 
         Context "Overwrite attribute definitions" {
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskInfoSSD1, $diskInfoHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
                 $diskSmartInfo = Get-DiskSmartInfo
