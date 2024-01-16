@@ -373,7 +373,22 @@ function inOverwriteAttributes
                     # $result[$index].BetterValue = $attrib.BetterValue
                     # $result[$index].IsCritical = $attrib.IsCritical
                     # $result[$index].Description = $attrib.Description
-                    $result[$index] = $attrib
+                    # $result[$index] = $attrib
+
+                    # $newAttrib = $attrib.clone()
+                    $newAttrib = [ordered]@{
+                        AttributeID = $attrib.AttributeID
+                        AttributeIDHex = $attrib.AttributeIDHex
+                        AttributeName = $attrib.AttributeName
+                        BetterValue = ''
+                        IsCritical = $result[$index].IsCritical
+                        Description = ''
+                    }
+
+                    # $newAttrib['BetterValue'] = ''
+                    # $newAttrib['IsCritical'] = $result[$index].IsCritical
+                    # $newAttrib['Description'] = ''
+                    $result[$index] = $newAttrib
                 }
                 else
                 {
