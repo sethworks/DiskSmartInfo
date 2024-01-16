@@ -23,7 +23,7 @@ Describe "DiskSmartAttributeDescription" {
                 $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin-Up Time'
                 $diskSmartAttributeDescription[42].BetterValue | Should -BeExactly 'Low'
                 $diskSmartAttributeDescription[44].IsCritical | Should -BeExactly $true
-                $diskSmartAttributeDescription[45].IsCritical | Should -BeNullOrEmpty
+                $diskSmartAttributeDescription[45].IsCritical | Should -BeExactly $false
                 $diskSmartAttributeDescription[63].Description | Should -BeExactly 'Count of attempts to compensate for platter speed variations.'
             }
         }
