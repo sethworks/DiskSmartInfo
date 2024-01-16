@@ -266,5 +266,20 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
             }
         }
+
+        Context "Retain IsCritical property during overwriting" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+            }
+
+            It "Retains IsCritical property value during attribute overwriting" {
+                $diskSmartInfo[1].SmartData | Should -HaveCount 6
+                $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
+                $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+            }
+        }
     }
 }
