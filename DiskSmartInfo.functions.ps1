@@ -348,7 +348,6 @@ function inOverwriteAttributes
         [string]$model
     )
 
-    # $result = $defaultAttributes
     $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
     foreach ($set in $overwrites)
@@ -371,8 +370,6 @@ function inOverwriteAttributes
                     AttributeID = $attrib.AttributeID
                     AttributeIDHex = $attrib.AttributeIDHex
                     AttributeName = $attrib.AttributeName
-                    # IsCritical = $result[$index].IsCritical
-                    # $newAttrib['IsCritical'] = $false
                     IsCritical = $false
                     BetterValue = ''
                     Description = ''
@@ -380,31 +377,11 @@ function inOverwriteAttributes
 
                 if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
                 {
-                    # $result[$index].AttributeName = $attrib.AttributeName
-                    # $result[$index].BetterValue = $attrib.BetterValue
-                    # $result[$index].IsCritical = $attrib.IsCritical
-                    # $result[$index].Description = $attrib.Description
-                    # $result[$index] = $attrib
-
-                    # $newAttrib = $attrib.clone()
-                    # $newAttrib = [ordered]@{
-                    #     AttributeID = $attrib.AttributeID
-                    #     AttributeIDHex = $attrib.AttributeIDHex
-                    #     AttributeName = $attrib.AttributeName
-                    #     IsCritical = $result[$index].IsCritical
-                    #     BetterValue = ''
-                    #     Description = ''
-                    # }
-
-                    # $newAttrib['BetterValue'] = ''
-                    # $newAttrib['IsCritical'] = $result[$index].IsCritical
                     $newAttrib.IsCritical = $result[$index].IsCritical
-                    # $newAttrib['Description'] = ''
                     $result[$index] = $newAttrib
                 }
                 else
                 {
-                    # $newAttrib['IsCritical'] = $false
                     $result.Add([PSCustomObject]$attrib)
                 }
             }
