@@ -380,8 +380,8 @@ function inOverwriteAttributes
                         AttributeID = $attrib.AttributeID
                         AttributeIDHex = $attrib.AttributeIDHex
                         AttributeName = $attrib.AttributeName
-                        BetterValue = ''
                         IsCritical = $result[$index].IsCritical
+                        BetterValue = ''
                         Description = ''
                     }
 
