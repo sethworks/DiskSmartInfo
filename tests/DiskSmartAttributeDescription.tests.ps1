@@ -14,17 +14,17 @@ Describe "DiskSmartAttributeDescription" {
             }
 
             It "Has 81 attributes" {
-                $diskSmartAttributeDescription | Should -HaveCount 81
+                $diskSmartAttributeDescription | Should -HaveCount 64
             }
 
             It "Has correct attributes" {
                 $diskSmartAttributeDescription[0].AttributeID | Should -Be 1
-                $diskSmartAttributeDescription[35].AttributeIDHex | Should -BeExactly 'C0'
+                $diskSmartAttributeDescription[30].AttributeIDHex | Should -BeExactly 'C2'
                 $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin-Up Time'
-                $diskSmartAttributeDescription[42].BetterValue | Should -BeExactly 'Low'
-                $diskSmartAttributeDescription[44].IsCritical | Should -BeExactly $true
+                $diskSmartAttributeDescription[24].BetterValue | Should -BeExactly 'Low'
+                $diskSmartAttributeDescription[37].IsCritical | Should -BeExactly $true
                 $diskSmartAttributeDescription[45].IsCritical | Should -BeExactly $false
-                $diskSmartAttributeDescription[63].Description | Should -BeExactly 'Count of attempts to compensate for platter speed variations.'
+                $diskSmartAttributeDescription[63].Description | Should -BeExactly 'Count of "Free Fall Events" detected.'
             }
         }
 
