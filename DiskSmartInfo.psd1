@@ -58,7 +58,7 @@ PowerShellVersion = '5.1'
 FormatsToProcess = @('DiskSmartInfo.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('DiskSmartInfo.functions.ps1', 'attributes/default.ps1', 'attributes/overwrites.ps1')
+NestedModules = @('DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'attributes/default.ps1', 'attributes/overwrites.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @('Get-DiskSmartInfo', 'Get-DiskSmartAttributeDescription')
@@ -79,7 +79,7 @@ AliasesToExport = @()
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1', 'DiskSmartInfo.functions.ps1', 'DiskSmartInfo.format.ps1xml', 'attributes/default.ps1', 'attributes/overwrites.ps1'
+FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1', 'DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'DiskSmartInfo.format.ps1xml', 'attributes/default.ps1', 'attributes/overwrites.ps1'
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
