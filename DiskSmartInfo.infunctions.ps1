@@ -106,7 +106,9 @@ function inGetDiskSmartInfo
                 if ($ShowConvertedData)
                 {
                     # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -data $attribute.Data) -TypeName 'DiskSmartAttribute#ConvertedData'
-                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -attributeObject $attributeObject) -TypeName 'DiskSmartAttribute#ConvertedData'
+                    $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                    # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -attributeObject $attributeObject -diskDrive $diskDrive) -TypeName 'DiskSmartAttribute#ConvertedData'
                 }
 
                 $attributes += $attributeObject
@@ -255,7 +257,8 @@ function inConvertData
 {
     Param(
         # $data
-        $attributeObject
+        $attributeObject,
+        $diskDrive
     )
 
     # $convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock
