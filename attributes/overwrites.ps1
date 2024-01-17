@@ -106,13 +106,13 @@ $overwrites = @(
             AttributeIDHex = 'F1'
             AttributeName = 'Total Writes GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} Gb" -f $($data / 1Gb)}
+            ConvertScriptBlock = {"{0:f3} Tb" -f $($data / 1Kb)}
         },
         [ordered]@{AttributeID = 242
             AttributeIDHex = 'F2'
             AttributeName = 'Total Reads GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} Gb" -f $($data / 1Gb)}
+            ConvertScriptBlock = {"{0:f3} Tb" -f $($data / 1Kb)}
         },
         [ordered]@{AttributeID = 243
             AttributeIDHex = 'F3'

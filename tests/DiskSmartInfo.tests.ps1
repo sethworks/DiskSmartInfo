@@ -267,6 +267,39 @@ Describe "DiskSmartInfo" {
             }
         }
 
+        Context "Converted data for overwritten attributes" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo -ShowConvertedData
+            }
+
+            It "Has default attribute definitions" {
+                $diskSmartInfo[0].SmartData | Should -HaveCount 15
+                $diskSmartInfo[0].SmartData[13].ID | Should -Be 241
+                $diskSmartInfo[0].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[0].SmartData[13].Data | Should -Be 12740846422
+                $diskSmartInfo[0].SmartData[13].ConvertedData | Should -BeExactly "5.933 Tb"
+                $diskSmartInfo[0].SmartData[14].ID | Should -Be 242
+                $diskSmartInfo[0].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
+                $diskSmartInfo[0].SmartData[14].Data | Should -Be 9556432520
+                $diskSmartInfo[0].SmartData[14].ConvertedData | Should -BeExactly "4.450 Tb"
+            }
+
+            It "Has overwritten attrubute definitions" {
+                $diskSmartInfo[1].SmartData | Should -HaveCount 30
+                $diskSmartInfo[1].SmartData[27].ID | Should -Be 241
+                $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
+                $diskSmartInfo[1].SmartData[27].Data | Should -Be 2034
+                $diskSmartInfo[1].SmartData[27].ConvertedData | Should -BeExactly "1.986 Tb"
+                $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
+                $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
+                $diskSmartInfo[1].SmartData[28].Data | Should -Be 2596
+                $diskSmartInfo[1].SmartData[28].ConvertedData | Should -BeExactly "2.535 Tb"
+            }
+        }
+
         Context "Retain IsCritical property during overwriting" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
