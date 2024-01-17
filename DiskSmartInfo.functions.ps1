@@ -78,16 +78,5 @@ function Get-DiskSmartInfo
     }
 
     # Error reporting
-    foreach ($e in $Script:ErrorCreatingCimSession)
-    {
-        Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
-    }
-    foreach ($e in $Script:ErrorAccessingCimSession)
-    {
-        Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
-    }
-    foreach ($e in $Script:ErrorAccessingClass)
-    {
-        Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
-    }
+    inReportErrors
 }
