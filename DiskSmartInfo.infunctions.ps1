@@ -105,7 +105,8 @@ function inGetDiskSmartInfo
 
                 if ($ShowConvertedData)
                 {
-                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -data $attribute.Data) -TypeName 'DiskSmartAttribute#ConvertedData'
+                    # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -data $attribute.Data) -TypeName 'DiskSmartAttribute#ConvertedData'
+                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $(inConvertData -attributeObject $attributeObject) -TypeName 'DiskSmartAttribute#ConvertedData'
                 }
 
                 $attributes += $attributeObject
@@ -253,34 +254,38 @@ function inGetAttributeData
 function inConvertData
 {
     Param(
-        $data
+        # $data
+        $attributeObject
     )
 
-    switch ($smartData[$a])
+    # switch ($smartData[$a])
+    switch ($attributeObject.ID)
     {
         3 # Spin-Up Time
         {
-            return "{0:f3} Sec" -f $($data / 1000)
+            # return "{0:f3} Sec" -f $($data / 1000)
+            return "{0:f3} Sec" -f $($attributeObject.Data / 1000)
         }
 
         9 # Power-On Hours
         {
-            return "{0:f} Days" -f $($data / 24)
+            return "{0:f} Days" -f $($attributeObject.Data / 24)
         }
 
         190 # Temperature Difference
         {
-            return "{0:n0} °C" -f $(100 - $data)
+            return "{0:n0} °C" -f $(100 - $attributeObject.Data)
         }
 
         241 # Total LBAs Written
         {
-            return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
+            return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
+            # $convertScriptBlock = 
         }
 
         242 # Total LBAs Read
         {
-            return "{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)
+            return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
         }
 
         default
