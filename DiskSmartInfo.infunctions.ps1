@@ -24,7 +24,7 @@ function inGetDiskSmartInfo
 
     try
     {
-        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters  -ErrorAction Stop
+        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
@@ -188,35 +188,97 @@ function inGetAttributeData
         $a
     )
 
-    if ($smartData[$a] -eq 194) # Temperature
+    $dt = $smartAttributes.Where{$_.AttributeID -eq $smartData[$a]}.DataType
+
+    switch ($dt.value__)
     {
-        # 10, 8, 6
-        $temps = @()
-
-        for ($i = 10; $i -ge 6; $i -= 2)
+        $([DataType]::bits48.value__)
         {
-            $value = ($smartData[$a + $i] * 256) + $smartData[$a + $i - 1]
+            $result = 0
+            $dataStartOffset = $a + 5
 
-            if ($value)
+            for ($offset = 0; $offset -lt 6; $offset++)
             {
-                $temps += $value
+                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
             }
+
+            return $result
         }
 
-        return $temps
-    }
-    else
-    {
-        $result = 0
-        $dataStartOffset = $a + 5
-
-        for ($offset = 0; $offset -le 6; $offset++)
+        $([DataType]::bits24.value__)
         {
-            $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            $result = 0
+            $dataStartOffset = $a + 5
+
+            for ($offset = 0; $offset -lt 4; $offset++)
+            {
+                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            }
+
+            return $result
         }
 
-        return $result
+        $([DataType]::bits16.value__)
+        {
+            $result = 0
+            $dataStartOffset = $a + 5
+
+            for ($offset = 0; $offset -lt 2; $offset++)
+            {
+                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            }
+
+            return $result
+        }
+
+        $([DataType]::temperature3.value__)
+        {
+            # 10, 8, 6
+            $temps = @()
+
+            for ($offset = 9; $offset -ge 5; $offset -= 2)
+            {
+                $value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
+
+                if ($value)
+                {
+                    $temps += $value
+                }
+            }
+
+            return $temps
+        }
     }
+
+    # if ($smartData[$a] -eq 194) # Temperature
+    # {
+    #     # 10, 8, 6
+    #     $temps = @()
+
+    #     for ($i = 10; $i -ge 6; $i -= 2)
+    #     {
+    #         $value = ($smartData[$a + $i] * 256) + $smartData[$a + $i - 1]
+
+    #         if ($value)
+    #         {
+    #             $temps += $value
+    #         }
+    #     }
+
+    #     return $temps
+    # }
+    # else
+    # {
+    #     $result = 0
+    #     $dataStartOffset = $a + 5
+
+    #     for ($offset = 0; $offset -le 6; $offset++)
+    #     {
+    #         $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+    #     }
+
+    #     return $result
+    # }
 }
 
 function inConvertData
