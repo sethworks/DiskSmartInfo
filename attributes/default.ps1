@@ -12,6 +12,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Read Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = '(Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred when reading data from a disk surface. The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
     },
@@ -21,6 +22,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Throughput Performance'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'High'
         Description = 'Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.'
     },
@@ -30,6 +32,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Spin-Up Time'
         DataType = [DataType]::bits16
         IsCritical = $false
+        ConvertScriptBlock = {"{0:f3} Sec" -f $($data / 1000)}
         BetterValue = 'Low'
         Description = 'Average time of spindle spin up (from zero RPM to fully operational [milliseconds]).'
     },
@@ -39,6 +42,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Start/Stop Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'A tally of spindle start/stop cycles. The spindle turns on, and hence the count is increased, both when the hard disk is turned on after having before been turned entirely off (disconnected from power source) and when the hard disk returns from having previously been put to sleep mode.'
     },
@@ -48,6 +52,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Reallocated Sectors Count'
         DataType = [DataType]::bits16
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.'
     },
@@ -57,6 +62,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Read Channel Margin'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Margin of a channel while reading data. The function of this attribute is not specified.'
     },
@@ -66,6 +72,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Seek Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Varies'
         Description = '(Vendor specific raw value.) Rate of seek errors of the magnetic heads. If there is a partial failure in the mechanical positioning system, then seek errors will arise. Such a failure may be due to numerous factors, such as damage to a servo, or thermal widening of the hard disk. The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
     },
@@ -75,6 +82,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Seek Time Performance'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'High'
         Description = 'Average performance of seek operations of the magnetic heads. If this attribute is decreasing, it is a sign of problems in the mechanical subsystem.'
     },
@@ -84,6 +92,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Power-On Hours'
         DataType = [DataType]::bits24
         IsCritical = $false
+        ConvertScriptBlock = {"{0:f} Days" -f $($data / 24)}
         BetterValue = ''
         Description = 'Count of hours in power-on state. The raw value of this attribute shows total count of hours (or minutes, or seconds, depending on manufacturer) in power-on state.
 "By default, the total expected lifetime of a hard disk in perfect condition is defined as 5 years (running every day and night on all days). This is equal to 1825 days in 24/7 mode or 43800 hours."
@@ -95,6 +104,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
         AttributeName = 'Spin Retry Count'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of retry of spin start attempts. This attribute stores a total count of the spin start attempts to reach the fully operational speed (under the condition that the first attempt was unsuccessful). An increase of this attribute value is a sign of problems in the hard disk mechanical subsystem.'
     },
@@ -104,6 +114,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
         AttributeName = 'Calibration Retry Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Calibration Retries". This attribute indicates the count that recalibration was requested (under the condition that the first attempt was unsuccessful). An increase of this attribute value is a sign of problems in the hard disk mechanical subsystem.'
     },
@@ -113,6 +124,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
         AttributeName = 'Power Cycle Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'This attribute indicates the count of full hard disk power on/off cycles.'
     },
@@ -122,6 +134,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
         AttributeName = 'Soft Read Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Uncorrected read errors reported to the operating system.'
     },
@@ -179,6 +192,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
         AttributeName = 'Power Loss Protection Failure'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Last test result as microseconds to discharge cap, saturated at its maximum value. Also logs minutes since last test and lifetime number of tests. Raw value contains the following data:
 Bytes 0-1: Last test result as microseconds to discharge cap, saturates at max value. Test result expected in range 25 <= result <= 5000000, lower indicates specific error code.
@@ -192,6 +206,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Erase Fail Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'S.M.A.R.T. parameter indicates a number of flash erase command failures.'
     },
@@ -201,6 +216,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Wear Range Delta'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Delta between most-worn and least-worn Flash blocks. It describes how good/bad the wearleveling of the SSD works on a more technical way.'
     },
@@ -210,6 +226,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Used Reserved Block Count Chip'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = ''
     },
@@ -219,6 +236,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Used Reserved Block Count Total'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = '"Pre-Fail" attribute used at least in Samsung devices.'
     },
@@ -228,6 +246,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Unused Reserved Block Count Total'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = '"Pre-Fail" attribute used at least in HP devices.'
     },
@@ -237,6 +256,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
         AttributeName = 'Program Fail Count Total'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Non-4K Aligned Access Count". Total number of Flash program operation failures since the drive was deployed.
 Number of user data accesses (both reads and writes) where LBAs are not 4 KiB aligned (LBA % 8 != 0) or where size is not modulus 4 KiB (block count != 8), assuming logical block size (LBS) = 512 B.'
@@ -247,6 +267,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'Erase Fail Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = '"Pre-Fail" Attribute used at least in Samsung devices.'
     },
@@ -256,6 +277,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'SATA Downshift Error Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Runtine Bad Block". Western Digital, Samsung or Seagate attribute: Either the number of downshifts of link speed (e.g. from 6Gbps to 3Gbps) or the total number of data blocks with detected, uncorrectable errors encountered during normal operation. Although degradation of this parameter can be an indicator of drive aging and/or potential electromechanical problems, it does not directly indicate imminent drive failure.'
     },
@@ -265,6 +287,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'End-to-End Error / IOEDC'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'This attribute is a part of Hewlett-Packard''s SMART IV technology, as well as part of other vendors'' IO Error Detection and Correction schemas, and it contains a count of parity errors which occur in the data path to the media via the drive''s cache RAM.'
     },
@@ -290,6 +313,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'Reported Uncorrectable Errors'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The count of errors that could not be recovered using hardware ECC (see attribute 195).'
     },
@@ -299,6 +323,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'Command Timeout'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The count of aborted operations due to HDD timeout. Normally this attribute value should be equal to zero.'
     },
@@ -308,6 +333,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
         AttributeName = 'High Fly Writes'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'HDD manufacturers implement a flying height sensor that attempts to provide additional protections for write operations by detecting when a recording head is flying outside its normal operating range. If an unsafe fly height condition is encountered, the write process is stopped, and the information is rewritten or reallocated to a safe region of the hard drive. This attribute indicates the count of these errors detected over the lifetime of the drive.
 This feature is implemented in most modern Seagate drives and some of Western Digital''s drives, beginning with the WD Enterprise WDE18300 and WDE9180 Ultra2 SCSI hard drives, and will be included on all future WD Enterprise products.'
@@ -318,6 +344,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
         AttributeName = 'Temperature Difference'
         DataType = [DataType]::temperature3
         IsCritical = $false
+        ConvertScriptBlock = {"{0:n0} °C" -f $(100 - $data)}
         BetterValue = 'Varies'
         Description = 'Also known as "Airflow Temperature". Value is equal to (100-temp. °C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
     },
@@ -327,6 +354,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
         AttributeName = 'G-Sense Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The count of errors resulting from externally induced shock and vibration.'
     },
@@ -336,6 +364,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
         AttributeName = 'Power-off Retract Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.'
     },
@@ -345,6 +374,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
         AttributeName = 'Load Cycle Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Load/Unload Cycle Count" (Fujitsu). Count of load/unload cycles into head landing zone position. Some drives use 225 (0xE1) for Load Cycle Count instead.
 Western Digital rates their VelociRaptor drives for 600,000 load/unload cycles, and WD Green drives for 300,000 cycles; the latter ones are designed to unload heads often to conserve power. On the other hand, the WD3000GLFS (a desktop drive) is specified for only 50,000 load/unload cycles.
@@ -356,6 +386,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
         AttributeName = 'Temperature'
         DataType = [DataType]::temperature3
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).'
     },
@@ -365,6 +396,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
         AttributeName = 'Hardware ECC Recovered'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Varies'
         Description = '(Vendor-specific raw value.) The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
     },
@@ -374,6 +406,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
         AttributeName = 'Reallocation Event Count'
         DataType = [DataType]::bits16
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of remap operations. The raw value of this attribute shows the total count of attempts to transfer data from reallocated sectors to a spare area. Both successful and unsuccessful attempts are counted.'
     },
@@ -383,6 +416,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
         AttributeName = 'Current Pending Sector Count'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of "unstable" sectors (waiting to be remapped, because of unrecoverable read errors). If an unstable sector is subsequently read successfully, the sector is remapped and this value is decreased. Read errors on a sector will not remap the sector immediately (since the correct value cannot be read and so the value to remap is not known, and also it might become readable later); instead, the drive firmware remembers that the sector needs to be remapped, and will remap it the next time it''s written.
 However, some drives will not immediately remap such sectors when written; instead the drive will first attempt to write to the problem sector and if the write operation is successful then the sector will be marked good (in this case, the "Reallocation Event Count" (0xC4) will not be increased). This is a serious shortcoming, for if such a drive contains marginal sectors that consistently fail only after some time has passed following a successful write operation, then the drive will never remap these problem sectors.'
@@ -393,6 +427,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Offline Uncorrectable Sector Count'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The total count of uncorrectable errors when reading/writing a sector. A rise in the value of this attribute indicates defects of the disk surface and/or problems in the mechanical subsystem.'
     },
@@ -402,6 +437,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Ultra DMA CRC Error Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The count of errors in data transfer via the interface cable as determined by ICRC (Interface Cyclic Redundancy Check).'
     },
@@ -411,6 +447,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Write Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "Multi-Zone Error Rate". The count of errors found when writing a sector. The higher the value, the worse the disk''s mechanical condition is.'
     },
@@ -420,6 +457,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Soft Read Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $true
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "TA Counter Detected". Count indicates the number of uncorrectable software read errors.'
     },
@@ -429,6 +467,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Data Address Mark Errors'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Also known as "TA Counter Increased". Count of Data Address Mark errors (or vendor-specific).'
     },
@@ -438,6 +477,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Run Out Cancel'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The number of errors caused by incorrect checksum during the error correction.'
     },
@@ -447,6 +487,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Soft ECC correction'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of errors corrected by the internal error correction software.'
     },
@@ -456,6 +497,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Thermal Asperity Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of errors due to high temperature.'
     },
@@ -465,6 +507,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Flying Height'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Height of heads above the disk surface. If too low, head crash is more likely; if too high, read/write errors are more likely.'
     },
@@ -474,6 +517,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Spin High Current'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Amount of surge current used to spin up the drive.'
     },
@@ -483,6 +527,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Spin Buzz'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Count of buzz routines needed to spin up the drive due to insufficient power.'
     },
@@ -492,6 +537,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Offline Seek Performance'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Drive''s seek performance during its internal tests.'
     },
@@ -525,6 +571,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Disk Shift'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Distance the disk has shifted relative to the spindle (usually due to shock or temperature). Unit of measure is unknown.'
     },
@@ -534,6 +581,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'G-Sense Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The count of errors resulting from externally induced shock and vibration.'
     },
@@ -543,6 +591,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Loaded Hours'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Time spent operating under data load (movement of magnetic head armature).'
     },
@@ -552,6 +601,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Load/Unload Retry Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Count of times head changes position.'
     },
@@ -561,6 +611,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Load Friction'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Resistance caused by friction in mechanical parts while operating.'
     },
@@ -570,6 +621,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Load/Unload Cycle Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Total count of load cycles. Some drives use 193 (0xC1) for Load Cycle Count instead. See Description for 193 for significance of this number.'
     },
@@ -579,6 +631,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Load "In"-time'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Total time of loading on the magnetic heads actuator (time not spent in parking area).'
     },
@@ -588,6 +641,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Torque Amplification Count'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of attempts to compensate for platter speed variations.'
     },
@@ -597,6 +651,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Power-Off Retract Cycle'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'The number of power-off cycles which are counted whenever there is a "retract event" and the heads are loaded off of the media such as when the machine is powered down, put to sleep, or is idle.'
     },
@@ -606,6 +661,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'GMR Head Amplitude (magnetic HDDs), Drive Life Protection Status (SSDs)'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Amplitude of "thrashing" (repetitive head moving motions between operations). In solid-state drives, indicates whether usage trajectory is outpacing the expected life curve.'
     },
@@ -615,6 +671,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Life Left (SSDs) or Temperature'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Indicates the approximate SSD life left, in terms of program/erase cycles or available reserved blocks. A normalized value of 100 represents a new drive, with a threshold value at 10 indicating a need for replacement. A value of 0 may mean that the drive is operating in read-only mode to allow data recovery. Previously (pre-2010) occasionally used for Drive Temperature (more typically reported at 0xC2).'
     },
@@ -624,6 +681,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Endurance Remaining or Available Reserved Space'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Number of physical erase cycles completed on the SSD as a percentage of the maximum physical erase cycles the drive is designed to endure. Intel SSDs report the available reserved space as a percentage of the initial reserved space.'
     },
@@ -633,6 +691,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Media Wearout Indicator (SSDs) or Power-On Hours'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Intel SSDs report a normalized value from 100, a new drive, to a minimum of 1. It decreases while the NAND erase cycles increase from 0 to the maximum-rated cycles. Previously (pre-2010) occasionally used for Power-On Hours (more typically reported in 0x09).'
     },
@@ -658,6 +717,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Head Flying Hours or Transfer Error Rate (Fujitsu)'
         DataType = [DataType]::bits24
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = ''
         Description = 'Time spent during the positioning of the drive heads. Some Fujitsu drives report the count of link resets during a data transfer.'
     },
@@ -667,6 +727,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Total LBAs Written'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = {"{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)}
         BetterValue = ''
         Description = 'Total count of LBAs written.'
     },
@@ -676,6 +737,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Total LBAs Read'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = {"{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)}
         BetterValue = ''
         Description = 'Total count of LBAs read. Some S.M.A.R.T. utilities will report a negative number for the raw value since in reality it has 48 bits rather than 32.'
     },
@@ -709,6 +771,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Read Error Retry Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of errors while reading from a disk.'
     },
@@ -734,6 +797,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Free Fall Protection'
         DataType = [DataType]::bits48
         IsCritical = $false
+        ConvertScriptBlock = $null
         BetterValue = 'Low'
         Description = 'Count of "Free Fall Events" detected.'
     }

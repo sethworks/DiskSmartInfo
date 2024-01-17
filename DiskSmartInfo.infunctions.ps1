@@ -258,41 +258,52 @@ function inConvertData
         $attributeObject
     )
 
-    # switch ($smartData[$a])
-    switch ($attributeObject.ID)
+    # $convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock
+    if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock)
     {
-        3 # Spin-Up Time
-        {
-            # return "{0:f3} Sec" -f $($data / 1000)
-            return "{0:f3} Sec" -f $($attributeObject.Data / 1000)
-        }
-
-        9 # Power-On Hours
-        {
-            return "{0:f} Days" -f $($attributeObject.Data / 24)
-        }
-
-        190 # Temperature Difference
-        {
-            return "{0:n0} °C" -f $(100 - $attributeObject.Data)
-        }
-
-        241 # Total LBAs Written
-        {
-            return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
-            # $convertScriptBlock = 
-        }
-
-        242 # Total LBAs Read
-        {
-            return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
-        }
-
-        default
-        {
-            return $null
-        }
+        $data = $attributeObject.Data
+        return $convertScriptBlock.Invoke()
     }
+    else
+    {
+        return $null
+    }
+
+    # switch ($smartData[$a])
+    # switch ($attributeObject.ID)
+    # {
+    #     3 # Spin-Up Time
+    #     {
+    #         # return "{0:f3} Sec" -f $($data / 1000)
+    #         return "{0:f3} Sec" -f $($attributeObject.Data / 1000)
+    #     }
+
+    #     9 # Power-On Hours
+    #     {
+    #         return "{0:f} Days" -f $($attributeObject.Data / 24)
+    #     }
+
+    #     190 # Temperature Difference
+    #     {
+    #         return "{0:n0} °C" -f $(100 - $attributeObject.Data)
+    #     }
+
+    #     241 # Total LBAs Written
+    #     {
+    #         return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
+    #         # $convertScriptBlock = 
+    #     }
+
+    #     242 # Total LBAs Read
+    #     {
+    #         return "{0:f3} Tb" -f $($attributeObject.Data * $diskDrive.BytesPerSector / 1Tb)
+    #     }
+
+    #     default
+    #     {
+    #         return $null
+    #     }
+    # }
 }
 
 function inReportErrors
