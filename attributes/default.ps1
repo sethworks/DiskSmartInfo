@@ -727,7 +727,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Total LBAs Written'
         DataType = [DataType]::bits48
         IsCritical = $false
-        ConvertScriptBlock = {"{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)}
+        ConvertScriptBlock = {"{0:f3} TB" -f $($data * $diskDrive.BytesPerSector / 1TB)}
         BetterValue = ''
         Description = 'Total count of LBAs written.'
     },
@@ -737,7 +737,7 @@ However, some drives will not immediately remap such sectors when written; inste
         AttributeName = 'Total LBAs Read'
         DataType = [DataType]::bits48
         IsCritical = $false
-        ConvertScriptBlock = {"{0:f3} Tb" -f $($data * $diskDrive.BytesPerSector / 1Tb)}
+        ConvertScriptBlock = {"{0:f3} TB" -f $($data * $diskDrive.BytesPerSector / 1TB)}
         BetterValue = ''
         Description = 'Total count of LBAs read. Some S.M.A.R.T. utilities will report a negative number for the raw value since in reality it has 48 bits rather than 32.'
     },
