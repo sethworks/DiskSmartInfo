@@ -62,7 +62,6 @@ function inGetDiskSmartInfo
             $hash.Add('ComputerName', $Session.ComputerName)
         }
 
-        # $hash.Add('Model', $diskDrive.Model)
         $hash.Add('Model', $model)
         $hash.Add('InstanceId', $instanceId)
 
@@ -233,7 +232,7 @@ function inGetAttributeData
 
         $([DataType]::temperature3.value__)
         {
-            # 10, 8, 6
+            # 9, 7, 5
             $temps = @()
 
             for ($offset = 9; $offset -ge 5; $offset -= 2)
@@ -249,36 +248,6 @@ function inGetAttributeData
             return $temps
         }
     }
-
-    # if ($smartData[$a] -eq 194) # Temperature
-    # {
-    #     # 10, 8, 6
-    #     $temps = @()
-
-    #     for ($i = 10; $i -ge 6; $i -= 2)
-    #     {
-    #         $value = ($smartData[$a + $i] * 256) + $smartData[$a + $i - 1]
-
-    #         if ($value)
-    #         {
-    #             $temps += $value
-    #         }
-    #     }
-
-    #     return $temps
-    # }
-    # else
-    # {
-    #     $result = 0
-    #     $dataStartOffset = $a + 5
-
-    #     for ($offset = 0; $offset -le 6; $offset++)
-    #     {
-    #         $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
-    #     }
-
-    #     return $result
-    # }
 }
 
 function inConvertData
