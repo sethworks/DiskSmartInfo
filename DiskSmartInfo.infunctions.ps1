@@ -159,6 +159,7 @@ function inOverwriteAttributes
                     AttributeID = $attrib.AttributeID
                     AttributeIDHex = $attrib.AttributeIDHex
                     AttributeName = $attrib.AttributeName
+                    DataType = $attrib.DataType
                     IsCritical = $false
                     ConvertScriptBlock = $null
                     BetterValue = ''
