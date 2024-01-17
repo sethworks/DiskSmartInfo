@@ -44,12 +44,12 @@ $overwrites = @(
         },
         [ordered]@{AttributeID = 174
             AttributeIDHex = 'AE'
-            AttributeName = 'Unexpect Power Loss Ct'
+            AttributeName = 'Unexpect Power Loss Count'
             DataType = [DataType]::bits48
         },
         [ordered]@{AttributeID = 176
             AttributeIDHex = 'B0'
-            AttributeName = 'Unused Rsvd Blk Cnt Tot'
+            AttributeName = 'Unused Reserved Block Count Total'
             DataType = [DataType]::bits48
         },
         [ordered]@{AttributeID = 180
