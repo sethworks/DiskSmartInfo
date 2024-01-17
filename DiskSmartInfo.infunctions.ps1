@@ -160,8 +160,14 @@ function inOverwriteAttributes
                     AttributeIDHex = $attrib.AttributeIDHex
                     AttributeName = $attrib.AttributeName
                     IsCritical = $false
+                    ConvertScriptBlock = $null
                     BetterValue = ''
                     Description = ''
+                }
+
+                if ($attrib.Keys -contains 'ConvertScriptBlock')
+                {
+                    $newAttrib.ConvertScriptBlock = $attrib.ConvertScriptBlock
                 }
 
                 if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
