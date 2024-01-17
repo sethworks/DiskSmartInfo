@@ -324,7 +324,7 @@
     0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0,   0,  0, 0, 0, 10
 
-    Model_HFSSSD1 = "HFS512G32TNF-1234"
+    Model_HFSSSD1 = "HFS512G32TNF-N3A0A"
     InstanceName_HFSSSD1 = 'IDE\HFS_________________________12345678\1&12345000&0&1.0.0_0'
     PNPDeviceID_HFSSSD1 = 'IDE\HFS_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_HFSSSD1 = 512
