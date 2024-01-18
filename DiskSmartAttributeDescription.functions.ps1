@@ -10,28 +10,28 @@ function Get-DiskSmartAttributeDescription
         [switch]$CriticalOnly
     )
 
-    $smartAttributes = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
+    # $smartAttributes = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
     switch ($PSCmdlet.ParameterSetName)
     {
         'AllAttributes'
         {
-            $smartAttributes
+            $descriptions
         }
 
         'AttributeID'
         {
-            $smartAttributes | Where-Object -FilterScript {$_.AttributeID -eq $AttributeID}
+            $descriptions | Where-Object -FilterScript {$_.AttributeID -eq $AttributeID}
         }
 
         'AttributeIDHex'
         {
-            $smartAttributes | Where-Object -FilterScript {$_.AttributeIDHex -eq $AttributeIDHex}
+            $descriptions | Where-Object -FilterScript {$_.AttributeIDHex -eq $AttributeIDHex}
         }
 
         'CriticalOnly'
         {
-            $smartAttributes | Where-Object -Property IsCritical
+            $descriptions | Where-Object -Property IsCritical
         }
     }
 }
