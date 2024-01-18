@@ -123,6 +123,7 @@ $overwrites = @(
             AttributeIDHex = 'F9'
             AttributeName = 'NAND Writes GiB'
             DataType = [DataType]::bits48
+            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
         },
         [ordered]@{AttributeID = 250
             AttributeIDHex = 'FA'
