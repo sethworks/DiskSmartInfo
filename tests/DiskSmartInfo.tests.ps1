@@ -336,7 +336,7 @@ Describe "DiskSmartInfo" {
                 It "Update IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 5
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 184
-                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "End-to-End Error / IOEDC"
+                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "End-to-End Error"
                 }
             }
 

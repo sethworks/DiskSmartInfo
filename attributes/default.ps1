@@ -9,7 +9,7 @@ $defaultAttributesHash = @(
     [ordered]@{
         AttributeID = 1
         AttributeIDHex = '1'
-        AttributeName = 'Read Error Rate'
+        AttributeName = 'Raw Read Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -189,7 +189,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     [ordered]@{
         AttributeID = 175
         AttributeIDHex = 'AF'
-        AttributeName = 'Power Loss Protection Failure'
+        AttributeName = 'Program Fail Count Chip'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -203,7 +203,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     [ordered]@{
         AttributeID = 176
         AttributeIDHex = 'B0'
-        AttributeName = 'Erase Fail Count'
+        AttributeName = 'Erase Fail Count Chip'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -213,7 +213,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     [ordered]@{
         AttributeID = 177
         AttributeIDHex = 'B1'
-        AttributeName = 'Wear Range Delta'
+        AttributeName = 'Wear Leveling Count'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -264,7 +264,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     [ordered]@{
         AttributeID = 182
         AttributeIDHex = 'B6'
-        AttributeName = 'Erase Fail Count'
+        AttributeName = 'Erase Fail Count Total'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -274,7 +274,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     [ordered]@{
         AttributeID = 183
         AttributeIDHex = 'B7'
-        AttributeName = 'SATA Downshift Error Count'
+        AttributeName = 'Runtime Bad Block'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -284,7 +284,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     [ordered]@{
         AttributeID = 184
         AttributeIDHex = 'B8'
-        AttributeName = 'End-to-End Error / IOEDC'
+        AttributeName = 'End-to-End Error'
         DataType = [DataType]::bits48
         IsCritical = $true
         ConvertScriptBlock = $null
@@ -341,7 +341,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     [ordered]@{
         AttributeID = 190
         AttributeIDHex = 'BE'
-        AttributeName = 'Temperature Difference'
+        AttributeName = 'Airflow Temperature Celsius'
         DataType = [DataType]::temperature3
         IsCritical = $false
         ConvertScriptBlock = {"{0:n0} °C" -f $(100 - $data)}
@@ -383,7 +383,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     [ordered]@{
         AttributeID = 194
         AttributeIDHex = 'C2'
-        AttributeName = 'Temperature'
+        AttributeName = 'Temperature Celsius'
         DataType = [DataType]::temperature3
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -444,7 +444,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 200
         AttributeIDHex = 'C8'
-        AttributeName = 'Write Error Rate'
+        AttributeName = 'Multi-Zone Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -628,7 +628,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 226
         AttributeIDHex = 'E2'
-        AttributeName = 'Load "In"-time'
+        AttributeName = 'Load-in time'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -658,7 +658,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 230
         AttributeIDHex = 'E6'
-        AttributeName = 'GMR Head Amplitude (magnetic HDDs), Drive Life Protection Status (SSDs)'
+        AttributeName = 'Head Amplitude'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -668,7 +668,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 231
         AttributeIDHex = 'E7'
-        AttributeName = 'Life Left (SSDs) or Temperature'
+        AttributeName = 'Temperature Celsius'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -678,7 +678,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 232
         AttributeIDHex = 'E8'
-        AttributeName = 'Endurance Remaining or Available Reserved Space'
+        AttributeName = 'Available Reserved Space'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -688,7 +688,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 233
         AttributeIDHex = 'E9'
-        AttributeName = 'Media Wearout Indicator (SSDs) or Power-On Hours'
+        AttributeName = 'Media Wearout Indicator'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -714,7 +714,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 240
         AttributeIDHex = 'F0'
-        AttributeName = 'Head Flying Hours or Transfer Error Rate (Fujitsu)'
+        AttributeName = 'Head Flying Hours'
         DataType = [DataType]::bits24
         IsCritical = $false
         ConvertScriptBlock = $null
@@ -794,7 +794,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 254
         AttributeIDHex = 'FE'
-        AttributeName = 'Free Fall Protection'
+        AttributeName = 'Free Fall Sensor'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null

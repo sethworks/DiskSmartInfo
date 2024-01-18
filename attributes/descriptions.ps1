@@ -2,7 +2,7 @@ $descriptionsHash = @(
     [ordered]@{
         AttributeID = 1
         AttributeIDHex = '1'
-        AttributeName = 'Read Error Rate'
+        AttributeName = 'Raw Read Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
         Description = '(Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred when reading data from a disk surface. The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
@@ -517,7 +517,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 226
         AttributeIDHex = 'E2'
-        AttributeName = 'Load "In"-time'
+        AttributeName = 'Load-in time'
         IsCritical = $false
         BetterValue = ''
         Description = 'Total time of loading on the magnetic heads actuator (time not spent in parking area).'
