@@ -166,6 +166,10 @@ function inOverwriteAttributes
                     Description = ''
                 }
 
+                if ($attrib.Keys -contains 'IsCritical')
+                {
+                    $newAttrib.IsCritical = $attrib.IsCritical
+                }
                 if ($attrib.Keys -contains 'ConvertScriptBlock')
                 {
                     $newAttrib.ConvertScriptBlock = $attrib.ConvertScriptBlock
@@ -173,7 +177,10 @@ function inOverwriteAttributes
 
                 if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
                 {
-                    $newAttrib.IsCritical = $result[$index].IsCritical
+                    if ($attrib.Keys -notcontains 'IsCritical')
+                    {
+                        $newAttrib.IsCritical = $result[$index].IsCritical
+                    }
                     $result[$index] = $newAttrib
                 }
                 else

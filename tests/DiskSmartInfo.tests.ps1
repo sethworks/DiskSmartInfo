@@ -300,18 +300,70 @@ Describe "DiskSmartInfo" {
             }
         }
 
-        Context "Retain IsCritical property during overwriting" {
-            BeforeAll {
-                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+        Context "IsCritical property for overwritten attributes" {
+            Context "Default attributes" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                }
+
+                It "Retains IsCritical property value during attribute overwriting" {
+                    $diskSmartInfo[1].SmartData | Should -HaveCount 6
+                    $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
+                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+                }
             }
 
-            It "Retains IsCritical property value during attribute overwriting" {
-                $diskSmartInfo[1].SmartData | Should -HaveCount 6
-                $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
-                $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+            Context "Overwrite attributes IsCritical = `$false" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    InModuleScope DiskSmartInfo {
+                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $false)
+                    }
+
+                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                }
+                AfterAll {
+                    InModuleScope DiskSmartInfo {
+                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
+                    }
+                }
+                It "Update IsCritical property value during attribute overwriting" {
+                    $diskSmartInfo[1].SmartData | Should -HaveCount 5
+                    $diskSmartInfo[1].SmartData[0].ID | Should -Be 184
+                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "End-to-End Error / IOEDC"
+                }
+            }
+
+            Context "Overwrite attributes IsCritical = `$true" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    InModuleScope DiskSmartInfo {
+                        $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $false
+                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $true)
+                    }
+
+                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                }
+                AfterAll {
+                    InModuleScope DiskSmartInfo {
+                        $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $true
+                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
+                    }
+                }
+                It "Update IsCritical property value during attribute overwriting" {
+                    $diskSmartInfo[1].SmartData | Should -HaveCount 6
+                    $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
+                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+                }
             }
         }
     }

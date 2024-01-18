@@ -131,7 +131,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     [ordered]@{
         AttributeID = 13
         AttributeIDHex = 'D'
-        AttributeName = 'Soft Read Error Rate'
+        AttributeName = 'Read Soft Error Rate'
         DataType = [DataType]::bits48
         IsCritical = $false
         ConvertScriptBlock = $null
