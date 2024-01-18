@@ -31,5 +31,17 @@ Describe "Attributes" {
             }
         }
     }
+
+    Context "Descriptions" {
+
+        It "ID values is equal to IDHex values" {
+            InModuleScope DiskSmartInfo {
+                foreach ($attribute in $descriptions)
+                {
+                    $attribute.AttributeIDHex | Should -BeExactly $attribute.AttributeID.ToString("X")
+                }
+            }
+        }
+    }
 }
 

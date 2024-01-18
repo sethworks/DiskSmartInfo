@@ -13,18 +13,18 @@ Describe "DiskSmartAttributeDescription" {
                 $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription
             }
 
-            It "Has 81 attributes" {
-                $diskSmartAttributeDescription | Should -HaveCount 64
+            It "Has 82 attributes" {
+                $diskSmartAttributeDescription | Should -HaveCount 82
             }
 
             It "Has correct attributes" {
                 $diskSmartAttributeDescription[0].AttributeID | Should -Be 1
-                $diskSmartAttributeDescription[30].AttributeIDHex | Should -BeExactly 'C2'
+                $diskSmartAttributeDescription[38].AttributeIDHex | Should -BeExactly 'C2'
                 $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin-Up Time'
-                $diskSmartAttributeDescription[24].BetterValue | Should -BeExactly 'Low'
-                $diskSmartAttributeDescription[37].IsCritical | Should -BeExactly $true
-                $diskSmartAttributeDescription[45].IsCritical | Should -BeExactly $false
-                $diskSmartAttributeDescription[63].Description | Should -BeExactly 'Count of "Free Fall Events" detected.'
+                $diskSmartAttributeDescription[28].BetterValue | Should -BeExactly 'Low'
+                $diskSmartAttributeDescription[45].IsCritical | Should -BeExactly $true
+                $diskSmartAttributeDescription[48].IsCritical | Should -BeExactly $false
+                $diskSmartAttributeDescription[81].Description | Should -BeExactly 'Count of "Free Fall Events" detected.'
             }
         }
 
