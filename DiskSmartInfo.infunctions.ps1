@@ -80,7 +80,8 @@ function inGetDiskSmartInfo
                     ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
             {
                 $attribute.Add("ID", $attributeID)
-                $attribute.Add("IDhex", [convert]::ToString($attributeID,16).ToUpper())
+                # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
+                $attribute.Add("IDHex", $attributeID.ToString("X"))
                 $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                 $attribute.Add("Threshold", $thresholdsData[$a + 1])
                 $attribute.Add("Value", $smartData[$a + 3])
@@ -157,7 +158,6 @@ function inOverwriteAttributes
             {
                 $newAttrib = [ordered]@{
                     AttributeID = $attrib.AttributeID
-                    AttributeIDHex = $attrib.AttributeIDHex
                     AttributeName = $attrib.AttributeName
                     DataType = $attrib.DataType
                     IsCritical = $false
