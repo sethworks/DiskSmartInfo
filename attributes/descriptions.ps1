@@ -672,5 +672,6 @@ $descriptions = [System.Collections.Generic.List[PSCustomObject]]::new()
 
 foreach ($descriptionHash in $descriptionsHash)
 {
+    $descriptionHash.Insert(1, "AttributeIDHex", $descriptionHash.AttributeID.ToString("X"))
     $descriptions.Add([PSCustomObject]$descriptionHash)
 }
