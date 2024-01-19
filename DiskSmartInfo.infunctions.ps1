@@ -158,7 +158,6 @@ function inOverwriteAttributes
             {
                 $newAttrib = [ordered]@{
                     AttributeID = $attrib.AttributeID
-                    # AttributeIDHex = $attrib.AttributeIDHex
                     AttributeName = $attrib.AttributeName
                     DataType = $attrib.DataType
                     IsCritical = $false

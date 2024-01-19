@@ -10,8 +10,6 @@ function Get-DiskSmartAttributeDescription
         [switch]$CriticalOnly
     )
 
-    # $smartAttributes = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
-
     switch ($PSCmdlet.ParameterSetName)
     {
         'AllAttributes'
