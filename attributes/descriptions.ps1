@@ -1,7 +1,7 @@
 $descriptionsHash = @(
     [ordered]@{
         AttributeID = 1
-        AttributeIDHex = '1'
+        # AttributeIDHex = '1'
         AttributeName = 'Raw Read Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -9,7 +9,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 2
-        AttributeIDHex = '2'
+        # AttributeIDHex = '2'
         AttributeName = 'Throughput Performance'
         IsCritical = $false
         BetterValue = 'High'
@@ -17,7 +17,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 3
-        AttributeIDHex = '3'
+        # AttributeIDHex = '3'
         AttributeName = 'Spin-Up Time'
         IsCritical = $false
         BetterValue = 'Low'
@@ -25,7 +25,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 4
-        AttributeIDHex = '4'
+        # AttributeIDHex = '4'
         AttributeName = 'Start/Stop Count'
         IsCritical = $false
         BetterValue = ''
@@ -33,7 +33,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 5
-        AttributeIDHex = '5'
+        # AttributeIDHex = '5'
         AttributeName = 'Reallocated Sectors Count'
         IsCritical = $true
         BetterValue = ''
@@ -41,7 +41,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 6
-        AttributeIDHex = '6'
+        # AttributeIDHex = '6'
         AttributeName = 'Read Channel Margin'
         IsCritical = $false
         BetterValue = ''
@@ -49,7 +49,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 7
-        AttributeIDHex = '7'
+        # AttributeIDHex = '7'
         AttributeName = 'Seek Error Rate'
         IsCritical = $false
         BetterValue = 'Varies'
@@ -57,7 +57,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 8
-        AttributeIDHex = '8'
+        # AttributeIDHex = '8'
         AttributeName = 'Seek Time Performance'
         IsCritical = $false
         BetterValue = 'High'
@@ -65,7 +65,7 @@ $descriptionsHash = @(
     },
     [ordered]@{
         AttributeID = 9
-        AttributeIDHex = '9'
+        # AttributeIDHex = '9'
         AttributeName = 'Power-On Hours'
         IsCritical = $false
         BetterValue = ''
@@ -75,7 +75,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 10
-        AttributeIDHex = 'A'
+        # AttributeIDHex = 'A'
         AttributeName = 'Spin Retry Count'
         IsCritical = $true
         BetterValue = 'Low'
@@ -83,7 +83,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 11
-        AttributeIDHex = 'B'
+        # AttributeIDHex = 'B'
         AttributeName = 'Calibration Retry Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -91,7 +91,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 12
-        AttributeIDHex = 'C'
+        # AttributeIDHex = 'C'
         AttributeName = 'Power Cycle Count'
         IsCritical = $false
         BetterValue = ''
@@ -99,7 +99,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 13
-        AttributeIDHex = 'D'
+        # AttributeIDHex = 'D'
         AttributeName = 'Read Soft Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -107,7 +107,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 22
-        AttributeIDHex = '16'
+        # AttributeIDHex = '16'
         AttributeName = 'Current Helium Level'
         IsCritical = $false
         BetterValue = ''
@@ -115,7 +115,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 170
-        AttributeIDHex = 'AA'
+        # AttributeIDHex = 'AA'
         AttributeName = 'Available Reserved Space'
         IsCritical = $false
         BetterValue = ''
@@ -123,7 +123,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 171
-        AttributeIDHex = 'AB'
+        # AttributeIDHex = 'AB'
         AttributeName = 'SSD Program Fail Count'
         IsCritical = $false
         BetterValue = ''
@@ -131,7 +131,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 172
-        AttributeIDHex = 'AC'
+        # AttributeIDHex = 'AC'
         AttributeName = 'SSD Erase Fail Count'
         IsCritical = $false
         BetterValue = ''
@@ -139,7 +139,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 173
-        AttributeIDHex = 'AD'
+        # AttributeIDHex = 'AD'
         AttributeName = 'SSD Wear Leveling Count'
         IsCritical = $false
         BetterValue = ''
@@ -147,7 +147,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 174
-        AttributeIDHex = 'AE'
+        # AttributeIDHex = 'AE'
         AttributeName = 'Unexpected power loss count'
         IsCritical = $false
         BetterValue = ''
@@ -155,7 +155,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 175
-        AttributeIDHex = 'AF'
+        # AttributeIDHex = 'AF'
         AttributeName = 'Power Loss Protection Failure'
         IsCritical = $false
         BetterValue = ''
@@ -167,7 +167,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 176
-        AttributeIDHex = 'B0'
+        # AttributeIDHex = 'B0'
         AttributeName = 'Erase Fail Count'
         IsCritical = $false
         BetterValue = ''
@@ -175,7 +175,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 177
-        AttributeIDHex = 'B1'
+        # AttributeIDHex = 'B1'
         AttributeName = 'Wear Range Delta'
         IsCritical = $false
         BetterValue = ''
@@ -183,7 +183,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 178
-        AttributeIDHex = 'B2'
+        # AttributeIDHex = 'B2'
         AttributeName = 'Used Reserved Block Count Chip'
         IsCritical = $false
         BetterValue = ''
@@ -191,7 +191,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 179
-        AttributeIDHex = 'B3'
+        # AttributeIDHex = 'B3'
         AttributeName = 'Used Reserved Block Count Total'
         IsCritical = $false
         BetterValue = ''
@@ -199,7 +199,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 180
-        AttributeIDHex = 'B4'
+        # AttributeIDHex = 'B4'
         AttributeName = 'Unused Reserved Block Count Total'
         IsCritical = $false
         BetterValue = ''
@@ -207,7 +207,7 @@ Normalized value is set to one on test failure or 11 if the capacitor has been t
     },
     [ordered]@{
         AttributeID = 181
-        AttributeIDHex = 'B5'
+        # AttributeIDHex = 'B5'
         AttributeName = 'Program Fail Count Total'
         IsCritical = $false
         BetterValue = 'Low'
@@ -216,7 +216,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 182
-        AttributeIDHex = 'B6'
+        # AttributeIDHex = 'B6'
         AttributeName = 'Erase Fail Count'
         IsCritical = $false
         BetterValue = ''
@@ -224,7 +224,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 183
-        AttributeIDHex = 'B7'
+        # AttributeIDHex = 'B7'
         AttributeName = 'SATA Downshift Error Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -232,7 +232,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 184
-        AttributeIDHex = 'B8'
+        # AttributeIDHex = 'B8'
         AttributeName = 'End-to-End Error / IOEDC'
         IsCritical = $true
         BetterValue = 'Low'
@@ -240,7 +240,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 185
-        AttributeIDHex = 'B9'
+        # AttributeIDHex = 'B9'
         AttributeName = 'Head Stability'
         IsCritical = $false
         BetterValue = ''
@@ -248,7 +248,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 186
-        AttributeIDHex = 'BA'
+        # AttributeIDHex = 'BA'
         AttributeName = 'Induced Op-Vibration Detection'
         IsCritical = $false
         BetterValue = ''
@@ -256,7 +256,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 187
-        AttributeIDHex = 'BB'
+        # AttributeIDHex = 'BB'
         AttributeName = 'Reported Uncorrectable Errors'
         IsCritical = $true
         BetterValue = 'Low'
@@ -264,7 +264,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 188
-        AttributeIDHex = 'BC'
+        # AttributeIDHex = 'BC'
         AttributeName = 'Command Timeout'
         IsCritical = $true
         BetterValue = 'Low'
@@ -272,7 +272,7 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 189
-        AttributeIDHex = 'BD'
+        # AttributeIDHex = 'BD'
         AttributeName = 'High Fly Writes'
         IsCritical = $false
         BetterValue = 'Low'
@@ -281,7 +281,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     },
     [ordered]@{
         AttributeID = 190
-        AttributeIDHex = 'BE'
+        # AttributeIDHex = 'BE'
         AttributeName = 'Temperature Difference'
         IsCritical = $false
         BetterValue = 'Varies'
@@ -289,7 +289,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     },
     [ordered]@{
         AttributeID = 191
-        AttributeIDHex = 'BF'
+        # AttributeIDHex = 'BF'
         AttributeName = 'G-Sense Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -297,7 +297,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     },
     [ordered]@{
         AttributeID = 192
-        AttributeIDHex = 'C0'
+        # AttributeIDHex = 'C0'
         AttributeName = 'Power-off Retract Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -305,7 +305,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     },
     [ordered]@{
         AttributeID = 193
-        AttributeIDHex = 'C1'
+        # AttributeIDHex = 'C1'
         AttributeName = 'Load Cycle Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -315,7 +315,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     },
     [ordered]@{
         AttributeID = 194
-        AttributeIDHex = 'C2'
+        # AttributeIDHex = 'C2'
         AttributeName = 'Temperature'
         IsCritical = $false
         BetterValue = 'Low'
@@ -323,7 +323,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     },
     [ordered]@{
         AttributeID = 195
-        AttributeIDHex = 'C3'
+        # AttributeIDHex = 'C3'
         AttributeName = 'Hardware ECC Recovered'
         IsCritical = $false
         BetterValue = 'Varies'
@@ -331,7 +331,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     },
     [ordered]@{
         AttributeID = 196
-        AttributeIDHex = 'C4'
+        # AttributeIDHex = 'C4'
         AttributeName = 'Reallocation Event Count'
         IsCritical = $true
         BetterValue = 'Low'
@@ -339,7 +339,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     },
     [ordered]@{
         AttributeID = 197
-        AttributeIDHex = 'C5'
+        # AttributeIDHex = 'C5'
         AttributeName = 'Current Pending Sector Count'
         IsCritical = $true
         BetterValue = 'Low'
@@ -348,7 +348,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 198
-        AttributeIDHex = 'C6'
+        # AttributeIDHex = 'C6'
         AttributeName = 'Offline Uncorrectable Sector Count'
         IsCritical = $true
         BetterValue = 'Low'
@@ -356,7 +356,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 199
-        AttributeIDHex = 'C7'
+        # AttributeIDHex = 'C7'
         AttributeName = 'Ultra DMA CRC Error Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -364,7 +364,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 200
-        AttributeIDHex = 'C8'
+        # AttributeIDHex = 'C8'
         AttributeName = 'Write Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -372,7 +372,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 201
-        AttributeIDHex = 'C9'
+        # AttributeIDHex = 'C9'
         AttributeName = 'Soft Read Error Rate'
         IsCritical = $true
         BetterValue = 'Low'
@@ -380,7 +380,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 202
-        AttributeIDHex = 'CA'
+        # AttributeIDHex = 'CA'
         AttributeName = 'Data Address Mark Errors'
         IsCritical = $false
         BetterValue = 'Low'
@@ -388,7 +388,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 203
-        AttributeIDHex = 'CB'
+        # AttributeIDHex = 'CB'
         AttributeName = 'Run Out Cancel'
         IsCritical = $false
         BetterValue = 'Low'
@@ -396,7 +396,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 204
-        AttributeIDHex = 'CC'
+        # AttributeIDHex = 'CC'
         AttributeName = 'Soft ECC correction'
         IsCritical = $false
         BetterValue = 'Low'
@@ -404,7 +404,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 205
-        AttributeIDHex = 'CD'
+        # AttributeIDHex = 'CD'
         AttributeName = 'Thermal Asperity Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -412,7 +412,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 206
-        AttributeIDHex = 'CE'
+        # AttributeIDHex = 'CE'
         AttributeName = 'Flying Height'
         IsCritical = $false
         BetterValue = ''
@@ -420,7 +420,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 207
-        AttributeIDHex = 'CF'
+        # AttributeIDHex = 'CF'
         AttributeName = 'Spin High Current'
         IsCritical = $false
         BetterValue = 'Low'
@@ -428,7 +428,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 208
-        AttributeIDHex = 'D0'
+        # AttributeIDHex = 'D0'
         AttributeName = 'Spin Buzz'
         IsCritical = $false
         BetterValue = ''
@@ -436,7 +436,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 209
-        AttributeIDHex = 'D1'
+        # AttributeIDHex = 'D1'
         AttributeName = 'Offline Seek Performance'
         IsCritical = $false
         BetterValue = ''
@@ -444,7 +444,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 210
-        AttributeIDHex = 'D2'
+        # AttributeIDHex = 'D2'
         AttributeName = 'Vibration Diring Write'
         IsCritical = $false
         BetterValue = ''
@@ -452,7 +452,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 211
-        AttributeIDHex = 'D3'
+        # AttributeIDHex = 'D3'
         AttributeName = 'Vibration Diring Write'
         IsCritical = $false
         BetterValue = ''
@@ -460,7 +460,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 212
-        AttributeIDHex = 'D4'
+        # AttributeIDHex = 'D4'
         AttributeName = 'Shock During Write'
         IsCritical = $false
         BetterValue = ''
@@ -468,7 +468,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 220
-        AttributeIDHex = 'DC'
+        # AttributeIDHex = 'DC'
         AttributeName = 'Disk Shift'
         IsCritical = $false
         BetterValue = 'Low'
@@ -476,7 +476,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 221
-        AttributeIDHex = 'DD'
+        # AttributeIDHex = 'DD'
         AttributeName = 'G-Sense Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -484,7 +484,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 222
-        AttributeIDHex = 'DE'
+        # AttributeIDHex = 'DE'
         AttributeName = 'Loaded Hours'
         IsCritical = $false
         BetterValue = ''
@@ -492,7 +492,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 223
-        AttributeIDHex = 'DF'
+        # AttributeIDHex = 'DF'
         AttributeName = 'Load/Unload Retry Count'
         IsCritical = $false
         BetterValue = ''
@@ -500,7 +500,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 224
-        AttributeIDHex = 'E0'
+        # AttributeIDHex = 'E0'
         AttributeName = 'Load Friction'
         IsCritical = $false
         BetterValue = 'Low'
@@ -508,7 +508,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 225
-        AttributeIDHex = 'E1'
+        # AttributeIDHex = 'E1'
         AttributeName = 'Load/Unload Cycle Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -516,7 +516,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 226
-        AttributeIDHex = 'E2'
+        # AttributeIDHex = 'E2'
         AttributeName = 'Load-in time'
         IsCritical = $false
         BetterValue = ''
@@ -524,7 +524,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 227
-        AttributeIDHex = 'E3'
+        # AttributeIDHex = 'E3'
         AttributeName = 'Torque Amplification Count'
         IsCritical = $false
         BetterValue = 'Low'
@@ -532,7 +532,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 228
-        AttributeIDHex = 'E4'
+        # AttributeIDHex = 'E4'
         AttributeName = 'Power-Off Retract Cycle'
         IsCritical = $false
         BetterValue = 'Low'
@@ -540,7 +540,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 230
-        AttributeIDHex = 'E6'
+        # AttributeIDHex = 'E6'
         AttributeName = 'GMR Head Amplitude (magnetic HDDs), Drive Life Protection Status (SSDs)'
         IsCritical = $false
         BetterValue = ''
@@ -548,7 +548,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 231
-        AttributeIDHex = 'E7'
+        # AttributeIDHex = 'E7'
         AttributeName = 'Life Left (SSDs) or Temperature'
         IsCritical = $false
         BetterValue = ''
@@ -556,7 +556,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 232
-        AttributeIDHex = 'E8'
+        # AttributeIDHex = 'E8'
         AttributeName = 'Endurance Remaining or Available Reserved Space'
         IsCritical = $false
         BetterValue = ''
@@ -564,7 +564,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 233
-        AttributeIDHex = 'E9'
+        # AttributeIDHex = 'E9'
         AttributeName = 'Media Wearout Indicator (SSDs) or Power-On Hours'
         IsCritical = $false
         BetterValue = ''
@@ -572,7 +572,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 234
-        AttributeIDHex = 'EA'
+        # AttributeIDHex = 'EA'
         AttributeName = 'Average erase count AND Maximum Erase Count'
         IsCritical = $false
         BetterValue = ''
@@ -580,7 +580,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 235
-        AttributeIDHex = 'EB'
+        # AttributeIDHex = 'EB'
         AttributeName = 'Good Block Count AND System(Free) Block Count'
         IsCritical = $false
         BetterValue = ''
@@ -588,7 +588,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 240
-        AttributeIDHex = 'F0'
+        # AttributeIDHex = 'F0'
         AttributeName = 'Head Flying Hours or Transfer Error Rate (Fujitsu)'
         IsCritical = $false
         BetterValue = ''
@@ -596,7 +596,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 241
-        AttributeIDHex = 'F1'
+        # AttributeIDHex = 'F1'
         AttributeName = 'Total LBAs Written'
         IsCritical = $false
         BetterValue = ''
@@ -604,7 +604,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 242
-        AttributeIDHex = 'F2'
+        # AttributeIDHex = 'F2'
         AttributeName = 'Total LBAs Read'
         IsCritical = $false
         BetterValue = ''
@@ -612,7 +612,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 243
-        AttributeIDHex = 'F3'
+        # AttributeIDHex = 'F3'
         AttributeName = 'Total LBAs Written Expanded'
         IsCritical = $false
         BetterValue = ''
@@ -620,7 +620,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 244
-        AttributeIDHex = 'F4'
+        # AttributeIDHex = 'F4'
         AttributeName = 'Total LBAs Read Expanded'
         IsCritical = $false
         BetterValue = ''
@@ -628,7 +628,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 249
-        AttributeIDHex = 'F9'
+        # AttributeIDHex = 'F9'
         AttributeName = 'NAND Writes (1GiB)'
         IsCritical = $false
         BetterValue = ''
@@ -636,7 +636,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 250
-        AttributeIDHex = 'FA'
+        # AttributeIDHex = 'FA'
         AttributeName = 'Read Error Retry Rate'
         IsCritical = $false
         BetterValue = 'Low'
@@ -644,7 +644,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 251
-        AttributeIDHex = 'FB'
+        # AttributeIDHex = 'FB'
         AttributeName = 'Minimum Spares Remaining'
         IsCritical = $false
         BetterValue = ''
@@ -652,7 +652,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 252
-        AttributeIDHex = 'FC'
+        # AttributeIDHex = 'FC'
         AttributeName = 'Newly Added Bad Flash Block'
         IsCritical = $false
         BetterValue = ''
@@ -660,7 +660,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 254
-        AttributeIDHex = 'FE'
+        # AttributeIDHex = 'FE'
         AttributeName = 'Free Fall Protection'
         IsCritical = $false
         BetterValue = 'Low'
