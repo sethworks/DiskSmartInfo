@@ -4,6 +4,7 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$QuietIfOK
     )
 
@@ -76,8 +77,9 @@ function inGetDiskSmartInfo
             $attributeID = $smartData[$a]
 
             if ($attributeID -and
-                (   (-not $CriticalAttributesOnly) -or
-                    ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
+               (isRequested -AttributeID $attributeID) -and
+               ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
+                # (   (-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
             {
                 $attribute.Add("ID", $attributeID)
                 # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
@@ -90,8 +92,10 @@ function inGetDiskSmartInfo
 
                 if ($QuietIfOK)
                 {
-                    if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
-                         ($attribute.Value -le $attribute.Threshold) )
+                    # if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
+                    if (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or
+                       (isThresholdReached -Attribute $attribute))
+                    #    ($attribute.Value -le $attribute.Threshold) )
                     {
                         $Silence = $false
                     }

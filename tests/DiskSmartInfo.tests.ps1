@@ -207,7 +207,7 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.SMARTData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
             }
 
-            It "Has attributes in Warning or Critical state only" {
+            It "Consists of attributes in Warning or Critical state only" {
                 $diskSmartInfo.SMARTData.Id | Should -Be @(3, 197, 198)
                 $diskSmartInfo.SMARTData.Data | Should -Be @(6825, 20, 20)
             }
@@ -363,6 +363,24 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 6
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
                     $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+                }
+            }
+        }
+
+        Context "Select attributes" {
+
+            Context "AttributeID" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -AttributeID (1..10)
+                }
+                It "Has requested attributes" {
+                    $diskSmartInfo.SmartData | Should -HaveCount 9
+                    $diskSmartInfo.SmartData[0].ID | Should -Be 1
+                    $diskSmartInfo.SmartData[8].ID | Should -Be 10
                 }
             }
         }
