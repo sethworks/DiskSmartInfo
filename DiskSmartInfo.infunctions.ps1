@@ -228,7 +228,7 @@ function inGetAttributeData
             $result = 0
             $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 4; $offset++)
+            for ($offset = 0; $offset -lt 3; $offset++)
             {
                 $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
             }

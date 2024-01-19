@@ -155,7 +155,7 @@ Describe "DiskSmartInfo" {
             }
 
             It "Converts Power-On Hours" {
-                $diskSmartInfo[0].SMARTData[7].ConvertedData | Should -BeExactly '3060.12 Days'
+                $diskSmartInfo[0].SMARTData[7].ConvertedData | Should -BeExactly '3060.25 Days'
             }
 
             It "Converts Temperature Difference" {
