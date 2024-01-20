@@ -459,6 +459,12 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
                 }
 
+                AfterAll {
+                    InModuleScope DiskSmartInfo {
+                        $Config.SuppressEmptySmartData = $true
+                    }
+                }
+
                 Context "AttributeID depends on SuppressEmptySmartData" {
                     BeforeAll {
                         $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
