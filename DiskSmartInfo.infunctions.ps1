@@ -79,7 +79,6 @@ function inGetDiskSmartInfo
             if ($attributeID -and
                (isRequested -AttributeID $attributeID) -and
                ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
-                # (   (-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
             {
                 $attribute.Add("ID", $attributeID)
                 # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
@@ -89,22 +88,7 @@ function inGetDiskSmartInfo
                 $attribute.Add("Value", $smartData[$a + 3])
                 $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
-<#
-                if ($QuietIfOK)
-                {
-                    # if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
-                    if (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or
-                       (isThresholdReached -Attribute $attribute))
-                    #    ($attribute.Value -le $attribute.Threshold) )
-                    {
-                        $Silence = $false
-                    }
-                    else
-                    {
-                        continue
-                    }
-                }
-#>
+
                 if ((-not $QuietIfOK) -or
                    ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
                 {
@@ -121,12 +105,6 @@ function inGetDiskSmartInfo
             }
         }
 
-        # if ($Silence)
-        # {
-        #     continue
-        # }
-
-        # if ($attributes)
         if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
         {
             $hash.Add("SmartData", $attributes)
