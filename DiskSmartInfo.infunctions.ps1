@@ -126,7 +126,8 @@ function inGetDiskSmartInfo
         #     continue
         # }
 
-        if ($attributes)
+        # if ($attributes)
+        if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
         {
             $hash.Add("SmartData", $attributes)
             $diskSmartInfo = [PSCustomObject]$hash

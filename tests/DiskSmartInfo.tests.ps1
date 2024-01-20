@@ -384,5 +384,89 @@ Describe "DiskSmartInfo" {
                 }
             }
         }
+
+        Context "Suppress empty SmartData" {
+
+            Context "AttributeID" {
+
+                Context "SuppressEmptySmartData = `$true" {
+
+                    BeforeAll {
+                        mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                        InModuleScope DiskSmartInfo {
+                            $Config.SuppressEmptySmartData = $true
+                        }
+
+                        $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
+                    }
+
+                    It "Has 2 DiskSmartInfo object" {
+                        $diskSmartInfo | Should -HaveCount 2
+                        $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                    }
+                    It "Has SMARTData property with DiskSmartAttribute objects" {
+                        $diskSmartInfo[0].SmartData | Should -HaveCount 2
+                        $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                        $diskSmartInfo[1].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                    }
+
+                    It "Has requested attributes only" {
+                        $diskSmartInfo[0].SmartData[0].ID | Should -Be 4
+                        $diskSmartInfo[0].SmartData[0].Data | Should -Be 25733
+                        $diskSmartInfo[0].SmartData[1].ID | Should -Be 8
+                        $diskSmartInfo[0].SmartData[1].Data | Should -Be 0
+
+                        $diskSmartInfo[1].SmartData | Should -HaveCount 1
+                        $diskSmartInfo[1].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                        $diskSmartInfo[1].SmartData[0].ID | Should -Be 4
+                        $diskSmartInfo[1].SmartData[0].Data | Should -Be 73592
+                    }
+                }
+
+                Context "SuppressEmptySmartData = `$false" {
+
+                    BeforeAll {
+                        mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSMARTData } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                        InModuleScope DiskSmartInfo {
+                            $Config.SuppressEmptySmartData = $false
+                        }
+
+                        $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
+                    }
+
+                    It "Has 3 DiskSmartInfo object" {
+                        $diskSmartInfo | Should -HaveCount 3
+                        $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                    }
+                    It "Has SmartData property with DiskSmartAttribute objects" {
+                        $diskSmartInfo[0].SmartData | Should -HaveCount 2
+                        $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                        $diskSmartInfo[1].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                    }
+
+                    It "Has requested attributes only" {
+                        $diskSmartInfo[0].SmartData[0].ID | Should -Be 4
+                        $diskSmartInfo[0].SmartData[0].Data | Should -Be 25733
+                        $diskSmartInfo[0].SmartData[1].ID | Should -Be 8
+                        $diskSmartInfo[0].SmartData[1].Data | Should -Be 0
+
+                        $diskSmartInfo[1].SmartData | Should -HaveCount 1
+                        $diskSmartInfo[1].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+                        $diskSmartInfo[1].SmartData[0].ID | Should -Be 4
+                        $diskSmartInfo[1].SmartData[0].Data | Should -Be 73592
+                    }
+
+                    It "Has empty SmartData property" {
+                        $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
+                    }
+                }
+            }
+        }
     }
 }
