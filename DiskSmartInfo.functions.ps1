@@ -24,7 +24,10 @@ function Get-DiskSmartInfo
     {
         foreach ($at in $AttributeID)
         {
-            $attributeIDs.Add($at)
+            if (-not $attributeIDs.Contains($at))
+            {
+                $attributeIDs.Add($at)
+            }
         }
     }
 
