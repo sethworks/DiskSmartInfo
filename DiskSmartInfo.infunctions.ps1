@@ -89,7 +89,7 @@ function inGetDiskSmartInfo
                 $attribute.Add("Value", $smartData[$a + 3])
                 $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
-
+<#
                 if ($QuietIfOK)
                 {
                     # if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
@@ -104,35 +104,41 @@ function inGetDiskSmartInfo
                         continue
                     }
                 }
-
-                $attributeObject = [PSCustomObject]$attribute
-                $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
-
-                if ($ShowConvertedData)
+#>
+                if ((-not $QuietIfOK) -or
+                   ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
                 {
-                    $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
-                }
+                    $attributeObject = [PSCustomObject]$attribute
+                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                $attributes += $attributeObject
+                    if ($ShowConvertedData)
+                    {
+                        $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                        $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                    }
+                    $attributes += $attributeObject
+                }
             }
         }
 
-        if ($Silence)
+        # if ($Silence)
+        # {
+        #     continue
+        # }
+
+        if ($attributes)
         {
-            continue
+            $hash.Add("SmartData", $attributes)
+            $diskSmartInfo = [PSCustomObject]$hash
+            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+
+            if ($Session)
+            {
+                $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+            }
+
+            $diskSmartInfo
         }
-
-        $hash.Add("SmartData", $attributes)
-        $diskSmartInfo = [PSCustomObject]$hash
-        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
-
-        if ($Session)
-        {
-            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
-        }
-
-        $diskSmartInfo
     }
 }
 
