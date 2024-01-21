@@ -9,7 +9,7 @@ function inGetDiskSmartInfo
     )
 
     $namespaceWMI = 'root/WMI'
-    $classSMARTData = 'MSStorageDriver_ATAPISmartData'
+    $classSmartData = 'MSStorageDriver_ATAPISmartData'
     $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
     $classDiskDrive = 'Win32_DiskDrive'
 
@@ -25,7 +25,7 @@ function inGetDiskSmartInfo
 
     try
     {
-        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
+        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
