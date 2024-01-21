@@ -10,6 +10,8 @@ function Get-DiskSmartInfo
         [switch]$CriticalAttributesOnly,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
+        [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
+        [string[]]$AttributeIDHex,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
         [switch]$QuietIfOK
     )
@@ -27,6 +29,17 @@ function Get-DiskSmartInfo
             if (-not $attributeIDs.Contains($at))
             {
                 $attributeIDs.Add($at)
+            }
+        }
+    }
+    if ($AttributeIDHex)
+    {
+        foreach ($at in $AttributeIDHex)
+        {
+            $value = [convert]::ToInt32($at, 16)
+            if (-not $attributeIDs.Contains($value))
+            {
+                $attributeIDs.Add($value)
             }
         }
     }

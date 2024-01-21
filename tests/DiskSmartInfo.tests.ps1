@@ -383,6 +383,22 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo.SmartData[8].ID | Should -Be 10
                 }
             }
+
+            Context "AttributeIDHex" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -AttributeIDHex df, e1, e3
+                }
+
+                It "Has requested attributes" {
+                    $diskSmartInfo.SmartData | Should -HaveCount 2
+                    $diskSmartInfo.SmartData[0].ID | Should -Be 223
+                    $diskSmartInfo.SmartData[1].ID | Should -Be 225
+                }
+            }
         }
 
         Context "Suppress empty SmartData" {
