@@ -12,6 +12,7 @@ function Get-DiskSmartInfo
         [int[]]$AttributeID,
         [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
         [string[]]$AttributeIDHex,
+        [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
         [switch]$QuietIfOK
