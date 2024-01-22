@@ -456,7 +456,7 @@ $defaultAttributesHash = @(
     }
 )
 
-$defaultAttributes = [System.Collections.Generic.List[PSCustomObject]]::new()
+$Script:defaultAttributes = [System.Collections.Generic.List[PSCustomObject]]::new()
 
 foreach ($defaultAttributeHash in $defaultAttributesHash)
 {

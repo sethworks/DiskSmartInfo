@@ -8,6 +8,12 @@ function Get-DiskSmartInfo
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [ValidateRange(1, 255)]
+        [int[]]$AttributeID,
+        [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
+        [string[]]$AttributeIDHex,
+        [ArgumentCompleter([AttributeNameCompleter])]
+        [string[]]$AttributeName,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
         [switch]$QuietIfOK
     )
@@ -15,6 +21,41 @@ function Get-DiskSmartInfo
     $Script:ErrorCreatingCimSession = @()
     $Script:ErrorAccessingCimSession = @()
     $Script:ErrorAccessingClass = @()
+
+    # Attributes
+    $attributeIDs = [System.Collections.Generic.List[int]]::new()
+    if ($AttributeID)
+    {
+        foreach ($at in $AttributeID)
+        {
+            if (-not $attributeIDs.Contains($at))
+            {
+                $attributeIDs.Add($at)
+            }
+        }
+    }
+    if ($AttributeIDHex)
+    {
+        foreach ($at in $AttributeIDHex)
+        {
+            $value = [convert]::ToInt32($at, 16)
+            if (-not $attributeIDs.Contains($value))
+            {
+                $attributeIDs.Add($value)
+            }
+        }
+    }
+    if ($AttributeName)
+    {
+        foreach ($at in $AttributeName)
+        {
+            if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
+            {
+                if (-not $attributeIDs.Contains($value.AttributeID))
+                {$attributeIDs.Add($value.AttributeID)}
+            }
+        }
+    }
 
     # ComputerName
     if ($ComputerName)
@@ -36,6 +77,7 @@ function Get-DiskSmartInfo
                     -Session $cim `
                     -ShowConvertedData:$ShowConvertedData `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -AttributeIDs $attributeIDs `
                     -QuietIfOK:$QuietIfOK
             }
         }
@@ -59,6 +101,7 @@ function Get-DiskSmartInfo
                     -Session $cim `
                     -ShowConvertedData:$ShowConvertedData `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -AttributeIDs $attributeIDs `
                     -QuietIfOK:$QuietIfOK
             }
             else
@@ -74,6 +117,7 @@ function Get-DiskSmartInfo
         inGetDiskSmartInfo `
             -ShowConvertedData:$ShowConvertedData `
             -CriticalAttributesOnly:$CriticalAttributesOnly `
+            -AttributeIDs $attributeIDs `
             -QuietIfOK:$QuietIfOK
     }
 

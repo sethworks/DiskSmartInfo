@@ -4,11 +4,12 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$QuietIfOK
     )
 
     $namespaceWMI = 'root/WMI'
-    $classSMARTData = 'MSStorageDriver_ATAPISmartData'
+    $classSmartData = 'MSStorageDriver_ATAPISmartData'
     $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
     $classDiskDrive = 'Win32_DiskDrive'
 
@@ -24,7 +25,7 @@ function inGetDiskSmartInfo
 
     try
     {
-        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSMARTData @parameters -ErrorAction Stop
+        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
@@ -76,8 +77,8 @@ function inGetDiskSmartInfo
             $attributeID = $smartData[$a]
 
             if ($attributeID -and
-                (   (-not $CriticalAttributesOnly) -or
-                    ($CriticalAttributesOnly -and $smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical) ) )
+               (isRequested -AttributeID $attributeID) -and
+               ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
             {
                 $attribute.Add("ID", $attributeID)
                 # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
@@ -88,47 +89,35 @@ function inGetDiskSmartInfo
                 $attribute.Add("Worst", $smartData[$a + 4])
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                if ($QuietIfOK)
+                if ((-not $QuietIfOK) -or
+                   ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
                 {
-                    if ( ($smartAttributes.Where{$_.AttributeID -eq $attributeID}.IsCritical -and $attribute.Data) -or
-                         ($attribute.Value -le $attribute.Threshold) )
+                    $attributeObject = [PSCustomObject]$attribute
+                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+
+                    if ($ShowConvertedData)
                     {
-                        $Silence = $false
+                        $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                        $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
                     }
-                    else
-                    {
-                        continue
-                    }
+                    $attributes += $attributeObject
                 }
-
-                $attributeObject = [PSCustomObject]$attribute
-                $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
-
-                if ($ShowConvertedData)
-                {
-                    $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                    $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
-                }
-
-                $attributes += $attributeObject
             }
         }
 
-        if ($Silence)
+        if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
         {
-            continue
+            $hash.Add("SmartData", $attributes)
+            $diskSmartInfo = [PSCustomObject]$hash
+            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+
+            if ($Session)
+            {
+                $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+            }
+
+            $diskSmartInfo
         }
-
-        $hash.Add("SmartData", $attributes)
-        $diskSmartInfo = [PSCustomObject]$hash
-        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
-
-        if ($Session)
-        {
-            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
-        }
-
-        $diskSmartInfo
     }
 }
 
@@ -224,7 +213,7 @@ function inGetAttributeData
             $result = 0
             $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 4; $offset++)
+            for ($offset = 0; $offset -lt 3; $offset++)
             {
                 $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
             }
