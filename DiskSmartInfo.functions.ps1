@@ -12,6 +12,7 @@ function Get-DiskSmartInfo
         [int[]]$AttributeID,
         [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
         [string[]]$AttributeIDHex,
+        [string[]]$AttributeName,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
         [switch]$QuietIfOK
     )
@@ -40,6 +41,17 @@ function Get-DiskSmartInfo
             if (-not $attributeIDs.Contains($value))
             {
                 $attributeIDs.Add($value)
+            }
+        }
+    }
+    if ($AttributeName)
+    {
+        foreach ($at in $AttributeName)
+        {
+            if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
+            {
+                if (-not $attributeIDs.Contains($value.AttributeID))
+                {$attributeIDs.Add($value.AttributeID)}
             }
         }
     }
