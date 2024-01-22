@@ -49,13 +49,14 @@ class AttributeNameCompleter : System.Management.Automation.IArgumentCompleter
         {
             if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
             {
+                $id = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
                 if ($completionResult.Contains(" "))
                 {
-                    $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, $completionResult))
+                    $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}. $completionResult"))
                 }
                 else
                 {
-                    $result.Add([CompletionResult]::new($completionResult))
+                    $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${id}. $completionResult"))
                 }
             }
         }
