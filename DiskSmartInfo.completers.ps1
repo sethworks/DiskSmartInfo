@@ -52,11 +52,11 @@ class AttributeNameCompleter : System.Management.Automation.IArgumentCompleter
                 $id = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
                 if ($completionResult.Contains(" "))
                 {
-                    $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}. $completionResult"))
+                    $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))
                 }
                 else
                 {
-                    $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${id}. $completionResult"))
+                    $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))
                 }
             }
         }
