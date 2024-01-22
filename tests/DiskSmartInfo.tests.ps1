@@ -415,8 +415,24 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo.SmartData[1].ID | Should -Be 192
                 }
             }
+
+            Context "Attribute parameters" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -AttributeID 1 -AttributeIDHex A -AttributeName 'Power-off Retract Count', 'Spin-Up Time'
+                }
+
+                It "Has requested attributes" {
+                    $diskSmartInfo.SmartData | Should -HaveCount 4
+                    $diskSmartInfo.SmartData[0].ID | Should -Be 1
+                    $diskSmartInfo.SmartData[1].ID | Should -Be 3
+                    $diskSmartInfo.SmartData[2].ID | Should -Be 10
+                    $diskSmartInfo.SmartData[3].ID | Should -Be 192
+                }
+            }
         }
-
-
     }
 }
