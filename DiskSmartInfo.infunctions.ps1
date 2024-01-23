@@ -4,6 +4,7 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [System.Collections.Generic.List[int]]$DiskNumbers,
         [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$QuietIfOK
     )
@@ -54,69 +55,73 @@ function inGetDiskSmartInfo
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
 
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
-        $model = $diskDrive.Model
 
-        $hash = [ordered]@{}
-
-        if ($Session)
+        if (!$DiskNumbers.Count -or $DiskNumbers -contains $diskDrive.Index)
         {
-            $hash.Add('ComputerName', $Session.ComputerName)
-        }
+            $model = $diskDrive.Model
 
-        $hash.Add('Model', $model)
-        $hash.Add('InstanceId', $instanceId)
-
-        $attributes = @()
-
-        $smartAttributes = inOverwriteAttributes -model $model
-
-        for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
-        {
-            $attribute = [ordered]@{}
-
-            $attributeID = $smartData[$a]
-
-            if ($attributeID -and
-               (isRequested -AttributeID $attributeID) -and
-               ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
-            {
-                $attribute.Add("ID", $attributeID)
-                # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
-                $attribute.Add("IDHex", $attributeID.ToString("X"))
-                $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                $attribute.Add("Threshold", $thresholdsData[$a + 1])
-                $attribute.Add("Value", $smartData[$a + 3])
-                $attribute.Add("Worst", $smartData[$a + 4])
-                $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
-
-                if ((-not $QuietIfOK) -or
-                   ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
-                {
-                    $attributeObject = [PSCustomObject]$attribute
-                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
-
-                    if ($ShowConvertedData)
-                    {
-                        $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                        $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
-                    }
-                    $attributes += $attributeObject
-                }
-            }
-        }
-
-        if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
-        {
-            $hash.Add("SmartData", $attributes)
-            $diskSmartInfo = [PSCustomObject]$hash
-            $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+            $hash = [ordered]@{}
 
             if ($Session)
             {
-                $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+                $hash.Add('ComputerName', $Session.ComputerName)
             }
 
-            $diskSmartInfo
+            $hash.Add('Model', $model)
+            $hash.Add('InstanceId', $instanceId)
+
+            $attributes = @()
+
+            $smartAttributes = inOverwriteAttributes -model $model
+
+            for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+            {
+                $attribute = [ordered]@{}
+
+                $attributeID = $smartData[$a]
+
+                if ($attributeID -and
+                (isRequested -AttributeID $attributeID) -and
+                ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
+                {
+                    $attribute.Add("ID", $attributeID)
+                    # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
+                    $attribute.Add("IDHex", $attributeID.ToString("X"))
+                    $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    $attribute.Add("Threshold", $thresholdsData[$a + 1])
+                    $attribute.Add("Value", $smartData[$a + 3])
+                    $attribute.Add("Worst", $smartData[$a + 4])
+                    $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+
+                    if ((-not $QuietIfOK) -or
+                    ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
+                    {
+                        $attributeObject = [PSCustomObject]$attribute
+                        $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+
+                        if ($ShowConvertedData)
+                        {
+                            $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                            $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                        }
+                        $attributes += $attributeObject
+                    }
+                }
+            }
+
+            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
+            {
+                $hash.Add("SmartData", $attributes)
+                $diskSmartInfo = [PSCustomObject]$hash
+                $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+
+                if ($Session)
+                {
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+                }
+
+                $diskSmartInfo
+            }
         }
     }
 }

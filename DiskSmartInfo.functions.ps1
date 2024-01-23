@@ -8,6 +8,7 @@ function Get-DiskSmartInfo
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [int[]]$DiskNumber,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
         [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
@@ -18,109 +19,131 @@ function Get-DiskSmartInfo
         [switch]$QuietIfOK
     )
 
-    $Script:ErrorCreatingCimSession = @()
-    $Script:ErrorAccessingCimSession = @()
-    $Script:ErrorAccessingClass = @()
+    begin
+    {
+        $Script:ErrorCreatingCimSession = @()
+        $Script:ErrorAccessingCimSession = @()
+        $Script:ErrorAccessingClass = @()
 
-    # Attributes
-    $attributeIDs = [System.Collections.Generic.List[int]]::new()
-    if ($AttributeID)
-    {
-        foreach ($at in $AttributeID)
+        # Attributes
+        $attributeIDs = [System.Collections.Generic.List[int]]::new()
+        if ($AttributeID)
         {
-            if (-not $attributeIDs.Contains($at))
+            foreach ($at in $AttributeID)
             {
-                $attributeIDs.Add($at)
+                if (-not $attributeIDs.Contains($at))
+                {
+                    $attributeIDs.Add($at)
+                }
             }
         }
-    }
-    if ($AttributeIDHex)
-    {
-        foreach ($at in $AttributeIDHex)
+        if ($AttributeIDHex)
         {
-            $value = [convert]::ToInt32($at, 16)
-            if (-not $attributeIDs.Contains($value))
+            foreach ($at in $AttributeIDHex)
             {
-                $attributeIDs.Add($value)
+                $value = [convert]::ToInt32($at, 16)
+                if (-not $attributeIDs.Contains($value))
+                {
+                    $attributeIDs.Add($value)
+                }
             }
         }
-    }
-    if ($AttributeName)
-    {
-        foreach ($at in $AttributeName)
+        if ($AttributeName)
         {
-            if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
+            foreach ($at in $AttributeName)
             {
-                if (-not $attributeIDs.Contains($value.AttributeID))
-                {$attributeIDs.Add($value.AttributeID)}
+                if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
+                {
+                    if (-not $attributeIDs.Contains($value.AttributeID))
+                    {$attributeIDs.Add($value.AttributeID)}
+                }
             }
         }
+
+        $diskNumbers = [System.Collections.Generic.List[int]]::new()
     }
 
-    # ComputerName
-    if ($ComputerName)
+    process
     {
-        try
+        foreach ($dn in $DiskNumber)
         {
-            if ($DebugPreference -eq 'Continue')
+            if (-not $diskNumbers.Contains($dn))
             {
-                $cimSessions = New-CimSession -ComputerName $ComputerName
-            }
-            else
-            {
-                $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-            }
-
-            foreach ($cim in $cimSessions)
-            {
-                inGetDiskSmartInfo `
-                    -Session $cim `
-                    -ShowConvertedData:$ShowConvertedData `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -AttributeIDs $attributeIDs `
-                    -QuietIfOK:$QuietIfOK
-            }
-        }
-        finally
-        {
-            if ($cimSessions)
-            {
-                Remove-CimSession -CimSession $cimSessions
+                $diskNumbers.Add($dn)
             }
         }
     }
 
-    # CimSession
-    elseif ($CimSession)
+    end
     {
-        foreach ($cim in $CimSession)
+        # ComputerName
+        if ($ComputerName)
         {
-            if ($cim.TestConnection())
+            try
             {
-                inGetDiskSmartInfo `
-                    -Session $cim `
-                    -ShowConvertedData:$ShowConvertedData `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -AttributeIDs $attributeIDs `
-                    -QuietIfOK:$QuietIfOK
+                if ($DebugPreference -eq 'Continue')
+                {
+                    $cimSessions = New-CimSession -ComputerName $ComputerName
+                }
+                else
+                {
+                    $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                }
+
+                foreach ($cim in $cimSessions)
+                {
+                    inGetDiskSmartInfo `
+                        -Session $cim `
+                        -ShowConvertedData:$ShowConvertedData `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $diskNumbers `
+                        -AttributeIDs $attributeIDs `
+                        -QuietIfOK:$QuietIfOK
+                }
             }
-            else
+            finally
             {
-                $Script:ErrorAccessingCimSession += $cim.ComputerName
+                if ($cimSessions)
+                {
+                    Remove-CimSession -CimSession $cimSessions
+                }
             }
         }
-    }
 
-    # Localhost
-    else
-    {
-        inGetDiskSmartInfo `
-            -ShowConvertedData:$ShowConvertedData `
-            -CriticalAttributesOnly:$CriticalAttributesOnly `
-            -AttributeIDs $attributeIDs `
-            -QuietIfOK:$QuietIfOK
-    }
+        # CimSession
+        elseif ($CimSession)
+        {
+            foreach ($cim in $CimSession)
+            {
+                if ($cim.TestConnection())
+                {
+                    inGetDiskSmartInfo `
+                        -Session $cim `
+                        -ShowConvertedData:$ShowConvertedData `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $diskNumbers `
+                        -AttributeIDs $attributeIDs `
+                        -QuietIfOK:$QuietIfOK
+                }
+                else
+                {
+                    $Script:ErrorAccessingCimSession += $cim.ComputerName
+                }
+            }
+        }
 
-    # Error reporting
-    inReportErrors
+        # Localhost
+        else
+        {
+            inGetDiskSmartInfo `
+                -ShowConvertedData:$ShowConvertedData `
+                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                -DiskNumbers $diskNumbers `
+                -AttributeIDs $attributeIDs `
+                -QuietIfOK:$QuietIfOK
+        }
+
+        # Error reporting
+        inReportErrors
+    }
 }
