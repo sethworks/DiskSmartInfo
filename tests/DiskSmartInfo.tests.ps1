@@ -14,10 +14,17 @@ Describe "DiskSmartInfo" {
         $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
         $classDiskDrive = 'Win32_DiskDrive'
 
+        $namespaceStorage = 'root/Microsoft/Windows/Storage'
+        $classDisk = 'MSFT_Disk'
+        $classPhysicalDisk = 'MSFT_PhysicalDisk'
+
         # Class objects
         $cimClassSmartData = Get-CimClass -Namespace $namespaceWMI -ClassName $classSmartData
         $cimClassThresholds = Get-CimClass -Namespace $namespaceWMI -ClassName $classThresholds
         $cimClassDiskDrive = Get-CimClass -ClassName $classDiskDrive
+
+        $cimClassDisk = Get-CimClass -Namespace $namespaceStorage -ClassName $classDisk
+        $cimClassPhysicalDisk = Get-CimClass -Namespace $namespaceStorage -ClassName $classPhysicalDisk
 
         # Properties
         # HDD1
@@ -38,6 +45,14 @@ Describe "DiskSmartInfo" {
             BytesPerSector = $testsData.BytesPerSector_HDD1
         }
 
+        $diskPropertiesHDD1 = @{
+            Number = $testsData.Index_HDD1
+        }
+
+        $physicalDiskPropertiesHDD1 = @{
+            DeviceId = $testsData.Index_HDD1
+        }
+
         # HDD2
         $diskSmartDataPropertiesHDD2 = @{
             VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_HDD2
@@ -54,6 +69,14 @@ Describe "DiskSmartInfo" {
             PNPDeviceID = $testsData.PNPDeviceID_HDD2
             Model = $testsData.Model_HDD2
             BytesPerSector = $testsData.BytesPerSector_HDD2
+        }
+
+        $diskPropertiesHDD2 = @{
+            Number = $testsData.Index_HDD2
+        }
+
+        $physicalDiskPropertiesHDD2 = @{
+            DeviceId = $testsData.Index_HDD2
         }
 
         # SSD1
@@ -74,6 +97,14 @@ Describe "DiskSmartInfo" {
             BytesPerSector = $testsData.BytesPerSector_SSD1
         }
 
+        $diskPropertiesSSD1 = @{
+            Number = $testsData.Index_SSD1
+        }
+
+        $physicalDiskPropertiesSSD1 = @{
+            DeviceId = $testsData.Index_SSD1
+        }
+
         # HFSSSD1
         $diskSmartDataPropertiesHFSSSD1 = @{
             VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_HFSSSD1
@@ -92,6 +123,14 @@ Describe "DiskSmartInfo" {
             BytesPerSector = $testsData.BytesPerSector_HFSSSD1
         }
 
+        $diskPropertiesHFSSSD1 = @{
+            Number = $testsData.Index_HFSSSD1
+        }
+
+        $physicalDiskPropertiesHFSSSDD1 = @{
+            DeviceId = $testsData.Index_HFSSSD1
+        }
+
         # CIM object
         $diskSmartDataHDD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHDD1 -ClientOnly
         $diskSmartDataHDD2 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHDD2 -ClientOnly
@@ -107,6 +146,16 @@ Describe "DiskSmartInfo" {
         $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD2 -ClientOnly
         $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
         $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly
+
+        $diskHDD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD1 -ClientOnly
+        $diskHDD2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD2 -ClientOnly
+        $diskSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesSSD1 -ClientOnly
+        $diskHFSSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHFSSSD1 -ClientOnly
+
+        $physicalDiskHDD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD1 -ClientOnly
+        $physicalDiskHDD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD2 -ClientOnly
+        $physicalDiskSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD1 -ClientOnly
+        $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
     }
 
     Context "Get-DiskSmartInfo" {
@@ -448,6 +497,51 @@ Describe "DiskSmartInfo" {
                     mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                     $diskSmartInfo = Get-DiskSmartInfo -DiskNumber 0, 2
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                }
+            }
+
+            Context "Pipeline Win32_DiskDrive" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = $diskDriveHDD1, $diskDriveSSD1 | Get-DiskSmartInfo
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                }
+            }
+
+            Context "Pipeline MSFT_Disk" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = $diskHDD1, $diskSSD1 | Get-DiskSmartInfo
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                }
+            }
+
+            Context "Pipeline MSFT_PhysicalDisk" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = $physicalDiskHDD1, $physicalDiskSSD1 | Get-DiskSmartInfo
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2

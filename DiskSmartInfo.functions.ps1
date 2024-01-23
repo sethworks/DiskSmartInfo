@@ -8,6 +8,8 @@ function Get-DiskSmartInfo
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
+        [Alias('Index','Number','DeviceId')]
+        [Parameter(ValueFromPipelineByPropertyName)]
         [int[]]$DiskNumber,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
