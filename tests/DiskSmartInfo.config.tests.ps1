@@ -32,6 +32,7 @@ Describe "Config" {
         }
 
         $diskDrivePropertiesHDD1 = @{
+            Index = $testsData.Index_HDD1
             PNPDeviceID = $testsData.PNPDeviceID_HDD1
             Model = $testsData.Model_HDD1
             BytesPerSector = $testsData.BytesPerSector_HDD1
@@ -49,6 +50,7 @@ Describe "Config" {
         }
 
         $diskDrivePropertiesHDD2 = @{
+            Index = $testsData.Index_HDD2
             PNPDeviceID = $testsData.PNPDeviceID_HDD2
             Model = $testsData.Model_HDD2
             BytesPerSector = $testsData.BytesPerSector_HDD2
@@ -66,6 +68,7 @@ Describe "Config" {
         }
 
         $diskDrivePropertiesSSD1 = @{
+            Index = $testsData.Index_SSD1
             PNPDeviceID = $testsData.PNPDeviceID_SSD1
             Model = $testsData.Model_SSD1
             BytesPerSector = $testsData.BytesPerSector_SSD1
@@ -83,6 +86,7 @@ Describe "Config" {
         }
 
         $diskDrivePropertiesHFSSSD1 = @{
+            Index = $testsData.Index_HFSSSD1
             PNPDeviceID = $testsData.PNPDeviceID_HFSSSD1
             Model = $testsData.Model_HFSSSD1
             BytesPerSector = $testsData.BytesPerSector_HFSSSD1

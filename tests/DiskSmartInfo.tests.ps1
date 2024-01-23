@@ -32,6 +32,7 @@ Describe "DiskSmartInfo" {
         }
 
         $diskDrivePropertiesHDD1 = @{
+            Index = $testsData.Index_HDD1
             PNPDeviceID = $testsData.PNPDeviceID_HDD1
             Model = $testsData.Model_HDD1
             BytesPerSector = $testsData.BytesPerSector_HDD1
@@ -49,6 +50,7 @@ Describe "DiskSmartInfo" {
         }
 
         $diskDrivePropertiesHDD2 = @{
+            Index = $testsData.Index_HDD2
             PNPDeviceID = $testsData.PNPDeviceID_HDD2
             Model = $testsData.Model_HDD2
             BytesPerSector = $testsData.BytesPerSector_HDD2
@@ -66,6 +68,7 @@ Describe "DiskSmartInfo" {
         }
 
         $diskDrivePropertiesSSD1 = @{
+            Index = $testsData.Index_SSD1
             PNPDeviceID = $testsData.PNPDeviceID_SSD1
             Model = $testsData.Model_SSD1
             BytesPerSector = $testsData.BytesPerSector_SSD1
@@ -83,6 +86,7 @@ Describe "DiskSmartInfo" {
         }
 
         $diskDrivePropertiesHFSSSD1 = @{
+            Index = $testsData.Index_HFSSSD1
             PNPDeviceID = $testsData.PNPDeviceID_HFSSSD1
             Model = $testsData.Model_HFSSSD1
             BytesPerSector = $testsData.BytesPerSector_HFSSSD1
@@ -431,6 +435,24 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo.SmartData[1].ID | Should -Be 3
                     $diskSmartInfo.SmartData[2].ID | Should -Be 10
                     $diskSmartInfo.SmartData[3].ID | Should -Be 192
+                }
+            }
+        }
+
+        Context "Select disks" {
+
+            Context "DiskNumber" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -DiskNumber 0, 2
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
         }
