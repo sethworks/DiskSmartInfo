@@ -58,9 +58,6 @@ function inGetDiskSmartInfo
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
         $model = $diskDrive.Model
 
-        # if (!$DiskNumbers.Count -or $DiskNumbers -contains $diskDrive.Index)
-        # if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or ($DiskNumbers -contains $diskDrive.Index))
-        # if ((isDiskNumberMatched -Index $diskDrive.Index) -and (isDiskModelMatched -Model $model))
         if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
         {
             $hash = [ordered]@{}
@@ -88,7 +85,6 @@ function inGetDiskSmartInfo
                 ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
                 {
                     $attribute.Add("ID", $attributeID)
-                    # $attribute.Add("IDHex", [convert]::ToString($attributeID,16).ToUpper())
                     $attribute.Add("IDHex", $attributeID.ToString("X"))
                     $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                     $attribute.Add("Threshold", $thresholdsData[$a + 1])

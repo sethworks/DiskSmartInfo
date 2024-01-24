@@ -76,7 +76,6 @@ class DiskCompleter : IArgumentCompleter
     {
         $result = New-Object -TypeName "System.Collections.Generic.List[CompletionResult]"
         [System.Collections.Generic.List[String]]$valuesToExclude = $null
-        # $possibleValues = $null
 
         $parameters = @{
             ClassName = 'Win32_DiskDrive'
@@ -86,7 +85,6 @@ class DiskCompleter : IArgumentCompleter
            ($fakeBoundParameters.ContainsKey('ComputerName') -and $fakeBoundParameters.ComputerName.Count -gt 1) -or
            ($fakeBoundParameters.ContainsKey('CimSession') -and $fakeBoundParameters.CimSession.Count -gt 1) )
         {
-            # return $null
             return $result
         }
 
@@ -133,32 +131,21 @@ class DiskCompleter : IArgumentCompleter
 
         if ($parameterName -eq 'DiskNumber')
         {
-            # $possibleValues = $diskDrive.Index
             foreach ($completionResult in $diskDrive.Index)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    # $model = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
                     $model = ($diskDrive.Where{$_.Index -eq $completionResult}).Model
-                    # if ($completionResult.Contains(" "))
-                    # {
-                        # $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${completionResult}: $model"))
-                    # }
-                    # else
-                    # {
-                        $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${completionResult}: $model"))
-                    # }
+                    $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${completionResult}: $model"))
                 }
             }
         }
         elseif ($parameterName -eq 'DiskModel')
         {
-            # $possibleValues = $diskDrive.Model
             foreach ($completionResult in $diskDrive.Model)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    # $index = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
                     $index = ($diskDrive.Where{$_.Model -eq $completionResult}).Index
                     if ($completionResult.Contains(" "))
                     {
@@ -171,22 +158,6 @@ class DiskCompleter : IArgumentCompleter
                 }
             }
         }
-
-        # foreach ($completionResult in $possibleValues)
-        # {
-        #     if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
-        #     {
-        #         $id = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
-        #         if ($completionResult.Contains(" "))
-        #         {
-        #             $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))
-        #         }
-        #         else
-        #         {
-        #             $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))
-        #         }
-        #     }
-        # }
 
         return $result
     }
