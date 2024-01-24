@@ -2,15 +2,18 @@ function Get-DiskSmartInfo
 {
     [CmdletBinding(DefaultParameterSetName='ComputerName')]
     Param(
-        [Parameter(Position=0,ParameterSetName='ComputerName')]
+        # [Parameter(Position=0,ParameterSetName='ComputerName')]
+        [Parameter(Position=0)]
         [string[]]$ComputerName,
-        [Parameter(ParameterSetName='CimSession')]
+        # [Parameter(ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
+        [ArgumentCompleter([DiskCompleter])]
         [int[]]$DiskNumber,
+        [ArgumentCompleter([DiskCompleter])]
         [string[]]$DiskModel,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
