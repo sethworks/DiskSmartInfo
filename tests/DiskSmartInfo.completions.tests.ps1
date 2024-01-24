@@ -276,4 +276,76 @@ Describe "DiskSmartInfo completions tests" {
             # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
     }
+
+    Context "DiskModel" {
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+        }
+
+        It "Suggests all values" {
+            $command = "Get-DiskSmartInfo -DiskModel "
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -HaveCount 3
+
+            $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly 'HDD1'
+            $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+            $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly 'HDD2'
+            $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+            $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly 'SSD1'
+            $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+        }
+
+        It "Suggests proper values" {
+            $command = "Get-DiskSmartInfo -DiskModel HDD2"
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -HaveCount 1
+
+            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
+            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+            $commandCompletion.CompletionMatches.CompletionText | Should -BeExactly 'HDD2'
+            $commandCompletion.CompletionMatches.ToolTip | Should -BeExactly '1: HDD2'
+            # $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly '2'
+            # $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+        }
+
+        It "Omits already specified values" {
+            $command = "Get-DiskSmartInfo -DiskModel HDD2,"
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -HaveCount 2
+
+            $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly 'HDD1'
+            $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
+            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+            $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly 'SSD1'
+            $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
+        }
+
+        It "Do not return values for multiple hosts" {
+            $command = "Get-DiskSmartInfo -ComputerName 'host1', 'host2' -DiskModel "
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
+
+            $command = "Get-DiskSmartInfo -CimSession 'host1', 'host2' -DiskModel "
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
+
+            $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskModel "
+            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+            $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
+
+            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
+            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
+            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
+            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
+        }
+    }
 }

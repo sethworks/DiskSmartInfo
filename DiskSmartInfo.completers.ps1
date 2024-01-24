@@ -120,7 +120,7 @@ class DiskCompleter : IArgumentCompleter
                 if ($values)
                 {
                     $valuesToExclude = $values |
-                        Where-Object { $_.GetType().Name -eq 'ConstantExpressionAst' } |
+                        Where-Object { ($_.GetType().Name -eq 'StringConstantExpressionAst') -or ($_.GetType().Name -eq 'ConstantExpressionAst') } |
                         ForEach-Object { $_.SafeGetValue() }
 
                     if ($wordToComplete)
