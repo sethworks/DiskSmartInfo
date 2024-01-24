@@ -45,3 +45,42 @@ function isThresholdReached
         return $false
     }
 }
+
+function isDiskNumberMatched
+{
+    Param (
+        [int]$Index
+    )
+
+    if (!$DiskNumbers.Count -or $DiskNumbers -contains $Index)
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+}
+
+function isDiskModelMatched
+{
+    Param (
+        [string]$Model
+    )
+
+    if ($DiskModels.Count)
+    {
+        foreach ($dm in $DiskModels)
+        {
+            if ($Model -like $dm)
+            {
+                return $true
+            }
+        }
+        return $false
+    }
+    else
+    {
+        return $true
+    }
+}

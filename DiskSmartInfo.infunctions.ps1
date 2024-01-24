@@ -5,6 +5,7 @@ function inGetDiskSmartInfo
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
         [System.Collections.Generic.List[int]]$DiskNumbers,
+        [string[]]$DiskModels,
         [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$QuietIfOK
     )
@@ -55,11 +56,12 @@ function inGetDiskSmartInfo
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
 
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+        $model = $diskDrive.Model
 
-        if (!$DiskNumbers.Count -or $DiskNumbers -contains $diskDrive.Index)
+        # if (!$DiskNumbers.Count -or $DiskNumbers -contains $diskDrive.Index)
+        # if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or ($DiskNumbers -contains $diskDrive.Index))
+        if ((isDiskNumberMatched -Index $diskDrive.Index) -and (isDiskModelMatched -Model $model))
         {
-            $model = $diskDrive.Model
-
             $hash = [ordered]@{}
 
             if ($Session)

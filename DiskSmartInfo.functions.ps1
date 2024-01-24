@@ -11,6 +11,7 @@ function Get-DiskSmartInfo
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
         [int[]]$DiskNumber,
+        [string[]]$DiskModel,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
         [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
@@ -99,6 +100,7 @@ function Get-DiskSmartInfo
                         -ShowConvertedData:$ShowConvertedData `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $diskNumbers `
+                        -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -QuietIfOK:$QuietIfOK
                 }
@@ -124,6 +126,7 @@ function Get-DiskSmartInfo
                         -ShowConvertedData:$ShowConvertedData `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $diskNumbers `
+                        -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -QuietIfOK:$QuietIfOK
                 }
@@ -141,6 +144,7 @@ function Get-DiskSmartInfo
                 -ShowConvertedData:$ShowConvertedData `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
                 -DiskNumbers $diskNumbers `
+                -DiskModels $DiskModel `
                 -AttributeIDs $attributeIDs `
                 -QuietIfOK:$QuietIfOK
         }
