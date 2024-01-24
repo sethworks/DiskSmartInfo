@@ -549,6 +549,36 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
+
+            Context "DiskModel" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -DiskModel "HDD*"
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
+                }
+            }
+
+            Context "DiskNumber and DiskModel" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -DiskNumber 0 -DiskModel "SSD1"
+                }
+                It "Has data for selected disks" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                }
+            }
         }
     }
 }

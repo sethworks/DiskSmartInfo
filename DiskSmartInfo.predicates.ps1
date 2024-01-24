@@ -52,7 +52,8 @@ function isDiskNumberMatched
         [int]$Index
     )
 
-    if (!$DiskNumbers.Count -or $DiskNumbers -contains $Index)
+    # if (!$DiskNumbers.Count -or $DiskNumbers -contains $Index)
+    if ($DiskNumbers -contains $Index)
     {
         return $true
     }
@@ -68,8 +69,8 @@ function isDiskModelMatched
         [string]$Model
     )
 
-    if ($DiskModels.Count)
-    {
+    # if ($DiskModels.Count)
+    # {
         foreach ($dm in $DiskModels)
         {
             if ($Model -like $dm)
@@ -78,9 +79,9 @@ function isDiskModelMatched
             }
         }
         return $false
-    }
-    else
-    {
-        return $true
-    }
+    # }
+    # else
+    # {
+        # return $true
+    # }
 }

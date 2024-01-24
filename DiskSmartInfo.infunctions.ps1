@@ -60,7 +60,8 @@ function inGetDiskSmartInfo
 
         # if (!$DiskNumbers.Count -or $DiskNumbers -contains $diskDrive.Index)
         # if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or ($DiskNumbers -contains $diskDrive.Index))
-        if ((isDiskNumberMatched -Index $diskDrive.Index) -and (isDiskModelMatched -Model $model))
+        # if ((isDiskNumberMatched -Index $diskDrive.Index) -and (isDiskModelMatched -Model $model))
+        if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
         {
             $hash = [ordered]@{}
 
