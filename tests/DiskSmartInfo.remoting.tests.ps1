@@ -3,7 +3,7 @@ BeforeAll {
     Import-Module -Name "$PSScriptRoot\..\DiskSmartInfo.psd1"
 }
 
-Describe "DiskSmartInfo" {
+Describe "DiskSmartInfo remoting tests" -Skip:(!(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)) {
 
     BeforeAll {
         $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testsData.psd1
@@ -158,6 +158,7 @@ Describe "DiskSmartInfo" {
         $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
 
         $computerNames = $env:computername, 'localhost'
+        $ipAddress = '127.0.0.1'
     }
 
     Context "ComputerName" {
@@ -183,6 +184,43 @@ Describe "DiskSmartInfo" {
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
             $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+        }
+
+        It "Has SmartData property with 22 DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData | Should -HaveCount 22
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+        }
+
+        It "Has correct DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
+            $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
+            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
+            $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
+            $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
+            $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
+            $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+        }
+    }
+    Context "ComputerName IP Address" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddress
+        }
+
+        It "Returns DiskSmartInfo object" {
+            $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+        }
+
+        It "Has ComputerName, Model, and InstanceId properties" {
+            $diskSmartInfo.ComputerName | Should -BeExactly $ipAddress
+            $diskSmartInfo.Model | Should -BeExactly $testsData.Model_HDD1
+            $diskSmartInfo.InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
