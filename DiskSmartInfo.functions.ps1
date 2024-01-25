@@ -3,9 +3,12 @@ function Get-DiskSmartInfo
     [CmdletBinding(DefaultParameterSetName='ComputerName')]
     Param(
         # [Parameter(Position=0,ParameterSetName='ComputerName')]
-        [Parameter(Position=0)]
+        # [Parameter(Position=0)]
+        [Alias('PSComputerName')]
+        [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
         # [Parameter(ParameterSetName='CimSession')]
+        [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
         [switch]$ShowConvertedData,
         [switch]$CriticalAttributesOnly,
@@ -67,6 +70,8 @@ function Get-DiskSmartInfo
         }
 
         $diskNumbers = [System.Collections.Generic.List[int]]::new()
+        $computerNames = [System.Collections.Generic.List[string]]::new()
+        $cimSessions = [System.Collections.Generic.List[Microsoft.Management.Infrastructure.CimSession]]::new()
     }
 
     process
@@ -78,22 +83,41 @@ function Get-DiskSmartInfo
                 $diskNumbers.Add($dn)
             }
         }
+
+        foreach ($cn in $ComputerName)
+        {
+            if (-not $computerNames.Contains($cn))
+            {
+                $computerNames.Add($cn)
+            }
+        }
+
+        foreach ($cs in $CimSession)
+        {
+            if (-not $cimSessions.Contains($cs))
+            {
+                $cimSessions.Add($cs)
+            }
+        }
     }
 
     end
     {
         # ComputerName
-        if ($ComputerName)
+        # if ($ComputerName)
+        if ($computerNames)
         {
             try
             {
                 if ($DebugPreference -eq 'Continue')
                 {
-                    $cimSessions = New-CimSession -ComputerName $ComputerName
+                    # $cimSessions = New-CimSession -ComputerName $ComputerName
+                    $cimSessions = New-CimSession -ComputerName $computerNames
                 }
                 else
                 {
-                    $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                    # $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                    $cimSessions = New-CimSession -ComputerName $computerNames -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
                 }
 
                 foreach ($cim in $cimSessions)
@@ -118,9 +142,10 @@ function Get-DiskSmartInfo
         }
 
         # CimSession
-        elseif ($CimSession)
+        # elseif ($CimSession)
+        elseif ($cimSessions)
         {
-            foreach ($cim in $CimSession)
+            foreach ($cim in $cimSessions)
             {
                 if ($cim.TestConnection())
                 {

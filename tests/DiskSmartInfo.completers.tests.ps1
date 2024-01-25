@@ -263,10 +263,10 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
 
-            $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskNumber "
-            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+            # $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskNumber "
+            # $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
+            # $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
 
             # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
             # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
@@ -335,10 +335,10 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
 
-            $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskModel "
-            $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+            # $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskModel "
+            # $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
+            # $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
 
             # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
             # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
