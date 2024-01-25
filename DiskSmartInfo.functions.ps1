@@ -70,27 +70,71 @@ function Get-DiskSmartInfo
         }
 
         $diskNumbers = [System.Collections.Generic.List[int]]::new()
-        $computerNames = [System.Collections.Generic.List[string]]::new()
+        # $computerNames = [System.Collections.Generic.List[string]]::new()
+        $computerNamesAndDiskNumbers = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
         $cimSessions = [System.Collections.Generic.List[Microsoft.Management.Infrastructure.CimSession]]::new()
     }
 
     process
     {
-        foreach ($dn in $DiskNumber)
+        if ($ComputerName)
         {
-            if (-not $diskNumbers.Contains($dn))
+            foreach ($cn in $ComputerName)
             {
-                $diskNumbers.Add($dn)
+                if (($in = $computerNamesAndDiskNumbers.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cn})) -ge 0)
+                {
+                    foreach ($dn in $DiskNumber)
+                    {
+                        if ($computerNamesAndDiskNumbers[$in].DiskNumber -notcontains $dn)
+                        {
+                            $computerNamesAndDiskNumbers[$in].DiskNumber += $dn
+                        }
+                    }
+                    # if ($DiskNumber)
+                    # {
+                    #     $computerNamesAndDiskNumbers
+                    # }
+                    # $computerNames.Add($cn)
+                    # if ($computerNamesAndDiskNumbers[$in].$DiskNumber -contains $)
+                }
+                else
+                {
+                    if ($DiskNumber)
+                    {
+                        $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@($DiskNumber)})
+                    }
+                    else
+                    {
+                        $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@()})
+                    }
+                }
             }
         }
+        else
+        {
+            foreach ($dn in $DiskNumber)
+            {
+                if (-not $diskNumbers.Contains($dn))
+                {
+                    $diskNumbers.Add($dn)
+                }
+            }
+        }
+        # foreach ($dn in $DiskNumber)
+        # {
+        #     if (-not $diskNumbers.Contains($dn))
+        #     {
+        #         $diskNumbers.Add($dn)
+        #     }
+        # }
 
-        foreach ($cn in $ComputerName)
-        {
-            if (-not $computerNames.Contains($cn))
-            {
-                $computerNames.Add($cn)
-            }
-        }
+        # foreach ($cn in $ComputerName)
+        # {
+        #     if (-not $computerNames.Contains($cn))
+        #     {
+        #         $computerNames.Add($cn)
+        #     }
+        # }
 
         foreach ($cs in $CimSession)
         {
@@ -105,19 +149,22 @@ function Get-DiskSmartInfo
     {
         # ComputerName
         # if ($ComputerName)
-        if ($computerNames)
+        # if ($computerNames)
+        if ($computerNamesAndDiskNumbers)
         {
             try
             {
                 if ($DebugPreference -eq 'Continue')
                 {
                     # $cimSessions = New-CimSession -ComputerName $ComputerName
-                    $cimSessions = New-CimSession -ComputerName $computerNames
+                    # $cimSessions = New-CimSession -ComputerName $computerNames
+                    $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName
                 }
                 else
                 {
                     # $cimSessions = New-CimSession -ComputerName $ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-                    $cimSessions = New-CimSession -ComputerName $computerNames -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                    # $cimSessions = New-CimSession -ComputerName $computerNames -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                    $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
                 }
 
                 foreach ($cim in $cimSessions)
@@ -126,10 +173,11 @@ function Get-DiskSmartInfo
                         -Session $cim `
                         -ShowConvertedData:$ShowConvertedData `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $diskNumbers `
+                        -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -QuietIfOK:$QuietIfOK
+                        # -DiskNumbers $diskNumbers `
                 }
             }
             finally
