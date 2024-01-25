@@ -3,7 +3,10 @@ BeforeAll {
     Import-Module -Name "$PSScriptRoot\..\DiskSmartInfo.psd1"
 }
 
-Describe "DiskSmartInfo remoting tests" -Skip:(!(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)) {
+# Skip if remoting is disabled
+$skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
+
+Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
     BeforeAll {
         $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testsData.psd1
