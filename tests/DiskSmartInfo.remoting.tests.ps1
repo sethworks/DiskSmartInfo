@@ -4,7 +4,7 @@ BeforeAll {
 }
 
 # Skip if remoting is disabled
-$skipRemoting = !(Test-WSMan)
+$skipRemoting = !(Test-WSMan -ErrorAction SilentlyContinue)
 
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
