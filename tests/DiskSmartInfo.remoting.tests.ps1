@@ -9,7 +9,7 @@ $skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContin
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
     BeforeAll {
-        $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testsData.psd1
+        $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
 
         # Class names
         $namespaceWMI = 'root/WMI'
