@@ -160,8 +160,22 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         $physicalDiskSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD1 -ClientOnly
         $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
 
+        # Remoting
         $computerNames = $env:computername, 'localhost'
         $ipAddresses = '127.0.0.1', '127.0.0.2'
+
+        $diskDrivePropertiesHost1 = @{
+            Index = 1
+        }
+        $diskDrivePropertiesHost2 = @{
+            Index = 2
+        }
+
+        $diskDriveHost1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHost1 -ClientOnly
+        $diskDriveHost1 | Add-Member -MemberType NoteProperty -Name PSComputerName -Value $computerNames[0] -Force
+
+        $diskDriveHost2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHost2 -ClientOnly
+        $diskDriveHost2 | Add-Member -MemberType NoteProperty -Name PSComputerName -Value $computerNames[1] -Force
     }
 
     Context "ComputerName" {
@@ -429,6 +443,51 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+        }
+    }
+    Context "Win32_DiskDrive pipeline" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            $diskSmartInfo = $diskDriveHost1, $diskDriveHost2 | Get-DiskSmartInfo
+        }
+
+        It "Returns DiskSmartInfo object" {
+            $diskSmartInfo | Should -HaveCount 2
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+        }
+
+        It "Has ComputerName, Model, and InstanceId properties" {
+            $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
+            if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
+            {
+                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD2
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[0].SmartData | Should -HaveCount 18
+            }
+            elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
+            {
+                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_SSD1
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[0].SmartData | Should -HaveCount 15
+            }
+
+            $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
+            if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
+            {
+                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[1].SmartData | Should -HaveCount 18
+            }
+            elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
+            {
+                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_SSD1
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[1].SmartData | Should -HaveCount 15
+            }
         }
     }
 }
