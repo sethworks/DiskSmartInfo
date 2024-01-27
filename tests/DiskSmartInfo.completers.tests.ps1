@@ -324,6 +324,58 @@ Describe "DiskSmartInfo completions tests" {
             # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
             # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
+        Context "TrimDiskDriveModel = `$true" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            It "Suggests proper values" {
+                $command = "Get-DiskSmartInfo -DiskNumber "
+                $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+                $commandCompletion.CompletionMatches | Should -HaveCount 3
+
+                $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
+                $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+                $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
+                $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+                $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly '2'
+                $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+            }
+        }
+        Context "TrimDiskDriveModel = `$false" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $false
+                }
+            }
+
+            AfterAll {
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            It "Suggests proper values" {
+                $command = "Get-DiskSmartInfo -DiskNumber "
+                $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+                $commandCompletion.CompletionMatches | Should -HaveCount 3
+
+                $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
+                $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1 ATA Device'
+                $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
+                $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+                $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly '2'
+                $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+            }
+        }
     }
 
     Context "DiskModel" {
@@ -395,6 +447,58 @@ Describe "DiskSmartInfo completions tests" {
             # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
             # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
             # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
+        }
+        Context "TrimDiskDriveModel = `$true" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            It "Suggests proper values" {
+                $command = "Get-DiskSmartInfo -DiskModel "
+                $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+                $commandCompletion.CompletionMatches | Should -HaveCount 3
+
+                $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly 'HDD1'
+                $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
+                $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly 'HDD2'
+                $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+                $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly 'SSD1'
+                $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+            }
+        }
+        Context "TrimDiskDriveModel = `$false" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $false
+                }
+            }
+
+            AfterAll {
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            It "Suggests proper values" {
+                $command = "Get-DiskSmartInfo -DiskModel "
+                $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
+
+                $commandCompletion.CompletionMatches | Should -HaveCount 3
+
+                $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly "'HDD1 ATA Device'"
+                $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1 ATA Device'
+                $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly 'HDD2'
+                $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
+                $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly 'SSD1'
+                $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
+            }
         }
     }
 }

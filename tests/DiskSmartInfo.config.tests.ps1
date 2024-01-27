@@ -353,7 +353,7 @@ Describe "Config" {
                 }
             }
 
-            Context "Results depends on TrimDiskDriveModel" {
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
                 }
@@ -387,7 +387,7 @@ Describe "Config" {
                 }
             }
 
-            Context "Results depends on TrimDiskDriveModel" {
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
                 }
