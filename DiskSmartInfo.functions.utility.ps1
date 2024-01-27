@@ -1,4 +1,4 @@
-function TrimDiskDriveModel
+function inTrimDiskDriveModel
 {
     Param (
         $Model
@@ -7,15 +7,18 @@ function TrimDiskDriveModel
     # return $Model.TrimEnd('ATA Device').TrimEnd('SCSI Disk Device')
     $trimStrings = @(' ATA Device', ' SCSI Disk Device')
 
-    foreach ($ts in $trimStrings)
+    if ($Script:Config.TrimDiskDriveModel)
     {
-        if ($Model.EndsWith($ts))
+        foreach ($ts in $trimStrings)
         {
-            return $Model.Remove($Model.LastIndexOf($ts))
-            # if (($index = $Model.LastIndexOf($ts)) -ge 0)
-            # {
-            #     $Model = $Model.Remove($index)
-            # }
+            if ($Model.EndsWith($ts))
+            {
+                return $Model.Remove($Model.LastIndexOf($ts))
+                # if (($index = $Model.LastIndexOf($ts)) -ge 0)
+                # {
+                #     $Model = $Model.Remove($index)
+                # }
+            }
         }
     }
 

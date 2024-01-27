@@ -134,18 +134,9 @@ class DiskCompleter : IArgumentCompleter
         {
             $diskDrives += @{
                 Index = $d.Index
-                Model = $d.Model
+                Model = inTrimDiskDriveModel -Model $d.Model
             }
         }
-
-        if ($Script:Config.TrimDiskDriveModel)
-        {
-            foreach ($d in $diskDrives)
-            {
-                $d.Model = TrimDiskDriveModel -Model $d.Model
-            }
-        }
-
 
         if ($parameterName -eq 'DiskNumber')
         {
