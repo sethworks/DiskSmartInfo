@@ -356,7 +356,6 @@ Describe "DiskSmartInfo remoting mocked tests" {
         BeforeAll {
             $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
             $cimSessionHost2 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[1]} -Methods @{TestConnection = {$true}}
-            # mock New-CimSession -MockWith { $cimSessionHost1, $cimSessionHost2 } -ModuleName DiskSmartInfo
             mock Remove-CimSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -403,7 +402,6 @@ Describe "DiskSmartInfo remoting mocked tests" {
         BeforeAll {
             $cimSessionHost3 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $ipAddresses[0]} -Methods @{TestConnection = {$true}}
             $cimSessionHost4 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $ipAddresses[1]} -Methods @{TestConnection = {$true}}
-            # mock New-CimSession -MockWith { $cimSessionHost3, $cimSessionHost4 } -ModuleName DiskSmartInfo
             mock Remove-CimSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -450,7 +448,6 @@ Describe "DiskSmartInfo remoting mocked tests" {
         BeforeAll {
             $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
             $cimSessionHost2 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[1]} -Methods @{TestConnection = {$true}}
-            # mock New-CimSession -MockWith { $cimSessionHost1, $cimSessionHost2 } -ModuleName DiskSmartInfo
             mock Remove-CimSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo

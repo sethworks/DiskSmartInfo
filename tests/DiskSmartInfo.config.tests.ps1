@@ -277,8 +277,6 @@ Describe "Config" {
                 InModuleScope DiskSmartInfo {
                     $Config.SuppressEmptySmartData = $false
                 }
-
-                # $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
             }
 
             AfterAll {

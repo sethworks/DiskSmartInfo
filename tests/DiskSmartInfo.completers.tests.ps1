@@ -279,12 +279,8 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches | Should -HaveCount 1
 
-            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
-            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
             $commandCompletion.CompletionMatches.CompletionText | Should -BeExactly '1'
             $commandCompletion.CompletionMatches.ToolTip | Should -BeExactly '1: HDD2'
-            # $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly '2'
-            # $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
         }
 
         It "Omits already specified values" {
@@ -295,8 +291,6 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
             $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
             $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
@@ -311,19 +305,8 @@ Describe "DiskSmartInfo completions tests" {
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
-
-            # $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskNumber "
-            # $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
-
-            # $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
-
-            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
-            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
+
         Context "TrimDiskDriveModel = `$true" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
@@ -403,12 +386,8 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches | Should -HaveCount 1
 
-            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
-            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
             $commandCompletion.CompletionMatches.CompletionText | Should -BeExactly 'HDD2'
             $commandCompletion.CompletionMatches.ToolTip | Should -BeExactly '1: HDD2'
-            # $commandCompletion.CompletionMatches[2].CompletionText | Should -BeExactly '2'
-            # $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
         }
 
         It "Omits already specified values" {
@@ -419,8 +398,6 @@ Describe "DiskSmartInfo completions tests" {
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly 'HDD1'
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
             $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly 'SSD1'
             $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
@@ -435,19 +412,8 @@ Describe "DiskSmartInfo completions tests" {
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
-
-            # $command = "Get-DiskSmartInfo -ComputerName 'host1' -CimSession 'host2' -DiskModel "
-            # $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
-
-            # $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
-
-            # $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly '0'
-            # $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly '0: HDD1'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '1'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '1: HDD2'
-            # $commandCompletion.CompletionMatches[1].CompletionText | Should -BeExactly '2'
-            # $commandCompletion.CompletionMatches[1].ToolTip | Should -BeExactly '2: SSD1'
         }
+
         Context "TrimDiskDriveModel = `$true" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
@@ -471,6 +437,7 @@ Describe "DiskSmartInfo completions tests" {
                 $commandCompletion.CompletionMatches[2].ToolTip | Should -BeExactly '2: SSD1'
             }
         }
+
         Context "TrimDiskDriveModel = `$false" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
