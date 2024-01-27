@@ -19,5 +19,5 @@ function TrimDiskDriveModel
         }
     }
 
-    # return $Model
+    return $Model
 }
