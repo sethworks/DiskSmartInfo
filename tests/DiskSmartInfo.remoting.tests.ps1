@@ -9,7 +9,7 @@ $skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContin
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
     BeforeAll {
-        $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
+        $testData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
 
         # Class names
         $namespaceWMI = 'root/WMI'
@@ -32,113 +32,113 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         # Properties
         # HDD1
         $diskSmartDataPropertiesHDD1 = @{
-            VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_HDD1
-            InstanceName = $testsData.InstanceName_HDD1
+            VendorSpecific = $testData.AtapiSmartData_VendorSpecific_HDD1
+            InstanceName = $testData.InstanceName_HDD1
         }
 
         $diskThresholdsPropertiesHDD1 = @{
-            VendorSpecific = $testsData.FailurePredictThresholds_VendorSpecific_HDD1
-            InstanceName = $testsData.InstanceName_HDD1
+            VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_HDD1
+            InstanceName = $testData.InstanceName_HDD1
         }
 
         $diskDrivePropertiesHDD1 = @{
-            Index = $testsData.Index_HDD1
-            PNPDeviceID = $testsData.PNPDeviceID_HDD1
-            Model = $testsData.Model_HDD1
-            BytesPerSector = $testsData.BytesPerSector_HDD1
+            Index = $testData.Index_HDD1
+            PNPDeviceID = $testData.PNPDeviceID_HDD1
+            Model = $testData.Model_HDD1
+            BytesPerSector = $testData.BytesPerSector_HDD1
         }
 
         $diskDrivePropertiesATAHDD1 = @{
-            Index = $testsData.Index_HDD1
-            PNPDeviceID = $testsData.PNPDeviceID_HDD1
-            Model = $testsData.ModelATA_HDD1
-            BytesPerSector = $testsData.BytesPerSector_HDD1
+            Index = $testData.Index_HDD1
+            PNPDeviceID = $testData.PNPDeviceID_HDD1
+            Model = $testData.ModelATA_HDD1
+            BytesPerSector = $testData.BytesPerSector_HDD1
         }
 
         $diskPropertiesHDD1 = @{
-            Number = $testsData.Index_HDD1
+            Number = $testData.Index_HDD1
         }
 
         $physicalDiskPropertiesHDD1 = @{
-            DeviceId = $testsData.Index_HDD1
+            DeviceId = $testData.Index_HDD1
         }
 
         # HDD2
         $diskSmartDataPropertiesHDD2 = @{
-            VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_HDD2
-            InstanceName = $testsData.InstanceName_HDD2
+            VendorSpecific = $testData.AtapiSmartData_VendorSpecific_HDD2
+            InstanceName = $testData.InstanceName_HDD2
         }
 
         $diskThresholdsPropertiesHDD2 = @{
-            VendorSpecific = $testsData.FailurePredictThresholds_VendorSpecific_HDD2
-            InstanceName = $testsData.InstanceName_HDD2
+            VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_HDD2
+            InstanceName = $testData.InstanceName_HDD2
         }
 
         $diskDrivePropertiesHDD2 = @{
-            Index = $testsData.Index_HDD2
-            PNPDeviceID = $testsData.PNPDeviceID_HDD2
-            Model = $testsData.Model_HDD2
-            BytesPerSector = $testsData.BytesPerSector_HDD2
+            Index = $testData.Index_HDD2
+            PNPDeviceID = $testData.PNPDeviceID_HDD2
+            Model = $testData.Model_HDD2
+            BytesPerSector = $testData.BytesPerSector_HDD2
         }
 
         $diskPropertiesHDD2 = @{
-            Number = $testsData.Index_HDD2
+            Number = $testData.Index_HDD2
         }
 
         $physicalDiskPropertiesHDD2 = @{
-            DeviceId = $testsData.Index_HDD2
+            DeviceId = $testData.Index_HDD2
         }
 
         # SSD1
         $diskSmartDataPropertiesSSD1 = @{
-            VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_SSD1
-            InstanceName = $testsData.InstanceName_SSD1
+            VendorSpecific = $testData.AtapiSmartData_VendorSpecific_SSD1
+            InstanceName = $testData.InstanceName_SSD1
         }
 
         $diskThresholdsPropertiesSSD1 = @{
-            VendorSpecific = $testsData.FailurePredictThresholds_VendorSpecific_SSD1
-            InstanceName = $testsData.InstanceName_SSD1
+            VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_SSD1
+            InstanceName = $testData.InstanceName_SSD1
         }
 
         $diskDrivePropertiesSSD1 = @{
-            Index = $testsData.Index_SSD1
-            PNPDeviceID = $testsData.PNPDeviceID_SSD1
-            Model = $testsData.Model_SSD1
-            BytesPerSector = $testsData.BytesPerSector_SSD1
+            Index = $testData.Index_SSD1
+            PNPDeviceID = $testData.PNPDeviceID_SSD1
+            Model = $testData.Model_SSD1
+            BytesPerSector = $testData.BytesPerSector_SSD1
         }
 
         $diskPropertiesSSD1 = @{
-            Number = $testsData.Index_SSD1
+            Number = $testData.Index_SSD1
         }
 
         $physicalDiskPropertiesSSD1 = @{
-            DeviceId = $testsData.Index_SSD1
+            DeviceId = $testData.Index_SSD1
         }
 
         # HFSSSD1
         $diskSmartDataPropertiesHFSSSD1 = @{
-            VendorSpecific = $testsData.AtapiSmartData_VendorSpecific_HFSSSD1
-            InstanceName = $testsData.InstanceName_HFSSSD1
+            VendorSpecific = $testData.AtapiSmartData_VendorSpecific_HFSSSD1
+            InstanceName = $testData.InstanceName_HFSSSD1
         }
 
         $diskThresholdsPropertiesHFSSSD1 = @{
-            VendorSpecific = $testsData.FailurePredictThresholds_VendorSpecific_HFSSSD1
-            InstanceName = $testsData.InstanceName_HFSSSD1
+            VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_HFSSSD1
+            InstanceName = $testData.InstanceName_HFSSSD1
         }
 
         $diskDrivePropertiesHFSSSD1 = @{
-            Index = $testsData.Index_HFSSSD1
-            PNPDeviceID = $testsData.PNPDeviceID_HFSSSD1
-            Model = $testsData.Model_HFSSSD1
-            BytesPerSector = $testsData.BytesPerSector_HFSSSD1
+            Index = $testData.Index_HFSSSD1
+            PNPDeviceID = $testData.PNPDeviceID_HFSSSD1
+            Model = $testData.Model_HFSSSD1
+            BytesPerSector = $testData.BytesPerSector_HFSSSD1
         }
 
         $diskPropertiesHFSSSD1 = @{
-            Number = $testsData.Index_HFSSSD1
+            Number = $testData.Index_HFSSSD1
         }
 
         $physicalDiskPropertiesHFSSSDD1 = @{
-            DeviceId = $testsData.Index_HFSSSD1
+            DeviceId = $testData.Index_HFSSSD1
         }
 
         # CIM object
@@ -227,12 +227,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -269,12 +269,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -311,12 +311,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -358,12 +358,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -405,12 +405,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -452,12 +452,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         It "Has ComputerName, Model, and InstanceId properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
-            $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
-            $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD1
-            $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD1
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -496,28 +496,28 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
@@ -541,28 +541,28 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
@@ -586,28 +586,28 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[0].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_HDD2
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
-                $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_SSD1
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testsData.PNPDeviceID_SSD1
+                $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_SSD1
+                $diskSmartInfo[1].InstanceId | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
