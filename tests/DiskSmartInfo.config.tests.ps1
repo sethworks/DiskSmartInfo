@@ -45,6 +45,13 @@ Describe "Config" {
             BytesPerSector = $testsData.BytesPerSector_HDD1
         }
 
+        $diskDrivePropertiesATAHDD1 = @{
+            Index = $testsData.Index_HDD1
+            PNPDeviceID = $testsData.PNPDeviceID_HDD1
+            Model = $testsData.ModelATA_HDD1
+            BytesPerSector = $testsData.BytesPerSector_HDD1
+        }
+
         $diskPropertiesHDD1 = @{
             Number = $testsData.Index_HDD1
         }
@@ -143,6 +150,7 @@ Describe "Config" {
         $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
 
         $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
+        $diskDriveATAHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesATAHDD1 -ClientOnly
         $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD2 -ClientOnly
         $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
         $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly
@@ -327,6 +335,71 @@ Describe "Config" {
                 It "Consists of attributes in Warning or Critical state only" {
                     $diskSmartInfo.SmartData.Id | Should -Be @(3, 197, 198)
                     $diskSmartInfo.SmartData.Data | Should -Be @(6825, 20, 20)
+                }
+            }
+        }
+    }
+
+    Context "Trim Win32_DiskDrive Model property" {
+
+        Context "TrimDiskDriveModel = `$true" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            Context "Results depends on TrimDiskDriveModel" {
+                BeforeAll {
+                    $diskSmartInfo = Get-DiskSmartInfo
+                }
+
+                It "Has 2 DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+
+                It "Has trimmed models" {
+                    $diskSmartInfo[0].Model | Should -BeExactly $testsData.Model_HDD1
+                    $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
+                }
+            }
+        }
+
+        Context "SuppressEmptySmartData = `$false" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $false
+                }
+            }
+
+            AfterAll {
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModel = $true
+                }
+            }
+
+            Context "Results depends on TrimDiskDriveModel" {
+                BeforeAll {
+                    $diskSmartInfo = Get-DiskSmartInfo
+                }
+
+                It "Has 2 DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+
+                It "Has untrimmed models" {
+                    $diskSmartInfo[0].Model | Should -BeExactly $testsData.ModelATA_HDD1
+                    $diskSmartInfo[1].Model | Should -BeExactly $testsData.Model_HDD2
                 }
             }
         }

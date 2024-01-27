@@ -48,6 +48,13 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             BytesPerSector = $testsData.BytesPerSector_HDD1
         }
 
+        $diskDrivePropertiesATAHDD1 = @{
+            Index = $testsData.Index_HDD1
+            PNPDeviceID = $testsData.PNPDeviceID_HDD1
+            Model = $testsData.ModelATA_HDD1
+            BytesPerSector = $testsData.BytesPerSector_HDD1
+        }
+
         $diskPropertiesHDD1 = @{
             Number = $testsData.Index_HDD1
         }
@@ -146,6 +153,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
 
         $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
+        $diskDriveATAHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesATAHDD1 -ClientOnly
         $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD2 -ClientOnly
         $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
         $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly

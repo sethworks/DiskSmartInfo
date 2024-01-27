@@ -79,6 +79,7 @@
 
     Index_HDD1 = 0
     Model_HDD1 = "HDD1"
+    ModelATA_HDD1 = "HDD1 ATA Device"
     InstanceName_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0_0'
     PNPDeviceID_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_HDD1 = 512
