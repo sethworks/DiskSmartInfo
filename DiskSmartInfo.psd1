@@ -58,7 +58,7 @@ PowerShellVersion = '5.1'
 FormatsToProcess = @('DiskSmartInfo.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('DiskSmartInfo.completers.ps1', 'DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'DiskSmartInfo.infunctions.ps1', 'DiskSmartInfo.predicates.ps1', 'attributes/default.ps1', 'attributes/overwrites.ps1', 'attributes/descriptions.ps1')
+NestedModules = @('DiskSmartInfo.completers.ps1', 'DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'DiskSmartInfo.functions.internal.ps1', 'DiskSmartInfo.functions.utility.ps1', 'DiskSmartInfo.functions.predicates.ps1', 'attributes/default.ps1', 'attributes/overwrites.ps1', 'attributes/descriptions.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
 FunctionsToExport = @('Get-DiskSmartInfo', 'Get-DiskSmartAttributeDescription')
@@ -79,7 +79,7 @@ AliasesToExport = @()
 # ModuleList = @()
 
 # List of all files packaged with this module
-FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1', 'DiskSmartInfo.completers.ps1', 'DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'DiskSmartInfo.infunctions.ps1', 'DiskSmartInfo.predicates.ps1', 'DiskSmartInfo.format.ps1xml', 'attributes/default.ps1', 'attributes/overwrites.ps1', 'attributes/descriptions.ps1'
+FileList = 'DiskSmartInfo.psd1', 'DiskSmartInfo.psm1', 'DiskSmartInfo.completers.ps1', 'DiskSmartInfo.functions.ps1', 'DiskSmartAttributeDescription.functions.ps1', 'DiskSmartInfo.functions.internal.ps1', 'DiskSmartInfo.functions.utility.ps1', 'DiskSmartInfo.functions.predicates.ps1', 'DiskSmartInfo.format.ps1xml', 'attributes/default.ps1', 'attributes/overwrites.ps1', 'attributes/descriptions.ps1'
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{

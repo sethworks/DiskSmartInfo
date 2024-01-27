@@ -3,7 +3,7 @@ BeforeAll {
     Import-Module -Name "$PSScriptRoot\..\DiskSmartInfo.psd1"
 }
 
-Describe "DiskSmartInfo remocking tests" {
+Describe "DiskSmartInfo remoting mocked tests" {
 
     BeforeAll {
         $testsData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
