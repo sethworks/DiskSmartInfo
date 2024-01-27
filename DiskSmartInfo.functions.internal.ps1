@@ -56,7 +56,15 @@ function inGetDiskSmartInfo
         $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
 
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
-        $model = $diskDrive.Model
+
+        if ($Config.TrimDiskDriveModel)
+        {
+            $model = TrimDiskDriveModel -Model $diskDrive.Model
+        }
+        else
+        {
+            $model = $diskDrive.Model
+        }
 
         if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
         {

@@ -129,24 +129,46 @@ class DiskCompleter : IArgumentCompleter
             }
         }
 
+        $diskDrives = @()
+        foreach ($d in $diskDrive)
+        {
+            $diskDrives += @{
+                Index = $d.Index
+                Model = $d.Model
+            }
+        }
+
+        if ($Script:Config.TrimDiskDriveModel)
+        {
+            foreach ($d in $diskDrives)
+            {
+                $d.Model = TrimDiskDriveModel -Model $d.Model
+            }
+        }
+
+
         if ($parameterName -eq 'DiskNumber')
         {
-            foreach ($completionResult in $diskDrive.Index)
+            # foreach ($completionResult in $diskDrive.Index)
+            foreach ($completionResult in $diskDrives.Index)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    $model = ($diskDrive.Where{$_.Index -eq $completionResult}).Model
+                    # $model = ($diskDrive.Where{$_.Index -eq $completionResult}).Model
+                    $model = ($diskDrives.Where{$_.Index -eq $completionResult}).Model
                     $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${completionResult}: $model"))
                 }
             }
         }
         elseif ($parameterName -eq 'DiskModel')
         {
-            foreach ($completionResult in $diskDrive.Model)
+            # foreach ($completionResult in $diskDrive.Model)
+            foreach ($completionResult in $diskDrives.Model)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    $index = ($diskDrive.Where{$_.Model -eq $completionResult}).Index
+                    # $index = ($diskDrive.Where{$_.Model -eq $completionResult}).Index
+                    $index = ($diskDrives.Where{$_.Model -eq $completionResult}).Index
                     if ($completionResult.Contains(" "))
                     {
                         $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${index}: $completionResult"))
