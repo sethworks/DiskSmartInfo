@@ -278,7 +278,7 @@ Describe "Config" {
                     $Config.SuppressEmptySmartData = $false
                 }
 
-                $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
+                # $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
             }
 
             AfterAll {
