@@ -140,12 +140,10 @@ class DiskCompleter : IArgumentCompleter
 
         if ($parameterName -eq 'DiskNumber')
         {
-            # foreach ($completionResult in $diskDrive.Index)
             foreach ($completionResult in $diskDrives.Index)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    # $model = ($diskDrive.Where{$_.Index -eq $completionResult}).Model
                     $model = ($diskDrives.Where{$_.Index -eq $completionResult}).Model
                     $result.Add([CompletionResult]::new($completionResult, $completionResult, [CompletionResultType]::ParameterValue, "${completionResult}: $model"))
                 }
@@ -153,12 +151,10 @@ class DiskCompleter : IArgumentCompleter
         }
         elseif ($parameterName -eq 'DiskModel')
         {
-            # foreach ($completionResult in $diskDrive.Model)
             foreach ($completionResult in $diskDrives.Model)
             {
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
-                    # $index = ($diskDrive.Where{$_.Model -eq $completionResult}).Index
                     $index = ($diskDrives.Where{$_.Model -eq $completionResult}).Index
                     if ($completionResult.Contains(" "))
                     {
