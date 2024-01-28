@@ -92,7 +92,7 @@ function inGetDiskSmartInfo
 
                 if ($attributeID -and
                 (isAttributeRequested -AttributeID $attributeID) -and
-                ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
+                ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                 {
                     $attribute.Add("ID", $attributeID)
                     $attribute.Add("IDHex", $attributeID.ToString("X"))
@@ -102,8 +102,7 @@ function inGetDiskSmartInfo
                     $attribute.Add("Worst", $smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                    if ((-not $QuietIfOK) -or
-                    ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
+                    if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
