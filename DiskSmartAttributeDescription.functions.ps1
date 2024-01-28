@@ -1,35 +1,48 @@
 function Get-DiskSmartAttributeDescription
 {
-    [CmdletBinding(DefaultParameterSetName='AllAttributes')]
     Param(
-        [Parameter(Position=0,ParameterSetName='AttributeID')]
-        [int]$AttributeID,
-        [Parameter(ParameterSetName='AttributeIDHex')]
-        [string]$AttributeIDHex,
-        [Parameter(ParameterSetName='CriticalOnly')]
+        [Parameter(Position=0)]
+        [ValidateRange(1, 255)]
+        [int[]]$AttributeID,
+        [Parameter(Position=1)]
+        [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
+        [string[]]$AttributeIDHex,
+        [Parameter(Position=2)]
+        [ArgumentCompleter([AttributeNameCompleter])]
+        [string[]]$AttributeName,
         [switch]$CriticalOnly
     )
 
-    switch ($PSCmdlet.ParameterSetName)
+    $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
+
+    foreach ($attribute in $descriptions)
     {
-        'AllAttributes'
+        if ((isRequested -AttributeID $attribute.AttributeID) -and (!$CriticalOnly -or $attribute.IsCritical))
+        # if (($attributeIDs.Count $attribute.AttributeID -in $attributeIDs) -and (!IsCritical -or $attribute.IsCritical))
         {
-            $descriptions
-        }
-
-        'AttributeID'
-        {
-            $descriptions | Where-Object -FilterScript {$_.AttributeID -eq $AttributeID}
-        }
-
-        'AttributeIDHex'
-        {
-            $descriptions | Where-Object -FilterScript {$_.AttributeIDHex -eq $AttributeIDHex}
-        }
-
-        'CriticalOnly'
-        {
-            $descriptions | Where-Object -Property IsCritical
+            $attribute
         }
     }
+    # switch ($PSCmdlet.ParameterSetName)
+    # {
+    #     'AllAttributes'
+    #     {
+    #         $descriptions
+    #     }
+
+    #     'AttributeID'
+    #     {
+    #         $descriptions | Where-Object -FilterScript {$_.AttributeID -eq $AttributeID}
+    #     }
+
+    #     'AttributeIDHex'
+    #     {
+    #         $descriptions | Where-Object -FilterScript {$_.AttributeIDHex -eq $AttributeIDHex}
+    #     }
+
+    #     'CriticalOnly'
+    #     {
+    #         $descriptions | Where-Object -Property IsCritical
+    #     }
+    # }
 }
