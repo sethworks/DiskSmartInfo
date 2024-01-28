@@ -17,7 +17,7 @@ function Get-DiskSmartAttributeDescription
 
     foreach ($attribute in $descriptions)
     {
-        if ((isRequested -AttributeID $attribute.AttributeID) -and (!$CriticalOnly -or $attribute.IsCritical))
+        if ((isAttributeRequested -AttributeID $attribute.AttributeID) -and (!$CriticalOnly -or $attribute.IsCritical))
         # if (($attributeIDs.Count $attribute.AttributeID -in $attributeIDs) -and (!IsCritical -or $attribute.IsCritical))
         {
             $attribute

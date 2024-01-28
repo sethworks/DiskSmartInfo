@@ -14,7 +14,7 @@ function isCritical
     }
 }
 
-function isRequested
+function isAttributeRequested
 {
     Param (
         [int]$AttributeID
