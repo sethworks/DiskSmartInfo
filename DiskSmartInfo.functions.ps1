@@ -34,40 +34,6 @@ function Get-DiskSmartInfo
         $Script:ErrorAccessingCimSession = @()
         $Script:ErrorAccessingClass = @()
 
-        # Attributes
-        # $attributeIDs = [System.Collections.Generic.List[int]]::new()
-        # if ($AttributeID)
-        # {
-        #     foreach ($at in $AttributeID)
-        #     {
-        #         if (-not $attributeIDs.Contains($at))
-        #         {
-        #             $attributeIDs.Add($at)
-        #         }
-        #     }
-        # }
-        # if ($AttributeIDHex)
-        # {
-        #     foreach ($at in $AttributeIDHex)
-        #     {
-        #         $value = [convert]::ToInt32($at, 16)
-        #         if (-not $attributeIDs.Contains($value))
-        #         {
-        #             $attributeIDs.Add($value)
-        #         }
-        #     }
-        # }
-        # if ($AttributeName)
-        # {
-        #     foreach ($at in $AttributeName)
-        #     {
-        #         if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
-        #         {
-        #             if (-not $attributeIDs.Contains($value.AttributeID))
-        #             {$attributeIDs.Add($value.AttributeID)}
-        #         }
-        #     }
-        # }
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
         $diskNumbers = [System.Collections.Generic.List[int]]::new()

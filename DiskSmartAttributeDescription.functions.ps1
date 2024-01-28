@@ -18,31 +18,8 @@ function Get-DiskSmartAttributeDescription
     foreach ($attribute in $descriptions)
     {
         if ((isAttributeRequested -AttributeID $attribute.AttributeID) -and (!$CriticalOnly -or $attribute.IsCritical))
-        # if (($attributeIDs.Count $attribute.AttributeID -in $attributeIDs) -and (!IsCritical -or $attribute.IsCritical))
         {
             $attribute
         }
     }
-    # switch ($PSCmdlet.ParameterSetName)
-    # {
-    #     'AllAttributes'
-    #     {
-    #         $descriptions
-    #     }
-
-    #     'AttributeID'
-    #     {
-    #         $descriptions | Where-Object -FilterScript {$_.AttributeID -eq $AttributeID}
-    #     }
-
-    #     'AttributeIDHex'
-    #     {
-    #         $descriptions | Where-Object -FilterScript {$_.AttributeIDHex -eq $AttributeIDHex}
-    #     }
-
-    #     'CriticalOnly'
-    #     {
-    #         $descriptions | Where-Object -Property IsCritical
-    #     }
-    # }
 }
