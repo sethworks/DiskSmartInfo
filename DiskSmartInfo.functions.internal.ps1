@@ -48,14 +48,22 @@ function inGetDiskSmartInfo
     {
         $Silence = $QuietIfOK
 
-        $instanceName = $diskSmartData.InstanceName
+        # $instanceName = $diskSmartData.InstanceName
         $smartData = $diskSmartData.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
+        # $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
 
         # remove '_0' at the end
-        $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
+        # $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
 
-        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+        $pNPDeviceId = $diskSmartData.InstanceName
+        if ($pNPDeviceId.EndsWith('_0'))
+        {
+            $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+        }
+
+        # $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
 
         $model = inTrimDiskDriveModel -Model $diskDrive.Model
 
@@ -69,7 +77,8 @@ function inGetDiskSmartInfo
             }
 
             $hash.Add('Model', $model)
-            $hash.Add('InstanceId', $instanceId)
+            # $hash.Add('InstanceId', $instanceId)
+            $hash.Add('InstanceId', $pNPDeviceId)
 
             $attributes = @()
 
