@@ -58,6 +58,16 @@ Describe "DiskSmartAttributeDescription" {
             }
         }
 
+        Context "-AttributeName" {
+            BeforeAll {
+                $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName 'Power-On Hours'
+            }
+
+            It "Has correct attribute" {
+                $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Power-On Hours'
+            }
+        }
+
         Context "-CriticalOnly" {
             BeforeAll {
                 $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -CriticalOnly
@@ -69,6 +79,55 @@ Describe "DiskSmartAttributeDescription" {
 
             It "Has critical attributes only" {
                 $diskSmartAttributeDescription.IsCritical | Get-Unique | Should -BeExactly $true
+            }
+        }
+
+        Context "-AttributeID -AttributeIDHex -AttributeName" {
+            BeforeAll {
+                $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 1, 2 -AttributeIDHex 'A', 'C8' -AttributeName 'Soft ECC correction', 'Offline Seek Performance'
+            }
+
+            It "Has correct results count" {
+                $diskSmartAttributeDescription | Should -HaveCount 6
+            }
+            It "Has correct attributes" {
+                $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
+                $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
+                $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin Retry Count'
+                $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Write Error Rate'
+                $diskSmartAttributeDescription[4].AttributeName | Should -BeExactly 'Soft ECC correction'
+                $diskSmartAttributeDescription[5].AttributeName | Should -BeExactly 'Offline Seek Performance'
+            }
+        }
+
+        Context "-AttributeID -AttributeIDHex -AttributeName without parameter names" {
+            BeforeAll {
+                $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription 1, 2 'A', 'C8' 'Soft ECC correction', 'Offline Seek Performance'
+            }
+
+            It "Has correct results count" {
+                $diskSmartAttributeDescription | Should -HaveCount 6
+            }
+            It "Has correct attributes" {
+                $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
+                $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
+                $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin Retry Count'
+                $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Write Error Rate'
+                $diskSmartAttributeDescription[4].AttributeName | Should -BeExactly 'Soft ECC correction'
+                $diskSmartAttributeDescription[5].AttributeName | Should -BeExactly 'Offline Seek Performance'
+            }
+        }
+
+        Context "-AttributeID -AttributeIDHex -AttributeName -CriticalOnly" {
+            BeforeAll {
+                $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 1, 2 -AttributeIDHex 'A', 'C8' -AttributeName 'Soft ECC correction', 'Offline Seek Performance' -CriticalOnly
+            }
+
+            It "Has correct results count" {
+                $diskSmartAttributeDescription | Should -HaveCount 1
+            }
+            It "Has correct attributes" {
+                $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Spin Retry Count'
             }
         }
     }
