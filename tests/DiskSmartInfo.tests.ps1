@@ -221,9 +221,9 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
 
-            It "Has Model and InstanceId properties" {
+            It "Has Model and PNPDeviceID properties" {
                 $diskSmartInfo.Model | Should -BeExactly $testData.Model_HDD1
-                $diskSmartInfo.InstanceId | Should -BeExactly $testData.PNPDeviceID_HDD1
+                $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
             }
 
             It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -549,8 +549,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 
@@ -564,8 +564,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 
@@ -579,8 +579,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 
@@ -594,8 +594,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 
@@ -609,8 +609,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 
@@ -624,8 +624,8 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].InstanceId | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].InstanceId | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
         }

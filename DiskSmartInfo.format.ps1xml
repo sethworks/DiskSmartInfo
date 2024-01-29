@@ -28,9 +28,9 @@
                                 <PropertyName>Model</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
-                            <Text>InstanceId:   </Text>
+                            <Text>PNPDeviceId:  </Text>
                             <ExpressionBinding>
-                                <PropertyName>InstanceId</PropertyName>
+                                <PropertyName>PNPDeviceId</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
                             <Text>SMARTData:    </Text>

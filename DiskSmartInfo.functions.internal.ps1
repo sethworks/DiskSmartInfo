@@ -72,7 +72,8 @@ function inGetDiskSmartInfo
             }
 
             $hash.Add('Model', $model)
-            $hash.Add('InstanceId', $pNPDeviceId)
+            # $hash.Add('InstanceId', $pNPDeviceId)
+            $hash.Add('PNPDeviceId', $pNPDeviceId)
 
             $attributes = @()
 
