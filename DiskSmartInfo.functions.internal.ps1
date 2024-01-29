@@ -46,16 +46,16 @@ function inGetDiskSmartInfo
 
     foreach ($diskSmartData in $disksSmartData)
     {
-        $Silence = $QuietIfOK
-
-        $instanceName = $diskSmartData.InstanceName
         $smartData = $diskSmartData.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $instanceName} | ForEach-Object -MemberName VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
 
-        # remove '_0' at the end
-        $instanceId = $instanceName.Substring(0, $instanceName.Length - 2)
+        $pNPDeviceId = $diskSmartData.InstanceName
+        if ($pNPDeviceId -match '_\d$')
+        {
+            $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+        }
 
-        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $instanceId }
+        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
 
         $model = inTrimDiskDriveModel -Model $diskDrive.Model
 
@@ -69,7 +69,7 @@ function inGetDiskSmartInfo
             }
 
             $hash.Add('Model', $model)
-            $hash.Add('InstanceId', $instanceId)
+            $hash.Add('PNPDeviceId', $pNPDeviceId)
 
             $attributes = @()
 
@@ -82,8 +82,8 @@ function inGetDiskSmartInfo
                 $attributeID = $smartData[$a]
 
                 if ($attributeID -and
-                (isRequested -AttributeID $attributeID) -and
-                ((-not $CriticalAttributesOnly) -or ($CriticalAttributesOnly -and (isCritical -AttributeID $attributeID))))
+                (isAttributeRequested -AttributeID $attributeID) -and
+                ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                 {
                     $attribute.Add("ID", $attributeID)
                     $attribute.Add("IDHex", $attributeID.ToString("X"))
@@ -93,8 +93,7 @@ function inGetDiskSmartInfo
                     $attribute.Add("Worst", $smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                    if ((-not $QuietIfOK) -or
-                    ($QuietIfOK -and (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute))))
+                    if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
