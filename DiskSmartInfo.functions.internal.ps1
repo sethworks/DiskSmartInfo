@@ -46,13 +46,10 @@ function inGetDiskSmartInfo
 
     foreach ($diskSmartData in $disksSmartData)
     {
-        # $Silence = $QuietIfOK
-
         $smartData = $diskSmartData.VendorSpecific
         $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
 
         $pNPDeviceId = $diskSmartData.InstanceName
-        # if ($pNPDeviceId.EndsWith('_0'))
         if ($pNPDeviceId -match '_\d$')
         {
             $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
@@ -72,7 +69,6 @@ function inGetDiskSmartInfo
             }
 
             $hash.Add('Model', $model)
-            # $hash.Add('InstanceId', $pNPDeviceId)
             $hash.Add('PNPDeviceId', $pNPDeviceId)
 
             $attributes = @()
