@@ -7,7 +7,9 @@ function inGetDiskSmartInfo
         [System.Collections.Generic.List[int]]$DiskNumbers,
         [string[]]$DiskModels,
         [System.Collections.Generic.List[int]]$AttributeIDs,
-        [switch]$QuietIfOK
+        [switch]$QuietIfOK,
+        [switch]$ShowHistoricalData,
+        [switch]$UpdateHistoricalData
     )
 
     $namespaceWMI = 'root/WMI'

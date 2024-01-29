@@ -25,7 +25,9 @@ function Get-DiskSmartInfo
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
-        [switch]$QuietIfOK
+        [switch]$QuietIfOK,
+        [switch]$ShowHistoricalData,
+        [switch]$UpdateHistoricalData
     )
 
     begin
@@ -115,7 +117,9 @@ function Get-DiskSmartInfo
                         -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
-                        -QuietIfOK:$QuietIfOK
+                        -QuietIfOK:$QuietIfOK `
+                        -ShowHistoricalData:$ShowHistoricalData `
+                        -UpdateHistoricalData:$UpdateHistoricalData
                 }
             }
             finally
@@ -141,7 +145,9 @@ function Get-DiskSmartInfo
                         -DiskNumbers $diskNumbers `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
-                        -QuietIfOK:$QuietIfOK
+                        -QuietIfOK:$QuietIfOK `
+                        -ShowHistoricalData:$ShowHistoricalData `
+                        -UpdateHistoricalData:$UpdateHistoricalData
                 }
                 else
                 {
@@ -159,7 +165,9 @@ function Get-DiskSmartInfo
                 -DiskNumbers $diskNumbers `
                 -DiskModels $DiskModel `
                 -AttributeIDs $attributeIDs `
-                -QuietIfOK:$QuietIfOK
+                -QuietIfOK:$QuietIfOK `
+                -ShowHistoricalData:$ShowHistoricalData `
+                -UpdateHistoricalData:$UpdateHistoricalData
         }
 
         # Error reporting
