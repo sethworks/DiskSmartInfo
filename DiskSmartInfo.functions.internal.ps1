@@ -52,7 +52,8 @@ function inGetDiskSmartInfo
         $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
 
         $pNPDeviceId = $diskSmartData.InstanceName
-        if ($pNPDeviceId.EndsWith('_0'))
+        # if ($pNPDeviceId.EndsWith('_0'))
+        if ($pNPDeviceId -match '_\d$')
         {
             $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
         }
