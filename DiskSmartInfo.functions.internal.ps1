@@ -46,7 +46,7 @@ function inGetDiskSmartInfo
 
     foreach ($diskSmartData in $disksSmartData)
     {
-        $Silence = $QuietIfOK
+        # $Silence = $QuietIfOK
 
         $smartData = $diskSmartData.VendorSpecific
         $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
