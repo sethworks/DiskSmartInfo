@@ -125,6 +125,11 @@ function inGetDiskSmartInfo
             }
         }
     }
+
+    if ($UpdateHistoricalData)
+    {
+        inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
+    }
 }
 
 function inOverwriteAttributes
@@ -276,6 +281,131 @@ function inConvertData
     {
         return $null
     }
+}
+
+function inUpdateHistoricalData
+{
+    Param (
+        $disksSmartData,
+        $disksThresholds,
+        $diskDrives,
+        $session
+    )
+
+    $historyData = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+    foreach ($diskSmartData in $disksSmartData)
+    {
+        $smartData = $diskSmartData.VendorSpecific
+        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
+
+        $pNPDeviceId = $diskSmartData.InstanceName
+        if ($pNPDeviceId -match '_\d$')
+        {
+            $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+        }
+
+        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
+
+        $model = inTrimDiskDriveModel -Model $diskDrive.Model
+
+        # if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
+        # {
+            $hash = [ordered]@{}
+
+            # if ($Session)
+            # {
+            #     $hash.Add('ComputerName', $Session.ComputerName)
+            # }
+
+            # $hash.Add('Model', $model)
+            $hash.Add('PNPDeviceId', $pNPDeviceId)
+
+            $attributes = @()
+
+            $smartAttributes = inOverwriteAttributes -model $model
+
+            for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+            {
+                $attribute = [ordered]@{}
+
+                $attributeID = $smartData[$a]
+
+                # if ($attributeID -and
+                # (isAttributeRequested -AttributeID $attributeID) -and
+                # ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
+                # {
+                if ($attributeID)
+                {
+
+                    $attribute.Add("ID", $attributeID)
+                    # $attribute.Add("IDHex", $attributeID.ToString("X"))
+                    # $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    # $attribute.Add("Threshold", $thresholdsData[$a + 1])
+                    # $attribute.Add("Value", $smartData[$a + 3])
+                    # $attribute.Add("Worst", $smartData[$a + 4])
+                    $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+
+                    # if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
+                    # {
+                        $attributeObject = [PSCustomObject]$attribute
+                        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+
+                        # if ($ShowConvertedData)
+                        # {
+                            #     $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                            #     $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                            # }
+                        $attributes += $attributeObject
+                }
+                    # }
+                # }
+            }
+
+            # if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
+            if ($attributes)
+            {
+                $hash.Add("SmartData", $attributes)
+                $diskSmartInfo = [PSCustomObject]$hash
+                # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+
+                $historyData.Add($diskSmartInfo)
+            }
+
+            # }
+        }
+        if ($Session)
+        {
+            # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+            $filename = "$($session.ComputerName).txt"
+        }
+        else
+        {
+            $filename = 'localhost.txt'
+        }
+
+        # $diskSmartInfo
+
+        if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+        {
+            $filepath = -Path $Config.HistoricalDataPath
+        }
+        else
+        {
+            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+        }
+
+        if (!(Test-Path -Path $filepath))
+        {
+            New-Item -ItemType Directory -Path $filepath | Out-Null
+        }
+
+        $fullname = Join-Path -Path $filepath -ChildPath $filename
+
+        if ($historyData.Count)
+        {
+            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historyData -Depth 4)
+        }
 }
 
 function inReportErrors
