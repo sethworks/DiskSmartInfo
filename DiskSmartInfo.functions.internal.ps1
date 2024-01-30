@@ -46,6 +46,11 @@ function inGetDiskSmartInfo
         continue
     }
 
+    if ($ShowHistoricalData)
+    {
+        $historicalData = inGetHistoricalData -session $Session
+    }
+
     foreach ($diskSmartData in $disksSmartData)
     {
         $smartData = $diskSmartData.VendorSpecific
@@ -60,11 +65,6 @@ function inGetDiskSmartInfo
         $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
 
         $model = inTrimDiskDriveModel -Model $diskDrive.Model
-
-        if ($ShowHistoricalData)
-        {
-            $historicalData = inGetHistoricalData -session $Session
-        }
 
         if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
         {
@@ -81,6 +81,12 @@ function inGetDiskSmartInfo
             $attributes = @()
 
             $smartAttributes = inOverwriteAttributes -model $model
+
+            if ($historicalData)
+            {
+                # $historicalAttributes = $historicalData.Find([Predicate[PSCustomObject]]{$args[0].PNPDeviceID -eq $pNPDeviceId}).SmartData
+                $historicalAttributes = $historicalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
+            }
 
             for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
             {
@@ -99,6 +105,11 @@ function inGetDiskSmartInfo
                     $attribute.Add("Value", $smartData[$a + 3])
                     $attribute.Add("Worst", $smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+
+                    if ($ShowHistoricalData)
+                    {
+                        $attribute.Add("HistoryData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
+                    }
 
                     if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
@@ -424,7 +435,7 @@ function inGetHistoricalData
 
     $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
 
-    $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
+    $historicalData = @()
 
     foreach ($object in $converted)
     {
@@ -436,18 +447,28 @@ function inGetHistoricalData
         foreach ($at in $object.SmartData)
         {
             $attribute = [ordered]@{}
-            $attribute.Add('ID', [int]$at.ID)
-            $attribute.Add('Data', [long]$at.Data)
 
-            $attributeObject = [PSCustomObject]$attribute
-            $attributes += $attributeObject
+            $attribute.Add('ID', [int]$at.ID)
+
+            if ($at.Data.Count -gt 1)
+            {
+                $attribute.Add('Data', [long[]]$at.Data)
+            }
+            else
+            {
+                $attribute.Add('Data', [long]$at.Data)
+            }
+
+            $attributes += [PSCustomObject]$attribute
+            # $attributeObject = [PSCustomObject]$attribute
+            # $attributes += $attributeObject
         }
 
         $hash.Add('SmartData', $attributes)
-        $historicalData.Add([PSCustomObject]$hash)
+        $historicalData += [PSCustomObject]$hash
     }
 
-    $historicalData
+    return $historicalData
 }
 
 function inReportErrors
