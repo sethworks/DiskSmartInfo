@@ -61,6 +61,11 @@ function inGetDiskSmartInfo
 
         $model = inTrimDiskDriveModel -Model $diskDrive.Model
 
+        if ($ShowHistoricalData)
+        {
+            $historicalData = inGetHistoricalData -session $Session
+        }
+
         if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
         {
             $hash = [ordered]@{}
@@ -292,7 +297,7 @@ function inUpdateHistoricalData
         $session
     )
 
-    $historyData = [System.Collections.Generic.List[PSCustomObject]]::new()
+    $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
 
     foreach ($diskSmartData in $disksSmartData)
     {
@@ -369,43 +374,80 @@ function inUpdateHistoricalData
                 $diskSmartInfo = [PSCustomObject]$hash
                 # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                $historyData.Add($diskSmartInfo)
+                $historicalData.Add($diskSmartInfo)
             }
 
             # }
         }
-        if ($Session)
+        # if ($Session)
+        # {
+        #     # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+        #     $filename = "$($session.ComputerName).txt"
+        # }
+        # else
+        # {
+        #     $filename = 'localhost.txt'
+        # }
+
+        # # $diskSmartInfo
+
+        # if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+        # {
+        #     $filepath = -Path $Config.HistoricalDataPath
+        # }
+        # else
+        # {
+        #     $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+        # }
+
+        # if (!(Test-Path -Path $filepath))
+        # {
+        #     New-Item -ItemType Directory -Path $filepath | Out-Null
+        # }
+
+        # $fullname = Join-Path -Path $filepath -ChildPath $filename
+
+        if ($historicalData.Count)
         {
-            # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
-            $filename = "$($session.ComputerName).txt"
+            $fullname = inComposeHistoricalDataFileName -session $session
+            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historicalData -Depth 4)
         }
-        else
+}
+
+function inGetHistoricalData
+{
+    Param (
+        $session
+    )
+
+    $fullname = inComposeHistoricalDataFileName -session $session
+
+    $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+
+    $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+    foreach ($object in $converted)
+    {
+        $hash = [ordered]@{}
+        $attributes = @()
+
+        $hash.Add('PNPDeviceID', $object.PNPDeviceID)
+
+        foreach ($at in $object.SmartData)
         {
-            $filename = 'localhost.txt'
+            $attribute = [ordered]@{}
+            $attribute.Add('ID', [int]$at.ID)
+            $attribute.Add('Data', [long]$at.Data)
+
+            $attributeObject = [PSCustomObject]$attribute
+            $attributes += $attributeObject
         }
 
-        # $diskSmartInfo
+        $hash.Add('SmartData', $attributes)
+        $historicalData.Add([PSCustomObject]$hash)
+    }
 
-        if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
-        {
-            $filepath = -Path $Config.HistoricalDataPath
-        }
-        else
-        {
-            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
-        }
-
-        if (!(Test-Path -Path $filepath))
-        {
-            New-Item -ItemType Directory -Path $filepath | Out-Null
-        }
-
-        $fullname = Join-Path -Path $filepath -ChildPath $filename
-
-        if ($historyData.Count)
-        {
-            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historyData -Depth 4)
-        }
+    $historicalData
 }
 
 function inReportErrors
