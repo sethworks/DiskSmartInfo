@@ -417,7 +417,7 @@ function inUpdateHistoricalData
 
                     # if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     # {
-                        $attributeObject = [PSCustomObject]$attribute
+                        # $attributeObject = [PSCustomObject]$attribute
                         # $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
                         # if ($ShowConvertedData)
@@ -425,7 +425,8 @@ function inUpdateHistoricalData
                             #     $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
                             #     $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
                             # }
-                        $attributes += $attributeObject
+                        # $attributes += $attributeObject
+                        $attributes += [PSCustomObject]$attribute
                 }
                     # }
                 # }
@@ -435,10 +436,11 @@ function inUpdateHistoricalData
             if ($attributes)
             {
                 $hash.Add("SmartData", $attributes)
-                $diskSmartInfo = [PSCustomObject]$hash
+                # $diskSmartInfo = [PSCustomObject]$hash
                 # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                $historicalData.Add($diskSmartInfo)
+                # $historicalData.Add($diskSmartInfo)
+                $historicalData.Add([PSCustomObject]$hash)
             }
 
             # }
