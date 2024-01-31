@@ -273,7 +273,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>QuietIfOK</maml:name>
+          <maml:name>Quiet</maml:name>
           <maml:description>
             <maml:para>Displays only attributes, whose value is in Warning or Critical state.</maml:para>
             <maml:para>If attribute if critical, it is shown, if its Data greater than 0. If attribute is not critical, it is shown, if its Value is less or equal to its threshold.</maml:para>
@@ -326,7 +326,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>QuietIfOK</maml:name>
+          <maml:name>Quiet</maml:name>
           <maml:description>
             <maml:para>Displays only attributes, whose value is in Warning or Critical state.</maml:para>
             <maml:para>If attribute if critical, it is shown, if its Data greater than 0. If attribute is not critical, it is shown, if its Value is less or equal to its threshold.</maml:para>
@@ -393,7 +393,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>QuietIfOK</maml:name>
+        <maml:name>Quiet</maml:name>
         <maml:description>
           <maml:para>Displays only attributes, whose value is in Warning or Critical state.</maml:para>
           <maml:para>If attribute if critical, it is shown, if its Data greater than 0. If attribute is not critical, it is shown, if its Value is less or equal to its threshold.</maml:para>
@@ -516,7 +516,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>---- Example 4: Silence if not in warning or critical state ----</maml:title>
-        <dev:code>Get-DiskSmartInfo -QuietIfOK
+        <dev:code>Get-DiskSmartInfo -Quiet
 
 Model:        Disk model
 InstanceId:   Disk Instance Id
@@ -535,7 +535,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>Example 5: Silence if critical attributes are not in warning or critical state</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
+        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 
 Model:        Disk model
 InstanceId:   Disk Instance Id

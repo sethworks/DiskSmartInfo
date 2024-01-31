@@ -7,7 +7,7 @@ function inGetDiskSmartInfo
         [System.Collections.Generic.List[int]]$DiskNumbers,
         [string[]]$DiskModels,
         [System.Collections.Generic.List[int]]$AttributeIDs,
-        [switch]$QuietIfOK,
+        [switch]$Quiet,
         [switch]$ShowHistoricalData,
         [switch]$UpdateHistoricalData
     )
@@ -113,7 +113,7 @@ function inGetDiskSmartInfo
                     $attribute.Add("Worst", $smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                    if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
+                    if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
                         if ($ShowHistoricalData)
                         {
@@ -145,7 +145,7 @@ function inGetDiskSmartInfo
                 }
             }
 
-            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
+            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet))
             {
                 $hash.Add("SmartData", $attributes)
                 $diskSmartInfo = [PSCustomObject]$hash

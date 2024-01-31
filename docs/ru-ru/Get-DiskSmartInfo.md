@@ -15,13 +15,13 @@ schema: 2.0.0
 ### ComputerName (Default)
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] 
-[-QuietIfOK] [<CommonParameters>]
+[-Quiet] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
 Get-DiskSmartInfo -CimSession <String[]> [-ShowConvertedData] [-CriticalAttributesOnly] 
-[-QuietIfOK] CommonParameters>]
+[-Quiet] CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -99,7 +99,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -QuietIfOK
+### -Quiet
 Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.
 
 Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.
@@ -208,7 +208,7 @@ SMARTData:
 
 ### Example 4: Вывод только тех атрибутов, чьи значения находятся в состоянии Warning или Critical
 ```powershell
-Get-DiskSmartInfo -QuietIfOK
+Get-DiskSmartInfo -Quiet
 ```
 
 ```
@@ -229,7 +229,7 @@ SMARTData:
 
 ### Example 5: Вывод только тех критических атрибутов, чьи значения находятся в состоянии Warning или Critical
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
+Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 ```
 
 ```

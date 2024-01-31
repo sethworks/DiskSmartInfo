@@ -220,7 +220,7 @@ Describe "Config" {
                 }
             }
 
-            Context "AttributeID depends on SuppressEmptySmartData" {
+            Context "AttributeID parameter results depend on SuppressEmptySmartData" {
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
                 }
@@ -248,9 +248,9 @@ Describe "Config" {
                 }
             }
 
-            Context "QuietIfOK not depends on SuppressEmptySmartData" {
+            Context "Quiet parameter results not depend on SuppressEmptySmartData" {
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -QuietIfOK
+                    $diskSmartInfo = Get-DiskSmartInfo -Quiet
                 }
 
                 It "Has 1 DiskSmartInfo object" {
@@ -285,7 +285,7 @@ Describe "Config" {
                 }
             }
 
-            Context "AttributeID depends on SuppressEmptySmartData" {
+            Context "AttributeID parameter results depend on SuppressEmptySmartData" {
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
                 }
@@ -317,9 +317,9 @@ Describe "Config" {
                 }
             }
 
-            Context "QuietIfOK not depends on SuppressEmptySmartData" {
+            Context "Quiet parameter results not depend on SuppressEmptySmartData" {
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -QuietIfOK
+                    $diskSmartInfo = Get-DiskSmartInfo -Quiet
                 }
 
                 It "Has 1 DiskSmartInfo object" {
