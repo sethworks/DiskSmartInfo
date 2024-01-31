@@ -113,20 +113,32 @@ function inGetDiskSmartInfo
                     $attribute.Add("Worst", $smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
-                    if ($ShowHistoricalData)
-                    {
-                        $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
-                    }
-
                     if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
+                        if ($ShowHistoricalData)
+                        {
+                            $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
+                        }
+                        if ($ShowConvertedData)
+                        {
+                            $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute -diskDrive $diskDrive))
+                        }
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                        if ($ShowConvertedData)
+                        if ($ShowHistoricalData -and $ShowConvertedData)
                         {
-                            $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                            $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalDataConvertedData'
+                        }
+                        elseif ($ShowHistoricalData)
+                        {
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalData'
+                        }
+                        elseif ($ShowConvertedData)
+                        {
+                            # $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
+                            # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#ConvertedData'
                         }
                         $attributes += $attributeObject
                     }
@@ -299,13 +311,16 @@ function inGetAttributeData
 function inConvertData
 {
     Param(
-        $attributeObject,
+        # $attributeObject,
+        $attribute,
         $diskDrive
     )
 
-    if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock)
+    # if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock)
+    if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
     {
-        $data = $attributeObject.Data
+        # $data = $attributeObject.Data
+        $data = $attribute.Data
         return $convertScriptBlock.Invoke()
     }
     else
