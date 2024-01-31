@@ -14,13 +14,13 @@ schema: 2.0.0
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
 [-Quiet] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
-Get-DiskSmartInfo -CimSession <String[]> [-ShowConvertedData] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo -CimSession <String[]> [-ShowConverted] [-CriticalAttributesOnly] 
 [-Quiet] CommonParameters>]
 ```
 
@@ -61,7 +61,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ShowConvertedData
+### -ShowConverted
 Параметр добавляет ковертированные данные для некоторых атрибутов.
 
 Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах),
@@ -157,7 +157,7 @@ SMARTData:
 
 ### Example 2: Конвертированные данные
 ```powershell
-Get-DiskSmartInfo -ShowConvertedData
+Get-DiskSmartInfo -ShowConverted
 ```
 
 ```

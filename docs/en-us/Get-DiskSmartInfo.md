@@ -14,13 +14,13 @@ Gets disk SMART information
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConvertedData] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
 [-Quiet] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
-Get-DiskSmartInfo -CimSession <String[]> [-ShowConvertedData] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo -CimSession <String[]> [-ShowConverted] [-CriticalAttributesOnly] 
 [-Quiet] CommonParameters>]
 ```
 
@@ -61,7 +61,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ShowConvertedData
+### -ShowConverted
 Adds converted data for some of the attributes.
 
 Such attributes are: "Spin-Up Time" (displays value in seconds),
@@ -157,7 +157,7 @@ The command gets disk SMART information.
 
 ### Example 2: Converted data
 ```powershell
-Get-DiskSmartInfo -ShowConvertedData
+Get-DiskSmartInfo -ShowConverted
 ```
 
 ```

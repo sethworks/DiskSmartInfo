@@ -2,7 +2,7 @@ function inGetDiskSmartInfo
 {
     Param (
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
-        [switch]$ShowConvertedData,
+        [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
         [System.Collections.Generic.List[int]]$DiskNumbers,
         [string[]]$DiskModels,
@@ -119,14 +119,14 @@ function inGetDiskSmartInfo
                         {
                             $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
                         }
-                        if ($ShowConvertedData)
+                        if ($ShowConverted)
                         {
                             $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute -diskDrive $diskDrive))
                         }
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                        if ($ShowHistoricalData -and $ShowConvertedData)
+                        if ($ShowHistoricalData -and $ShowConverted)
                         {
                             $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalDataConvertedData'
                         }
@@ -134,7 +134,7 @@ function inGetDiskSmartInfo
                         {
                             $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalData'
                         }
-                        elseif ($ShowConvertedData)
+                        elseif ($ShowConverted)
                         {
                             # $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
                             # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'

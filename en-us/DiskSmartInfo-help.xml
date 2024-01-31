@@ -249,7 +249,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Adds converted data for some of the attributes.</maml:para>
             <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
@@ -302,7 +302,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Adds converted data for some of the attributes.</maml:para>
             <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
@@ -367,7 +367,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>ShowConvertedData</maml:name>
+        <maml:name>ShowConverted</maml:name>
         <maml:description>
           <maml:para>Adds converted data for some of the attributes.</maml:para>
           <maml:para>Such attributes are: "Spin-Up Time" (displays value in seconds), "Power-On Hours" (displays value in days), "Temperature Difference" (shows actual temperature), "Total LBAs Written" (shows value in Tb), and "Total LBAs Read" (shows value in Tb).</maml:para>
@@ -465,7 +465,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>------------------ Example 2: Converted data ------------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -ShowConvertedData
+        <dev:code>Get-DiskSmartInfo -ShowConverted
 
 Model:        Disk model
 InstanceId:   Disk Instance Id

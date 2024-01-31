@@ -249,7 +249,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
             <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -303,7 +303,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
             <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -369,7 +369,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>ShowConvertedData</maml:name>
+        <maml:name>ShowConverted</maml:name>
         <maml:description>
           <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
           <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -468,7 +468,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>-------------- Example 2: Конвертированные данные --------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -ShowConvertedData
+        <dev:code>Get-DiskSmartInfo -ShowConverted
 
 Model:        Disk model
 InstanceId:   Disk Instance Id

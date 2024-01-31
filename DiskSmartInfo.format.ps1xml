@@ -231,7 +231,9 @@
                     <TableColumnHeader>
                         <Label>History</Label>
                     </TableColumnHeader>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>Converted</Label>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>
@@ -333,7 +335,9 @@
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>Converted</Label>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>

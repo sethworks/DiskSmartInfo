@@ -10,7 +10,8 @@ function Get-DiskSmartInfo
         # [Parameter(ParameterSetName='CimSession')]
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
-        [switch]$ShowConvertedData,
+        [Alias('ShowConvertedData')]
+        [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -113,7 +114,7 @@ function Get-DiskSmartInfo
                 {
                     inGetDiskSmartInfo `
                         -Session $cim `
-                        -ShowConvertedData:$ShowConvertedData `
+                        -ShowConverted:$ShowConverted `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
                         -DiskModels $DiskModel `
@@ -141,7 +142,7 @@ function Get-DiskSmartInfo
                 {
                     inGetDiskSmartInfo `
                         -Session $cim `
-                        -ShowConvertedData:$ShowConvertedData `
+                        -ShowConverted:$ShowConverted `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $diskNumbers `
                         -DiskModels $DiskModel `
@@ -161,7 +162,7 @@ function Get-DiskSmartInfo
         else
         {
             inGetDiskSmartInfo `
-                -ShowConvertedData:$ShowConvertedData `
+                -ShowConverted:$ShowConverted `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
                 -DiskNumbers $diskNumbers `
                 -DiskModels $DiskModel `

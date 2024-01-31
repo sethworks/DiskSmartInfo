@@ -244,12 +244,12 @@ Describe "DiskSmartInfo" {
             }
         }
 
-        Context "-ShowConvertedData" {
+        Context "-ShowConverted" {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -ShowConvertedData
+                $diskSmartInfo = Get-DiskSmartInfo -ShowConverted
             }
 
             It "Converts Spin-Up Time" {
@@ -374,7 +374,7 @@ Describe "DiskSmartInfo" {
                 mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -ShowConvertedData
+                $diskSmartInfo = Get-DiskSmartInfo -ShowConverted
             }
 
             It "Has default attribute definitions" {
