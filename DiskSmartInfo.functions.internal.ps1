@@ -9,7 +9,7 @@ function inGetDiskSmartInfo
         [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$Quiet,
         [switch]$ShowHistory,
-        [switch]$UpdateHistoricalData
+        [switch]$UpdateHistory
     )
 
     $namespaceWMI = 'root/WMI'
@@ -169,7 +169,7 @@ function inGetDiskSmartInfo
         }
     }
 
-    if ($UpdateHistoricalData)
+    if ($UpdateHistory)
     {
         inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
     }

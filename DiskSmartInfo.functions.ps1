@@ -30,7 +30,8 @@ function Get-DiskSmartInfo
         [switch]$Quiet,
         [Alias('ShowHistoricalData')]
         [switch]$ShowHistory,
-        [switch]$UpdateHistoricalData
+        [Alias('UpdateHistoricalData')]
+        [switch]$UpdateHistory
     )
 
     begin
@@ -122,7 +123,7 @@ function Get-DiskSmartInfo
                         -AttributeIDs $attributeIDs `
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
-                        -UpdateHistoricalData:$UpdateHistoricalData
+                        -UpdateHistory:$UpdateHistory
                 }
             }
             finally
@@ -150,7 +151,7 @@ function Get-DiskSmartInfo
                         -AttributeIDs $attributeIDs `
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
-                        -UpdateHistoricalData:$UpdateHistoricalData
+                        -UpdateHistory:$UpdateHistory
                 }
                 else
                 {
@@ -170,7 +171,7 @@ function Get-DiskSmartInfo
                 -AttributeIDs $attributeIDs `
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `
-                -UpdateHistoricalData:$UpdateHistoricalData
+                -UpdateHistory:$UpdateHistory
         }
 
         # Error reporting
