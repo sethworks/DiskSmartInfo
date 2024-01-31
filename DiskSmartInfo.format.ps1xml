@@ -7,9 +7,25 @@
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
-                            <Text>ComputerName: </Text>
+                            <Text>ComputerName:   </Text>
                             <ExpressionBinding>
                                 <PropertyName>ComputerName</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </Control>
+        <Control>
+            <Name>HistoricalDateControl</Name>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <Text>HistoricalDate: </Text>
+                            <ExpressionBinding>
+                                <PropertyName>HistoricalDate</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
                         </CustomItem>
@@ -23,12 +39,12 @@
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
-                            <Text>Model:        </Text>
+                            <Text>Model:          </Text>
                             <ExpressionBinding>
                                 <PropertyName>Model</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
-                            <Text>PNPDeviceId:  </Text>
+                            <Text>PNPDeviceId:    </Text>
                             <ExpressionBinding>
                                 <PropertyName>PNPDeviceId</PropertyName>
                             </ExpressionBinding>
@@ -39,15 +55,15 @@
             </CustomControl>
         </Control>
         <Control>
-            <Name>SmartData</Name>
+            <Name>SmartDataControl</Name>
             <CustomControl>
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
-                            <Text>SMARTData:    </Text>
+                            <Text>SMARTData:      </Text>
                             <NewLine/>
                             <Frame>
-                                <LeftIndent>14</LeftIndent>
+                                <LeftIndent>16</LeftIndent>
                                 <CustomItem>
                                     <ExpressionBinding>
                                         <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
@@ -75,7 +91,7 @@
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
-                                <CustomControlName>SmartData</CustomControlName>
+                                <CustomControlName>SmartDataControl</CustomControlName>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
@@ -98,7 +114,30 @@
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
-                                <CustomControlName>SmartData</CustomControlName>
+                                <CustomControlName>SmartDataControl</CustomControlName>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>DiskSmartInfo#HistoricalData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo#HistoricalData</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
