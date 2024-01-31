@@ -81,7 +81,7 @@ function inGetDiskSmartInfo
 
             if ($hostHistoricalData)
             {
-                $hash.Add('HistoryDate', $hostHistoricalData.TimeStamp)
+                $hash.Add('HistoricalDate', $hostHistoricalData.TimeStamp)
             }
 
             $attributes = @()
@@ -115,7 +115,7 @@ function inGetDiskSmartInfo
 
                     if ($ShowHistoricalData)
                     {
-                        $attribute.Add("HistoryData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
+                        $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
                     }
 
                     if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
@@ -139,9 +139,17 @@ function inGetDiskSmartInfo
                 $diskSmartInfo = [PSCustomObject]$hash
                 $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                if ($Session)
+                if ($Session -and $ShowHistoricalData)
+                {
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameHistoricalData"
+                }
+                elseif ($Session)
                 {
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+                }
+                elseif ($ShowHistoricalData)
+                {
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#HistoricalData"
                 }
 
                 $diskSmartInfo

@@ -33,6 +33,17 @@
                                 <PropertyName>PNPDeviceId</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </Control>
+        <Control>
+            <Name>SmartData</Name>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
                             <Text>SMARTData:    </Text>
                             <NewLine/>
                             <Frame>
@@ -63,6 +74,9 @@
                             <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartData</CustomControlName>
+                            </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -82,6 +96,9 @@
                             </ExpressionBinding>
                             <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartData</CustomControlName>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
