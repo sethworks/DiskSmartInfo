@@ -612,4 +612,53 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             }
         }
     }
+
+    Context "History ComputerName" {
+
+        Context "-UpdateHistory" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.HistoricalDataPath = $TestDrive
+                }
+
+                Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
+                $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).txt"
+            }
+
+            It "Historical data file exists" {
+                $filepath | Should -Exist
+            }
+            It "Historical data file contains proper data" {
+                $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+            }
+        }
+
+        Context "-ShowHistory" {
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                InModuleScope DiskSmartInfo {
+                    $Config.HistoricalDataPath = $TestDrive
+                }
+
+                Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -ShowHistory
+            }
+
+            It "HistoricalDate property exists" {
+                $diskSmartInfo[0].HistoricalDate | Should -Not -BeNullOrEmpty
+            }
+
+            It "Attribute data" {
+                $diskSmartInfo[0].SmartData[21].HistoricalData | Should -Be 26047
+                $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+            }
+        }
+    }
 }

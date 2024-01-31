@@ -81,7 +81,7 @@ function inComposeHistoricalDataFileName
 
     if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
     {
-        $filepath = -Path $Config.HistoricalDataPath
+        $filepath = $Config.HistoricalDataPath
     }
     else
     {
