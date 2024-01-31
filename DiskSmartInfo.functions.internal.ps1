@@ -8,7 +8,7 @@ function inGetDiskSmartInfo
         [string[]]$DiskModels,
         [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$Quiet,
-        [switch]$ShowHistoricalData,
+        [switch]$ShowHistory,
         [switch]$UpdateHistoricalData
     )
 
@@ -46,7 +46,7 @@ function inGetDiskSmartInfo
         continue
     }
 
-    if ($ShowHistoricalData)
+    if ($ShowHistory)
     {
         # $historicalData = inGetHistoricalData -session $Session
         $hostHistoricalData = inGetHistoricalData -session $Session
@@ -115,7 +115,7 @@ function inGetDiskSmartInfo
 
                     if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                     {
-                        if ($ShowHistoricalData)
+                        if ($ShowHistory)
                         {
                             $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
                         }
@@ -126,11 +126,11 @@ function inGetDiskSmartInfo
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                        if ($ShowHistoricalData -and $ShowConverted)
+                        if ($ShowHistory -and $ShowConverted)
                         {
                             $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalDataConvertedData'
                         }
-                        elseif ($ShowHistoricalData)
+                        elseif ($ShowHistory)
                         {
                             $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalData'
                         }
@@ -151,7 +151,7 @@ function inGetDiskSmartInfo
                 $diskSmartInfo = [PSCustomObject]$hash
                 $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                if ($Session -and $ShowHistoricalData)
+                if ($Session -and $ShowHistory)
                 {
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameHistoricalData"
                 }
@@ -159,7 +159,7 @@ function inGetDiskSmartInfo
                 {
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
                 }
-                elseif ($ShowHistoricalData)
+                elseif ($ShowHistory)
                 {
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#HistoricalData"
                 }

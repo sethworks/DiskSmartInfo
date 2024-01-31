@@ -28,7 +28,8 @@ function Get-DiskSmartInfo
         [string[]]$AttributeName,
         [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState','QuietIfOK')]
         [switch]$Quiet,
-        [switch]$ShowHistoricalData,
+        [Alias('ShowHistoricalData')]
+        [switch]$ShowHistory,
         [switch]$UpdateHistoricalData
     )
 
@@ -120,7 +121,7 @@ function Get-DiskSmartInfo
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -Quiet:$Quiet `
-                        -ShowHistoricalData:$ShowHistoricalData `
+                        -ShowHistory:$ShowHistory `
                         -UpdateHistoricalData:$UpdateHistoricalData
                 }
             }
@@ -148,7 +149,7 @@ function Get-DiskSmartInfo
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -Quiet:$Quiet `
-                        -ShowHistoricalData:$ShowHistoricalData `
+                        -ShowHistory:$ShowHistory `
                         -UpdateHistoricalData:$UpdateHistoricalData
                 }
                 else
@@ -168,7 +169,7 @@ function Get-DiskSmartInfo
                 -DiskModels $DiskModel `
                 -AttributeIDs $attributeIDs `
                 -Quiet:$Quiet `
-                -ShowHistoricalData:$ShowHistoricalData `
+                -ShowHistory:$ShowHistory `
                 -UpdateHistoricalData:$UpdateHistoricalData
         }
 
