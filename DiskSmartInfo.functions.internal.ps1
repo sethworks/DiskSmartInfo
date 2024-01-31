@@ -470,51 +470,56 @@ function inGetHistoricalData
 
     $fullname = inComposeHistoricalDataFileName -session $session
 
-    # $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
-    $content = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
-    # $timestamp = $content.TimeStamp
-
-    # $historicalData = @()
-    $hostHistoricalData = @{
-        TimeStamp = $content.TimeStamp
-        HistoricalData = @()
-    }
-
-    # foreach ($object in $converted)
-    foreach ($object in $content.HistoricalData)
+    if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
     {
-        $hash = [ordered]@{}
-        $attributes = @()
+        # $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+        # $content = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+        $converted = ConvertFrom-Json -InputObject $content
+        # $timestamp = $content.TimeStamp
 
-        $hash.Add('PNPDeviceID', $object.PNPDeviceID)
-
-        foreach ($at in $object.SmartData)
-        {
-            $attribute = [ordered]@{}
-
-            $attribute.Add('ID', [int]$at.ID)
-
-            if ($at.Data.Count -gt 1)
-            {
-                $attribute.Add('Data', [long[]]$at.Data)
-            }
-            else
-            {
-                $attribute.Add('Data', [long]$at.Data)
-            }
-
-            $attributes += [PSCustomObject]$attribute
-            # $attributeObject = [PSCustomObject]$attribute
-            # $attributes += $attributeObject
+        # $historicalData = @()
+        $hostHistoricalData = @{
+            # TimeStamp = $content.TimeStamp
+            TimeStamp = $converted.TimeStamp
+            HistoricalData = @()
         }
 
-        $hash.Add('SmartData', $attributes)
-        $hostHistoricalData.HistoricalData += [PSCustomObject]$hash
-        # $historicalData += [PSCustomObject]$hash
-    }
+        # foreach ($object in $converted)
+        # foreach ($object in $content.HistoricalData)
+        foreach ($object in $converted.HistoricalData)
+        {
+            $hash = [ordered]@{}
+            $attributes = @()
 
-    return $hostHistoricalData
-    # return $historicalData
+            $hash.Add('PNPDeviceID', $object.PNPDeviceID)
+
+            foreach ($at in $object.SmartData)
+            {
+                $attribute = [ordered]@{}
+
+                $attribute.Add('ID', [int]$at.ID)
+
+                if ($at.Data.Count -gt 1)
+                {
+                    $attribute.Add('Data', [long[]]$at.Data)
+                }
+                else
+                {
+                    $attribute.Add('Data', [long]$at.Data)
+                }
+
+                $attributes += [PSCustomObject]$attribute
+                # $attributeObject = [PSCustomObject]$attribute
+                # $attributes += $attributeObject
+            }
+
+            $hash.Add('SmartData', $attributes)
+            $hostHistoricalData.HistoricalData += [PSCustomObject]$hash
+            # $historicalData += [PSCustomObject]$hash
+        }
+        return $hostHistoricalData
+        # return $historicalData
+    }
 }
 
 function inReportErrors
