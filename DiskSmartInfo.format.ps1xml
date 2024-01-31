@@ -99,6 +99,32 @@
             </CustomControl>
         </View>
         <View>
+            <Name>DiskSmartInfo#ComputerNameHistoricalData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo#ComputerNameHistoricalData</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>ComputerNameControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
             <Name>DiskSmartInfo#ComputerName</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo#ComputerName</TypeName>
