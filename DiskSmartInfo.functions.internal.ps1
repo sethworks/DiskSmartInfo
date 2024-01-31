@@ -144,8 +144,9 @@ function inGetDiskSmartInfo
                         }
                         if ($ShowConverted)
                         {
-                            $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute -diskDrive $diskDrive))
+                            $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute))
                         }
+
                         $attributeObject = [PSCustomObject]$attribute
                         $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
@@ -335,8 +336,7 @@ function inConvertData
 {
     Param(
         # $attributeObject,
-        $attribute,
-        $diskDrive
+        $attribute
     )
 
     # if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock)
