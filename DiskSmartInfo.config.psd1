@@ -8,6 +8,6 @@
     # Path to save attributes' historical data. If not absolute, it is relative to module folder.
     HistoricalDataPath = 'history'
 
-    # Show only changed historical data. If attribute's historical data is the same as actual, show historical data as empty.
-    ShowChangedHistoricalDataOnly = $true
+    # Show historical data for all attributes. If false, show only historical data, that differ from actual.
+    ShowUnchangedHistoricalData = $true
 }
