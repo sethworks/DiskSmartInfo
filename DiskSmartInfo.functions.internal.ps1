@@ -48,7 +48,8 @@ function inGetDiskSmartInfo
 
     if ($ShowHistoricalData)
     {
-        $historicalData = inGetHistoricalData -session $Session
+        # $historicalData = inGetHistoricalData -session $Session
+        $hostHistoricalData = inGetHistoricalData -session $Session
     }
 
     foreach ($diskSmartData in $disksSmartData)
@@ -78,14 +79,20 @@ function inGetDiskSmartInfo
             $hash.Add('Model', $model)
             $hash.Add('PNPDeviceId', $pNPDeviceId)
 
+            if ($hostHistoricalData)
+            {
+                $hash.Add('HistoryDate', $hostHistoricalData.TimeStamp)
+            }
+
             $attributes = @()
 
             $smartAttributes = inOverwriteAttributes -model $model
 
-            if ($historicalData)
+            # if ($historicalData)
+            if ($hostHistoricalData)
             {
                 # $historicalAttributes = $historicalData.Find([Predicate[PSCustomObject]]{$args[0].PNPDeviceID -eq $pNPDeviceId}).SmartData
-                $historicalAttributes = $historicalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
+                $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
             }
 
             for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
@@ -421,7 +428,14 @@ function inUpdateHistoricalData
         if ($historicalData.Count)
         {
             $fullname = inComposeHistoricalDataFileName -session $session
-            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historicalData -Depth 4)
+
+            $hostHistoricalData = @{
+                TimeStamp = Get-Date
+                HistoricalData = $historicalData
+            }
+
+            # Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historicalData -Depth 4)
+            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
         }
 }
 
@@ -433,11 +447,18 @@ function inGetHistoricalData
 
     $fullname = inComposeHistoricalDataFileName -session $session
 
-    $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+    # $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+    $content = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
+    # $timestamp = $content.TimeStamp
 
-    $historicalData = @()
+    # $historicalData = @()
+    $hostHistoricalData = @{
+        TimeStamp = $content.TimeStamp
+        HistoricalData = @()
+    }
 
-    foreach ($object in $converted)
+    # foreach ($object in $converted)
+    foreach ($object in $content.HistoricalData)
     {
         $hash = [ordered]@{}
         $attributes = @()
@@ -465,10 +486,12 @@ function inGetHistoricalData
         }
 
         $hash.Add('SmartData', $attributes)
-        $historicalData += [PSCustomObject]$hash
+        $hostHistoricalData.HistoricalData += [PSCustomObject]$hash
+        # $historicalData += [PSCustomObject]$hash
     }
 
-    return $historicalData
+    return $hostHistoricalData
+    # return $historicalData
 }
 
 function inReportErrors
