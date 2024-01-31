@@ -79,9 +79,16 @@ function inGetDiskSmartInfo
             $hash.Add('Model', $model)
             $hash.Add('PNPDeviceId', $pNPDeviceId)
 
-            if ($hostHistoricalData)
+            if ($ShowHistory)
             {
-                $hash.Add('HistoricalDate', $hostHistoricalData.TimeStamp)
+                if ($hostHistoricalData)
+                {
+                    $hash.Add('HistoricalDate', $hostHistoricalData.TimeStamp)
+                }
+                else
+                {
+                    $hash.Add('HistoricalDate', $null)
+                }
             }
 
             $attributes = @()
@@ -117,7 +124,14 @@ function inGetDiskSmartInfo
                     {
                         if ($ShowHistory)
                         {
-                            $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
+                            if ($hostHistoricalData)
+                            {
+                                $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
+                            }
+                            else
+                            {
+                                $attribute.Add("HistoricalData", $null)
+                            }
                         }
                         if ($ShowConverted)
                         {
