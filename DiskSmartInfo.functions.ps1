@@ -16,6 +16,7 @@ function Get-DiskSmartInfo
         [Parameter(ValueFromPipelineByPropertyName)]
         [ArgumentCompleter([DiskCompleter])]
         [int[]]$DiskNumber,
+        [Alias('Model')]
         [ArgumentCompleter([DiskCompleter])]
         [string[]]$DiskModel,
         [ValidateRange(1, 255)]
