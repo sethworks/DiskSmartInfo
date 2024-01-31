@@ -294,6 +294,91 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
+    Context "ComputerName positional" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            $diskSmartInfo = Get-DiskSmartInfo $computerNames
+        }
+
+        It "Returns DiskSmartInfo object" {
+            $diskSmartInfo | Should -HaveCount 2
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+        }
+
+        It "Has ComputerName, Model, and InstanceId properties" {
+            $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+            $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+        }
+
+        It "Has SmartData property with 22 DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData | Should -HaveCount 22
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+        }
+
+        It "Has correct DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
+            $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
+            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
+            $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
+            $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
+            $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
+            $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+        }
+    }
+    Context "ComputerName positional IP Address" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            $diskSmartInfo = Get-DiskSmartInfo $ipAddresses
+        }
+
+        It "Returns DiskSmartInfo object" {
+            $diskSmartInfo | Should -HaveCount 2
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+        }
+
+        It "Has ComputerName, Model, and InstanceId properties" {
+            $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
+            $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+            $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
+            $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD1
+            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+        }
+
+        It "Has SmartData property with 22 DiskSmartAttribute objects" {
+            $diskSmartInfo[1].SmartData | Should -HaveCount 22
+            $diskSmartInfo[1].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+        }
+
+        It "Has correct DiskSmartAttribute objects" {
+            $diskSmartInfo[1].SmartData[0].ID | Should -Be 1
+            $diskSmartInfo[1].SmartData[12].IDHex | Should -BeExactly 'C0'
+            $diskSmartInfo[1].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[1].SmartData[2].Threshold | Should -Be 25
+            $diskSmartInfo[1].SmartData[2].Value | Should -Be 71
+            $diskSmartInfo[1].SmartData[2].Worst | Should -Be 69
+            $diskSmartInfo[1].SmartData[3].Data | Should -Be 25733
+            $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
+            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
+        }
+    }
     Context "ComputerName pipeline" {
 
         BeforeAll {
