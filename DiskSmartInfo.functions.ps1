@@ -45,7 +45,7 @@ function Get-DiskSmartInfo
         # $diskNumbers = [System.Collections.Generic.List[int]]::new()
         # $computerNamesAndDiskNumbers = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
         $computersAndDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
-        $cimSessions = [System.Collections.Generic.List[Microsoft.Management.Infrastructure.CimSession]]::new()
+        # $cimSessions = [System.Collections.Generic.List[Microsoft.Management.Infrastructure.CimSession]]::new()
     }
 
     process
@@ -191,8 +191,8 @@ function Get-DiskSmartInfo
     {
         # ComputerName
         # if ($computerNamesAndDiskNumbers)
-        if ($computersAndDisks)
-        {
+        # if ($computersAndDisks)
+        # {
             try
             {
                 foreach ($cad in $computersAndDisks)
@@ -204,7 +204,7 @@ function Get-DiskSmartInfo
 
                     # if (-not $cad.ComputerName -or
                     #    ($cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                    if ((-not $cad.ComputerName -and -not $cad.CimSession) -or ($cad.CimSession) -or
+                    if ((-not $cad.ComputerName -and -not $cad.CimSession) -or ($cad.CimSession -and $cad.CimSession.TestConnection()) -or
                         (-not $cad.CimSession -and ($cad.CimSession = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue)))
                     {
                         inGetDiskSmartInfo `
@@ -245,37 +245,44 @@ function Get-DiskSmartInfo
             }
             finally
             {
-                if ($cimSessions)
+                foreach ($cad in $computersAndDisks)
                 {
-                    Remove-CimSession -CimSession $cimSessions
+                    if ($cad.ComputerName -and $cad.CimSession)
+                    {
+                        Remove-CimSession -CimSession $cad.CimSession
+                    }
                 }
+                # if ($cimSessions)
+                # {
+                #     Remove-CimSession -CimSession $cimSessions
+                # }
             }
-        }
+        # }
 
         # CimSession
-        elseif ($cimSessions)
-        {
-            foreach ($cim in $cimSessions)
-            {
-                if ($cim.TestConnection())
-                {
-                    inGetDiskSmartInfo `
-                        -Session $cim `
-                        -ShowConverted:$ShowConverted `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $diskNumbers `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
-                }
-                else
-                {
-                    $Script:ErrorAccessingCimSession += $cim.ComputerName
-                }
-            }
-        }
+        # elseif ($cimSessions)
+        # {
+        #     foreach ($cim in $cimSessions)
+        #     {
+        #         if ($cim.TestConnection())
+        #         {
+        #             inGetDiskSmartInfo `
+        #                 -Session $cim `
+        #                 -ShowConverted:$ShowConverted `
+        #                 -CriticalAttributesOnly:$CriticalAttributesOnly `
+        #                 -DiskNumbers $diskNumbers `
+        #                 -DiskModels $DiskModel `
+        #                 -AttributeIDs $attributeIDs `
+        #                 -Quiet:$Quiet `
+        #                 -ShowHistory:$ShowHistory `
+        #                 -UpdateHistory:$UpdateHistory
+        #         }
+        #         else
+        #         {
+        #             $Script:ErrorAccessingCimSession += $cim.ComputerName
+        #         }
+        #     }
+        # }
 
         # Localhost
         # else
