@@ -805,7 +805,14 @@ Describe "DiskSmartInfo remoting mocked tests" {
                 $filepath | Should -Exist
             }
             It "Historical data file contains proper data" {
-                $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                if ($IsCoreCLR)
+                {
+                    $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                }
+                else
+                {
+                    $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                }
             }
         }
 
