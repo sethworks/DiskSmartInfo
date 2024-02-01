@@ -74,18 +74,9 @@
                                 <ItemSelectionCondition>
                                     <PropertyName>SmartData</PropertyName>
                                 </ItemSelectionCondition>
-                                <ScriptBlock>"SMARTData:"</ScriptBlock>
+                                <ScriptBlock>if ($PSStyle) {$t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi'}; $text = $PSItem.SmartData | Format-Table | Out-String; if ($PSStyle) {$PSStyle.OutputRendering = $t}; $text.Substring(0,$text.Length-4).Replace("`r`n", "`r`n              ").Insert(0, "SMARTData:")</ScriptBlock>
                              </ExpressionBinding>
                              <NewLine/>
-                            <Frame>
-                                <LeftIndent>14</LeftIndent>
-                                <CustomItem>
-                                    <ExpressionBinding>
-                                         <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
-                                    </ExpressionBinding>
-                                    <NewLine/>
-                                </CustomItem>
-                            </Frame>
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
