@@ -50,7 +50,17 @@ function Get-DiskSmartInfo
 
     process
     {
-        if ($ComputerName)
+        if ($CimSession)
+        {
+            foreach ($cs in $CimSession)
+            {
+                if (-not $cimSessions.Contains($cs))
+                {
+                    $cimSessions.Add($cs)
+                }
+            }
+        }
+        elseif ($ComputerName)
         {
             foreach ($cn in $ComputerName)
             {
@@ -131,13 +141,13 @@ function Get-DiskSmartInfo
             # }
         }
 
-        foreach ($cs in $CimSession)
-        {
-            if (-not $cimSessions.Contains($cs))
-            {
-                $cimSessions.Add($cs)
-            }
-        }
+        # foreach ($cs in $CimSession)
+        # {
+        #     if (-not $cimSessions.Contains($cs))
+        #     {
+        #         $cimSessions.Add($cs)
+        #     }
+        # }
     }
 
     end
@@ -150,12 +160,13 @@ function Get-DiskSmartInfo
             {
                 foreach ($cad in $computersAndDisks)
                 {
-                    if ($cad.ComputerName)
-                    {
-                        $cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-                    }
+                    # if ($cad.ComputerName)
+                    # {
+                    #     $cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
+                    # }
 
-                    if (-not $cad.ComputerName -or $cad.Cim)
+                    if (-not $cad.ComputerName -or
+                       ($cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
                     {
                         inGetDiskSmartInfo `
                         -Session $cad.Cim `
