@@ -80,12 +80,12 @@ function Get-DiskSmartInfo
                     if ($DiskNumber.Count)
                     {
                         # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@($DiskNumber)})
-                        $sessionsComputersDisks.Add(@{ComputerName = $null; CimSession = $cs; DiskNumber=@($DiskNumber)})
+                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@($DiskNumber)})
                     }
                     else
                     {
                         # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@()})
-                        $sessionsComputersDisks.Add(@{ComputerName = $null; CimSession = $cs; DiskNumber=@()})
+                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@()})
                     }
                 }
             }
@@ -126,12 +126,12 @@ function Get-DiskSmartInfo
                     if ($DiskNumber.Count)
                     {
                         # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@($DiskNumber)})
-                        $sessionsComputersDisks.Add(@{ComputerName = $cn; CimSession = $null; DiskNumber=@($DiskNumber)})
+                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@($DiskNumber)})
                     }
                     else
                     {
                         # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@()})
-                        $sessionsComputersDisks.Add(@{ComputerName = $cn; CimSession = $null; DiskNumber=@()})
+                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@()})
                     }
                 }
             }
@@ -162,12 +162,12 @@ function Get-DiskSmartInfo
                 if ($DiskNumber.Count)
                 {
                     # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@($DiskNumber)})
-                    $sessionsComputersDisks.Add(@{ComputerName = $null; CimSession = $null; DiskNumber=@($DiskNumber)})
+                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@($DiskNumber)})
                 }
                 else
                 {
                     # $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@()})
-                    $sessionsComputersDisks.Add(@{ComputerName = $null; CimSession = $null; DiskNumber=@()})
+                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@()})
                 }
             }
             # foreach ($dn in $DiskNumber)
