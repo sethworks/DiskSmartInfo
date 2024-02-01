@@ -197,6 +197,32 @@ function Get-DiskSmartInfo
             {
                 foreach ($cad in $computersAndDisks)
                 {
+                    if ($cad.CimSession -and -not $cad.CimSession.TestConnection())
+                    {
+                        $Script:ErrorAccessingCimSession += $cim.ComputerName
+                        continue
+                    }
+                    elseif ($cad.ComputerName -and -not ($cad.CimSession = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
+                    {
+                        continue
+                    }
+                    # elseif ($cad.ComputerName -or $cad.CimSession)
+                    # {
+                    #     continue
+                    # }
+                    else
+                    {
+                        inGetDiskSmartInfo `
+                            -Session $cad.CimSession `
+                            -ShowConverted:$ShowConverted `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $cad.DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
+                    }
                     # if ($cad.ComputerName)
                     # {
                     #     $cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
@@ -204,21 +230,21 @@ function Get-DiskSmartInfo
 
                     # if (-not $cad.ComputerName -or
                     #    ($cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                    if ((-not $cad.ComputerName -and -not $cad.CimSession) -or ($cad.CimSession -and $cad.CimSession.TestConnection()) -or
-                        (-not $cad.CimSession -and ($cad.CimSession = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue)))
-                    {
-                        inGetDiskSmartInfo `
-                        -Session $cad.CimSession `
-                        -ShowConverted:$ShowConverted `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $cad.DiskNumber `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
-                        # -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
-                    }
+                    # if ((-not $cad.ComputerName -and -not $cad.CimSession) -or ($cad.CimSession -and $cad.CimSession.TestConnection()) -or
+                    #     (-not $cad.CimSession -and ($cad.CimSession = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue)))
+                    # {
+                    #     inGetDiskSmartInfo `
+                    #     -Session $cad.CimSession `
+                    #     -ShowConverted:$ShowConverted `
+                    #     -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    #     -DiskNumbers $cad.DiskNumber `
+                    #     -DiskModels $DiskModel `
+                    #     -AttributeIDs $attributeIDs `
+                    #     -Quiet:$Quiet `
+                    #     -ShowHistory:$ShowHistory `
+                    #     -UpdateHistory:$UpdateHistory
+                        ## -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
+                    # }
                 }
                 # if ($DebugPreference -eq 'Continue')
                 # {
