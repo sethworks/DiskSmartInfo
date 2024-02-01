@@ -282,13 +282,15 @@ Describe "Config" {
                 }
             }
 
-            Context "Quiet parameter results not depend on SuppressEmptySmartData" {
+            Context "Quiet parameter results do not depend on SuppressEmptySmartData" {
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -Quiet
                 }
 
                 It "Has 1 DiskSmartInfo object" {
                     $diskSmartInfo | Should -HaveCount 1
+                    $diskSmartInfo.Number | Should -Be $testData.Index_HDD2
+                    $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
                 It "Has SmartData property with 3 DiskSmartAttribute objects" {

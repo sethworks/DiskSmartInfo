@@ -255,9 +255,11 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
 
-            It "Has Model and PNPDeviceID properties" {
+            It "Has DiskSmartInfo object properties" {
+                $diskSmartInfo.Number | Should -BeExactly $testData.Index_HDD1
                 $diskSmartInfo.Model | Should -BeExactly $testData.Model_HDD1
                 $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+                $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailure_HDD1
             }
 
             It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -597,8 +599,12 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
 
@@ -613,8 +619,12 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
 
@@ -629,8 +639,12 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
 
@@ -645,8 +659,12 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
 
@@ -661,8 +679,12 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_HDD2
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                 }
             }
 
@@ -677,8 +699,68 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
-                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
-                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+
+                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+
+                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
+                }
+            }
+        }
+
+        Context "PredictFailure property" {
+
+            Context "Empty SmartData property" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusTrueHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -AttributeID 14
+                }
+                It "Returns DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 1
+                    $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+                It "Has DiskSmartInfo object properties" {
+                    $diskSmartInfo.Number | Should -BeExactly $testData.Index_HDD1
+                    $diskSmartInfo.Model | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+                    $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
+                }
+                It "Has empty SmartData property" {
+                    $diskSmartInfo.SmartData | Should -BeNullOrEmpty
+                }
+            }
+
+            Context "-Quiet" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusTrueHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -Quiet
+                }
+                It "Returns DiskSmartInfo objects" {
+                    $diskSmartInfo | Should -HaveCount 2
+                }
+                It "Has DiskSmartInfo object properties" {
+                    $diskSmartInfo[0].Number | Should -BeExactly $testData.Index_HDD1
+                    $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+                    $diskSmartInfo[0].PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
+
+                    $diskSmartInfo[1].Number | Should -BeExactly $testData.Index_HDD2
+                    $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                    $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
+                    $diskSmartInfo[1].PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailure_HDD2
+                }
+                It "Has empty SmartData property" {
+                    $diskSmartInfo[0].SmartData | Should -BeNullOrEmpty
+                    $diskSmartInfo[1].SmartData | Should -HaveCount 3
                 }
             }
         }
