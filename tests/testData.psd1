@@ -77,6 +77,9 @@
     0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0,   0,  0, 0, 0, 59
 
+    FailurePredictStatus_PredictFailure_HDD1 = $false
+    FailurePredictStatus_PredictFailureTrue_HDD1 = $true
+
     Index_HDD1 = 0
     Model_HDD1 = "HDD1"
     ModelATA_HDD1 = "HDD1 ATA Device"
@@ -162,6 +165,8 @@
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0, 0, 0, 0, 0, 228
 
+    FailurePredictStatus_PredictFailure_HDD2 = $false
+
     Index_HDD2 = 1
     Model_HDD2 = "HDD2"
     InstanceName_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0_0'
@@ -245,6 +250,8 @@
     0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0,   0,  0, 0, 0, 78
 
+    FailurePredictStatus_PredictFailure_SSD1 = $false
+
     Index_SSD1 = 2
     Model_SSD1 = "SSD1"
     InstanceName_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0_0'
@@ -327,6 +334,8 @@
     0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0,   0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     0,   0,  0, 0, 0, 10
+
+    FailurePredictStatus_PredictFailure_HFSSSD1 = $false
 
     Index_HFSSSD1 = 3
     Model_HFSSSD1 = "HFS512G32TNF-N3A0A"

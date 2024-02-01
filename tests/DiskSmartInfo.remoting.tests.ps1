@@ -15,6 +15,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         $namespaceWMI = 'root/WMI'
         $classSmartData = 'MSStorageDriver_ATAPISmartData'
         $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
+        $classFailurePredictStatus = 'MSStorageDriver_FailurePredictStatus'
         $classDiskDrive = 'Win32_DiskDrive'
 
         $namespaceStorage = 'root/Microsoft/Windows/Storage'
@@ -24,6 +25,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         # Class objects
         $cimClassSmartData = Get-CimClass -Namespace $namespaceWMI -ClassName $classSmartData
         $cimClassThresholds = Get-CimClass -Namespace $namespaceWMI -ClassName $classThresholds
+        $cimClassFailurePredictStatus = Get-CimClass -Namespace $namespaceWMI -ClassName $classFailurePredictStatus
         $cimClassDiskDrive = Get-CimClass -ClassName $classDiskDrive
 
         $cimClassDisk = Get-CimClass -Namespace $namespaceStorage -ClassName $classDisk
@@ -38,6 +40,16 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         $diskThresholdsPropertiesHDD1 = @{
             VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_HDD1
+            InstanceName = $testData.InstanceName_HDD1
+        }
+
+        $diskFailurePredictStatusPropertiesHDD1 = @{
+            PredictFailure = $testData.FailurePredictStatus_PredictFailure_HDD1
+            InstanceName = $testData.InstanceName_HDD1
+        }
+
+        $diskFailurePredictStatusTruePropertiesHDD1 = @{
+            PredictFailure = $testData.FailurePredictStatus_PredictFailureTrue_HDD1
             InstanceName = $testData.InstanceName_HDD1
         }
 
@@ -74,6 +86,11 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             InstanceName = $testData.InstanceName_HDD2
         }
 
+        $diskFailurePredictStatusPropertiesHDD2 = @{
+            PredictFailure = $testData.FailurePredictStatus_PredictFailure_HDD2
+            InstanceName = $testData.InstanceName_HDD2
+        }
+
         $diskDrivePropertiesHDD2 = @{
             Index = $testData.Index_HDD2
             PNPDeviceID = $testData.PNPDeviceID_HDD2
@@ -97,6 +114,11 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
         $diskThresholdsPropertiesSSD1 = @{
             VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_SSD1
+            InstanceName = $testData.InstanceName_SSD1
+        }
+
+        $diskFailurePredictStatusPropertiesSSD1 = @{
+            PredictFailure = $testData.FailurePredictStatus_PredictFailure_SSD1
             InstanceName = $testData.InstanceName_SSD1
         }
 
@@ -126,6 +148,11 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             InstanceName = $testData.InstanceName_HFSSSD1
         }
 
+        $diskFailurePredictStatusPropertiesHFSSSD1 = @{
+            PredictFailure = $testData.FailurePredictStatus_PredictFailure_HFSSSD1
+            InstanceName = $testData.InstanceName_HFSSSD1
+        }
+
         $diskDrivePropertiesHFSSSD1 = @{
             Index = $testData.Index_HFSSSD1
             PNPDeviceID = $testData.PNPDeviceID_HFSSSD1
@@ -151,6 +178,12 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         $diskThresholdsHDD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD2 -ClientOnly
         $diskThresholdsSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD1 -ClientOnly
         $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
+
+        $diskFailurePredictStatusHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHDD1 -ClientOnly
+        $diskFailurePredictStatusTrueHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusTruePropertiesHDD1 -ClientOnly
+        $diskFailurePredictStatusHDD2 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHDD2 -ClientOnly
+        $diskFailurePredictStatusSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesSSD1 -ClientOnly
+        $diskFailurePredictStatusHFSSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHFSSSD1 -ClientOnly
 
         $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
         $diskDriveATAHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesATAHDD1 -ClientOnly
@@ -215,6 +248,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames
         }
@@ -257,6 +291,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses
         }
@@ -300,6 +335,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo $computerNames
         }
@@ -342,6 +378,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo $ipAddresses
         }
@@ -384,6 +421,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $computerNames | Get-DiskSmartInfo
         }
@@ -426,6 +464,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $cim = New-CimSession -ComputerName $computerNames
             $diskSmartInfo = Get-DiskSmartInfo -CimSession $cim
@@ -473,6 +512,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $cim = New-CimSession -ComputerName $ipAddresses
             $diskSmartInfo = Get-DiskSmartInfo -CimSession $cim
@@ -520,6 +560,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $cim = New-CimSession -ComputerName $computerNames
             $diskSmartInfo = $cim | Get-DiskSmartInfo
@@ -567,6 +608,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $diskDriveHost1, $diskDriveHost2 | Get-DiskSmartInfo
         }
@@ -612,6 +654,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $diskHost1, $diskHost2 | Get-DiskSmartInfo
         }
@@ -657,6 +700,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $physicalDiskHost1, $physicalDiskHost2 | Get-DiskSmartInfo
         }
@@ -704,6 +748,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
@@ -726,6 +771,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
