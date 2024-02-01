@@ -76,13 +76,29 @@ function inComposeHistoricalDataFileName
         $filename = 'localhost.txt'
     }
 
-    if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+    if ($IsCoreCLR)
     {
-        $filepath = $Config.HistoricalDataPath
+        if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+        {
+            $filepath = $Config.HistoricalDataPath
+        }
+        else
+        {
+            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+        }
     }
+    # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
     else
     {
-        $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+        $pathroot = [System.IO.Path]::GetPathRoot($Config.HistoricalDataPath)
+        if ($pathroot -and $pathroot[-1] -eq '\')
+        {
+            $filepath = $Config.HistoricalDataPath
+        }
+        else
+        {
+            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+        }
     }
 
     if (!(Test-Path -Path $filepath))

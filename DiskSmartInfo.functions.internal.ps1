@@ -87,7 +87,7 @@ function inGetDiskSmartInfo
             {
                 if ($hostHistoricalData)
                 {
-                    $hash.Add('HistoricalDate', $hostHistoricalData.TimeStamp)
+                    $hash.Add('HistoricalDate', [datetime]$hostHistoricalData.TimeStamp)
                 }
                 else
                 {
@@ -430,8 +430,18 @@ function inGetHistoricalData
     {
         $converted = ConvertFrom-Json -InputObject $content
 
+        if ($IsCoreCLR)
+        {
+            $timestamp = $converted.TimeStamp
+        }
+        # Windows PowerShell 5.1 ConvertTo-Json converts DateTime objects differently
+        else
+        {
+            $timestamp = $converted.TimeStamp.DateTime
+        }
+
         $hostHistoricalData = @{
-            TimeStamp = $converted.TimeStamp
+            TimeStamp = $timestamp
             HistoricalData = @()
         }
 
