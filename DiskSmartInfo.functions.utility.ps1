@@ -92,5 +92,5 @@ function inComposeHistoricalDataFileName
 
     $fullname = Join-Path -Path $filepath -ChildPath $filename
 
-    $fullname
+    return $fullname
 }
