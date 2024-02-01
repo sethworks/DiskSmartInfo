@@ -15,6 +15,7 @@ function inGetDiskSmartInfo
     $namespaceWMI = 'root/WMI'
     $classSmartData = 'MSStorageDriver_ATAPISmartData'
     $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
+    $classFailurePredictStatus = 'MSStorageDriver_FailurePredictStatus'
     $classDiskDrive = 'Win32_DiskDrive'
 
     $initialOffset = 2
@@ -31,6 +32,7 @@ function inGetDiskSmartInfo
     {
         $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
+        $disksFailurePredictStatus = Get-CimInstance -nam $namespaceWMI -ClassName $classFailurePredictStatus @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
     catch
@@ -55,6 +57,7 @@ function inGetDiskSmartInfo
     {
         $smartData = $diskSmartData.VendorSpecific
         $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
+        $failurePredictStatus = $disksFailurePredictStatus | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName PredictFailure
 
         $pNPDeviceId = $diskSmartData.InstanceName
         if ($pNPDeviceId -match '_\d$')
@@ -75,8 +78,10 @@ function inGetDiskSmartInfo
                 $hash.Add('ComputerName', $Session.ComputerName)
             }
 
+            $hash.Add('Number', $diskDrive.Index)
             $hash.Add('Model', $model)
             $hash.Add('PNPDeviceId', $pNPDeviceId)
+            $hash.Add('PredictFailure', $failurePredictStatus)
 
             if ($ShowHistory)
             {
@@ -163,7 +168,8 @@ function inGetDiskSmartInfo
                 }
             }
 
-            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet))
+            # if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet))
+            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
             {
                 $hash.Add("SmartData", $attributes)
                 $diskSmartInfo = [PSCustomObject]$hash
