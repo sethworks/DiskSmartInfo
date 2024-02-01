@@ -48,7 +48,6 @@ function inGetDiskSmartInfo
 
     if ($ShowHistory)
     {
-        # $historicalData = inGetHistoricalData -session $Session
         $hostHistoricalData = inGetHistoricalData -session $Session
     }
 
@@ -95,10 +94,8 @@ function inGetDiskSmartInfo
 
             $smartAttributes = inOverwriteAttributes -model $model
 
-            # if ($historicalData)
             if ($hostHistoricalData)
             {
-                # $historicalAttributes = $historicalData.Find([Predicate[PSCustomObject]]{$args[0].PNPDeviceID -eq $pNPDeviceId}).SmartData
                 $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
             }
 
@@ -129,7 +126,6 @@ function inGetDiskSmartInfo
                                 $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
                                 if ($Config.ShowUnchangedHistoricalData -or ($historicalAttributeData -ne $attribute.Data))
                                 {
-                                    # $attribute.Add("HistoricalData", $historicalAttributes.Where{$_.ID -eq $attributeID}.Data)
                                     $attribute.Add("HistoricalData", $historicalAttributeData)
                                 }
                                 else
@@ -160,8 +156,6 @@ function inGetDiskSmartInfo
                         }
                         elseif ($ShowConverted)
                         {
-                            # $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                            # $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
                             $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#ConvertedData'
                         }
                         $attributes += $attributeObject
@@ -335,14 +329,11 @@ function inGetAttributeData
 function inConvertData
 {
     Param(
-        # $attributeObject,
         $attribute
     )
 
-    # if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attributeObject.ID}.ConvertScriptBlock)
     if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
     {
-        # $data = $attributeObject.Data
         $data = $attribute.Data
         return $convertScriptBlock.Invoke()
     }
@@ -378,113 +369,47 @@ function inUpdateHistoricalData
 
         $model = inTrimDiskDriveModel -Model $diskDrive.Model
 
-        # if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
-        # {
-            $hash = [ordered]@{}
+        $hash = [ordered]@{}
 
-            # if ($Session)
-            # {
-            #     $hash.Add('ComputerName', $Session.ComputerName)
-            # }
+        $hash.Add('PNPDeviceId', $pNPDeviceId)
 
-            # $hash.Add('Model', $model)
-            $hash.Add('PNPDeviceId', $pNPDeviceId)
+        $attributes = @()
 
-            $attributes = @()
+        $smartAttributes = inOverwriteAttributes -model $model
 
-            $smartAttributes = inOverwriteAttributes -model $model
-
-            for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
-            {
-                $attribute = [ordered]@{}
-
-                $attributeID = $smartData[$a]
-
-                # if ($attributeID -and
-                # (isAttributeRequested -AttributeID $attributeID) -and
-                # ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
-                # {
-                if ($attributeID)
-                {
-
-                    $attribute.Add("ID", $attributeID)
-                    # $attribute.Add("IDHex", $attributeID.ToString("X"))
-                    # $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                    # $attribute.Add("Threshold", $thresholdsData[$a + 1])
-                    # $attribute.Add("Value", $smartData[$a + 3])
-                    # $attribute.Add("Worst", $smartData[$a + 4])
-                    $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
-
-                    # if ((-not $QuietIfOK) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
-                    # {
-                        # $attributeObject = [PSCustomObject]$attribute
-                        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
-
-                        # if ($ShowConvertedData)
-                        # {
-                            #     $convertedValue = inConvertData -attributeObject $attributeObject -diskDrive $diskDrive
-                            #     $attributeObject | Add-Member -MemberType NoteProperty -Name ConvertedData -Value $convertedValue -TypeName 'DiskSmartAttribute#ConvertedData'
-                            # }
-                        # $attributes += $attributeObject
-                        $attributes += [PSCustomObject]$attribute
-                }
-                    # }
-                # }
-            }
-
-            # if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $QuietIfOK))
-            if ($attributes)
-            {
-                $hash.Add("SmartData", $attributes)
-                # $diskSmartInfo = [PSCustomObject]$hash
-                # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
-
-                # $historicalData.Add($diskSmartInfo)
-                $historicalData.Add([PSCustomObject]$hash)
-            }
-
-            # }
-        }
-        # if ($Session)
-        # {
-        #     # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
-        #     $filename = "$($session.ComputerName).txt"
-        # }
-        # else
-        # {
-        #     $filename = 'localhost.txt'
-        # }
-
-        # # $diskSmartInfo
-
-        # if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
-        # {
-        #     $filepath = -Path $Config.HistoricalDataPath
-        # }
-        # else
-        # {
-        #     $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
-        # }
-
-        # if (!(Test-Path -Path $filepath))
-        # {
-        #     New-Item -ItemType Directory -Path $filepath | Out-Null
-        # }
-
-        # $fullname = Join-Path -Path $filepath -ChildPath $filename
-
-        if ($historicalData.Count)
+        for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
-            $fullname = inComposeHistoricalDataFileName -session $session
+            $attribute = [ordered]@{}
 
-            $hostHistoricalData = @{
-                TimeStamp = Get-Date
-                HistoricalData = $historicalData
-            }
+            $attributeID = $smartData[$a]
 
-            # Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $historicalData -Depth 4)
-            Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
+            if ($attributeID)
+            {
+                $attribute.Add("ID", $attributeID)
+                $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+
+                $attributes += [PSCustomObject]$attribute
+                }
         }
+
+        if ($attributes)
+        {
+            $hash.Add("SmartData", $attributes)
+            $historicalData.Add([PSCustomObject]$hash)
+        }
+    }
+
+    if ($historicalData.Count)
+    {
+        $fullname = inComposeHistoricalDataFileName -session $session
+
+        $hostHistoricalData = @{
+            TimeStamp = Get-Date
+            HistoricalData = $historicalData
+        }
+
+        Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
+    }
 }
 
 function inGetHistoricalData
@@ -497,20 +422,13 @@ function inGetHistoricalData
 
     if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
     {
-        # $converted = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
-        # $content = ConvertFrom-Json -InputObject (Get-Content -Path $fullname -Raw)
         $converted = ConvertFrom-Json -InputObject $content
-        # $timestamp = $content.TimeStamp
 
-        # $historicalData = @()
         $hostHistoricalData = @{
-            # TimeStamp = $content.TimeStamp
             TimeStamp = $converted.TimeStamp
             HistoricalData = @()
         }
 
-        # foreach ($object in $converted)
-        # foreach ($object in $content.HistoricalData)
         foreach ($object in $converted.HistoricalData)
         {
             $hash = [ordered]@{}
@@ -534,16 +452,13 @@ function inGetHistoricalData
                 }
 
                 $attributes += [PSCustomObject]$attribute
-                # $attributeObject = [PSCustomObject]$attribute
-                # $attributes += $attributeObject
             }
 
             $hash.Add('SmartData', $attributes)
             $hostHistoricalData.HistoricalData += [PSCustomObject]$hash
-            # $historicalData += [PSCustomObject]$hash
         }
+
         return $hostHistoricalData
-        # return $historicalData
     }
 }
 

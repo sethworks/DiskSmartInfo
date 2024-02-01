@@ -69,15 +69,12 @@ function inComposeHistoricalDataFileName
 
     if ($session)
     {
-        # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
         $filename = "$($session.ComputerName).txt"
     }
     else
     {
         $filename = 'localhost.txt'
     }
-
-    # $diskSmartInfo
 
     if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
     {
