@@ -18,6 +18,22 @@
             </CustomControl>
         </Control>
         <Control>
+            <Name>HistoricalDateControl</Name>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <Text>HistoryDate:  </Text>
+                            <ExpressionBinding>
+                                <PropertyName>HistoricalDate</PropertyName>
+                            </ExpressionBinding>
+                            <NewLine/>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </Control>
+        <Control>
             <Name>DiskSmartInfoControl</Name>
             <CustomControl>
                 <CustomEntries>
@@ -33,6 +49,17 @@
                                 <PropertyName>PNPDeviceId</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </Control>
+        <Control>
+            <Name>SmartDataControl</Name>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
                             <Text>SMARTData:    </Text>
                             <NewLine/>
                             <Frame>
@@ -63,6 +90,35 @@
                             <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>DiskSmartInfo#ComputerNameHistoricalData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo#ComputerNameHistoricalData</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>ComputerNameControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
+                            </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -82,6 +138,32 @@
                             </ExpressionBinding>
                             <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
+                            </ExpressionBinding>
+                        </CustomItem>
+                    </CustomEntry>
+                </CustomEntries>
+            </CustomControl>
+        </View>
+        <View>
+            <Name>DiskSmartInfo#HistoricalData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartInfo#HistoricalData</TypeName>
+            </ViewSelectedBy>
+            <CustomControl>
+                <CustomEntries>
+                    <CustomEntry>
+                        <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
+                                <CustomControlName>SmartDataControl</CustomControlName>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
@@ -133,7 +215,114 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute</Name>
+            <Name>DiskSmartAttribute#HistoricalDataConvertedData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartAttribute#HistoricalDataConvertedData</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>History</Label>
+                    </TableColumnHeader>
+                    <TableColumnHeader>
+                        <Label>Converted</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IDHex</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>AttributeName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Threshold</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Worst</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Data</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>HistoricalData</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <Alignment>Right</Alignment>
+                                <PropertyName>ConvertedData</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>DiskSmartAttribute#HistoricalData</Name>
+            <ViewSelectedBy>
+                <TypeName>DiskSmartAttribute#HistoricalData</TypeName>
+            </ViewSelectedBy>
+            <TableControl>
+                <TableHeaders>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>History</Label>
+                    </TableColumnHeader>
+                </TableHeaders>
+                <TableRowEntries>
+                    <TableRowEntry>
+                        <TableColumnItems>
+                            <TableColumnItem>
+                                <PropertyName>ID</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>IDHex</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>AttributeName</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Threshold</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Value</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Worst</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>Data</PropertyName>
+                            </TableColumnItem>
+                            <TableColumnItem>
+                                <PropertyName>HistoricalData</PropertyName>
+                            </TableColumnItem>
+                        </TableColumnItems>
+                    </TableRowEntry>
+                </TableRowEntries>
+            </TableControl>
+        </View>
+        <View>
+            <Name>DiskSmartAttribute#ConvertedData</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartAttribute#ConvertedData</TypeName>
             </ViewSelectedBy>
@@ -146,7 +335,9 @@
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>Converted</Label>
+                    </TableColumnHeader>
                 </TableHeaders>
                 <TableRowEntries>
                     <TableRowEntry>

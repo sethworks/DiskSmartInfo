@@ -60,3 +60,37 @@ function inTrimDiskDriveModel
 
     return $Model
 }
+
+function inComposeHistoricalDataFileName
+{
+    Param (
+        $session
+    )
+
+    if ($session)
+    {
+        $filename = "$($session.ComputerName).txt"
+    }
+    else
+    {
+        $filename = 'localhost.txt'
+    }
+
+    if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+    {
+        $filepath = $Config.HistoricalDataPath
+    }
+    else
+    {
+        $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+    }
+
+    if (!(Test-Path -Path $filepath))
+    {
+        New-Item -ItemType Directory -Path $filepath | Out-Null
+    }
+
+    $fullname = Join-Path -Path $filepath -ChildPath $filename
+
+    return $fullname
+}

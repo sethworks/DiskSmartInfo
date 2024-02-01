@@ -10,12 +10,14 @@ function Get-DiskSmartInfo
         # [Parameter(ParameterSetName='CimSession')]
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
-        [switch]$ShowConvertedData,
+        [Alias('ShowConvertedData')]
+        [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
         [ArgumentCompleter([DiskCompleter])]
         [int[]]$DiskNumber,
+        [Alias('Model')]
         [ArgumentCompleter([DiskCompleter])]
         [string[]]$DiskModel,
         [ValidateRange(1, 255)]
@@ -24,8 +26,12 @@ function Get-DiskSmartInfo
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
-        [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState')]
-        [switch]$QuietIfOK
+        [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState','QuietIfOK')]
+        [switch]$Quiet,
+        [Alias('ShowHistoricalData')]
+        [switch]$ShowHistory,
+        [Alias('UpdateHistoricalData')]
+        [switch]$UpdateHistory
     )
 
     begin
@@ -110,12 +116,14 @@ function Get-DiskSmartInfo
                 {
                     inGetDiskSmartInfo `
                         -Session $cim `
-                        -ShowConvertedData:$ShowConvertedData `
+                        -ShowConverted:$ShowConverted `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
-                        -QuietIfOK:$QuietIfOK
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
                 }
             }
             finally
@@ -136,12 +144,14 @@ function Get-DiskSmartInfo
                 {
                     inGetDiskSmartInfo `
                         -Session $cim `
-                        -ShowConvertedData:$ShowConvertedData `
+                        -ShowConverted:$ShowConverted `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $diskNumbers `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
-                        -QuietIfOK:$QuietIfOK
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
                 }
                 else
                 {
@@ -154,12 +164,14 @@ function Get-DiskSmartInfo
         else
         {
             inGetDiskSmartInfo `
-                -ShowConvertedData:$ShowConvertedData `
+                -ShowConverted:$ShowConverted `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
                 -DiskNumbers $diskNumbers `
                 -DiskModels $DiskModel `
                 -AttributeIDs $attributeIDs `
-                -QuietIfOK:$QuietIfOK
+                -Quiet:$Quiet `
+                -ShowHistory:$ShowHistory `
+                -UpdateHistory:$UpdateHistory
         }
 
         # Error reporting

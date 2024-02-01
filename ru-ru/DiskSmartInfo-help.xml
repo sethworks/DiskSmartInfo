@@ -249,7 +249,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
             <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -273,7 +273,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>QuietIfOK</maml:name>
+          <maml:name>Quiet</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
             <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -303,7 +303,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConvertedData</maml:name>
+          <maml:name>ShowConverted</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
             <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -327,7 +327,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>QuietIfOK</maml:name>
+          <maml:name>Quiet</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
             <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -369,7 +369,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>ShowConvertedData</maml:name>
+        <maml:name>ShowConverted</maml:name>
         <maml:description>
           <maml:para>Параметр добавляет ковертированные данные для некоторых атрибутов.</maml:para>
           <maml:para>Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах), "Power-On Hours" (показывает данные в днях), "Temperature Difference" (показывает действительную температуру), "Total LBAs Written" (показывает данные в терабайтах) и "Total LBAs Read" (показывает данные в терабайтах).</maml:para>
@@ -395,7 +395,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>QuietIfOK</maml:name>
+        <maml:name>Quiet</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.</maml:para>
           <maml:para>Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.</maml:para>
@@ -468,7 +468,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>-------------- Example 2: Конвертированные данные --------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -ShowConvertedData
+        <dev:code>Get-DiskSmartInfo -ShowConverted
 
 Model:        Disk model
 InstanceId:   Disk Instance Id
@@ -519,7 +519,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>Example 4: Вывод только тех атрибутов, чьи значения находятся в состоянии Warning или Critical</maml:title>
-        <dev:code>Get-DiskSmartInfo -QuietIfOK
+        <dev:code>Get-DiskSmartInfo -Quiet
 
 Model:        Disk model
 InstanceId:   Disk Instance Id
@@ -539,7 +539,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>Example 5: Вывод только тех критических атрибутов, чьи значения находятся в состоянии Warning или Critical</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -QuietIfOK
+        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 
 Model:        Disk model
 InstanceId:   Disk Instance Id
