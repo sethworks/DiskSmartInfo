@@ -39,7 +39,11 @@
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
-                            <Text>Model:        </Text>
+                            <Text>Disk:         </Text>
+                            <ExpressionBinding>
+                                <PropertyName>Number</PropertyName>
+                            </ExpressionBinding>
+                            <Text>: </Text>
                             <ExpressionBinding>
                                 <PropertyName>Model</PropertyName>
                             </ExpressionBinding>
@@ -49,6 +53,12 @@
                                 <PropertyName>PNPDeviceId</PropertyName>
                             </ExpressionBinding>
                             <NewLine/>
+                            <ExpressionBinding>
+                                <ItemSelectionCondition>
+                                    <PropertyName>PredictFailure</PropertyName>
+                                </ItemSelectionCondition>
+                                <ScriptBlock>"Failure:      $($PSItem.PredictFailure)`n"</ScriptBlock>
+                            </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -60,13 +70,18 @@
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
-                            <Text>SMARTData:    </Text>
-                            <NewLine/>
+                            <ExpressionBinding>
+                                <ItemSelectionCondition>
+                                    <PropertyName>SmartData</PropertyName>
+                                </ItemSelectionCondition>
+                                <ScriptBlock>"SMARTData:"</ScriptBlock>
+                             </ExpressionBinding>
+                             <NewLine/>
                             <Frame>
                                 <LeftIndent>14</LeftIndent>
                                 <CustomItem>
                                     <ExpressionBinding>
-                                        <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
+                                         <ScriptBlock>$PSItem.SmartData | Format-Table | Out-String</ScriptBlock>
                                     </ExpressionBinding>
                                     <NewLine/>
                                 </CustomItem>
