@@ -27,8 +27,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -78,8 +78,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -129,8 +129,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -180,8 +180,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -231,8 +231,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -278,8 +278,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -325,8 +325,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -372,8 +372,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -422,8 +422,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -475,8 +475,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
@@ -528,8 +528,8 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
         It "Returns DiskSmartInfo object" {
             $diskSmartInfo | Should -HaveCount 2
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
-            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#ComputerName'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
         It "Has ComputerName, Model, and InstanceId properties" {
