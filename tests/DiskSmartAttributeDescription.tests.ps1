@@ -1,6 +1,8 @@
 BeforeAll {
     Remove-Module -Name DiskSmartInfo -Force -ErrorAction SilentlyContinue
     Import-Module -Name "$PSScriptRoot\..\DiskSmartInfo.psd1"
+
+    . $PSScriptRoot\testEnvironment.ps1
 }
 
 Describe "DiskSmartAttributeDescription" {
