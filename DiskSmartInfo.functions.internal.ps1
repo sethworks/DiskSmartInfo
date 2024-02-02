@@ -78,8 +78,10 @@ function inGetDiskSmartInfo
                 $hash.Add('ComputerName', $Session.ComputerName)
             }
 
-            $hash.Add('Number', $diskDrive.Index)
-            $hash.Add('Model', $model)
+            # $hash.Add('Number', $diskDrive.Index)
+            $hash.Add('DiskNumber', $diskDrive.Index)
+            # $hash.Add('Model', $model)
+            $hash.Add('DiskModel', $model)
             $hash.Add('PNPDeviceId', $pNPDeviceId)
             $hash.Add('PredictFailure', $failurePredictStatus)
 
@@ -87,11 +89,13 @@ function inGetDiskSmartInfo
             {
                 if ($hostHistoricalData)
                 {
-                    $hash.Add('HistoricalDate', [datetime]$hostHistoricalData.TimeStamp)
+                    # $hash.Add('HistoricalDate', [datetime]$hostHistoricalData.TimeStamp)
+                    $hash.Add('HistoryDate', [datetime]$hostHistoricalData.TimeStamp)
                 }
                 else
                 {
-                    $hash.Add('HistoricalDate', $null)
+                    # $hash.Add('HistoricalDate', $null)
+                    $hash.Add('HistoryDate', $null)
                 }
             }
 
@@ -184,7 +188,8 @@ function inGetDiskSmartInfo
 
                 if ($Session -and $ShowHistory)
                 {
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameHistoricalData"
+                    # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameHistoricalData"
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameDataHistory"
                 }
                 elseif ($Session)
                 {
@@ -192,7 +197,8 @@ function inGetDiskSmartInfo
                 }
                 elseif ($ShowHistory)
                 {
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#HistoricalData"
+                    # $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#HistoricalData"
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
                 }
 
                 $diskSmartInfo
