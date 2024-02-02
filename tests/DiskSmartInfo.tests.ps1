@@ -23,8 +23,8 @@ Describe "DiskSmartInfo" {
             }
 
             It "Has DiskSmartInfo object properties" {
-                $diskSmartInfo.Number | Should -BeExactly $testData.Index_HDD1
-                $diskSmartInfo.Model | Should -BeExactly $testData.Model_HDD1
+                $diskSmartInfo.DiskNumber | Should -BeExactly $testData.Index_HDD1
+                $diskSmartInfo.DiskModel | Should -BeExactly $testData.Model_HDD1
                 $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                 $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailure_HDD1
             }
@@ -367,10 +367,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
@@ -387,10 +387,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
@@ -407,10 +407,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
@@ -427,10 +427,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
@@ -447,10 +447,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_HDD2
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_HDD2
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                 }
             }
@@ -467,10 +467,10 @@ Describe "DiskSmartInfo" {
                 It "Has data for selected disks" {
                     $diskSmartInfo | Should -HaveCount 2
 
-                    $diskSmartInfo[0].Number | Should -Be $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
 
-                    $diskSmartInfo[1].Number | Should -Be $testData.Index_SSD1
+                    $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 }
             }
@@ -492,8 +492,8 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
                 It "Has DiskSmartInfo object properties" {
-                    $diskSmartInfo.Number | Should -BeExactly $testData.Index_HDD1
-                    $diskSmartInfo.Model | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo.DiskNumber | Should -BeExactly $testData.Index_HDD1
+                    $diskSmartInfo.DiskModel | Should -BeExactly $testData.Model_HDD1
                     $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                     $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
                 }
@@ -515,13 +515,13 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo | Should -HaveCount 2
                 }
                 It "Has DiskSmartInfo object properties" {
-                    $diskSmartInfo[0].Number | Should -BeExactly $testData.Index_HDD1
-                    $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo[0].DiskNumber | Should -BeExactly $testData.Index_HDD1
+                    $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.Model_HDD1
                     $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                     $diskSmartInfo[0].PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
 
-                    $diskSmartInfo[1].Number | Should -BeExactly $testData.Index_HDD2
-                    $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                    $diskSmartInfo[1].DiskNumber | Should -BeExactly $testData.Index_HDD2
+                    $diskSmartInfo[1].DiskModel | Should -BeExactly $testData.Model_HDD2
                     $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                     $diskSmartInfo[1].PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailure_HDD2
                 }

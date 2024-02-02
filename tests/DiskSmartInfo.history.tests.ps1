@@ -73,12 +73,12 @@ Describe "DiskSmartInfo" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#HistoricalData'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
             }
 
             It "HistoricalDate property exists" {
-                $diskSmartInfo[0].HistoricalDate | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].HistoricalDate | Should -BeOfType 'System.DateTime'
+                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
             }
 
             It "Attribute object is of proper type" {
@@ -129,12 +129,12 @@ Describe "DiskSmartInfo" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#HistoricalData'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
             }
 
             It "HistoricalDate property exists" {
-                $diskSmartInfo[0].HistoricalDate | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].HistoricalDate | Should -BeOfType 'System.DateTime'
+                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
             }
 
             It "Attribute object is of proper type" {

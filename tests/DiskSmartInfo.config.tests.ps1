@@ -56,7 +56,7 @@ Describe "Config" {
 
                 It "Has 1 DiskSmartInfo object" {
                     $diskSmartInfo | Should -HaveCount 1
-                    $diskSmartInfo.Number | Should -Be $testData.Index_HDD2
+                    $diskSmartInfo.DiskNumber | Should -Be $testData.Index_HDD2
                     $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
@@ -167,8 +167,8 @@ Describe "Config" {
                 }
 
                 It "Has trimmed models" {
-                    $diskSmartInfo[0].Model | Should -BeExactly $testData.Model_HDD1
-                    $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                    $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo[1].DiskModel | Should -BeExactly $testData.Model_HDD2
                 }
             }
         }
@@ -202,8 +202,8 @@ Describe "Config" {
                 }
 
                 It "Has untrimmed models" {
-                    $diskSmartInfo[0].Model | Should -BeExactly $testData.ModelATA_HDD1
-                    $diskSmartInfo[1].Model | Should -BeExactly $testData.Model_HDD2
+                    $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.ModelATA_HDD1
+                    $diskSmartInfo[1].DiskModel | Should -BeExactly $testData.Model_HDD2
                 }
             }
         }
