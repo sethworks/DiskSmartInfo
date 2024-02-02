@@ -17,13 +17,13 @@
             </CustomControl>
         </Control>
         <Control>
-            <Name>HistoricalDateControl</Name>
+            <Name>HistoryDateControl</Name>
             <CustomControl>
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)HistoryDate:$($PSStyle.Reset)  $($PSItem.HistoricalDate)"</ScriptBlock>
+                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)HistoryDate:$($PSStyle.Reset)  $($PSItem.HistoryDate)"</ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>
                         </CustomItem>
@@ -38,7 +38,7 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)Disk:$($PSStyle.Reset)         $($PSItem.Number): $($PSItem.Model)"</ScriptBlock>
+                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)Disk:$($PSStyle.Reset)         $($PSItem.DiskNumber): $($PSItem.DiskModel)"</ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>
                             <ExpressionBinding>
@@ -97,9 +97,9 @@
             </CustomControl>
         </View>
         <View>
-            <Name>DiskSmartInfo#ComputerNameHistoricalData</Name>
+            <Name>DiskSmartInfo#ComputerNameDataHistory</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#ComputerNameHistoricalData</TypeName>
+                <TypeName>DiskSmartInfo#ComputerNameDataHistory</TypeName>
             </ViewSelectedBy>
             <CustomControl>
                 <CustomEntries>
@@ -112,7 +112,7 @@
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
-                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                                <CustomControlName>HistoryDateControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
                                 <CustomControlName>SmartDataControl</CustomControlName>
@@ -146,9 +146,9 @@
             </CustomControl>
         </View>
         <View>
-            <Name>DiskSmartInfo#HistoricalData</Name>
+            <Name>DiskSmartInfo#DataHistory</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#HistoricalData</TypeName>
+                <TypeName>DiskSmartInfo#DataHistory</TypeName>
             </ViewSelectedBy>
             <CustomControl>
                 <CustomEntries>
@@ -158,7 +158,7 @@
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
-                                <CustomControlName>HistoricalDateControl</CustomControlName>
+                                <CustomControlName>HistoryDateControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
                                 <CustomControlName>SmartDataControl</CustomControlName>
