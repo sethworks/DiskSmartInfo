@@ -213,9 +213,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#HistoricalDataConvertedData</Name>
+            <Name>DiskSmartAttribute#DataHistoryDataConverted</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#HistoricalDataConvertedData</TypeName>
+                <TypeName>DiskSmartAttribute#DataHistoryDataConverted</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -258,11 +258,11 @@
                                 <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>HistoricalData</PropertyName>
+                                <PropertyName>DataHistory</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <Alignment>Right</Alignment>
-                                <PropertyName>ConvertedData</PropertyName>
+                                <PropertyName>DataConverted</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -270,9 +270,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#HistoricalData</Name>
+            <Name>DiskSmartAttribute#DataHistory</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#HistoricalData</TypeName>
+                <TypeName>DiskSmartAttribute#DataHistory</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -312,7 +312,7 @@
                                 <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>HistoricalData</PropertyName>
+                                <PropertyName>DataHistory</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
@@ -320,9 +320,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#ConvertedData</Name>
+            <Name>DiskSmartAttribute#DataConverted</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#ConvertedData</TypeName>
+                <TypeName>DiskSmartAttribute#DataConverted</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -363,7 +363,7 @@
                             </TableColumnItem>
                             <TableColumnItem>
                                 <Alignment>Right</Alignment>
-                                <PropertyName>ConvertedData</PropertyName>
+                                <PropertyName>DataConverted</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
                     </TableRowEntry>
