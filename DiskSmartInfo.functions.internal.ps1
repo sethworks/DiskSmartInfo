@@ -131,21 +131,25 @@ function inGetDiskSmartInfo
                                 $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
                                 if ($Config.ShowUnchangedHistoricalData -or ($historicalAttributeData -ne $attribute.Data))
                                 {
-                                    $attribute.Add("HistoricalData", $historicalAttributeData)
+                                    # $attribute.Add("HistoricalData", $historicalAttributeData)
+                                    $attribute.Add("DataHistory", $historicalAttributeData)
                                 }
                                 else
                                 {
-                                    $attribute.Add("HistoricalData", $null)
+                                    # $attribute.Add("HistoricalData", $null)
+                                    $attribute.Add("DataHistory", $null)
                                 }
                             }
                             else
                             {
-                                $attribute.Add("HistoricalData", $null)
+                                # $attribute.Add("HistoricalData", $null)
+                                $attribute.Add("DataHistory", $null)
                             }
                         }
                         if ($ShowConverted)
                         {
-                            $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute))
+                            # $attribute.Add("ConvertedData", $(inConvertData -attribute $attribute))
+                            $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
                         }
 
                         $attributeObject = [PSCustomObject]$attribute
@@ -153,15 +157,18 @@ function inGetDiskSmartInfo
 
                         if ($ShowHistory -and $ShowConverted)
                         {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalDataConvertedData'
+                            # $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalDataConvertedData'
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
                         }
                         elseif ($ShowHistory)
                         {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalData'
+                            # $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoricalData'
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
                         }
                         elseif ($ShowConverted)
                         {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#ConvertedData'
+                            # $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#ConvertedData'
+                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
                         }
                         $attributes += $attributeObject
                     }
