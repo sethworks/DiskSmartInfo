@@ -8,9 +8,12 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)ComputerName:$($PSStyle.Reset) $($PSItem.ComputerName)"</ScriptBlock>
+                                <ItemSelectionCondition>
+                                    <PropertyName>ComputerName</PropertyName>
+                                </ItemSelectionCondition>
+                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)ComputerName:$($PSStyle.Reset) $($PSItem.ComputerName)`n"</ScriptBlock>
                             </ExpressionBinding>
-                            <NewLine/>
+                            <!-- <NewLine/> -->
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -66,9 +69,9 @@
                                 <ItemSelectionCondition>
                                     <PropertyName>SmartData</PropertyName>
                                 </ItemSelectionCondition>
-                                <ScriptBlock>if ($PSStyle) {$t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi'}; $text = $PSItem.SmartData | Format-Table | Out-String; if ($PSStyle) {$PSStyle.OutputRendering = $t}; $text.Substring(0,$text.Length-4).Replace("`r`n", "`r`n              ").Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)")</ScriptBlock>
+                                <ScriptBlock>if ($PSStyle) {$t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi'}; $text = $PSItem.SmartData | Format-Table | Out-String; if ($PSStyle) {$PSStyle.OutputRendering = $t}; $text.Substring(0,$text.Length-2).Replace("`r`n", "`r`n              ").Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").TrimEnd(' ')</ScriptBlock>
                              </ExpressionBinding>
-                             <NewLine/>
+                             <!-- <NewLine/> -->
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -86,6 +89,9 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
+                                <CustomControlName>ComputerNameControl</CustomControlName>
+                            </ExpressionBinding>
+                            <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
                             <ExpressionBinding>
@@ -96,7 +102,7 @@
                 </CustomEntries>
             </CustomControl>
         </View>
-        <View>
+        <!-- <View>
             <Name>DiskSmartInfo#ComputerNameDataHistory</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo#ComputerNameDataHistory</TypeName>
@@ -121,8 +127,8 @@
                     </CustomEntry>
                 </CustomEntries>
             </CustomControl>
-        </View>
-        <View>
+        </View> -->
+        <!-- <View>
             <Name>DiskSmartInfo#ComputerName</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartInfo#ComputerName</TypeName>
@@ -144,7 +150,7 @@
                     </CustomEntry>
                 </CustomEntries>
             </CustomControl>
-        </View>
+        </View> -->
         <View>
             <Name>DiskSmartInfo#DataHistory</Name>
             <ViewSelectedBy>
@@ -154,6 +160,9 @@
                 <CustomEntries>
                     <CustomEntry>
                         <CustomItem>
+                            <ExpressionBinding>
+                                <CustomControlName>ComputerNameControl</CustomControlName>
+                            </ExpressionBinding>
                             <ExpressionBinding>
                                 <CustomControlName>DiskSmartInfoControl</CustomControlName>
                             </ExpressionBinding>
