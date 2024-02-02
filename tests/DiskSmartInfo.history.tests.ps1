@@ -82,16 +82,16 @@ Describe "DiskSmartInfo" {
             }
 
             It "Attribute object is of proper type" {
-                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#HistoricalData'
+                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
             }
 
             It "Changed attribute data" {
-                $diskSmartInfo[0].SmartData[10].HistoricalData | Should -Be 357
+                $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
                 $diskSmartInfo[0].SmartData[10].Data | Should -Be 358
             }
 
             It "Unchanged attribute data" {
-                $diskSmartInfo[0].SmartData[21].HistoricalData | Should -Be 26047
+                $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
                 $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
             }
         }
@@ -138,16 +138,16 @@ Describe "DiskSmartInfo" {
             }
 
             It "Attribute object is of proper type" {
-                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#HistoricalData'
+                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
             }
 
             It "Changed attribute data" {
-                $diskSmartInfo[0].SmartData[10].HistoricalData | Should -Be 357
+                $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
                 $diskSmartInfo[0].SmartData[10].Data | Should -Be 358
             }
 
             It "Unchanged attribute data" {
-                $diskSmartInfo[0].SmartData[21].HistoricalData | Should -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData[21].DataHistory | Should -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
             }
         }

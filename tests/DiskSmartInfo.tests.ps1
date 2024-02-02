@@ -57,23 +57,23 @@ Describe "DiskSmartInfo" {
             }
 
             It "Converts Spin-Up Time" {
-                $diskSmartInfo[0].SmartData[2].ConvertedData | Should -BeExactly '9.059 Sec'
+                $diskSmartInfo[0].SmartData[2].DataConverted | Should -BeExactly '9.059 Sec'
             }
 
             It "Converts Power-On Hours" {
-                $diskSmartInfo[0].SmartData[7].ConvertedData | Should -BeExactly '3060.25 Days'
+                $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeExactly '3060.25 Days'
             }
 
             It "Converts Temperature Difference" {
-                $diskSmartInfo[1].SmartData[9].ConvertedData | Should -BeExactly '60 °C'
+                $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly '60 °C'
             }
 
             It "Converts Total LBAs Written" {
-                $diskSmartInfo[1].SmartData[13].ConvertedData | Should -BeExactly '5.933 TB'
+                $diskSmartInfo[1].SmartData[13].DataConverted | Should -BeExactly '5.933 TB'
             }
 
             It "Converts Total LBAs Read" {
-                $diskSmartInfo[1].SmartData[14].ConvertedData | Should -BeExactly '4.450 TB'
+                $diskSmartInfo[1].SmartData[14].DataConverted | Should -BeExactly '4.450 TB'
             }
         }
 
@@ -191,11 +191,11 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[0].SmartData[13].ID | Should -Be 241
                 $diskSmartInfo[0].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[0].SmartData[13].Data | Should -Be 12740846422
-                $diskSmartInfo[0].SmartData[13].ConvertedData | Should -BeExactly "5.933 TB"
+                $diskSmartInfo[0].SmartData[13].DataConverted | Should -BeExactly "5.933 TB"
                 $diskSmartInfo[0].SmartData[14].ID | Should -Be 242
                 $diskSmartInfo[0].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
                 $diskSmartInfo[0].SmartData[14].Data | Should -Be 9556432520
-                $diskSmartInfo[0].SmartData[14].ConvertedData | Should -BeExactly "4.450 TB"
+                $diskSmartInfo[0].SmartData[14].DataConverted | Should -BeExactly "4.450 TB"
             }
 
             It "Has overwritten attrubute definitions" {
@@ -203,11 +203,11 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[1].SmartData[27].ID | Should -Be 241
                 $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
                 $diskSmartInfo[1].SmartData[27].Data | Should -Be 2034
-                $diskSmartInfo[1].SmartData[27].ConvertedData | Should -BeExactly "1.986 TB"
+                $diskSmartInfo[1].SmartData[27].DataConverted | Should -BeExactly "1.986 TB"
                 $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
                 $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
                 $diskSmartInfo[1].SmartData[28].Data | Should -Be 2596
-                $diskSmartInfo[1].SmartData[28].ConvertedData | Should -BeExactly "2.535 TB"
+                $diskSmartInfo[1].SmartData[28].DataConverted | Should -BeExactly "2.535 TB"
             }
         }
 

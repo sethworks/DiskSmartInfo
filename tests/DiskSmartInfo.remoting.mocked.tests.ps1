@@ -623,7 +623,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             }
 
             It "Attribute data" {
-                $diskSmartInfo[0].SmartData[21].HistoricalData | Should -Be 26047
+                $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
                 $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
             }
         }
