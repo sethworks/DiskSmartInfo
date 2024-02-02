@@ -150,140 +150,44 @@ function Get-DiskSmartInfo
 
     end
     {
-        # ComputerName
-        # if ($computerNamesAndDiskNumbers)
-        # if ($computersAndDisks)
-        # {
-            try
+        try
+        {
+            foreach ($scd in $sessionsComputersDisks)
             {
-                foreach ($scd in $sessionsComputersDisks)
+                if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
                 {
-                    if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
-                    {
-                        $Script:ErrorAccessingCimSession += $scd.ComputerName
-                        continue
-                    }
-                    elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                    {
-                        continue
-                    }
-                    # elseif ($cad.ComputerName -or $cad.CimSession)
-                    # {
-                    #     continue
-                    # }
-                    else
-                    {
-                        inGetDiskSmartInfo `
-                            -Session $scd.CimSession `
-                            -ShowConverted:$ShowConverted `
-                            -CriticalAttributesOnly:$CriticalAttributesOnly `
-                            -DiskNumbers $scd.DiskNumber `
-                            -DiskModels $DiskModel `
-                            -AttributeIDs $attributeIDs `
-                            -Quiet:$Quiet `
-                            -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory
-                    }
-                    # if ($cad.ComputerName)
-                    # {
-                    #     $cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-                    # }
-
-                    # if (-not $cad.ComputerName -or
-                    #    ($cad.Cim = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                    # if ((-not $cad.ComputerName -and -not $cad.CimSession) -or ($cad.CimSession -and $cad.CimSession.TestConnection()) -or
-                    #     (-not $cad.CimSession -and ($cad.CimSession = New-CimSession -ComputerName $cad.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue)))
-                    # {
-                    #     inGetDiskSmartInfo `
-                    #     -Session $cad.CimSession `
-                    #     -ShowConverted:$ShowConverted `
-                    #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    #     -DiskNumbers $cad.DiskNumber `
-                    #     -DiskModels $DiskModel `
-                    #     -AttributeIDs $attributeIDs `
-                    #     -Quiet:$Quiet `
-                    #     -ShowHistory:$ShowHistory `
-                    #     -UpdateHistory:$UpdateHistory
-                        ## -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
-                    # }
+                    $Script:ErrorAccessingCimSession += $scd.ComputerName
+                    continue
                 }
-                # if ($DebugPreference -eq 'Continue')
-                # {
-                #     $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName
-                # }
-                # else
-                # {
-                #     $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-                # }
-
-                # foreach ($cim in $cimSessions)
-                # {
-                    # inGetDiskSmartInfo `
-                    #     -Session $cim `
-                    #     -ShowConverted:$ShowConverted `
-                    #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    #     -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
-                    #     -DiskModels $DiskModel `
-                    #     -AttributeIDs $attributeIDs `
-                    #     -Quiet:$Quiet `
-                    #     -ShowHistory:$ShowHistory `
-                    #     -UpdateHistory:$UpdateHistory
-                # }
+                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
+                {
+                    continue
+                }
+                else
+                {
+                    inGetDiskSmartInfo `
+                        -Session $scd.CimSession `
+                        -ShowConverted:$ShowConverted `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $scd.DiskNumber `
+                        -DiskModels $DiskModel `
+                        -AttributeIDs $attributeIDs `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
+                }
             }
-            finally
+        }
+        finally
+        {
+            foreach ($scd in $sessionsComputersDisks)
             {
-                foreach ($scd in $sessionsComputersDisks)
+                if ($scd.ComputerName -and $scd.CimSession)
                 {
-                    if ($scd.ComputerName -and $scd.CimSession)
-                    {
-                        Remove-CimSession -CimSession $scd.CimSession
-                    }
+                    Remove-CimSession -CimSession $scd.CimSession
                 }
-                # if ($cimSessions)
-                # {
-                #     Remove-CimSession -CimSession $cimSessions
-                # }
             }
-        # }
-
-        # CimSession
-        # elseif ($cimSessions)
-        # {
-        #     foreach ($cim in $cimSessions)
-        #     {
-        #         if ($cim.TestConnection())
-        #         {
-        #             inGetDiskSmartInfo `
-        #                 -Session $cim `
-        #                 -ShowConverted:$ShowConverted `
-        #                 -CriticalAttributesOnly:$CriticalAttributesOnly `
-        #                 -DiskNumbers $diskNumbers `
-        #                 -DiskModels $DiskModel `
-        #                 -AttributeIDs $attributeIDs `
-        #                 -Quiet:$Quiet `
-        #                 -ShowHistory:$ShowHistory `
-        #                 -UpdateHistory:$UpdateHistory
-        #         }
-        #         else
-        #         {
-        #             $Script:ErrorAccessingCimSession += $cim.ComputerName
-        #         }
-        #     }
-        # }
-
-        # Localhost
-        # else
-        # {
-        #     inGetDiskSmartInfo `
-        #         -ShowConverted:$ShowConverted `
-        #         -CriticalAttributesOnly:$CriticalAttributesOnly `
-        #         -DiskNumbers $diskNumbers `
-        #         -DiskModels $DiskModel `
-        #         -AttributeIDs $attributeIDs `
-        #         -Quiet:$Quiet `
-        #         -ShowHistory:$ShowHistory `
-        #         -UpdateHistory:$UpdateHistory
-        # }
+        }
 
         # Error reporting
         inReportErrors
