@@ -77,6 +77,10 @@ function inGetDiskSmartInfo
             {
                 $hash.Add('ComputerName', $Session.ComputerName)
             }
+            else
+            {
+                $hash.Add('ComputerName', $null)
+            }
 
             $hash.Add('DiskNumber', $diskDrive.Index)
             $hash.Add('DiskModel', $model)
@@ -174,15 +178,19 @@ function inGetDiskSmartInfo
                 $diskSmartInfo = [PSCustomObject]$hash
                 $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                if ($Session -and $ShowHistory)
-                {
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameDataHistory"
-                }
-                elseif ($Session)
-                {
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
-                }
-                elseif ($ShowHistory)
+                # if ($Session -and $ShowHistory)
+                # {
+                #     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerNameDataHistory"
+                # }
+                # elseif ($Session)
+                # {
+                #     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#ComputerName"
+                # }
+                # elseif ($ShowHistory)
+                # {
+                #     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
+                # }
+                if ($ShowHistory)
                 {
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
                 }
