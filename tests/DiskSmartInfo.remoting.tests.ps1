@@ -53,7 +53,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
 
-        It "Has correct types and properties" {
+        It "DiskSmartInfo object has correct types and properties" {
             $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 
             $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
@@ -587,7 +587,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo.SmartData[20].Data | Should -Be 702
             }
 
-            It "Has correct types and properties" {
+            It "DiskSmartInfo object has correct types and properties" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
 
                 $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty

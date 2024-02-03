@@ -118,12 +118,12 @@ function inGetDiskSmartInfo
                 (isAttributeRequested -AttributeID $attributeID) -and
                 ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                 {
-                    $attribute.Add("ID", $attributeID)
-                    $attribute.Add("IDHex", $attributeID.ToString("X"))
-                    $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                    $attribute.Add("Threshold", $thresholdsData[$a + 1])
-                    $attribute.Add("Value", $smartData[$a + 3])
-                    $attribute.Add("Worst", $smartData[$a + 4])
+                    $attribute.Add("ID", [byte]$attributeID)
+                    $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
+                    $attribute.Add("AttributeName", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
+                    $attribute.Add("Value", [byte]$smartData[$a + 3])
+                    $attribute.Add("Worst", [byte]$smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
                     if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
@@ -270,7 +270,7 @@ function inGetAttributeData
     {
         $([DataType]::bits48.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 6; $offset++)
@@ -283,7 +283,7 @@ function inGetAttributeData
 
         $([DataType]::bits24.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 3; $offset++)
@@ -296,7 +296,7 @@ function inGetAttributeData
 
         $([DataType]::bits16.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 2; $offset++)
@@ -314,7 +314,7 @@ function inGetAttributeData
 
             for ($offset = 9; $offset -ge 5; $offset -= 2)
             {
-                $value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
+                [long]$value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
 
                 if ($value)
                 {
@@ -436,7 +436,7 @@ function inGetHistoricalData
         }
 
         $hostHistoricalData = @{
-            TimeStamp = $timestamp
+            TimeStamp = [datetime]$timestamp
             HistoricalData = @()
         }
 
@@ -445,13 +445,13 @@ function inGetHistoricalData
             $hash = [ordered]@{}
             $attributes = @()
 
-            $hash.Add('PNPDeviceID', $object.PNPDeviceID)
+            $hash.Add('PNPDeviceID', [string]$object.PNPDeviceID)
 
             foreach ($at in $object.SmartData)
             {
                 $attribute = [ordered]@{}
 
-                $attribute.Add('ID', [int]$at.ID)
+                $attribute.Add('ID', [byte]$at.ID)
 
                 if ($at.Data.Count -gt 1)
                 {

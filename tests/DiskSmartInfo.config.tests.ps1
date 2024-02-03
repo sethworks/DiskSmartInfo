@@ -120,7 +120,7 @@ Describe "Config" {
                 #     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
                 # }
 
-                It "Has correct types and properties" {
+                It "DiskSmartInfo object has correct types and properties" {
                     $diskSmartInfo[2].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 
                     $diskSmartInfo[2].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
