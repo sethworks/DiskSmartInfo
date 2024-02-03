@@ -13,7 +13,6 @@
                                 </ItemSelectionCondition>
                                 <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)ComputerName:$($PSStyle.Reset) $($PSItem.ComputerName)`n"</ScriptBlock>
                             </ExpressionBinding>
-                            <!-- <NewLine/> -->
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -71,7 +70,6 @@
                                 </ItemSelectionCondition>
                                 <ScriptBlock>if ($PSStyle) {$t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi'}; $text = $PSItem.SmartData | Format-Table | Out-String; if ($PSStyle) {$PSStyle.OutputRendering = $t}; $text.Substring(0,$text.Length-2).Replace("`r`n", "`r`n              ").Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").TrimEnd(' ')</ScriptBlock>
                              </ExpressionBinding>
-                             <!-- <NewLine/> -->
                         </CustomItem>
                     </CustomEntry>
                 </CustomEntries>
@@ -102,55 +100,6 @@
                 </CustomEntries>
             </CustomControl>
         </View>
-        <!-- <View>
-            <Name>DiskSmartInfo#ComputerNameDataHistory</Name>
-            <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#ComputerNameDataHistory</TypeName>
-            </ViewSelectedBy>
-            <CustomControl>
-                <CustomEntries>
-                    <CustomEntry>
-                        <CustomItem>
-                            <ExpressionBinding>
-                                <CustomControlName>ComputerNameControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>HistoryDateControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>SmartDataControl</CustomControlName>
-                            </ExpressionBinding>
-                        </CustomItem>
-                    </CustomEntry>
-                </CustomEntries>
-            </CustomControl>
-        </View> -->
-        <!-- <View>
-            <Name>DiskSmartInfo#ComputerName</Name>
-            <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#ComputerName</TypeName>
-            </ViewSelectedBy>
-            <CustomControl>
-                <CustomEntries>
-                    <CustomEntry>
-                        <CustomItem>
-                            <ExpressionBinding>
-                                <CustomControlName>ComputerNameControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>SmartDataControl</CustomControlName>
-                            </ExpressionBinding>
-                        </CustomItem>
-                    </CustomEntry>
-                </CustomEntries>
-            </CustomControl>
-        </View> -->
         <View>
             <Name>DiskSmartInfo#DataHistory</Name>
             <ViewSelectedBy>
