@@ -131,6 +131,14 @@ Describe "History" {
             $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeNullOrEmpty
         }
+
+        It "DiskSmartAttribute object is formatted correctly" {
+            $format = $diskSmartInfo[0].SmartData | Format-Table
+
+            $labels = $format.shapeInfo.tableColumnInfoList.Label
+
+            $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History')
+        }
     }
 
     Context "-UpdateHistory" {
@@ -290,6 +298,14 @@ Describe "History" {
                 $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
                 $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
             }
+
+            It "DiskSmartAttribute object is formatted correctly" {
+                $format = $diskSmartInfo[0].SmartData | Format-Table
+
+                $labels = $format.shapeInfo.tableColumnInfoList.Label
+
+                $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History')
+            }
         }
 
         Context "ShowUnchangedHistoricalData = `$false" {
@@ -435,6 +451,14 @@ Describe "History" {
 
                 $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
+            }
+
+            It "DiskSmartAttribute object is formatted correctly" {
+                $format = $diskSmartInfo[0].SmartData | Format-Table
+
+                $labels = $format.shapeInfo.tableColumnInfoList.Label
+
+                $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History', 'Converted')
             }
         }
     }
