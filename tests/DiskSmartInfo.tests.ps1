@@ -53,16 +53,16 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.ComputerName | Should -BeNullOrEmpty
 
                 $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.DiskModel | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+                $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
 
                 $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+                $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
 
                 $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
@@ -74,29 +74,29 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.SmartData[0].psobject.properties | Should -HaveCount 7
 
                 $diskSmartInfo.SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].ID.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo.SmartData[0].ID | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].IDHex.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].AttributeName.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.SmartData[0].AttributeName | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].Threshold.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo.SmartData[0].Threshold | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].Value.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo.SmartData[0].Value | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].Worst.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo.SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo.SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.SmartData[0].Data.pstypenames[0] | Should -BeExactly 'System.Int64'
+                $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.Int64'
 
                 $diskSmartInfo.SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.SmartData[13].Data | Should -HaveCount 3
-                $diskSmartInfo.SmartData[13].Data[0].pstypenames[0] | Should -BeExactly 'System.Int64'
+                $diskSmartInfo.SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
             }
         }
 
@@ -135,35 +135,35 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].ID.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].IDHex.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].AttributeName.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo[0].SmartData[0].AttributeName | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].Threshold.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].Value.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].Worst.pstypenames[0] | Should -BeExactly 'System.Byte'
+                $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].Data.pstypenames[0] | Should -BeExactly 'System.Int64'
+                $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                $diskSmartInfo[0].SmartData[13].Data[0].pstypenames[0] | Should -BeExactly 'System.Int64'
+                $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].DataConverted | Should -BeNullOrEmpty
 
                 $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[7].DataConverted.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
             }
         }
 

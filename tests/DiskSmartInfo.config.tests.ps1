@@ -127,16 +127,16 @@ Describe "Config" {
                     $diskSmartInfo[2].ComputerName | Should -BeNullOrEmpty
 
                     $diskSmartInfo[2].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
-                    $diskSmartInfo[2].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+                    $diskSmartInfo[2].DiskModel | Should -BeOfType 'System.String'
 
                     $diskSmartInfo[2].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
-                    $diskSmartInfo[2].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+                    $diskSmartInfo[2].DiskNumber | Should -BeOfType 'System.UInt32'
 
                     $diskSmartInfo[2].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-                    $diskSmartInfo[2].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+                    $diskSmartInfo[2].PNPDeviceId | Should -BeOfType 'System.String'
 
                     $diskSmartInfo[2].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
-                    $diskSmartInfo[2].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+                    $diskSmartInfo[2].PredictFailure | Should -BeOfType 'System.Boolean'
 
                     $diskSmartInfo[2].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty

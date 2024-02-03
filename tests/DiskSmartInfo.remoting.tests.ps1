@@ -57,19 +57,19 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 
             $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].ComputerName.pstypenames[0] | Should -BeExactly 'System.String'
+            $diskSmartInfo[0].ComputerName | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+            $diskSmartInfo[0].DiskModel | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+            $diskSmartInfo[0].DiskNumber | Should -BeOfType 'System.UInt32'
 
             $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+            $diskSmartInfo[0].PNPDeviceId | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+            $diskSmartInfo[0].PredictFailure | Should -BeOfType 'System.Boolean'
 
             $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
@@ -591,22 +591,22 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
 
                 $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.ComputerName.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.ComputerName | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.DiskModel | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+                $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
 
                 $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+                $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+                $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
 
                 $diskSmartInfo.psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
+                $diskSmartInfo.HistoryDate | Should -BeOfType 'System.DateTime'
 
                 $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
