@@ -42,83 +42,134 @@ function Get-DiskSmartInfo
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
-        $diskNumbers = [System.Collections.Generic.List[int]]::new()
-        $computerNamesAndDiskNumbers = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
-        $cimSessions = [System.Collections.Generic.List[Microsoft.Management.Infrastructure.CimSession]]::new()
+        $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     }
 
     process
     {
-        if ($ComputerName)
+        if ($CimSession)
         {
-            foreach ($cn in $ComputerName)
+            foreach ($cs in $CimSession)
             {
-                if (($in = $computerNamesAndDiskNumbers.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cn})) -ge 0)
+                if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].CimSession.ComputerName -eq $cs.ComputerName})) -ge 0)
                 {
-                    foreach ($dn in $DiskNumber)
+                    if ($DiskNumber.Count)
                     {
-                        if ($computerNamesAndDiskNumbers[$in].DiskNumber -notcontains $dn)
+                        foreach ($dn in $DiskNumber)
                         {
-                            $computerNamesAndDiskNumbers[$in].DiskNumber += $dn
+                            if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
+                            {
+                                $sessionsComputersDisks[$in].DiskNumber += $dn
+                            }
                         }
+                    }
+                    else
+                    {
+                        $sessionsComputersDisks[$in].DiskNumber = @()
                     }
                 }
                 else
                 {
-                    if ($DiskNumber)
+                    if ($DiskNumber.Count)
                     {
-                        $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@($DiskNumber)})
+                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@($DiskNumber)})
                     }
                     else
                     {
-                        $computerNamesAndDiskNumbers.Add(@{ComputerName = $cn; DiskNumber=@()})
+                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@()})
+                    }
+                }
+            }
+        }
+        elseif ($ComputerName)
+        {
+            foreach ($cn in $ComputerName)
+            {
+                if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cn})) -ge 0)
+                {
+                    if ($DiskNumber.Count)
+                    {
+                        foreach ($dn in $DiskNumber)
+                        {
+                            if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
+                            {
+                                $sessionsComputersDisks[$in].DiskNumber += $dn
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $sessionsComputersDisks[$in].DiskNumber = @()
+                    }
+                }
+                else
+                {
+                    if ($DiskNumber.Count)
+                    {
+                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@($DiskNumber)})
+                    }
+                    else
+                    {
+                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@()})
                     }
                 }
             }
         }
         else
         {
-            foreach ($dn in $DiskNumber)
+            if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{($args[0].ComputerName -eq $null -and $args[0].CimSession -eq $null)})) -ge 0)
             {
-                if (-not $diskNumbers.Contains($dn))
+                if ($DiskNumber.Count)
                 {
-                    $diskNumbers.Add($dn)
+                    foreach ($dn in $DiskNumber)
+                    {
+                        if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
+                        {
+                            $sessionsComputersDisks[$in].DiskNumber += $dn
+                        }
+                    }
+                }
+                else
+                {
+                    $sessionsComputersDisks[$in].DiskNumber = @()
                 }
             }
-        }
-
-        foreach ($cs in $CimSession)
-        {
-            if (-not $cimSessions.Contains($cs))
+            else
             {
-                $cimSessions.Add($cs)
+                if ($DiskNumber.Count)
+                {
+                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@($DiskNumber)})
+                }
+                else
+                {
+                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@()})
+                }
             }
         }
     }
 
     end
     {
-        # ComputerName
-        if ($computerNamesAndDiskNumbers)
+        try
         {
-            try
+            foreach ($scd in $sessionsComputersDisks)
             {
-                if ($DebugPreference -eq 'Continue')
+                if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
                 {
-                    $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName
+                    $Script:ErrorAccessingCimSession += $scd.ComputerName
+                    continue
+                }
+                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
+                {
+                    continue
                 }
                 else
                 {
-                    $cimSessions = New-CimSession -ComputerName $computerNamesAndDiskNumbers.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue
-                }
-
-                foreach ($cim in $cimSessions)
-                {
                     inGetDiskSmartInfo `
-                        -Session $cim `
+                        -Session $scd.CimSession `
                         -ShowConverted:$ShowConverted `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $computerNamesAndDiskNumbers.Find([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cim.ComputerName}).DiskNumber `
+                        -DiskNumbers $scd.DiskNumber `
                         -DiskModels $DiskModel `
                         -AttributeIDs $attributeIDs `
                         -Quiet:$Quiet `
@@ -126,52 +177,16 @@ function Get-DiskSmartInfo
                         -UpdateHistory:$UpdateHistory
                 }
             }
-            finally
+        }
+        finally
+        {
+            foreach ($scd in $sessionsComputersDisks)
             {
-                if ($cimSessions)
+                if ($scd.ComputerName -and $scd.CimSession)
                 {
-                    Remove-CimSession -CimSession $cimSessions
+                    Remove-CimSession -CimSession $scd.CimSession
                 }
             }
-        }
-
-        # CimSession
-        elseif ($cimSessions)
-        {
-            foreach ($cim in $cimSessions)
-            {
-                if ($cim.TestConnection())
-                {
-                    inGetDiskSmartInfo `
-                        -Session $cim `
-                        -ShowConverted:$ShowConverted `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $diskNumbers `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
-                }
-                else
-                {
-                    $Script:ErrorAccessingCimSession += $cim.ComputerName
-                }
-            }
-        }
-
-        # Localhost
-        else
-        {
-            inGetDiskSmartInfo `
-                -ShowConverted:$ShowConverted `
-                -CriticalAttributesOnly:$CriticalAttributesOnly `
-                -DiskNumbers $diskNumbers `
-                -DiskModels $DiskModel `
-                -AttributeIDs $attributeIDs `
-                -Quiet:$Quiet `
-                -ShowHistory:$ShowHistory `
-                -UpdateHistory:$UpdateHistory
         }
 
         # Error reporting

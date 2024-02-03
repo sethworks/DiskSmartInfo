@@ -3,6 +3,7 @@
         'PSUseDeclaredVarsMoreThanAssignments',
         'PSReviewUnusedParameter',
         'PSAvoidUsingWMICmdlet',
-        'PSPossibleIncorrectUsageOfAssignmentOperator'
+        'PSPossibleIncorrectUsageOfAssignmentOperator',
+        'PSPossibleIncorrectComparisonWithNull'
     )
 }
