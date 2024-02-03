@@ -603,6 +603,28 @@ Describe "DiskSmartInfo" {
                 #     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
                 # }
 
+                It "DiskSmartInfo object has correct types and properties" {
+                    $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+                    $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.ComputerName | Should -BeNullOrEmpty
+
+                    $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.DiskModel | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
+
+                    $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
+
+                    $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
+                }
+
                 It "DiskSmartInfo object is formatted correctly" {
                     $format = $diskSmartInfo | Format-Custom
 
@@ -636,7 +658,29 @@ Describe "DiskSmartInfo" {
                     $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                     $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
                 }
-                It "Has empty SmartData property" {
+                # It "Has empty SmartData property" {
+                #     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
+                # }
+
+                It "DiskSmartInfo object has correct types and properties" {
+                    $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+                    $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.ComputerName | Should -BeNullOrEmpty
+
+                    $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.DiskModel | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
+
+                    $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
+
+                    $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
                 }
 
