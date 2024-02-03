@@ -116,7 +116,29 @@ Describe "Config" {
                     $diskSmartInfo[1].SmartData[0].Data | Should -Be 73592
                 }
 
-                It "Has empty SmartData property" {
+                # It "Has empty SmartData property" {
+                #     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
+                # }
+
+                It "Has correct types and properties" {
+                    $diskSmartInfo[2].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+                    $diskSmartInfo[2].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].ComputerName | Should -BeNullOrEmpty
+
+                    $diskSmartInfo[2].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+                    $diskSmartInfo[2].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+                    $diskSmartInfo[2].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+                    $diskSmartInfo[2].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+                    $diskSmartInfo[2].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
                 }
             }

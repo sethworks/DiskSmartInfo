@@ -72,6 +72,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
 
             $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
         }
     }
     Context "ComputerName IP Address" {
@@ -604,10 +605,11 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
 
-                $diskSmartInfo[0].psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
+                $diskSmartInfo.psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
 
                 $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
             }
         }
     }

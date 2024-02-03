@@ -79,6 +79,7 @@ Describe "History" {
             $diskSmartInfo[0].HistoryDate | Should -BeNullOrEmpty
 
             $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
         }
     }
 
@@ -186,6 +187,7 @@ Describe "History" {
                 $diskSmartInfo[0].HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
 
                 $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
             }
         }
 

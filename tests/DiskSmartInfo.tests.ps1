@@ -65,6 +65,7 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
 
                 $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
             }
         }
 
