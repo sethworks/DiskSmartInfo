@@ -141,6 +141,17 @@ Describe "Config" {
                     $diskSmartInfo[2].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
                 }
+
+                It "DiskSmartInfo object is formatted correctly" {
+                    $format = $diskSmartInfo[2] | Format-Custom
+
+                    $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                    $propertyValues | Should -HaveCount 2
+
+                    $propertyValues[0] | Should -BeExactly 'Disk:         2: SSD1'
+                    $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                }
             }
 
             Context "Quiet parameter results not depend on SuppressEmptySmartData" {

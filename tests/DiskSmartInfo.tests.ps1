@@ -68,6 +68,18 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
             }
 
+            It "DiskSmartInfo object is formatted correctly" {
+                $format = $diskSmartInfo | Format-Custom
+
+                $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                $propertyValues | Should -HaveCount 3
+
+                $propertyValues[0] | Should -BeExactly 'Disk:         0: HDD1'
+                $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                $propertyValues[2] | Should -BeLikeExactly 'SMARTData:*'
+            }
+
             It "DiskSmartAttribute object has correct types and properties" {
                 $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
 
@@ -568,6 +580,43 @@ Describe "DiskSmartInfo" {
 
         Context "PredictFailure property" {
 
+            Context "Filled SmartData property" {
+                BeforeAll {
+                    mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusTrueHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo
+                }
+                It "Returns DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 1
+                    $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+                It "Has DiskSmartInfo object properties" {
+                    $diskSmartInfo.DiskNumber | Should -BeExactly $testData.Index_HDD1
+                    $diskSmartInfo.DiskModel | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
+                    $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
+                }
+                # It "Has empty SmartData property" {
+                #     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
+                # }
+
+                It "DiskSmartInfo object is formatted correctly" {
+                    $format = $diskSmartInfo | Format-Custom
+
+                    $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                    $propertyValues | Should -HaveCount 4
+
+                    $propertyValues[0] | Should -BeExactly 'Disk:         0: HDD1'
+                    $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $propertyValues[2] | Should -BeExactly "Failure:      True`n"
+                    $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
+                }
+            }
+
             Context "Empty SmartData property" {
                 BeforeAll {
                     mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -589,6 +638,18 @@ Describe "DiskSmartInfo" {
                 }
                 It "Has empty SmartData property" {
                     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
+                }
+
+                It "DiskSmartInfo object is formatted correctly" {
+                    $format = $diskSmartInfo | Format-Custom
+
+                    $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                    $propertyValues | Should -HaveCount 3
+
+                    $propertyValues[0] | Should -BeExactly 'Disk:         0: HDD1'
+                    $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                    $propertyValues[2] | Should -BeExactly "Failure:      True`n"
                 }
             }
 

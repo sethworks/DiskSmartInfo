@@ -82,6 +82,19 @@ Describe "History" {
             $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
         }
 
+        It "DiskSmartInfo object is formatted correctly" {
+            $format = $diskSmartInfo[0] | Format-Custom
+
+            $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+            $propertyValues | Should -HaveCount 4
+
+            $propertyValues[0] | Should -BeExactly 'Disk:         0: HDD1'
+            $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+            $propertyValues[2] | Should -BeLikeExactly 'HistoryDate:*'
+            $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
+        }
+
         It "DiskSmartAttribute object has correct types and properties" {
             $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
 
@@ -225,6 +238,19 @@ Describe "History" {
 
                 $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
+            }
+
+            It "DiskSmartInfo object is formatted correctly" {
+                $format = $diskSmartInfo[0] | Format-Custom
+
+                $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                $propertyValues | Should -HaveCount 4
+
+                $propertyValues[0] | Should -BeExactly 'Disk:         0: HDD1'
+                $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                $propertyValues[2] | Should -BeLikeExactly 'HistoryDate:*'
+                $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
             }
 
             It "DiskSmartAttribute object has correct types and properties" {

@@ -79,6 +79,19 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
         }
+
+        It "DiskSmartInfo object is formatted correctly" {
+            $format = $diskSmartInfo[0] | Format-Custom
+
+            $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+            $propertyValues | Should -HaveCount 4
+
+            $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
+            $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
+            $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+            $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
+        }
     }
     Context "ComputerName IP Address" {
 
@@ -672,6 +685,20 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
                 $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
+            }
+
+            It "DiskSmartInfo object is formatted correctly" {
+                $format = $diskSmartInfo | Format-Custom
+
+                $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                $propertyValues | Should -HaveCount 5
+
+                $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
+                $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
+                $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                $propertyValues[3] | Should -BeLikeExactly 'HistoryDate:*'
+                $propertyValues[4] | Should -BeLikeExactly 'SMARTData:*'
             }
         }
     }
