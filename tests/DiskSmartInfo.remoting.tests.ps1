@@ -52,6 +52,27 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
+
+        It "Has correct types and properties" {
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+            $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].ComputerName.pstypenames[0] | Should -BeExactly 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+            $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+            $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+        }
     }
     Context "ComputerName IP Address" {
 
@@ -557,12 +578,36 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             }
 
             It "HistoricalDate property exists" {
-                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.HistoryDate | Should -Not -BeNullOrEmpty
             }
 
             It "Attribute data" {
-                $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
-                $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+                $diskSmartInfo.SmartData[20].DataHistory | Should -Be 702
+                $diskSmartInfo.SmartData[20].Data | Should -Be 702
+            }
+
+            It "Has correct types and properties" {
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+
+                $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.ComputerName.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+                $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+                $diskSmartInfo[0].psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
+
+                $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
             }
         }
     }

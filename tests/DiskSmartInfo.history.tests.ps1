@@ -7,6 +7,81 @@ BeforeAll {
 
 Describe "History" {
 
+    Context "-ShowHistory before updating" {
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+            InModuleScope DiskSmartInfo {
+                $Config.HistoricalDataPath = $TestDrive
+            }
+
+            # Get-DiskSmartInfo -UpdateHistory | Out-Null
+
+            # if ($IsCoreCLR)
+            # {
+            #     (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data": 358.0', '"Data": 357.0' | Set-Content -Path 'TestDrive:/localhost.txt'
+            # }
+            # else
+            # {
+            #     (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
+            # }
+
+            $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
+        }
+
+        # It "Object is of proper type" {
+        #     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+        # }
+
+        # It "HistoricalDate property exists" {
+        #     $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+        #     $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
+        # }
+
+        It "Attribute object is of proper type" {
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
+        }
+
+        It "Changed attribute data" {
+            # $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
+            $diskSmartInfo[0].SmartData[10].DataHistory | Should -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[10].Data | Should -Be 358
+        }
+
+        It "Unchanged attribute data" {
+            # $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
+            $diskSmartInfo[0].SmartData[20].DataHistory | Should -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+        }
+
+        It "Has correct types and properties" {
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+
+            $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].ComputerName | Should -BeNullOrEmpty
+
+            $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+            $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+            $diskSmartInfo[0].psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].HistoryDate | Should -BeNullOrEmpty
+
+            $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+        }
+    }
+
     Context "-UpdateHistory" {
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -66,14 +141,14 @@ Describe "History" {
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
             }
 
-            It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
-            }
+            # It "Object is of proper type" {
+            #     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+            # }
 
-            It "HistoricalDate property exists" {
-                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
-            }
+            # It "HistoricalDate property exists" {
+            #     $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+            #     $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
+            # }
 
             It "Attribute object is of proper type" {
                 $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
@@ -85,8 +160,32 @@ Describe "History" {
             }
 
             It "Unchanged attribute data" {
-                $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
-                $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+                $diskSmartInfo[0].SmartData[20].DataHistory | Should -Be 702
+                $diskSmartInfo[0].SmartData[20].Data | Should -Be 702
+            }
+
+            It "Has correct types and properties" {
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+
+                $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].ComputerName | Should -BeNullOrEmpty
+
+                $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+                $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+                $diskSmartInfo[0].psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].HistoryDate.pstypenames[0] | Should -BeExactly 'System.DateTime'
+
+                $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
             }
         }
 
@@ -141,8 +240,8 @@ Describe "History" {
             }
 
             It "Unchanged attribute data" {
-                $diskSmartInfo[0].SmartData[21].DataHistory | Should -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+                $diskSmartInfo[0].SmartData[20].DataHistory | Should -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData[20].Data | Should -Be 702
             }
         }
     }

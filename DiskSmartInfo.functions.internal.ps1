@@ -75,17 +75,17 @@ function inGetDiskSmartInfo
 
             if ($Session)
             {
-                $hash.Add('ComputerName', $Session.ComputerName)
+                $hash.Add('ComputerName', [string]$Session.ComputerName)
             }
             else
             {
                 $hash.Add('ComputerName', $null)
             }
 
-            $hash.Add('DiskNumber', $diskDrive.Index)
-            $hash.Add('DiskModel', $model)
-            $hash.Add('PNPDeviceId', $pNPDeviceId)
-            $hash.Add('PredictFailure', $failurePredictStatus)
+            $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
+            $hash.Add('DiskModel', [string]$model)
+            $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
+            $hash.Add('PredictFailure', [bool]$failurePredictStatus)
 
             if ($ShowHistory)
             {

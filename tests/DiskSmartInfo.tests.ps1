@@ -45,6 +45,27 @@ Describe "DiskSmartInfo" {
                 $diskSmartInfo.SmartData[13].Data | Should -HaveCount 3
                 $diskSmartInfo.SmartData[13].Data | Should -Be @(47, 14, 39)
             }
+
+            It "Has correct types and properties" {
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+                $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.ComputerName | Should -BeNullOrEmpty
+
+                $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskModel.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskNumber.pstypenames[0] | Should -BeExactly 'System.UInt32'
+
+                $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PNPDeviceId.pstypenames[0] | Should -BeExactly 'System.String'
+
+                $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PredictFailure.pstypenames[0] | Should -BeExactly 'System.Boolean'
+
+                $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+            }
         }
 
         Context "-ShowConverted" {
