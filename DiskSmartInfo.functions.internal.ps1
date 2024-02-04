@@ -477,7 +477,9 @@ function inReportErrors
         $message = "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
         # $exception = [System.Exception]::new($message)
         $exception = [System.Exception]::new($message, $e.Exception)
-        [System.Management.Automation.ErrorRecord]::new($exception, $e.FullyQualifiedErrorId, $e.CategoryInfo.Category, $e.TargetObject)
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $e.FullyQualifiedErrorId, $e.CategoryInfo.Category, $e.TargetObject)
+        # Write-Error -ErrorRecord $errorRecord
+        $PSCmdlet.WriteError($errorRecord)
     }
     foreach ($e in $Script:ErrorAccessingCimSession)
     {
