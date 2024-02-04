@@ -652,9 +652,6 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                 $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
             }
-            # It "Has empty SmartData property" {
-            #     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
-            # }
 
             It "DiskSmartInfo object has correct types and properties" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
@@ -711,9 +708,6 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD1
                 $diskSmartInfo.PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailureTrue_HDD1
             }
-            # It "Has empty SmartData property" {
-            #     $diskSmartInfo.SmartData | Should -BeNullOrEmpty
-            # }
 
             It "DiskSmartInfo object has correct types and properties" {
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'

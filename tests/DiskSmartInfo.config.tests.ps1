@@ -116,10 +116,6 @@ Describe "Config" {
                     $diskSmartInfo[1].SmartData[0].Data | Should -Be 73592
                 }
 
-                # It "Has empty SmartData property" {
-                #     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
-                # }
-
                 It "DiskSmartInfo object has correct types and properties" {
                     $diskSmartInfo[2].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 

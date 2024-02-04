@@ -18,43 +18,15 @@ Describe "History" {
                 $Config.HistoricalDataPath = $TestDrive
             }
 
-            # Get-DiskSmartInfo -UpdateHistory | Out-Null
-
-            # if ($IsCoreCLR)
-            # {
-            #     (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data": 358.0', '"Data": 357.0' | Set-Content -Path 'TestDrive:/localhost.txt'
-            # }
-            # else
-            # {
-            #     (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
-            # }
-
             $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
         }
 
-        # It "Object is of proper type" {
-        #     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
-        # }
-
-        # It "HistoricalDate property exists" {
-        #     $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
-        #     $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
-        # }
-
-        # It "Attribute object is of proper type" {
-        #     $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
-        # }
-
-        It "Changed attribute data" {
-            # $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
+        It "Attribute data" {
             $diskSmartInfo[0].SmartData[10].DataHistory | Should -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[10].Data | Should -Be 358
-        }
+            $diskSmartInfo[0].SmartData[10].Data | Should -Be 358
 
-        It "Unchanged attribute data" {
-            # $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
             $diskSmartInfo[0].SmartData[20].DataHistory | Should -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+            $diskSmartInfo[0].SmartData[20].Data | Should -Be 702
         }
 
         It "DiskSmartInfo object has correct types and properties" {
@@ -199,19 +171,6 @@ Describe "History" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
             }
-
-            # It "Object is of proper type" {
-            #     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
-            # }
-
-            # It "HistoricalDate property exists" {
-            #     $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
-            #     $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
-            # }
-
-            # It "Attribute object is of proper type" {
-            #     $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
-            # }
 
             It "Changed attribute data" {
                 $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
@@ -390,14 +349,14 @@ Describe "History" {
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory -ShowConverted
             }
 
-            # It "Object is of proper type" {
-            #     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
-            # }
+            It "Object is of proper type" {
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+            }
 
-            # It "HistoricalDate property exists" {
-            #     $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
-            #     $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
-            # }
+            It "HistoricalDate property exists" {
+                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].HistoryDate | Should -BeOfType 'System.DateTime'
+            }
 
             It "Changed attribute data" {
                 $diskSmartInfo[0].SmartData[10].DataHistory | Should -Be 357
