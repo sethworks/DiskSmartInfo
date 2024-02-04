@@ -218,35 +218,67 @@ function inOverwriteAttributes
         {
             foreach ($overwriteAttribute in $overwrite.Attributes)
             {
-                $newAttribute = [ordered]@{
-                    AttributeID = $overwriteAttribute.AttributeID
-                    AttributeName = $overwriteAttribute.AttributeName
-                    DataType = $overwriteAttribute.DataType
-                    IsCritical = $false
-                    ConvertScriptBlock = $null
-                }
-
-                if ($overwriteAttribute.Keys -contains 'IsCritical')
-                {
-                    $newAttribute.IsCritical = $overwriteAttribute.IsCritical
-                }
-                if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
-                {
-                    $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
-                }
-
                 if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
                 {
-                    if ($overwriteAttribute.Keys -notcontains 'IsCritical')
-                    {
-                        $newAttribute.IsCritical = $result[$index].IsCritical
+                    $newAttribute = [ordered]@{
+                        AttributeID = $overwriteAttribute.AttributeID
+                        AttributeName = $overwriteAttribute.AttributeName
+                        DataType = $overwriteAttribute.DataType
+                        IsCritical = $result[$index].IsCritical
+                        ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
-                    $result[$index] = $newAttribute
+
+                    if ($overwriteAttribute.Keys -contains 'IsCritical')
+                    {
+                        $newAttribute.IsCritical = $overwriteAttribute.IsCritical
+                    }
+                    if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
+                    {
+                        $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
+                    }
+
+                    # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
+                    # {
+                        # if ($overwriteAttribute.Keys -notcontains 'IsCritical')
+                        # {
+                            # $newAttribute.IsCritical = $result[$index].IsCritical
+                            # }
+                    $result[$index] = [PSCustomObject]$newAttribute
+                            # }
                 }
                 else
                 {
                     $result.Add([PSCustomObject]$overwriteAttribute)
                 }
+                # $newAttribute = [ordered]@{
+                #     AttributeID = $overwriteAttribute.AttributeID
+                #     AttributeName = $overwriteAttribute.AttributeName
+                #     DataType = $overwriteAttribute.DataType
+                #     IsCritical = $false
+                #     ConvertScriptBlock = $null
+                # }
+
+                # if ($overwriteAttribute.Keys -contains 'IsCritical')
+                # {
+                #     $newAttribute.IsCritical = $overwriteAttribute.IsCritical
+                # }
+                # if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
+                # {
+                #     $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
+                # }
+
+                # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
+                # {
+                #     if ($overwriteAttribute.Keys -notcontains 'IsCritical')
+                #     {
+                #         $newAttribute.IsCritical = $result[$index].IsCritical
+                #     }
+                #     $result[$index] = $newAttribute
+                # }
+                # else
+                # {
+                #     $result.Add([PSCustomObject]$overwriteAttribute)
+                # }
             }
             break
         }
