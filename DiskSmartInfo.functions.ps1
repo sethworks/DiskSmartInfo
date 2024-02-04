@@ -10,7 +10,6 @@ function Get-DiskSmartInfo
         # [Parameter(ParameterSetName='CimSession')]
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
-        [Alias('ShowConvertedData')]
         [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
@@ -26,11 +25,8 @@ function Get-DiskSmartInfo
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
-        [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState','QuietIfOK')]
         [switch]$Quiet,
-        [Alias('ShowHistoricalData')]
         [switch]$ShowHistory,
-        [Alias('UpdateHistoricalData')]
         [switch]$UpdateHistory
     )
 
