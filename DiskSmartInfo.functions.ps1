@@ -1,13 +1,10 @@
 function Get-DiskSmartInfo
 {
-    [CmdletBinding(DefaultParameterSetName='ComputerName')]
+    [CmdletBinding(PositionalBinding=$false,DefaultParameterSetName='ComputerName')]
     Param(
-        # [Parameter(Position=0,ParameterSetName='ComputerName')]
-        # [Parameter(Position=0)]
         [Alias('PSComputerName')]
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
-        # [Parameter(ParameterSetName='CimSession')]
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
         [switch]$ShowConverted,
