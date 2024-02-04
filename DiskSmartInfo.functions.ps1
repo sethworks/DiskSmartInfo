@@ -31,7 +31,7 @@ function Get-DiskSmartInfo
     {
         $Script:ErrorCreatingCimSession = @()
         $Script:ErrorAccessingCimSession = @()
-        $Script:ErrorAccessingClass = @()
+        $Script:ErrorAccessingCimClass = @()
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 

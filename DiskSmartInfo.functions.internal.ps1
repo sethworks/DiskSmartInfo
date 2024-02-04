@@ -43,7 +43,7 @@ function inGetDiskSmartInfo
         }
         else
         {
-            $Script:ErrorAccessingClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
+            $Script:ErrorAccessingCimClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
         }
         continue
     }
@@ -485,7 +485,7 @@ function inReportErrors
     {
         Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
     }
-    foreach ($e in $Script:ErrorAccessingClass)
+    foreach ($e in $Script:ErrorAccessingCimClass)
     {
         Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
     }
