@@ -32,7 +32,7 @@ function inGetDiskSmartInfo
     {
         $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
         $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
-        $disksFailurePredictStatus = Get-CimInstance -nam $namespaceWMI -ClassName $classFailurePredictStatus @parameters
+        $disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters
         $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
     }
     catch
