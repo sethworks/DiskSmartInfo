@@ -152,7 +152,7 @@ function Get-DiskSmartInfo
                     $Script:ErrorAccessingCimSession += $scd.ComputerName
                     continue
                 }
-                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
+                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
                 {
                     continue
                 }

@@ -473,7 +473,10 @@ function inReportErrors
     {
         # $e
         # Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
-        $exception = [System.Exception]::new("ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)")
+        # $exception = [System.Exception]::new("ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)")
+        $message = "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
+        # $exception = [System.Exception]::new($message)
+        $exception = [System.Exception]::new($message, $e.Exception)
         [System.Management.Automation.ErrorRecord]::new($exception, $e.FullyQualifiedErrorId, $e.CategoryInfo.Category, $e.TargetObject)
     }
     foreach ($e in $Script:ErrorAccessingCimSession)
