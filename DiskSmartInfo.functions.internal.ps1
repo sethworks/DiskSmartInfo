@@ -202,11 +202,9 @@ function inOverwriteAttributes
 
     $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
-    # foreach ($set in $overwrites)
     foreach ($overwrite in $overwrites)
     {
         $patternMatched = $false
-        # foreach ($modelPattern in $set.ModelPatterns)
         foreach ($modelPattern in $overwrite.ModelPatterns)
         {
             if ($model -match $modelPattern)
@@ -218,51 +216,35 @@ function inOverwriteAttributes
 
         if ($patternMatched)
         {
-            # foreach ($attrib in $overwrite.Attributes)
             foreach ($overwriteAttribute in $overwrite.Attributes)
             {
-                # $newAttrib = [ordered]@{
                 $newAttribute = [ordered]@{
-                    # AttributeID = $attrib.AttributeID
                     AttributeID = $overwriteAttribute.AttributeID
-                    # AttributeName = $attrib.AttributeName
                     AttributeName = $overwriteAttribute.AttributeName
-                    # DataType = $attrib.DataType
                     DataType = $overwriteAttribute.DataType
                     IsCritical = $false
                     ConvertScriptBlock = $null
-                    # BetterValue = ''
-                    # Description = ''
                 }
 
-                # if ($attrib.Keys -contains 'IsCritical')
                 if ($overwriteAttribute.Keys -contains 'IsCritical')
                 {
-                    # $newAttrib.IsCritical = $attrib.IsCritical
                     $newAttribute.IsCritical = $overwriteAttribute.IsCritical
                 }
-                # if ($attrib.Keys -contains 'ConvertScriptBlock')
                 if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
                 {
-                    # $newAttrib.ConvertScriptBlock = $attrib.ConvertScriptBlock
                     $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
                 }
 
-                # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
                 if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
                 {
-                    # if ($attrib.Keys -notcontains 'IsCritical')
                     if ($overwriteAttribute.Keys -notcontains 'IsCritical')
                     {
-                        # $newAttrib.IsCritical = $result[$index].IsCritical
                         $newAttribute.IsCritical = $result[$index].IsCritical
                     }
-                    # $result[$index] = $newAttrib
                     $result[$index] = $newAttribute
                 }
                 else
                 {
-                    # $result.Add([PSCustomObject]$attrib)
                     $result.Add([PSCustomObject]$overwriteAttribute)
                 }
             }
