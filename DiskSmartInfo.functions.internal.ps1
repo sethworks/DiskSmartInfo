@@ -75,17 +75,17 @@ function inGetDiskSmartInfo
 
             if ($Session)
             {
-                $hash.Add('ComputerName', $Session.ComputerName)
+                $hash.Add('ComputerName', [string]$Session.ComputerName)
             }
             else
             {
                 $hash.Add('ComputerName', $null)
             }
 
-            $hash.Add('DiskNumber', $diskDrive.Index)
-            $hash.Add('DiskModel', $model)
-            $hash.Add('PNPDeviceId', $pNPDeviceId)
-            $hash.Add('PredictFailure', $failurePredictStatus)
+            $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
+            $hash.Add('DiskModel', [string]$model)
+            $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
+            $hash.Add('PredictFailure', [bool]$failurePredictStatus)
 
             if ($ShowHistory)
             {
@@ -118,12 +118,12 @@ function inGetDiskSmartInfo
                 (isAttributeRequested -AttributeID $attributeID) -and
                 ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                 {
-                    $attribute.Add("ID", $attributeID)
-                    $attribute.Add("IDHex", $attributeID.ToString("X"))
-                    $attribute.Add("AttributeName", $smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                    $attribute.Add("Threshold", $thresholdsData[$a + 1])
-                    $attribute.Add("Value", $smartData[$a + 3])
-                    $attribute.Add("Worst", $smartData[$a + 4])
+                    $attribute.Add("ID", [byte]$attributeID)
+                    $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
+                    $attribute.Add("AttributeName", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
+                    $attribute.Add("Value", [byte]$smartData[$a + 3])
+                    $attribute.Add("Worst", [byte]$smartData[$a + 4])
                     $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
                     if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
@@ -202,10 +202,10 @@ function inOverwriteAttributes
 
     $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
-    foreach ($set in $overwrites)
+    foreach ($overwrite in $overwrites)
     {
         $patternMatched = $false
-        foreach ($modelPattern in $set.ModelPatterns)
+        foreach ($modelPattern in $overwrite.ModelPatterns)
         {
             if ($model -match $modelPattern)
             {
@@ -216,38 +216,32 @@ function inOverwriteAttributes
 
         if ($patternMatched)
         {
-            foreach ($attrib in $set.Attributes)
+            foreach ($overwriteAttribute in $overwrite.Attributes)
             {
-                $newAttrib = [ordered]@{
-                    AttributeID = $attrib.AttributeID
-                    AttributeName = $attrib.AttributeName
-                    DataType = $attrib.DataType
-                    IsCritical = $false
-                    ConvertScriptBlock = $null
-                    BetterValue = ''
-                    Description = ''
-                }
-
-                if ($attrib.Keys -contains 'IsCritical')
+                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
                 {
-                    $newAttrib.IsCritical = $attrib.IsCritical
-                }
-                if ($attrib.Keys -contains 'ConvertScriptBlock')
-                {
-                    $newAttrib.ConvertScriptBlock = $attrib.ConvertScriptBlock
-                }
-
-                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attrib.AttributeID})) -ge 0)
-                {
-                    if ($attrib.Keys -notcontains 'IsCritical')
-                    {
-                        $newAttrib.IsCritical = $result[$index].IsCritical
+                    $newAttribute = [ordered]@{
+                        AttributeID = $overwriteAttribute.AttributeID
+                        AttributeName = $overwriteAttribute.AttributeName
+                        DataType = $overwriteAttribute.DataType
+                        IsCritical = $result[$index].IsCritical
+                        ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
-                    $result[$index] = $newAttrib
+
+                    if ($overwriteAttribute.Keys -contains 'IsCritical')
+                    {
+                        $newAttribute.IsCritical = $overwriteAttribute.IsCritical
+                    }
+                    if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
+                    {
+                        $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
+                    }
+
+                    $result[$index] = [PSCustomObject]$newAttribute
                 }
                 else
                 {
-                    $result.Add([PSCustomObject]$attrib)
+                    $result.Add([PSCustomObject]$overwriteAttribute)
                 }
             }
             break
@@ -270,7 +264,7 @@ function inGetAttributeData
     {
         $([DataType]::bits48.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 6; $offset++)
@@ -283,7 +277,7 @@ function inGetAttributeData
 
         $([DataType]::bits24.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 3; $offset++)
@@ -296,7 +290,7 @@ function inGetAttributeData
 
         $([DataType]::bits16.value__)
         {
-            $result = 0
+            [long]$result = 0
             $dataStartOffset = $a + 5
 
             for ($offset = 0; $offset -lt 2; $offset++)
@@ -314,7 +308,7 @@ function inGetAttributeData
 
             for ($offset = 9; $offset -ge 5; $offset -= 2)
             {
-                $value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
+                [long]$value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
 
                 if ($value)
                 {
@@ -436,7 +430,7 @@ function inGetHistoricalData
         }
 
         $hostHistoricalData = @{
-            TimeStamp = $timestamp
+            TimeStamp = [datetime]$timestamp
             HistoricalData = @()
         }
 
@@ -445,13 +439,13 @@ function inGetHistoricalData
             $hash = [ordered]@{}
             $attributes = @()
 
-            $hash.Add('PNPDeviceID', $object.PNPDeviceID)
+            $hash.Add('PNPDeviceID', [string]$object.PNPDeviceID)
 
             foreach ($at in $object.SmartData)
             {
                 $attribute = [ordered]@{}
 
-                $attribute.Add('ID', [int]$at.ID)
+                $attribute.Add('ID', [byte]$at.ID)
 
                 if ($at.Data.Count -gt 1)
                 {

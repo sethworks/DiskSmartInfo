@@ -52,6 +52,41 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
+
+        It "DiskSmartInfo object has correct types and properties" {
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+            $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].ComputerName | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskModel | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskNumber | Should -BeOfType 'System.UInt32'
+
+            $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PNPDeviceId | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PredictFailure | Should -BeOfType 'System.Boolean'
+
+            $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
+        }
+
+        It "DiskSmartInfo object is formatted correctly" {
+            $format = $diskSmartInfo[0] | Format-Custom
+
+            $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+            $propertyValues | Should -HaveCount 4
+
+            $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
+            $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
+            $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+            $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
+        }
     }
     Context "ComputerName IP Address" {
 
@@ -557,12 +592,51 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             }
 
             It "HistoricalDate property exists" {
-                $diskSmartInfo[0].HistoryDate | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.HistoryDate | Should -Not -BeNullOrEmpty
             }
 
             It "Attribute data" {
-                $diskSmartInfo[0].SmartData[21].DataHistory | Should -Be 26047
-                $diskSmartInfo[0].SmartData[21].Data | Should -Be 26047
+                $diskSmartInfo.SmartData[20].DataHistory | Should -Be 702
+                $diskSmartInfo.SmartData[20].Data | Should -Be 702
+            }
+
+            It "DiskSmartInfo object has correct types and properties" {
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+
+                $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.ComputerName | Should -BeOfType 'System.String'
+
+                $diskSmartInfo.psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskModel | Should -BeOfType 'System.String'
+
+                $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
+
+                $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
+
+                $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
+
+                $diskSmartInfo.psobject.properties['HistoryDate'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.HistoryDate | Should -BeOfType 'System.DateTime'
+
+                $diskSmartInfo.psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.SmartData | Should -Not -BeNullOrEmpty
+            }
+
+            It "DiskSmartInfo object is formatted correctly" {
+                $format = $diskSmartInfo | Format-Custom
+
+                $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                $propertyValues | Should -HaveCount 5
+
+                $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
+                $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
+                $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+                $propertyValues[3] | Should -BeLikeExactly 'HistoryDate:*'
+                $propertyValues[4] | Should -BeLikeExactly 'SMARTData:*'
             }
         }
     }

@@ -116,8 +116,37 @@ Describe "Config" {
                     $diskSmartInfo[1].SmartData[0].Data | Should -Be 73592
                 }
 
-                It "Has empty SmartData property" {
+                It "DiskSmartInfo object has correct types and properties" {
+                    $diskSmartInfo[2].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+                    $diskSmartInfo[2].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].ComputerName | Should -BeNullOrEmpty
+
+                    $diskSmartInfo[2].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].DiskModel | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo[2].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].DiskNumber | Should -BeOfType 'System.UInt32'
+
+                    $diskSmartInfo[2].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].PNPDeviceId | Should -BeOfType 'System.String'
+
+                    $diskSmartInfo[2].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].PredictFailure | Should -BeOfType 'System.Boolean'
+
+                    $diskSmartInfo[2].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].SmartData | Should -BeNullOrEmpty
+                }
+
+                It "DiskSmartInfo object is formatted correctly" {
+                    $format = $diskSmartInfo[2] | Format-Custom
+
+                    $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+                    $propertyValues | Should -HaveCount 2
+
+                    $propertyValues[0] | Should -BeExactly 'Disk:         2: SSD1'
+                    $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 

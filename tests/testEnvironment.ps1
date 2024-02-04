@@ -126,6 +126,37 @@ $physicalDiskPropertiesSSD1 = @{
     DeviceId = $testData.Index_SSD1
 }
 
+# SSD2
+$diskSmartDataPropertiesSSD2 = @{
+    VendorSpecific = $testData.AtapiSmartData_VendorSpecific_SSD2
+    InstanceName = $testData.InstanceName_SSD2
+}
+
+$diskThresholdsPropertiesSSD2 = @{
+    VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_SSD2
+    InstanceName = $testData.InstanceName_SSD2
+}
+
+$diskFailurePredictStatusPropertiesSSD2 = @{
+    PredictFailure = $testData.FailurePredictStatus_PredictFailure_SSD2
+    InstanceName = $testData.InstanceName_SSD2
+}
+
+$diskDrivePropertiesSSD2 = @{
+    Index = $testData.Index_SSD2
+    PNPDeviceID = $testData.PNPDeviceID_SSD2
+    Model = $testData.Model_SSD2
+    BytesPerSector = $testData.BytesPerSector_SSD2
+}
+
+$diskPropertiesSSD2 = @{
+    Number = $testData.Index_SSD2
+}
+
+$physicalDiskPropertiesSSD2 = @{
+    DeviceId = $testData.Index_SSD2
+}
+
 # HFSSSD1
 $diskSmartDataPropertiesHFSSSD1 = @{
     VendorSpecific = $testData.AtapiSmartData_VendorSpecific_HFSSSD1
@@ -161,33 +192,39 @@ $physicalDiskPropertiesHFSSSDD1 = @{
 $diskSmartDataHDD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHDD1 -ClientOnly
 $diskSmartDataHDD2 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHDD2 -ClientOnly
 $diskSmartDataSSD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesSSD1 -ClientOnly
+$diskSmartDataSSD2 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesSSD2 -ClientOnly
 $diskSmartDataHFSSSD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHFSSSD1 -ClientOnly
 
 $diskThresholdsHDD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD1 -ClientOnly
 $diskThresholdsHDD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD2 -ClientOnly
 $diskThresholdsSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD1 -ClientOnly
+$diskThresholdsSSD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD2 -ClientOnly
 $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
 
 $diskFailurePredictStatusHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHDD1 -ClientOnly
 $diskFailurePredictStatusTrueHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusTruePropertiesHDD1 -ClientOnly
 $diskFailurePredictStatusHDD2 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHDD2 -ClientOnly
 $diskFailurePredictStatusSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesSSD1 -ClientOnly
+$diskFailurePredictStatusSSD2 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesSSD2 -ClientOnly
 $diskFailurePredictStatusHFSSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHFSSSD1 -ClientOnly
 
 $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
 $diskDriveATAHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesATAHDD1 -ClientOnly
 $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD2 -ClientOnly
 $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
+$diskDriveSSD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD2 -ClientOnly
 $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly
 
 $diskHDD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD1 -ClientOnly
 $diskHDD2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD2 -ClientOnly
 $diskSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesSSD1 -ClientOnly
+$diskSSD2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesSSD2 -ClientOnly
 $diskHFSSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHFSSSD1 -ClientOnly
 
 $physicalDiskHDD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD1 -ClientOnly
 $physicalDiskHDD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD2 -ClientOnly
 $physicalDiskSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD1 -ClientOnly
+$physicalDiskSSD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD2 -ClientOnly
 $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
 
 # Remoting
@@ -219,10 +256,10 @@ $diskHost1 | Add-Member -MemberType NoteProperty -Name PSComputerName -Value $co
 $diskHost2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHost2 -ClientOnly
 $diskHost2 | Add-Member -MemberType NoteProperty -Name PSComputerName -Value $computerNames[1] -Force
 
-$PhysicalDiskPropertiesHost1 = @{
+$physicalDiskPropertiesHost1 = @{
     DeviceId = 1
 }
-$PhysicalDiskPropertiesHost2 = @{
+$physicalDiskPropertiesHost2 = @{
     DeviceId = 2
 }
 $physicalDiskHost1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHost1 -ClientOnly
