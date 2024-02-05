@@ -8,6 +8,9 @@ BeforeAll {
 # Skip if remoting is disabled
 $skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
 
+# Skip if WSMan TrustedHosts is not '*'
+$skipIPAddresses = !((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
+
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
     Context "ComputerName" {
@@ -88,7 +91,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
         }
     }
-    Context "ComputerName IP Address" {
+    Context "ComputerName IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -175,7 +178,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
-    Context "ComputerName positional IP Address" {
+    Context "ComputerName positional IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -309,7 +312,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
-    Context "CimSession IP Address" {
+    Context "CimSession IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
