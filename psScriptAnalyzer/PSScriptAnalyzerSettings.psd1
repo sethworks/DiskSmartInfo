@@ -4,6 +4,7 @@
         'PSReviewUnusedParameter',
         'PSAvoidUsingWMICmdlet',
         'PSPossibleIncorrectUsageOfAssignmentOperator',
-        'PSPossibleIncorrectComparisonWithNull'
+        'PSPossibleIncorrectComparisonWithNull',
+        'PSAvoidUsingComputerNameHardcoded'
     )
 }
