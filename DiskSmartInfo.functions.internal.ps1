@@ -28,169 +28,176 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    try
+    # try
+    # {
+    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+        ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
     {
-        $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
-        $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
-        $disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters
-        $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
-    }
-    catch
-    {
-        if ($DebugPreference -eq 'Continue')
-        {
-            $_
-        }
-        else
-        {
-            $Script:ErrorAccessingCimClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
-        }
-        continue
-    }
 
-    if ($ShowHistory)
-    {
-        $hostHistoricalData = inGetHistoricalData -session $Session
-    }
+        # $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
+        # $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
+        # $disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters
+        # $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
+    # }
+    # catch
+    # {
+    #     if ($DebugPreference -eq 'Continue')
+    #     {
+    #         $_
+    #     }
+    #     else
+    #     {
+    #         $Script:ErrorAccessingCimClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
+    #     }
+    #     continue
+    # }
 
-    foreach ($diskSmartData in $disksSmartData)
-    {
-        $smartData = $diskSmartData.VendorSpecific
-        $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
-        $failurePredictStatus = $disksFailurePredictStatus | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName PredictFailure
-
-        $pNPDeviceId = $diskSmartData.InstanceName
-        if ($pNPDeviceId -match '_\d$')
+        if ($ShowHistory)
         {
-            $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+            $hostHistoricalData = inGetHistoricalData -session $Session
         }
 
-        $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
-
-        $model = inTrimDiskDriveModel -Model $diskDrive.Model
-
-        if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
+        foreach ($diskSmartData in $disksSmartData)
         {
-            $hash = [ordered]@{}
+            $smartData = $diskSmartData.VendorSpecific
+            $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
+            $failurePredictStatus = $disksFailurePredictStatus | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName PredictFailure
 
-            if ($Session)
+            $pNPDeviceId = $diskSmartData.InstanceName
+            if ($pNPDeviceId -match '_\d$')
             {
-                $hash.Add('ComputerName', [string]$Session.ComputerName)
-            }
-            else
-            {
-                $hash.Add('ComputerName', $null)
+                $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
             }
 
-            $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
-            $hash.Add('DiskModel', [string]$model)
-            $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
-            $hash.Add('PredictFailure', [bool]$failurePredictStatus)
+            $diskDrive = $diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
 
-            if ($ShowHistory)
+            $model = inTrimDiskDriveModel -Model $diskDrive.Model
+
+            if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
             {
-                if ($hostHistoricalData)
+                $hash = [ordered]@{}
+
+                if ($Session)
                 {
-                    $hash.Add('HistoryDate', [datetime]$hostHistoricalData.TimeStamp)
+                    $hash.Add('ComputerName', [string]$Session.ComputerName)
                 }
                 else
                 {
-                    $hash.Add('HistoryDate', $null)
+                    $hash.Add('ComputerName', $null)
                 }
-            }
 
-            $attributes = @()
+                $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
+                $hash.Add('DiskModel', [string]$model)
+                $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
+                $hash.Add('PredictFailure', [bool]$failurePredictStatus)
 
-            $smartAttributes = inOverwriteAttributes -model $model
-
-            if ($hostHistoricalData)
-            {
-                $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
-            }
-
-            for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
-            {
-                $attribute = [ordered]@{}
-
-                $attributeID = $smartData[$a]
-
-                if ($attributeID -and
-                (isAttributeRequested -AttributeID $attributeID) -and
-                ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
+                if ($ShowHistory)
                 {
-                    $attribute.Add("ID", [byte]$attributeID)
-                    $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
-                    $attribute.Add("AttributeName", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                    $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
-                    $attribute.Add("Value", [byte]$smartData[$a + 3])
-                    $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                    $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
-
-                    if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
+                    if ($hostHistoricalData)
                     {
-                        if ($ShowHistory)
+                        $hash.Add('HistoryDate', [datetime]$hostHistoricalData.TimeStamp)
+                    }
+                    else
+                    {
+                        $hash.Add('HistoryDate', $null)
+                    }
+                }
+
+                $attributes = @()
+
+                $smartAttributes = inOverwriteAttributes -model $model
+
+                if ($hostHistoricalData)
+                {
+                    $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
+                }
+
+                for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+                {
+                    $attribute = [ordered]@{}
+
+                    $attributeID = $smartData[$a]
+
+                    if ($attributeID -and
+                    (isAttributeRequested -AttributeID $attributeID) -and
+                    ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
+                    {
+                        $attribute.Add("ID", [byte]$attributeID)
+                        $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
+                        $attribute.Add("AttributeName", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                        $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
+                        $attribute.Add("Value", [byte]$smartData[$a + 3])
+                        $attribute.Add("Worst", [byte]$smartData[$a + 4])
+                        $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+
+                        if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                         {
-                            if ($hostHistoricalData)
+                            if ($ShowHistory)
                             {
-                                $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
-                                if ($Config.ShowUnchangedHistoricalData -or ($historicalAttributeData -ne $attribute.Data))
+                                if ($hostHistoricalData)
                                 {
-                                    $attribute.Add("DataHistory", $historicalAttributeData)
+                                    $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
+                                    if ($Config.ShowUnchangedHistoricalData -or ($historicalAttributeData -ne $attribute.Data))
+                                    {
+                                        $attribute.Add("DataHistory", $historicalAttributeData)
+                                    }
+                                    else
+                                    {
+                                        $attribute.Add("DataHistory", $null)
+                                    }
                                 }
                                 else
                                 {
                                     $attribute.Add("DataHistory", $null)
                                 }
                             }
-                            else
+                            if ($ShowConverted)
                             {
-                                $attribute.Add("DataHistory", $null)
+                                $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
                             }
-                        }
-                        if ($ShowConverted)
-                        {
-                            $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
-                        }
 
-                        $attributeObject = [PSCustomObject]$attribute
-                        $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+                            $attributeObject = [PSCustomObject]$attribute
+                            $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                        if ($ShowHistory -and $ShowConverted)
-                        {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                            if ($ShowHistory -and $ShowConverted)
+                            {
+                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                            }
+                            elseif ($ShowHistory)
+                            {
+                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
+                            }
+                            elseif ($ShowConverted)
+                            {
+                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
+                            }
+                            $attributes += $attributeObject
                         }
-                        elseif ($ShowHistory)
-                        {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
-                        }
-                        elseif ($ShowConverted)
-                        {
-                            $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
-                        }
-                        $attributes += $attributeObject
                     }
                 }
-            }
 
-            if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
-            {
-                $hash.Add("SmartData", $attributes)
-                $diskSmartInfo = [PSCustomObject]$hash
-                $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
-
-                if ($ShowHistory)
+                if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
                 {
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
-                }
+                    $hash.Add("SmartData", $attributes)
+                    $diskSmartInfo = [PSCustomObject]$hash
+                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
-                $diskSmartInfo
+                    if ($ShowHistory)
+                    {
+                        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
+                    }
+
+                    $diskSmartInfo
+                }
             }
         }
-    }
 
-    if ($UpdateHistory)
-    {
-        inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
+        if ($UpdateHistory)
+        {
+            inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
+        }
     }
 }
 
@@ -469,7 +476,8 @@ function inGetHistoricalData
 
 function inReportErrors
 {
-    foreach ($e in $Script:ErrorCreatingCimSession)
+    # foreach ($e in $Script:ErrorCreatingCimSession)
+    foreach ($e in $Script:CimSessionErrors)
     {
         # $e
         # Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
@@ -481,12 +489,12 @@ function inReportErrors
         # Write-Error -ErrorRecord $errorRecord
         $PSCmdlet.WriteError($errorRecord)
     }
-    foreach ($e in $Script:ErrorAccessingCimSession)
-    {
-        Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
-    }
-    foreach ($e in $Script:ErrorAccessingCimClass)
-    {
-        Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
-    }
+    # foreach ($e in $Script:ErrorAccessingCimSession)
+    # {
+    #     Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
+    # }
+    # foreach ($e in $Script:ErrorAccessingCimClass)
+    # {
+    #     Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
+    # }
 }

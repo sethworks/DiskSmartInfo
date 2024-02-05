@@ -29,9 +29,11 @@ function Get-DiskSmartInfo
 
     begin
     {
-        $Script:ErrorCreatingCimSession = @()
-        $Script:ErrorAccessingCimSession = @()
-        $Script:ErrorAccessingCimClass = @()
+        # $Script:ErrorCreatingCimSession = @()
+        # $Script:ErrorAccessingCimSession = @()
+        # $Script:ErrorAccessingCimClass = @()
+
+        $Script:CimSessionErrors = @()
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
@@ -147,17 +149,22 @@ function Get-DiskSmartInfo
         {
             foreach ($scd in $sessionsComputersDisks)
             {
-                if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
+                # if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
+                # {
+                #     $Script:ErrorAccessingCimSession += $scd.ComputerName
+                #     continue
+                # }
+                # elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
+                # elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
+                # {
+                #     continue
+                # }
+                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
                 {
-                    $Script:ErrorAccessingCimSession += $scd.ComputerName
                     continue
                 }
-                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                {
-                    continue
-                }
-                else
-                {
+                # else
+                # {
                     inGetDiskSmartInfo `
                         -Session $scd.CimSession `
                         -ShowConverted:$ShowConverted `
@@ -168,7 +175,7 @@ function Get-DiskSmartInfo
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
                         -UpdateHistory:$UpdateHistory
-                }
+                # }
             }
         }
         finally
