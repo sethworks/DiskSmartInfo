@@ -28,10 +28,14 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
-        ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
-        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
-        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
+    # if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters @cimErrorParameters) -and
+        # ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+        ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters @cimErrorParameters) -and
+        # ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
+        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters @cimErrorParameters) -and
+        # ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
+        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters @cimErrorParameters))
     {
         if ($ShowHistory)
         {
@@ -455,11 +459,11 @@ function inGetHistoricalData
 
 function inReportErrors
 {
-    foreach ($CimSessionError in $Script:CimSessionErrors)
+    foreach ($cimSessionError in $Script:cimSessionErrors)
     {
-        $message = "ComputerName: ""$($CimSessionError.OriginInfo.PSComputerName)"". $($CimSessionError.Exception.Message)"
-        $exception = [System.Exception]::new($message, $CimSessionError.Exception)
-        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $CimSessionError.FullyQualifiedErrorId, $CimSessionError.CategoryInfo.Category, $CimSessionError.TargetObject)
+        $message = "ComputerName: ""$($cimSessionError.OriginInfo.PSComputerName)"". $($cimSessionError.Exception.Message)"
+        $exception = [System.Exception]::new($message, $cimSessionError.Exception)
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimSessionError.FullyQualifiedErrorId, $cimSessionError.CategoryInfo.Category, $cimSessionError.TargetObject)
         $PSCmdlet.WriteError($errorRecord)
     }
 }

@@ -29,7 +29,12 @@ function Get-DiskSmartInfo
 
     begin
     {
-        $Script:CimSessionErrors = @()
+        $Script:cimSessionErrors = @()
+
+        $Script:cimErrorParameters = @{
+            ErrorVariable = '+Script:CimSessionErrors'
+            ErrorAction = 'SilentlyContinue'
+        }
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
@@ -145,7 +150,8 @@ function Get-DiskSmartInfo
         {
             foreach ($scd in $sessionsComputersDisks)
             {
-                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
+                # if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
+                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName @cimErrorParameters))
                 {
                     continue
                 }
