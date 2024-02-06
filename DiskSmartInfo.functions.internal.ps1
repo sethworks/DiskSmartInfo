@@ -4,7 +4,7 @@ function inGetDiskSmartInfo
         [Microsoft.Management.Infrastructure.CimSession[]]$Session,
         [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
-        [System.Collections.Generic.List[int]]$DiskNumbers,
+        [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [System.Collections.Generic.List[int]]$AttributeIDs,
         [switch]$Quiet,
