@@ -1,4 +1,4 @@
-$overwrites = @(
+$Script:overwrites = @(
     @{Family = 'SK hynix SATA SSDs'
     ModelPatterns = @('^HFS(128|256|512)G39TND-N210A.*', '^HFS(120|250|500)G32TND-N1A2A.*', '^HFS(128|256|512)G32TNF-N3A0A.*')
     Attributes = @(

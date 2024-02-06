@@ -586,7 +586,7 @@ However, some drives will not immediately remap such sectors when written; inste
     }
 )
 
-$descriptions = [System.Collections.Generic.List[PSCustomObject]]::new()
+$Script:descriptions = [System.Collections.Generic.List[PSCustomObject]]::new()
 
 foreach ($descriptionHash in $descriptionsHash)
 {
