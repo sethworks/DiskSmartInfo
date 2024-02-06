@@ -6,7 +6,7 @@ function inGetDiskSmartInfo
         [switch]$CriticalAttributesOnly,
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
-        [System.Collections.Generic.List[int]]$AttributeIDs,
+        [int[]]$AttributeIDs,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory
