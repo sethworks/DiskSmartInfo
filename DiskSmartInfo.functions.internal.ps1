@@ -355,8 +355,6 @@ function inUpdateHistoricalData
 
         $attributes = @()
 
-        # $smartAttributes = inOverwriteAttributes -model $model
-
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
             $attribute = [ordered]@{}
