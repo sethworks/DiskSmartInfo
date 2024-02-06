@@ -136,7 +136,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Converts Temperature Difference" {
-            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly '60 °C'
+            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "60 $([char]0xB0)C"
         }
 
         It "Converts Total LBAs Written" {

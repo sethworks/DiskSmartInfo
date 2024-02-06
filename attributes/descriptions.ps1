@@ -250,7 +250,7 @@ This feature is implemented in most modern Seagate drives and some of Western Di
         AttributeName = 'Temperature Difference'
         IsCritical = $false
         BetterValue = 'Varies'
-        Description = 'Also known as "Airflow Temperature". Value is equal to (100-temp. °C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
+        Description = 'Also known as "Airflow Temperature". Value is equal to (100-temp. $([char]0xB0)C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
     },
     [ordered]@{
         AttributeID = 191

@@ -193,7 +193,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Airflow Temperature Celsius'
         DataType = [DataType]::temperature3
         IsCritical = $false
-        ConvertScriptBlock = {"{0:n0} °C" -f $(100 - $args[0])}
+        ConvertScriptBlock = {"{0:n0} $([char]0xB0)C" -f $(100 - $args[0])}
     },
     [ordered]@{
         AttributeID = 191
