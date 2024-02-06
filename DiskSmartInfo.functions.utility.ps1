@@ -6,22 +6,22 @@ function inComposeAttributeIDs
         [string[]]$AttributeName
         )
 
-    $attributeIDs = @()
+    $attributeIDs = [System.Collections.Generic.List[int]]::new()
 
     foreach ($at in $AttributeID)
     {
-        if ($attributeIDs -notcontains $at)
+        if (-not $attributeIDs.Contains($at))
         {
-            $attributeIDs += $at
+            $attributeIDs.Add($at)
         }
     }
 
     foreach ($at in $AttributeIDHex)
     {
         $value = [convert]::ToInt32($at, 16)
-        if ($attributeIDs -notcontains $value)
+        if (-not $attributeIDs.Contains($value))
         {
-            $attributeIDs += $value
+            $attributeIDs.Add($value)
         }
     }
 
@@ -29,9 +29,9 @@ function inComposeAttributeIDs
     {
         if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
         {
-            if ($attributeIDs -notcontains $value.AttributeID)
+            if (-not $attributeIDs.Contains($value.AttributeID))
             {
-                $attributeIDs += $value.AttributeID
+                $attributeIDs.Add($value.AttributeID)
             }
         }
     }
