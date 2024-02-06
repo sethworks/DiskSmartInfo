@@ -28,32 +28,11 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    # try
-    # {
     if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
         ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
         ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue) -and
         ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
     {
-
-        # $disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters -ErrorAction Stop
-        # $disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters
-        # $disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters
-        # $diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters
-    # }
-    # catch
-    # {
-    #     if ($DebugPreference -eq 'Continue')
-    #     {
-    #         $_
-    #     }
-    #     else
-    #     {
-    #         $Script:ErrorAccessingCimClass += @{ComputerName = $Session.ComputerName; Protocol = $Session.Protocol; ErrorObject = $_}
-    #     }
-    #     continue
-    # }
-
         if ($ShowHistory)
         {
             $hostHistoricalData = inGetHistoricalData -session $Session
@@ -476,29 +455,11 @@ function inGetHistoricalData
 
 function inReportErrors
 {
-    # foreach ($e in $Script:ErrorCreatingCimSession)
-    # foreach ($e in $Script:CimSessionErrors)
     foreach ($CimSessionError in $Script:CimSessionErrors)
     {
-        # $e
-        # Write-Error -Message "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
-        # $exception = [System.Exception]::new("ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)")
-        # $message = "ComputerName: ""$($e.OriginInfo.PSComputerName)"". $($e.Exception.Message)"
         $message = "ComputerName: ""$($CimSessionError.OriginInfo.PSComputerName)"". $($CimSessionError.Exception.Message)"
-        # $exception = [System.Exception]::new($message)
-        # $exception = [System.Exception]::new($message, $e.Exception)
         $exception = [System.Exception]::new($message, $CimSessionError.Exception)
-        # $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $e.FullyQualifiedErrorId, $e.CategoryInfo.Category, $e.TargetObject)
         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $CimSessionError.FullyQualifiedErrorId, $CimSessionError.CategoryInfo.Category, $CimSessionError.TargetObject)
-        # Write-Error -ErrorRecord $errorRecord
         $PSCmdlet.WriteError($errorRecord)
     }
-    # foreach ($e in $Script:ErrorAccessingCimSession)
-    # {
-    #     Write-Error -Message "ComputerName: ""$e"". The WinRM client cannot process the request because the CimSession cannot be accessed."
-    # }
-    # foreach ($e in $Script:ErrorAccessingCimClass)
-    # {
-    #     Write-Error -Message "ComputerName: ""$($e.ComputerName)"", Protocol: $($e.Protocol). $($e.ErrorObject.Exception.Message)"
-    # }
 }
