@@ -355,7 +355,7 @@ function inUpdateHistoricalData
 
         $attributes = @()
 
-        $smartAttributes = inOverwriteAttributes -model $model
+        # $smartAttributes = inOverwriteAttributes -model $model
 
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
@@ -369,7 +369,7 @@ function inUpdateHistoricalData
                 $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
 
                 $attributes += [PSCustomObject]$attribute
-                }
+            }
         }
 
         if ($attributes)
