@@ -150,7 +150,6 @@ function Get-DiskSmartInfo
         {
             foreach ($scd in $sessionsComputersDisks)
             {
-                # if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable +Script:CimSessionErrors -ErrorAction SilentlyContinue))
                 if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName @cimErrorParameters))
                 {
                     continue
