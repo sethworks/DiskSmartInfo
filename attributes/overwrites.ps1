@@ -85,12 +85,14 @@ $overwrites = @(
         [ordered]@{AttributeID = 241
             AttributeName = 'Total Writes GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            # ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 242
             AttributeName = 'Total Reads GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            # ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 243
             AttributeName = 'Total Media Writes'
@@ -99,7 +101,8 @@ $overwrites = @(
         [ordered]@{AttributeID = 249
             AttributeName = 'NAND Writes GiB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            # ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 250
             AttributeName = 'Read Retry Count'

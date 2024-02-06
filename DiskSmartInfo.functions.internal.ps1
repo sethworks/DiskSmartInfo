@@ -315,8 +315,9 @@ function inConvertData
 
     if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
     {
-        $data = $attribute.Data
-        return $convertScriptBlock.Invoke()
+        # $data = $attribute.Data
+        # return $convertScriptBlock.Invoke()
+        return $convertScriptBlock.Invoke($attribute.Data)
     }
     else
     {

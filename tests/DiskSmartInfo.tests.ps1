@@ -348,6 +348,9 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
                 $diskSmartInfo[1].SmartData[28].Data | Should -Be 2596
                 $diskSmartInfo[1].SmartData[28].DataConverted | Should -BeExactly "2.535 TB"
+                $diskSmartInfo[1].SmartData[29].AttributeName | Should -BeExactly "NAND Writes GiB"
+                $diskSmartInfo[1].SmartData[29].Data | Should -Be 1745
+                $diskSmartInfo[1].SmartData[29].DataConverted | Should -BeExactly "1.704 TB"
             }
 
             It "Has default attribute definitions" {
