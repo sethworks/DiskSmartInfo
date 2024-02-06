@@ -25,7 +25,6 @@ $defaultAttributesHash = @(
         AttributeName = 'Spin-Up Time'
         DataType = [DataType]::bits16
         IsCritical = $false
-        # ConvertScriptBlock = {"{0:f3} Sec" -f $($data / 1000)}
         ConvertScriptBlock = {"{0:f3} Sec" -f $($args[0] / 1000)}
     },
     [ordered]@{
@@ -68,7 +67,6 @@ $defaultAttributesHash = @(
         AttributeName = 'Power-On Hours'
         DataType = [DataType]::bits24
         IsCritical = $false
-        # ConvertScriptBlock = {"{0:f} Days" -f $($data / 24)}
         ConvertScriptBlock = {"{0:f} Days" -f $($args[0] / 24)}
     },
     [ordered]@{
@@ -195,7 +193,6 @@ $defaultAttributesHash = @(
         AttributeName = 'Airflow Temperature Celsius'
         DataType = [DataType]::temperature3
         IsCritical = $false
-        # ConvertScriptBlock = {"{0:n0} °C" -f $(100 - $data)}
         ConvertScriptBlock = {"{0:n0} °C" -f $(100 - $args[0])}
     },
     [ordered]@{
@@ -434,7 +431,6 @@ $defaultAttributesHash = @(
         AttributeName = 'Total LBAs Written'
         DataType = [DataType]::bits48
         IsCritical = $false
-        # ConvertScriptBlock = {"{0:f3} TB" -f $($data * $diskDrive.BytesPerSector / 1TB)}
         ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
     },
     [ordered]@{
@@ -442,7 +438,6 @@ $defaultAttributesHash = @(
         AttributeName = 'Total LBAs Read'
         DataType = [DataType]::bits48
         IsCritical = $false
-        # ConvertScriptBlock = {"{0:f3} TB" -f $($data * $diskDrive.BytesPerSector / 1TB)}
         ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
     },
     [ordered]@{
