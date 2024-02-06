@@ -15,6 +15,7 @@ function Deploy-sthModule
     # Copy-Item -Path .\Templates -Exclude __* -Destination $Path -Recurse
     Copy-Item -Path .\attributes -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\functions -Destination $Path -Exclude __* -Recurse
+    Copy-Item -Path .\formats -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\tests -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\en-us -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\ru-ru -Destination $Path -Exclude __* -Recurse
