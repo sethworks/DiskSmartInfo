@@ -29,6 +29,15 @@ function Get-DiskSmartInfo
 
     begin
     {
+        if ($IsLinux -or $IsMacOS)
+        {
+            $message = "Platform is not supported"
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
+            $PSCmdlet.WriteError($errorRecord)
+            break
+        }
+
         $errorParameters = @{
             ErrorVariable = 'cimSessionErrors'
             ErrorAction = 'SilentlyContinue'
