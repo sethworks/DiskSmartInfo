@@ -29,12 +29,6 @@ function Get-DiskSmartInfo
 
     begin
     {
-        # $Script:cimSessionErrors = @()
-
-        # $Script:cimErrorParameters = @{
-        #     ErrorVariable = '+Script:CimSessionErrors'
-        #     ErrorAction = 'SilentlyContinue'
-        # }
         $errorParameters = @{
             ErrorVariable = 'cimSessionErrors'
             ErrorAction = 'SilentlyContinue'
@@ -182,7 +176,5 @@ function Get-DiskSmartInfo
                 }
             }
         }
-
-        # inReportErrors
     }
 }

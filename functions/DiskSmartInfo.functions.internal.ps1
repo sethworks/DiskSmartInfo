@@ -459,17 +459,6 @@ function inGetHistoricalData
     }
 }
 
-# function inReportErrors
-# {
-#     foreach ($cimSessionError in $Script:cimSessionErrors)
-#     {
-#         $message = "ComputerName: ""$($cimSessionError.OriginInfo.PSComputerName)"". $($cimSessionError.Exception.Message)"
-#         $exception = [System.Exception]::new($message, $cimSessionError.Exception)
-#         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimSessionError.FullyQualifiedErrorId, $cimSessionError.CategoryInfo.Category, $cimSessionError.TargetObject)
-#         $PSCmdlet.WriteError($errorRecord)
-#     }
-# }
-
 function inReportErrors
 {
     Param (
