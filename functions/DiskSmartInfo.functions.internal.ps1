@@ -21,6 +21,11 @@ function inGetDiskSmartInfo
     $initialOffset = 2
     $attributeLength = 12
 
+    $errorParameters = @{
+        ErrorVariable = 'cimInstanceErrors'
+        ErrorAction = 'SilentlyContinue'
+    }
+
     $parameters = @{}
 
     if ($Session)
@@ -28,10 +33,10 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters @cimErrorParameters) -and
-        ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters @cimErrorParameters) -and
-        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters @cimErrorParameters) -and
-        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters @cimErrorParameters))
+    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters @errorParameters) -and
+        ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters @errorParameters) -and
+        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters @errorParameters) -and
+        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters @errorParameters))
     {
         if ($ShowHistory)
         {
@@ -177,6 +182,10 @@ function inGetDiskSmartInfo
         {
             inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
         }
+    }
+    else
+    {
+        inReportErrors -CimErrors $cimInstanceErrors
     }
 }
 
@@ -450,13 +459,28 @@ function inGetHistoricalData
     }
 }
 
+# function inReportErrors
+# {
+#     foreach ($cimSessionError in $Script:cimSessionErrors)
+#     {
+#         $message = "ComputerName: ""$($cimSessionError.OriginInfo.PSComputerName)"". $($cimSessionError.Exception.Message)"
+#         $exception = [System.Exception]::new($message, $cimSessionError.Exception)
+#         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimSessionError.FullyQualifiedErrorId, $cimSessionError.CategoryInfo.Category, $cimSessionError.TargetObject)
+#         $PSCmdlet.WriteError($errorRecord)
+#     }
+# }
+
 function inReportErrors
 {
-    foreach ($cimSessionError in $Script:cimSessionErrors)
+    Param (
+        $CimErrors
+    )
+
+    foreach ($cimError in $CimErrors)
     {
-        $message = "ComputerName: ""$($cimSessionError.OriginInfo.PSComputerName)"". $($cimSessionError.Exception.Message)"
-        $exception = [System.Exception]::new($message, $cimSessionError.Exception)
-        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimSessionError.FullyQualifiedErrorId, $cimSessionError.CategoryInfo.Category, $cimSessionError.TargetObject)
+        $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+        $exception = [System.Exception]::new($message, $cimError.Exception)
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimError.FullyQualifiedErrorId, $cimError.CategoryInfo.Category, $cimError.TargetObject)
         $PSCmdlet.WriteError($errorRecord)
     }
 }
