@@ -39,7 +39,25 @@
                 "panel": "dedicated",
                 "showReuseMessage": false,
                 "clear": true
+            }
+        },
+        {
+            "label": "UpdateHelp",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; New-ExternalHelp -Path ./docs/en-us -OutputPath ./en-us -Force; New-ExternalHelp -Path ./docs/ru-ru -OutputPath ./ru-ru -Force",
+            "group": {
+                "kind": "none",
+                "isDefault": true
             },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            }
         }
     ],
     "inputs": [

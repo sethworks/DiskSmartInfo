@@ -8,41 +8,29 @@ schema: 2.0.0
 # Get-DiskSmartAttributeDescription
 
 ## SYNOPSIS
-Gets SMART attributes description
+Returns default SMART attributes description
 
 ## SYNTAX
 
-### AllAttributes (Default)
+### Default
 ```
-Get-DiskSmartAttributeDescription [<CommonParameters>]
-```
-
-### AttributeID
-```
-Get-DiskSmartAttributeDescription [[-AttributeID] <Int32>] [<CommonParameters>]
-```
-
-### AttributeIDHex
-```
-Get-DiskSmartAttributeDescription [-AttributeIDHex <String>] [<CommonParameters>]
-```
-
-### CriticalOnly
-```
-Get-DiskSmartAttributeDescription [-CriticalOnly] [<CommonParameters>]
+Get-DiskSmartAttributeDescription [[-AttributeID] <Int32[]>] [-AttributeIDHex <String[]>]
+ [-AttributeIDHex <String[]>] [-CriticalOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Cmdlet gets SMART (Self-Monitoring, Analysis and Reporting Technology) attributes description
+Cmdlet returns default SMART (Self-Monitoring, Analysis and Reporting Technology) attributes description
 
 ## PARAMETERS
 
 ### -AttributeID
 Specifies attribute id.
 
+The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
 ```yaml
-Type: Int32
-Parameter Sets: AttributeID
+Type: Int32[]
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -55,9 +43,29 @@ Accept wildcard characters: False
 ### -AttributeIDHex
 Specifies attribute id in hexadecimal.
 
+The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
 ```yaml
-Type: String
-Parameter Sets: AttributeIDHex
+Type: String[]
+Parameter Sets: Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeName
+Specifies attribute name.
+
+The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
+This parameter supports autocompletion.
+```yaml
+Type: String[]
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -70,9 +78,11 @@ Accept wildcard characters: False
 ### -CriticalOnly
 Displays critical attributes only.
 
+If any of the attribute parameters are used, the result includes only critical attributes from specified.
+
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CriticalOnly
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -160,7 +170,30 @@ Description    : Indicates the device temperature, if the appropriate sensor is 
 
 The command gets description for attribute with IDHex C2.
 
-### Example 5: Get critical attributes description
+### Example 5: Get attribute description by Name
+```powershell
+Get-DiskSmartAttributeDescription -AttributeName 'Throughput Performance', 'Temperature Celsius'
+```
+
+```
+AttributeID    : 2
+AttributeIDHex : 2
+AttributeName  : Throughput Performance
+IsCritical     : False
+BetterValue    : High
+Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.
+
+AttributeID    : 194
+AttributeIDHex : C2
+AttributeName  : Temperature
+IsCritical     : False
+BetterValue    : Low
+Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
+```
+
+The command gets description for attributes with specified names.
+
+### Example 6: Get critical attributes description
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
@@ -185,6 +218,22 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 
 The command gets description for critical SMART attributes.
 
+### Example 7: Get critical attributes description from specified
+```powershell
+Get-DiskSmartAttributeDescription -AttributeID (1..5) -CriticalOnly
+```
+
+```
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+BetterValue    :
+IsCritical     : True
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+```
+
+The command gets description for critical SMART attributes from specified.
+
 ## INPUTS
 
 ### None
@@ -192,6 +241,7 @@ The command gets description for critical SMART attributes.
 ## OUTPUTS
 
 ### System.Object
+
 ## NOTES
 
 ## RELATED LINKS
