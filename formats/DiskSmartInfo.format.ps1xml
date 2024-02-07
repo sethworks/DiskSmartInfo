@@ -11,7 +11,9 @@
                                 <ItemSelectionCondition>
                                     <PropertyName>ComputerName</PropertyName>
                                 </ItemSelectionCondition>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)ComputerName:$($PSStyle.Reset) $($PSItem.ComputerName)`n"</ScriptBlock>
+                                <ScriptBlock>
+                                    "$($PSStyle.Formatting.FormatAccent)ComputerName:$($PSStyle.Reset) $($PSItem.ComputerName)`n"
+                                </ScriptBlock>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
@@ -25,7 +27,9 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)HistoryDate:$($PSStyle.Reset)  $($PSItem.HistoryDate)"</ScriptBlock>
+                                <ScriptBlock>
+                                    "$($PSStyle.Formatting.FormatAccent)HistoryDate:$($PSStyle.Reset)  $($PSItem.HistoryDate)"
+                                </ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>
                         </CustomItem>
@@ -40,18 +44,24 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)Disk:$($PSStyle.Reset)         $($PSItem.DiskNumber): $($PSItem.DiskModel)"</ScriptBlock>
+                                <ScriptBlock>
+                                    "$($PSStyle.Formatting.FormatAccent)Disk:$($PSStyle.Reset)         $($PSItem.DiskNumber): $($PSItem.DiskModel)"
+                                </ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>
                             <ExpressionBinding>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)PNPDeviceId:$($PSStyle.Reset)  $($PSItem.PNPDeviceId)"</ScriptBlock>
+                                <ScriptBlock>
+                                    "$($PSStyle.Formatting.FormatAccent)PNPDeviceId:$($PSStyle.Reset)  $($PSItem.PNPDeviceId)"
+                                </ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>
                             <ExpressionBinding>
                                 <ItemSelectionCondition>
                                     <PropertyName>PredictFailure</PropertyName>
                                 </ItemSelectionCondition>
-                                <ScriptBlock>"$($PSStyle.Formatting.FormatAccent)Failure:$($PSStyle.Formatting.Error)      $($PSItem.PredictFailure)$($PSStyle.Reset)`n"</ScriptBlock>
+                                <ScriptBlock>
+                                    "$($PSStyle.Formatting.FormatAccent)Failure:$($PSStyle.Formatting.Error)      $($PSItem.PredictFailure)$($PSStyle.Reset)`n"
+                                </ScriptBlock>
                             </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
@@ -68,7 +78,15 @@
                                 <ItemSelectionCondition>
                                     <PropertyName>SmartData</PropertyName>
                                 </ItemSelectionCondition>
-                                <ScriptBlock>if ($PSStyle) {$t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi'}; $text = $PSItem.SmartData | Format-Table | Out-String; if ($PSStyle) {$PSStyle.OutputRendering = $t}; $text.Substring(0,$text.Length-2).Replace("`r`n", "`r`n              ").Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").TrimEnd(' ')</ScriptBlock>
+                                <ScriptBlock>
+                                    if ($PSStyle) { $t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi' }
+                                    $text = $PSItem.SmartData | Format-Table | Out-String
+                                    if ($PSStyle) { $PSStyle.OutputRendering = $t }
+                                    $text.Substring(0,$text.Length-2).
+                                        Replace("`r`n", "`r`n              ").
+                                        Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
+                                        TrimEnd(' ')
+                                </ScriptBlock>
                              </ExpressionBinding>
                         </CustomItem>
                     </CustomEntry>
