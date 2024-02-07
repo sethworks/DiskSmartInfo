@@ -30,7 +30,7 @@ The result is cumulative and includes all attributes specified in -AttributeID, 
 
 ```yaml
 Type: Int32[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -47,7 +47,7 @@ The result is cumulative and includes all attributes specified in -AttributeID, 
 
 ```yaml
 Type: String[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -66,7 +66,7 @@ This parameter supports autocompletion.
 
 ```yaml
 Type: String[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -83,7 +83,7 @@ If any of the attribute parameters are used, the result includes only critical a
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False

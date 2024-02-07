@@ -35,12 +35,12 @@ Get-DiskSmartInfo -CimSession <String[]> [-ShowConverted] [-CriticalAttributesOn
 ```yaml
 Type: String[]
 Parameter Sets: ComputerName
-Aliases:
+Aliases: PSComputerName
 
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
@@ -57,7 +57,7 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 

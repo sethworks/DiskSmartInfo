@@ -30,7 +30,7 @@ Get-DiskSmartAttributeDescription [[-AttributeID] <Int32[]>] [-AttributeIDHex <S
 
 ```yaml
 Type: Int32[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -47,7 +47,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -66,7 +66,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: String[]
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -84,7 +84,7 @@ Accept wildcard characters: False
 
 ```yaml
 Type: SwitchParameter
-Parameter Sets: Default
+Parameter Sets: (All)
 Aliases:
 
 Required: False

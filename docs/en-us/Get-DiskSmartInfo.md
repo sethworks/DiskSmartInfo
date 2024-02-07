@@ -30,22 +30,22 @@ Cmdlet gets disk SMART (Self-Monitoring, Analysis and Reporting Technology) info
 ## PARAMETERS
 
 ### -ComputerName
-Specifies computer names to get data.
+Specifies computer names to query.
 
 ```yaml
 Type: String[]
 Parameter Sets: ComputerName
-Aliases:
+Aliases: PSComputerName
 
 Required: False
 Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
 ### -CimSession
-Specifies CimSessions to get data.
+Specifies CimSessions to query.
 
 You can use both WSMAN and DCOM types of sessions.
 
@@ -57,18 +57,17 @@ Aliases:
 Required: False
 Position: Named
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
 ### -ShowConverted
 Adds converted data for some of the attributes.
 
-Such attributes are: "Spin-Up Time" (displays value in seconds),
-"Power-On Hours" (displays value in days),
-"Temperature Difference" (shows actual temperature),
-"Total LBAs Written" (shows value in Tb),
-and "Total LBAs Read" (shows value in Tb).
+These conversions are defined as ConvertScriptBlock property of attributes, listed in
+attributes/default.ps1 and attributes/proprietary.ps1 files.
+
+For more information, see about_DiskSmartInfo_attributes.
 
 ```yaml
 Type: SwitchParameter
@@ -85,8 +84,10 @@ Accept wildcard characters: False
 ### -CriticalAttributesOnly
 Displays only critical attributes.
 
-You can get the list of such attributes by using the Get-DiskSmartAttributeDescription -CriticalOnly
-command.
+This is defined by IsCritical property of attributes, listed in
+attributes/default.ps1 and attributes/proprietary.ps1 files.
+
+For more information, see about_DiskSmartInfo_attributes.
 
 ```yaml
 Type: SwitchParameter
@@ -101,12 +102,14 @@ Accept wildcard characters: False
 ```
 
 ### -Quiet
-Displays only attributes, whose value is in Warning or Critical state.
+Displays only those attributes, that are critical and their Data is greater than 0,
+or that are non-critical and their Value is less or equal to their Threshold.
 
-If attribute if critical, it is shown, if its Data greater than 0.
-If attribute is not critical, it is shown, if its Value is less or equal to its threshold.
+If there are no such an attributes for a disk, that disk is not shown.
 
-If disk does not have attributes with values in Warning or Critical state, it is not shown.
+It can be changed by DiskSmartInfo config parameters.
+
+For more inforrmation, see about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter
