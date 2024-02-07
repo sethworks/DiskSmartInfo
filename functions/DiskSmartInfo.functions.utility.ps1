@@ -101,7 +101,7 @@ function inComposeHistoricalDataFileName
         }
     }
 
-    if (!(Test-Path -Path $filepath))
+    if (-not (Test-Path -Path $filepath))
     {
         New-Item -ItemType Directory -Path $filepath | Out-Null
     }

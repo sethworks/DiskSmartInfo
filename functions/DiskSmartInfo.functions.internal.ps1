@@ -59,7 +59,7 @@ function inGetDiskSmartInfo
 
             $model = inTrimDiskDriveModel -Model $diskDrive.Model
 
-            if ((!$DiskNumbers.Count -and !$DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
+            if ((-not $DiskNumbers.Count -and -not $DiskModels.Count) -or (isDiskNumberMatched -Index $diskDrive.Index) -or (isDiskModelMatched -Model $model))
             {
                 $hash = [ordered]@{}
 

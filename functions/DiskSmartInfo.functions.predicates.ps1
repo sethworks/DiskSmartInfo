@@ -20,7 +20,7 @@ function isAttributeRequested
         [int]$AttributeID
     )
 
-    if (!$attributeIDs.Count -or $AttributeIDs -contains $AttributeID)
+    if (-not $attributeIDs.Count -or $AttributeIDs -contains $AttributeID)
     {
         return $true
     }

@@ -6,10 +6,10 @@ BeforeAll {
 }
 
 # Skip if remoting is disabled
-$skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
+$skipRemoting = -not (Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
 
 # Skip if WSMan TrustedHosts is not '*'
-$skipIPAddresses = !((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
+$skipIPAddresses = -not ((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
 
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
