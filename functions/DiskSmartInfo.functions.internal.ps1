@@ -197,10 +197,10 @@ function inOverwriteAttributes
 
     $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
-    foreach ($overwrite in $overwrites)
+    foreach ($proprietary in $proprietaryAttributes)
     {
         $patternMatched = $false
-        foreach ($modelPattern in $overwrite.ModelPatterns)
+        foreach ($modelPattern in $proprietary.ModelPatterns)
         {
             if ($model -match $modelPattern)
             {
@@ -211,32 +211,32 @@ function inOverwriteAttributes
 
         if ($patternMatched)
         {
-            foreach ($overwriteAttribute in $overwrite.Attributes)
+            foreach ($attribute in $proprietary.Attributes)
             {
-                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
+                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
                 {
                     $newAttribute = [ordered]@{
-                        AttributeID = $overwriteAttribute.AttributeID
-                        AttributeName = $overwriteAttribute.AttributeName
-                        DataType = $overwriteAttribute.DataType
+                        AttributeID = $attribute.AttributeID
+                        AttributeName = $attribute.AttributeName
+                        DataType = $attribute.DataType
                         IsCritical = $result[$index].IsCritical
                         ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
 
-                    if ($overwriteAttribute.Keys -contains 'IsCritical')
+                    if ($attribute.Keys -contains 'IsCritical')
                     {
-                        $newAttribute.IsCritical = $overwriteAttribute.IsCritical
+                        $newAttribute.IsCritical = $attribute.IsCritical
                     }
-                    if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
+                    if ($attribute.Keys -contains 'ConvertScriptBlock')
                     {
-                        $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
+                        $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
                     }
 
                     $result[$index] = [PSCustomObject]$newAttribute
                 }
                 else
                 {
-                    $result.Add([PSCustomObject]$overwriteAttribute)
+                    $result.Add([PSCustomObject]$attribute)
                 }
             }
             break

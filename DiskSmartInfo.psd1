@@ -66,7 +66,7 @@ NestedModules = @('functions/DiskSmartInfo.completers.ps1',
                   'functions/DiskSmartInfo.functions.utility.ps1',
                   'functions/DiskSmartInfo.functions.predicates.ps1',
                   'attributes/default.ps1',
-                  'attributes/overwrites.ps1',
+                  'attributes/proprietary.ps1',
                   'attributes/descriptions.ps1')
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
@@ -99,7 +99,7 @@ FileList = 'DiskSmartInfo.psd1',
            'formats/DiskSmartInfo.format.ps1xml',
            'formats/DiskSmartAttribute.format.ps1xml',
            'attributes/default.ps1',
-           'attributes/overwrites.ps1',
+           'attributes/proprietary.ps1',
            'attributes/descriptions.ps1'
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.

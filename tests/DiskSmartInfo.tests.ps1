@@ -402,7 +402,7 @@ Describe "Get-DiskSmartInfo" {
                     mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                     InModuleScope DiskSmartInfo {
-                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $false)
+                        $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $false)
                     }
 
                     $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
@@ -410,7 +410,7 @@ Describe "Get-DiskSmartInfo" {
 
                 AfterAll {
                     InModuleScope DiskSmartInfo {
-                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
+                        $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
                     }
                 }
 
@@ -433,7 +433,7 @@ Describe "Get-DiskSmartInfo" {
 
                     InModuleScope DiskSmartInfo {
                         $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $false
-                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $true)
+                        $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $true)
                     }
 
                     $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
@@ -442,7 +442,7 @@ Describe "Get-DiskSmartInfo" {
                 AfterAll {
                     InModuleScope DiskSmartInfo {
                         $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $true
-                        $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
+                        $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
                     }
                 }
 
