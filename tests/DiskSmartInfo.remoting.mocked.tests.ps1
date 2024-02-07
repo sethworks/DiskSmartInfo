@@ -92,6 +92,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
         }
     }
+
     Context "ComputerName IP Address" {
 
         BeforeAll {
@@ -142,6 +143,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "ComputerName positional" {
 
         BeforeAll {
@@ -192,6 +194,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "ComputerName positional IP Address" {
 
         BeforeAll {
@@ -242,6 +245,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "ComputerName pipeline" {
 
         BeforeAll {
@@ -292,6 +296,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "CimSession" {
 
         BeforeAll {
@@ -339,6 +344,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "CimSession IP Address" {
 
         BeforeAll {
@@ -386,6 +392,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "CimSession pipeline" {
 
         BeforeAll {
@@ -433,6 +440,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "Win32_DiskDrive pipeline" {
 
         BeforeAll {
@@ -485,6 +493,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             }
         }
     }
+
     Context "MSFT_Disk pipeline" {
 
         BeforeAll {
@@ -537,6 +546,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             }
         }
     }
+
     Context "MSFT_PhysicalDisk pipeline" {
 
         BeforeAll {
@@ -593,6 +603,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
     Context "History ComputerName" {
 
         Context "-UpdateHistory" {
+
             BeforeAll {
                 $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]}
                 mock New-CimSession -MockWith { $cimSessionHost1 } -ModuleName DiskSmartInfo
@@ -614,6 +625,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
             It "Historical data file exists" {
                 $filepath | Should -Exist
             }
+
             It "Historical data file contains proper data" {
                 if ($IsCoreCLR)
                 {
@@ -627,6 +639,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         }
 
         Context "-ShowHistory" {
+
             BeforeAll {
                 $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]}
                 mock New-CimSession -MockWith { $cimSessionHost1 } -ModuleName DiskSmartInfo

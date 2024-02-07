@@ -10,6 +10,7 @@ Describe "Config" {
     Context "Suppress empty SmartData" {
 
         Context "SuppressEmptySmartData = `$true" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -22,6 +23,7 @@ Describe "Config" {
             }
 
             Context "AttributeID parameter results depend on SuppressEmptySmartData" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
                 }
@@ -30,6 +32,7 @@ Describe "Config" {
                     $diskSmartInfo | Should -HaveCount 2
                     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
+
                 It "Has SmartData property with DiskSmartAttribute objects" {
                     $diskSmartInfo[0].SmartData | Should -HaveCount 2
                     $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
@@ -50,6 +53,7 @@ Describe "Config" {
             }
 
             Context "Quiet parameter results do not depend on SuppressEmptySmartData" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -Quiet
                 }
@@ -60,10 +64,12 @@ Describe "Config" {
                     $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
+
                 It "Has SmartData property with 3 DiskSmartAttribute objects" {
                     $diskSmartInfo.SmartData | Should -HaveCount 3
                     $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
                 }
+
                 It "Consists of attributes in Warning or Critical state only" {
                     $diskSmartInfo.SmartData.Id | Should -Be @(3, 197, 198)
                     $diskSmartInfo.SmartData.Data | Should -Be @(6825, 20, 20)
@@ -72,6 +78,7 @@ Describe "Config" {
         }
 
         Context "SuppressEmptySmartData = `$false" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -90,6 +97,7 @@ Describe "Config" {
             }
 
             Context "AttributeID parameter results depend on SuppressEmptySmartData" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
                 }
@@ -98,6 +106,7 @@ Describe "Config" {
                     $diskSmartInfo | Should -HaveCount 3
                     $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
+
                 It "Has SmartData property with DiskSmartAttribute objects" {
                     $diskSmartInfo[0].SmartData | Should -HaveCount 2
                     $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
@@ -151,6 +160,7 @@ Describe "Config" {
             }
 
             Context "Quiet parameter results not depend on SuppressEmptySmartData" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -Quiet
                 }
@@ -159,10 +169,12 @@ Describe "Config" {
                     $diskSmartInfo | Should -HaveCount 1
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
+
                 It "Has SmartData property with 3 DiskSmartAttribute objects" {
                     $diskSmartInfo.SmartData | Should -HaveCount 3
                     $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
                 }
+
                 It "Consists of attributes in Warning or Critical state only" {
                     $diskSmartInfo.SmartData.Id | Should -Be @(3, 197, 198)
                     $diskSmartInfo.SmartData.Data | Should -Be @(6825, 20, 20)
@@ -174,6 +186,7 @@ Describe "Config" {
     Context "Trim Win32_DiskDrive Model property" {
 
         Context "TrimDiskDriveModel = `$true" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -186,6 +199,7 @@ Describe "Config" {
             }
 
             Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
                 }
@@ -203,6 +217,7 @@ Describe "Config" {
         }
 
         Context "TrimDiskDriveModel = `$false" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -221,6 +236,7 @@ Describe "Config" {
             }
 
             Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
+
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
                 }

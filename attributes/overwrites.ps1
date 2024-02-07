@@ -1,4 +1,4 @@
-$overwrites = @(
+$Script:overwrites = @(
     @{Family = 'SK hynix SATA SSDs'
     ModelPatterns = @('^HFS(128|256|512)G39TND-N210A.*', '^HFS(120|250|500)G32TND-N1A2A.*', '^HFS(128|256|512)G32TNF-N3A0A.*')
     Attributes = @(
@@ -85,12 +85,12 @@ $overwrites = @(
         [ordered]@{AttributeID = 241
             AttributeName = 'Total Writes GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 242
             AttributeName = 'Total Reads GB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 243
             AttributeName = 'Total Media Writes'
@@ -99,7 +99,7 @@ $overwrites = @(
         [ordered]@{AttributeID = 249
             AttributeName = 'NAND Writes GiB'
             DataType = [DataType]::bits48
-            ConvertScriptBlock = {"{0:f3} TB" -f $($data / 1KB)}
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
         },
         [ordered]@{AttributeID = 250
             AttributeName = 'Read Retry Count'

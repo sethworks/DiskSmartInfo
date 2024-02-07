@@ -1,8 +1,6 @@
 BeforeAll {
     Remove-Module -Name DiskSmartInfo -Force -ErrorAction SilentlyContinue
     Import-Module -Name "$PSScriptRoot\..\DiskSmartInfo.psd1"
-
-    . $PSScriptRoot\testEnvironment.ps1
 }
 
 Describe "Get-DiskSmartAttributeDescription" {
@@ -29,6 +27,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeID" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 190
         }
@@ -39,6 +38,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeID without parameter name" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription 190
         }
@@ -49,6 +49,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeIDHex" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeIDHex C1
         }
@@ -59,6 +60,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeName" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName 'Power-On Hours'
         }
@@ -69,6 +71,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-CriticalOnly" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -CriticalOnly
         }
@@ -83,6 +86,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeID -AttributeIDHex -AttributeName" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 1, 2 -AttributeIDHex 'A', 'C8' -AttributeName 'Soft ECC correction', 'Offline Seek Performance'
         }
@@ -90,6 +94,7 @@ Describe "Get-DiskSmartAttributeDescription" {
         It "Has correct results count" {
             $diskSmartAttributeDescription | Should -HaveCount 6
         }
+
         It "Has correct attributes" {
             $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
             $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
@@ -101,6 +106,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeID -AttributeIDHex -AttributeName without parameter names" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription 1, 2 'A', 'C8' 'Soft ECC correction', 'Offline Seek Performance'
         }
@@ -108,6 +114,7 @@ Describe "Get-DiskSmartAttributeDescription" {
         It "Has correct results count" {
             $diskSmartAttributeDescription | Should -HaveCount 6
         }
+
         It "Has correct attributes" {
             $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
             $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
@@ -119,6 +126,7 @@ Describe "Get-DiskSmartAttributeDescription" {
     }
 
     Context "-AttributeID -AttributeIDHex -AttributeName -CriticalOnly" {
+
         BeforeAll {
             $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 1, 2 -AttributeIDHex 'A', 'C8' -AttributeName 'Soft ECC correction', 'Offline Seek Performance' -CriticalOnly
         }
@@ -126,6 +134,7 @@ Describe "Get-DiskSmartAttributeDescription" {
         It "Has correct results count" {
             $diskSmartAttributeDescription | Should -HaveCount 1
         }
+
         It "Has correct attributes" {
             $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Spin Retry Count'
         }

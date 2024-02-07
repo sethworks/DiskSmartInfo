@@ -1,2 +1,7 @@
 $PesterConfiguration.CodeCoverage.Enabled = $true
-$PesterConfiguration.CodeCoverage.Path = 'DiskSmartInfo.functions.ps1'
+$PesterConfiguration.CodeCoverage.Path = 'functions/DiskSmartInfo.completers.ps1',
+                                         'functions/DiskSmartInfo.functions.ps1',
+                                         'functions/DiskSmartAttributeDescription.functions.ps1',
+                                         'functions/DiskSmartInfo.functions.internal.ps1',
+                                         'functions/DiskSmartInfo.functions.utility.ps1',
+                                         'functions/DiskSmartInfo.functions.predicates.ps1'

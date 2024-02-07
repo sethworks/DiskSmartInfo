@@ -8,6 +8,7 @@ BeforeAll {
 Describe "Get-DiskSmartInfo" {
 
     Context "Without parameters" {
+
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -119,6 +120,7 @@ Describe "Get-DiskSmartInfo" {
     }
 
     Context "-ShowConverted" {
+
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -136,7 +138,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Converts Temperature Difference" {
-            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly '60 °C'
+            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "60 $([char]0xB0)C"
         }
 
         It "Converts Total LBAs Written" {
@@ -194,6 +196,7 @@ Describe "Get-DiskSmartInfo" {
     }
 
     Context "-CriticalAttributesOnly" {
+
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -213,6 +216,7 @@ Describe "Get-DiskSmartInfo" {
     }
 
     Context "-Quiet" {
+
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -238,6 +242,7 @@ Describe "Get-DiskSmartInfo" {
     }
 
     Context "-CriticalAttributesOnly -Quiet" {
+
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -297,6 +302,8 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
                 $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
                 $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
+                $diskSmartInfo[1].SmartData[29].ID | Should -Be 249
+                $diskSmartInfo[1].SmartData[29].AttributeName | Should -BeExactly "NAND Writes GiB"
             }
 
             It "Has default attribute definitions" {
@@ -309,6 +316,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Converted data for overwritten attributes" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1, $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -348,6 +356,9 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
                 $diskSmartInfo[1].SmartData[28].Data | Should -Be 2596
                 $diskSmartInfo[1].SmartData[28].DataConverted | Should -BeExactly "2.535 TB"
+                $diskSmartInfo[1].SmartData[29].AttributeName | Should -BeExactly "NAND Writes GiB"
+                $diskSmartInfo[1].SmartData[29].Data | Should -Be 1745
+                $diskSmartInfo[1].SmartData[29].DataConverted | Should -BeExactly "1.704 TB"
             }
 
             It "Has default attribute definitions" {
@@ -364,7 +375,9 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "IsCritical property for overwritten attributes" {
+
             Context "Default attributes" {
+
                 BeforeAll {
                     mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                     mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -381,6 +394,7 @@ Describe "Get-DiskSmartInfo" {
             }
 
             Context "Overwrite attributes IsCritical = `$false" {
+
                 BeforeAll {
                     mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                     mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -393,11 +407,13 @@ Describe "Get-DiskSmartInfo" {
 
                     $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
                 }
+
                 AfterAll {
                     InModuleScope DiskSmartInfo {
                         $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
                     }
                 }
+
                 It "Update IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 5
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 184
@@ -408,6 +424,7 @@ Describe "Get-DiskSmartInfo" {
             }
 
             Context "Overwrite attributes IsCritical = `$true" {
+
                 BeforeAll {
                     mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                     mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -421,12 +438,14 @@ Describe "Get-DiskSmartInfo" {
 
                     $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
                 }
+
                 AfterAll {
                     InModuleScope DiskSmartInfo {
                         $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $true
                         $overwrites.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Remove("IsCritical")
                     }
                 }
+
                 It "Update IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 6
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
@@ -439,6 +458,7 @@ Describe "Get-DiskSmartInfo" {
     Context "Select attributes" {
 
         Context "AttributeID" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -447,6 +467,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -AttributeID (1..10)
             }
+
             It "Has requested attributes" {
                 $diskSmartInfo.SmartData | Should -HaveCount 9
                 $diskSmartInfo.SmartData[0].ID | Should -Be 1
@@ -455,6 +476,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "AttributeIDHex" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -472,6 +494,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "AttributeName" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -489,6 +512,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Attribute parameters" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -511,6 +535,7 @@ Describe "Get-DiskSmartInfo" {
     Context "Select disks" {
 
         Context "DiskNumber" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -519,6 +544,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -DiskNumber 0, 2
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -531,6 +557,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Pipeline Win32_DiskDrive" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -539,6 +566,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = $diskDriveHDD1, $diskDriveSSD1 | Get-DiskSmartInfo
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -551,6 +579,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Pipeline MSFT_Disk" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -559,6 +588,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = $diskHDD1, $diskSSD1 | Get-DiskSmartInfo
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -571,6 +601,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Pipeline MSFT_PhysicalDisk" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -579,6 +610,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = $physicalDiskHDD1, $physicalDiskSSD1 | Get-DiskSmartInfo
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -591,6 +623,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "DiskModel" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -599,6 +632,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -DiskModel "HDD*"
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -611,6 +645,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "DiskNumber and DiskModel" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -619,6 +654,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -DiskNumber 0 -DiskModel "SSD1"
             }
+
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
@@ -634,6 +670,7 @@ Describe "Get-DiskSmartInfo" {
     Context "PredictFailure property" {
 
         Context "Filled SmartData property" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -642,10 +679,12 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo
             }
+
             It "Returns DiskSmartInfo object" {
                 $diskSmartInfo | Should -HaveCount 1
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
+
             It "Has DiskSmartInfo object properties" {
                 $diskSmartInfo.DiskNumber | Should -BeExactly $testData.Index_HDD1
                 $diskSmartInfo.DiskModel | Should -BeExactly $testData.Model_HDD1
@@ -690,6 +729,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "Empty SmartData property" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -698,10 +738,12 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -AttributeID 14
             }
+
             It "Returns DiskSmartInfo object" {
                 $diskSmartInfo | Should -HaveCount 1
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
             }
+
             It "Has DiskSmartInfo object properties" {
                 $diskSmartInfo.DiskNumber | Should -BeExactly $testData.Index_HDD1
                 $diskSmartInfo.DiskModel | Should -BeExactly $testData.Model_HDD1
@@ -745,6 +787,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         Context "-Quiet" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -753,9 +796,11 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo = Get-DiskSmartInfo -Quiet
             }
+
             It "Returns DiskSmartInfo objects" {
                 $diskSmartInfo | Should -HaveCount 2
             }
+
             It "Has DiskSmartInfo object properties" {
                 $diskSmartInfo[0].DiskNumber | Should -BeExactly $testData.Index_HDD1
                 $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.Model_HDD1
@@ -767,6 +812,7 @@ Describe "Get-DiskSmartInfo" {
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
                 $diskSmartInfo[1].PredictFailure | Should -BeExactly $testData.FailurePredictStatus_PredictFailure_HDD2
             }
+
             It "Has empty SmartData property" {
                 $diskSmartInfo[0].SmartData | Should -BeNullOrEmpty
                 $diskSmartInfo[1].SmartData | Should -HaveCount 3

@@ -2,14 +2,26 @@ name: Test
 on: push
 
 jobs:
-  WindowsTest:
-    name: Windows test
+  PowerShellTest:
+    name: PowerShell
     runs-on: windows-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
       - name: Run Pester tests
         shell: pwsh
+        run: |
+          . .\tests\PesterConfiguration.ps1
+          Invoke-Pester -Configuration $PesterConfiguration
+
+  WindowsPowerShellTest:
+    name: Windows PowerShell
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run Pester tests
+        shell: powershell
         run: |
           . .\tests\PesterConfiguration.ps1
           Invoke-Pester -Configuration $PesterConfiguration

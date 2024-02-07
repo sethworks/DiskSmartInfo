@@ -1,16 +1,12 @@
 function Get-DiskSmartInfo
 {
-    [CmdletBinding(DefaultParameterSetName='ComputerName')]
+    [CmdletBinding(PositionalBinding=$false,DefaultParameterSetName='ComputerName')]
     Param(
-        # [Parameter(Position=0,ParameterSetName='ComputerName')]
-        # [Parameter(Position=0)]
         [Alias('PSComputerName')]
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
-        # [Parameter(ParameterSetName='CimSession')]
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
-        [Alias('ShowConvertedData')]
         [switch]$ShowConverted,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
@@ -26,19 +22,26 @@ function Get-DiskSmartInfo
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
-        [Alias('WarningOrCriticalOnly','SilenceIfNotInWarningOrCriticalState','QuietIfOK')]
         [switch]$Quiet,
-        [Alias('ShowHistoricalData')]
         [switch]$ShowHistory,
-        [Alias('UpdateHistoricalData')]
         [switch]$UpdateHistory
     )
 
     begin
     {
-        $Script:ErrorCreatingCimSession = @()
-        $Script:ErrorAccessingCimSession = @()
-        $Script:ErrorAccessingClass = @()
+        if ($IsLinux -or $IsMacOS)
+        {
+            $message = "Platform is not supported"
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
+            $PSCmdlet.WriteError($errorRecord)
+            break
+        }
+
+        $errorParameters = @{
+            ErrorVariable = 'cimSessionErrors'
+            ErrorAction = 'SilentlyContinue'
+        }
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
@@ -154,28 +157,22 @@ function Get-DiskSmartInfo
         {
             foreach ($scd in $sessionsComputersDisks)
             {
-                if ($scd.CimSession -and -not $scd.CimSession.TestConnection())
+                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName @errorParameters))
                 {
-                    $Script:ErrorAccessingCimSession += $scd.ComputerName
+                    inReportErrors -CimErrors $cimSessionErrors
                     continue
                 }
-                elseif ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -ErrorVariable Script:ErrorCreatingCimSession -ErrorAction SilentlyContinue))
-                {
-                    continue
-                }
-                else
-                {
-                    inGetDiskSmartInfo `
-                        -Session $scd.CimSession `
-                        -ShowConverted:$ShowConverted `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $scd.DiskNumber `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
-                }
+
+                inGetDiskSmartInfo `
+                    -Session $scd.CimSession `
+                    -ShowConverted:$ShowConverted `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -DiskNumbers $scd.DiskNumber `
+                    -DiskModels $DiskModel `
+                    -AttributeIDs $attributeIDs `
+                    -Quiet:$Quiet `
+                    -ShowHistory:$ShowHistory `
+                    -UpdateHistory:$UpdateHistory
             }
         }
         finally
@@ -188,8 +185,5 @@ function Get-DiskSmartInfo
                 }
             }
         }
-
-        # Error reporting
-        inReportErrors
     }
 }

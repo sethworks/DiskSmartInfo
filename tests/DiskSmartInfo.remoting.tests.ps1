@@ -6,7 +6,10 @@ BeforeAll {
 }
 
 # Skip if remoting is disabled
-$skipRemoting = !(Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
+$skipRemoting = -not (Test-WSMan -ComputerName localhost -ErrorAction SilentlyContinue)
+
+# Skip if WSMan TrustedHosts is not '*'
+$skipIPAddresses = -not ((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
 
 Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
 
@@ -88,7 +91,8 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
         }
     }
-    Context "ComputerName IP Address" {
+
+    Context "ComputerName IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -175,7 +179,8 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
-    Context "ComputerName positional IP Address" {
+
+    Context "ComputerName positional IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -218,6 +223,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "ComputerName pipeline" {
 
         BeforeAll {
@@ -261,6 +267,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "CimSession" {
 
         BeforeAll {
@@ -309,7 +316,8 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
-    Context "CimSession IP Address" {
+
+    Context "CimSession IP Address" -Skip:$skipIPAddresses {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -357,6 +365,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "CimSession pipeline" {
 
         BeforeAll {
@@ -405,6 +414,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
         }
     }
+
     Context "Win32_DiskDrive pipeline" {
 
         BeforeAll {
@@ -451,6 +461,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             }
         }
     }
+
     Context "MSFT_Disk pipeline" {
 
         BeforeAll {
@@ -497,6 +508,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             }
         }
     }
+
     Context "MSFT_PhysicalDisk pipeline" {
 
         BeforeAll {
@@ -547,6 +559,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
     Context "History ComputerName" {
 
         Context "-UpdateHistory" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
@@ -564,6 +577,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             It "Historical data file exists" {
                 $filepath | Should -Exist
             }
+
             It "Historical data file contains proper data" {
                 if ($IsCoreCLR)
                 {
@@ -577,6 +591,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         }
 
         Context "-ShowHistory" {
+
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
