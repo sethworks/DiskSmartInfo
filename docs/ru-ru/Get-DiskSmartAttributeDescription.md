@@ -8,41 +8,29 @@ schema: 2.0.0
 # Get-DiskSmartAttributeDescription
 
 ## SYNOPSIS
-Командлет отображает описание атрибутов SMART
+Командлет отображает описание общих атрибутов SMART
 
 ## SYNTAX
 
-### AllAttributes (Default)
+### Default
 ```
-Get-DiskSmartAttributeDescription [<CommonParameters>]
-```
-
-### AttributeID
-```
-Get-DiskSmartAttributeDescription [[-AttributeID] <Int32>] [<CommonParameters>]
-```
-
-### AttributeIDHex
-```
-Get-DiskSmartAttributeDescription [-AttributeIDHex <String>] [<CommonParameters>]
-```
-
-### CriticalOnly
-```
-Get-DiskSmartAttributeDescription [-CriticalOnly] [<CommonParameters>]
+Get-DiskSmartAttributeDescription [[-AttributeID] <Int32[]>] [-AttributeIDHex <String[]>]
+ [-AttributeIDHex <String[]>] [-CriticalOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Командлет отображает описание атрибутов SMART (Self-Monitoring, Analysis and Reporting Technology)
+Командлет отображает описание общих атрибутов SMART (Self-Monitoring, Analysis and Reporting Technology)
 
 ## PARAMETERS
 
 ### -AttributeID
-Параметр указывает id атрибута.
+Параметр указывает идентификатор атрибута.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
 
 ```yaml
-Type: Int32
-Parameter Sets: AttributeID
+Type: Int32[]
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -53,11 +41,32 @@ Accept wildcard characters: False
 ```
 
 ### -AttributeIDHex
-Параметр указывает id атрибута в шестнадцатеричном формате.
+Параметр указывает идентификатор атрибута в шестнадцатеричном формате.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
 
 ```yaml
-Type: String
-Parameter Sets: AttributeIDHex
+Type: String[]
+Parameter Sets: Default
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeName
+Параметр указывает имя атрибута.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
+
+Этот параметр поддерживает автоматическое завершение значений.
+
+```yaml
+Type: String[]
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -70,9 +79,12 @@ Accept wildcard characters: False
 ### -CriticalOnly
 Параметр задает, что выводиться должны только критические атрибуты.
 
+Если заданы любые из параметров идентификации атрибутов, результат включает в себя только
+критические атрибуты из указанных.
+
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CriticalOnly
+Parameter Sets: Default
 Aliases:
 
 Required: False
@@ -83,7 +95,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
+Командлет поддерживает общие параметры: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. Дополнительная информация [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## EXAMPLES
 
@@ -110,7 +122,7 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 ...
 ```
 
-Команда отображает описание атрибутов SMART
+Команда отображает описание атрибутов SMART.
 
 ### Example 2: Получение описания атрибута по ID
 ```powershell
@@ -160,8 +172,30 @@ Description    : Indicates the device temperature, if the appropriate sensor is 
 
 Команда отображает описание атрибута с IDHex C2.
 
+### Example 5: Получение описания атрибутов по имени
+```powershell
+Get-DiskSmartAttributeDescription -AttributeName 'Throughput Performance', 'Temperature Celsius'
+```
 
-### Example 5: Получение описания критических атрибутов
+```
+AttributeID    : 2
+AttributeIDHex : 2
+AttributeName  : Throughput Performance
+IsCritical     : False
+BetterValue    : High
+Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.
+
+AttributeID    : 194
+AttributeIDHex : C2
+AttributeName  : Temperature
+IsCritical     : False
+BetterValue    : Low
+Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
+```
+
+Команда отображает описание атрибутов с указанными именами.
+
+### Example 6: Получение описания критических атрибутов
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
@@ -185,6 +219,22 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 ```
 
 Команда отображает описание критических атрибутов SMART.
+
+### Example 7: Получение описания критических атрибутов из указанных
+```powershell
+Get-DiskSmartAttributeDescription -AttributeID (1..5) -CriticalOnly
+```
+
+```
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+BetterValue    :
+IsCritical     : True
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+```
+
+Команда отображает описание критических атрибутов SMART из диапазона указанных.
 
 ## INPUTS
 

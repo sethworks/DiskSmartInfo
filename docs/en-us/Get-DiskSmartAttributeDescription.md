@@ -26,7 +26,7 @@ Cmdlet returns default SMART (Self-Monitoring, Analysis and Reporting Technology
 ### -AttributeID
 Specifies attribute id.
 
-The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
 
 ```yaml
 Type: Int32[]
@@ -43,7 +43,7 @@ Accept wildcard characters: False
 ### -AttributeIDHex
 Specifies attribute id in hexadecimal.
 
-The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
 
 ```yaml
 Type: String[]
@@ -60,9 +60,10 @@ Accept wildcard characters: False
 ### -AttributeName
 Specifies attribute name.
 
-The result is cumulative and includes attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
 
 This parameter supports autocompletion.
+
 ```yaml
 Type: String[]
 Parameter Sets: Default
