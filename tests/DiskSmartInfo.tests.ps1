@@ -137,8 +137,8 @@ Describe "Get-DiskSmartInfo" {
             $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeExactly '3060.25 Days'
         }
 
-        It "Converts Temperature Difference" {
-            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "60 $([char]0xB0)C"
+        It "Converts Airflow Temperature Celsius" {
+            $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "40 $([char]0xB0)C"
         }
 
         It "Converts Total LBAs Written" {
