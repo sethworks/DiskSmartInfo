@@ -42,7 +42,7 @@ Describe "Get-DiskSmartInfo" {
             $diskSmartInfo.SmartData[2].Worst | Should -Be 69
             $diskSmartInfo.SmartData[3].Data | Should -Be 25733
             $diskSmartInfo.SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo.SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo.SmartData[13].Data | Should -Be @(39, 14, 47)
         }
 
         It "DiskSmartInfo object has correct types and properties" {

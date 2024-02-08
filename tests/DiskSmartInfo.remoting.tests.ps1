@@ -53,7 +53,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
 
         It "DiskSmartInfo object has correct types and properties" {
@@ -132,7 +132,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[1].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -176,7 +176,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -220,7 +220,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[1].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -264,7 +264,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -313,7 +313,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -362,7 +362,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[1].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[1].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 
@@ -411,7 +411,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(47, 14, 39)
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
     }
 

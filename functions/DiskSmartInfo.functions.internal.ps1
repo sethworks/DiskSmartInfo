@@ -300,7 +300,7 @@ function inGetAttributeData
         {
             # 9, 7, 5
             # $temps = @()
-            $temps = @($smartData[$a + 5])
+            $temps = @([long]$smartData[$a + 5])
 
             # for ($offset = 9; $offset -ge 5; $offset -= 2)
             # {
@@ -316,7 +316,7 @@ function inGetAttributeData
             {
                 if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
                 {
-                    $temps += $smartData[$a + $offset]
+                    $temps += [long]$smartData[$a + $offset]
                 }
 
                 if ($temps.Count -eq 3)
