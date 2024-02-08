@@ -299,15 +299,35 @@ function inGetAttributeData
         $([DataType]::temperature3.value__)
         {
             # 9, 7, 5
-            $temps = @()
+            # $temps = @()
+            $temps = @($smartData[$a + 5])
 
-            for ($offset = 9; $offset -ge 5; $offset -= 2)
+            # for ($offset = 9; $offset -ge 5; $offset -= 2)
+            # {
+            #     [long]$value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
+
+            #     if ($value)
+            #     {
+            #         $temps += $value
+            #     }
+            # }
+
+            for ($offset = 6; $offset -le 10; $offset++)
             {
-                [long]$value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
-
-                if ($value)
+                if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
                 {
-                    $temps += $value
+                    $temps += $smartData[$a + $offset]
+                }
+
+                if ($temps.Count -eq 3)
+                {
+                    if ($temps[1] -gt $temps[2])
+                    {
+                        $t = $temps[1]
+                        $temps[1] = $temps[2]
+                        $temps[2] = $t
+                    }
+                    break
                 }
             }
 
