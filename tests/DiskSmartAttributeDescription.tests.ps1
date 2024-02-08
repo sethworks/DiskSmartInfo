@@ -70,6 +70,29 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
     }
 
+    Context "AttributeName wildcard" {
+
+        BeforeAll {
+            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*put*'
+        }
+
+        It "Has correct attribute" {
+            $diskSmartAttributeDescription | Should -HaveCount 1
+            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Throughput Performance'
+        }
+    }
+
+    Context "Non-existing attributes" {
+
+        BeforeAll {
+            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*SomeNonExistingAttribute*'
+        }
+
+        It "Has empty result" {
+            $diskSmartAttributeDescription | Should -BeNullOrEmpty
+        }
+    }
+
     Context "-CriticalOnly" {
 
         BeforeAll {

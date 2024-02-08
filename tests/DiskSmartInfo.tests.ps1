@@ -511,6 +511,40 @@ Describe "Get-DiskSmartInfo" {
             }
         }
 
+        Context "AttributeName wildcard" {
+
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*put*'
+            }
+
+            It "Has requested attributes" {
+                $diskSmartInfo.SmartData | Should -HaveCount 1
+                $diskSmartInfo.SmartData.ID | Should -Be 2
+                $diskSmartInfo.SmartData.AttributeName | Should -BeExactly 'Throughput Performance'
+            }
+        }
+
+        Context "Non-existing attributes" {
+
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*SomeNonExistingAttribute*'
+            }
+
+            It "Has empty result" {
+                $diskSmartInfo | Should -BeNullOrEmpty
+            }
+        }
+
         Context "Attribute parameters" {
 
             BeforeAll {

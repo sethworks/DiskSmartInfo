@@ -27,13 +27,18 @@ function inComposeAttributeIDs
 
     foreach ($at in $AttributeName)
     {
-        if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $at}))
+        if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -like $at}))
         {
             if (-not $attributeIDs.Contains($value.AttributeID))
             {
                 $attributeIDs.Add($value.AttributeID)
             }
         }
+    }
+
+    if (($AttributeID -or $AttributeIDHex -or $AttributeName) -and -not $attributeIDs.Count)
+    {
+        break
     }
 
     return $attributeIDs
