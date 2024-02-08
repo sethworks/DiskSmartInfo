@@ -44,7 +44,7 @@
         {
             "label": "UpdateHelp",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; New-ExternalHelp -Path ./docs/en-us -OutputPath ./en-us -Force; New-ExternalHelp -Path ./docs/ru-ru -OutputPath ./ru-ru -Force",
+            "command": "Set-Location ${workspaceFolder}; ./.helpers/updateHelp.ps1",
             "group": {
                 "kind": "none",
                 "isDefault": true
