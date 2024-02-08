@@ -89,6 +89,8 @@ attributes/default.ps1 and attributes/proprietary.ps1 files.
 
 For more information, see about_DiskSmartInfo_attributes.
 
+If any of the attribute selection parameters are used, the result includes only critical attributes from specified.
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -101,13 +103,171 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DiskNumber
+Specifies disk numbers to query.
+
+Disk number corresponds to Index property of Win32_DiskDrive WMI class,
+Number property of MSFT_Disk class (result of Get-Disk cmdlet),
+DeviceId property of MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet),
+and disk number in diskpart utility.
+
+This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
+autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
+specified, autocompletion suggests disks from that computer. Autocompletion does not suggest disk numbers
+if more than one ComputerName or CimSession specified.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases: Index, Number, DeviceId
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DiskModel
+Specified disk models to query.
+
+Disk number corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet)
+and MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet).
+
+Actually, the cmdlet compares specified value to Model property of Win32_DiskDrive WMI class, after stripping
+drive type suffix. For example, Model property of Win32_DiskDrive WMI class can be "Disk Model 2 TB ATA Device".
+By default the cmdlet strips " ATA Device" suffix, so that the value corresponds to MSFT_Disk
+and MSFT_PhysicalDisk Model property.
+
+This can be changed by TrimDiskDriveModel config parameter.
+
+This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
+autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
+specified, autocompletion suggests disks from that computer. Autocompletion does not suggest disk models
+if more than one ComputerName or CimSession specified.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Model
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
+### -AttributeID
+Specifies attribute id.
+
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeIDHex
+Specifies attribute id in hexadecimal.
+
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeName
+Specifies attribute name.
+
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
+This parameter supports autocompletion. Autocompletion suggests only default attributes and does not include proprietary ones.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
 ### -Quiet
 Displays only those attributes, that are critical and their Data is greater than 0,
 or that are non-critical and their Value is less or equal to their Threshold.
 
+If any of the attribute selection parameters are used, the result includes such an attributes only from specified.
+
 If there are no such an attributes for a disk, that disk is not shown.
 
-It can be changed by DiskSmartInfo config parameters.
+This can be changed by SuppressEmptySmartData config parameter.
+
+For more inforrmation, see about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ShowHistory
+Displays previously saved history Data alongside current Data.
+
+By default the cmdlet shows history data for all attribues, even if there were no changes occured.
+
+This can be changed by ShowUnchangedHistoricalData config parameter.
+
+For more inforrmation, see about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UpdateHistory
+Saves current Data for all disks of specified computers for later comparison.
+
+It there are some data already saved for specific computer, the cmdlet overwrites it.
+So the data it stored for one point in time only.
+
+The cmdlet stores Data for all disks and attributes of specified computers,
+even if disk selection or attribute selection parameters are used.
+
+History by default is located in the history folder of the module directory.
+
+This can be changed by HistoricalDataPath config parameter.
 
 For more inforrmation, see about_DiskSmartInfo_config.
 
@@ -368,7 +528,5 @@ The command gets disk SMART information from remote computers using CimSessions.
 
 ### System.Object
 ## NOTES
-
-You can get original error objects by using -Debug parameter.
 
 ## RELATED LINKS

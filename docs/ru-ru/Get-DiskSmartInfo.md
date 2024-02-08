@@ -369,6 +369,4 @@ SMARTData:
 ### System.Object
 ## NOTES
 
-Указание параметра -Debug позволяет получить оригинальные объекты ошибок.
-
 ## RELATED LINKS

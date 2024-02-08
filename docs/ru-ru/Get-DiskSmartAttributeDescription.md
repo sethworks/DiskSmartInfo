@@ -73,13 +73,13 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -CriticalOnly
 Параметр задает, что выводиться должны только критические атрибуты.
 
-Если заданы любые из параметров идентификации атрибутов, результат включает в себя только
+Если заданы любые из параметров выбора атрибутов, результат включает в себя только
 критические атрибуты из указанных.
 
 ```yaml

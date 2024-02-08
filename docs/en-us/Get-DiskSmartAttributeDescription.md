@@ -73,13 +73,13 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
-Accept wildcard characters: False
+Accept wildcard characters: True
 ```
 
 ### -CriticalOnly
 Displays critical attributes only.
 
-If any of the attribute parameters are used, the result includes only critical attributes from specified.
+If any of the attribute selection parameters are used, the result includes only critical attributes from specified.
 
 ```yaml
 Type: SwitchParameter
