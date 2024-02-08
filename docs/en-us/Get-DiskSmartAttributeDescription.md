@@ -125,7 +125,7 @@ The command gets SMART attributes description.
 
 ### Example 2: Get selected attributes
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*"
 ```
 
 ```
@@ -184,7 +184,7 @@ The command gets description for critical SMART attributes.
 
 ### Example 4: Get critical attributes description from specified
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered' -CriticalOnly
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*" -CriticalOnly
 ```
 
 ```

@@ -126,7 +126,7 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 
 ### Example 2: Получение описания указанных атрибутов
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*"
 ```
 
 ```
@@ -185,7 +185,7 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 
 ### Example 4: Получение описания критических атрибутов из указанных
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered' -CriticalOnly
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*" -CriticalOnly
 ```
 
 ```
