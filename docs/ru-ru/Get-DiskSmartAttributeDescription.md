@@ -124,78 +124,41 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 
 Команда отображает описание атрибутов SMART.
 
-### Example 2: Получение описания атрибута по ID
+### Example 2: Получение описания указанных атрибутов
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 192
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
 
 ```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+IsCritical     : True
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
 BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
-```
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
 
-Команда отображает описание атрибута с ID 192.
-
-### Example 3: Получение описания атрибута по ID без указания имени параметра AttributeID
-```powershell
-Get-DiskSmartAttributeDescription 192
-```
-
-```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
-BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
-```
-
-Команда отображает описание атрибута с ID 192.
-
-### Example 4: Получение описания атрибута по IDHex
-```powershell
-Get-DiskSmartAttributeDescription -AttributeIDHex C2
-```
-
-```
-AttributeID    : 194
-AttributeIDHex : C2
-AttributeName  : Temperature
-BetterValue    : Low
-IsCritical     :
-Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
-```
-
-Команда отображает описание атрибута с IDHex C2.
-
-### Example 5: Получение описания атрибутов по имени
-```powershell
-Get-DiskSmartAttributeDescription -AttributeName 'Throughput Performance', 'Temperature Celsius'
-```
-
-```
-AttributeID    : 2
-AttributeIDHex : 2
-AttributeName  : Throughput Performance
+AttributeID    : 195
+AttributeIDHex : C3
+AttributeName  : Hardware ECC Recovered
 IsCritical     : False
-BetterValue    : High
-Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.
-
-AttributeID    : 194
-AttributeIDHex : C2
-AttributeName  : Temperature
-IsCritical     : False
-BetterValue    : Low
-Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
+BetterValue    : Varies
+Description    : (Vendor-specific raw value.) The raw value has different structure for different vendors and is often
+                 not meaningful as a decimal number.
 ```
 
-Команда отображает описание атрибутов с указанными именами.
+Команда отображает описание указанных атрибутов.
 
-### Example 6: Получение описания критических атрибутов
+### Example 3: Получение описания критических атрибутов
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
@@ -220,21 +183,31 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 
 Команда отображает описание критических атрибутов SMART.
 
-### Example 7: Получение описания критических атрибутов из указанных
+### Example 4: Получение описания критических атрибутов из указанных
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID (1..5) -CriticalOnly
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered' -CriticalOnly
 ```
 
 ```
 AttributeID    : 5
 AttributeIDHex : 5
 AttributeName  : Reallocated Sectors Count
-BetterValue    :
 IsCritical     : True
-Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
+BetterValue    : Low
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
 ```
 
-Команда отображает описание критических атрибутов SMART из диапазона указанных.
+Команда отображает описание критических атрибутов SMART из указанных.
 
 ## INPUTS
 

@@ -195,6 +195,9 @@ Accept wildcard characters: False
 ### -AttributeName
 Specifies attribute name.
 
+The parameter accepts only default (and not proprietary) attribute names,
+then tranforms them into attribute ids, that are actually used.
+
 The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
 
 This parameter supports autocompletion. Autocompletion suggests only default attributes and does not include proprietary ones.
@@ -294,10 +297,9 @@ Get-DiskSmartInfo
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -324,10 +326,9 @@ Get-DiskSmartInfo -ShowConverted
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data        ConvertedData
               --  ----- -------------                                 --------- ----- ----- ----        -------------
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -346,7 +347,7 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069      5.923 Tb
 ```
 
-The command gets disk SMART information and adds converted data for some of the attributes.
+The command gets disk SMART information and adds converted data for applicable attributes.
 
 ### Example 3: Critical attributes only
 ```powershell
@@ -354,10 +355,9 @@ Get-DiskSmartInfo -CriticalAttributesOnly
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               5   5     Reallocated Sectors Count          10        252   252   0
@@ -369,16 +369,15 @@ SMARTData:
 
 The command gets disk SMART information and displays only critical attributes.
 
-### Example 4: Silence if not in warning or critical state
+### Example 4: Using -Quiet parameter
 ```powershell
 Get-DiskSmartInfo -Quiet
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               3   3     Spin-Up Time                       21        20    20    6825
@@ -386,27 +385,25 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-The command gets disk SMART information and displays only the attributes with values in Warning or Critical state.
-Disks that does not have attributes with values in such states does not display.
+The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0,
+or that are non-critical and their Value is less or equal to their Threshold.
 
-### Example 5: Silence if critical attributes are not in warning or critical state
+### Example 5: Using -CriticalAttributesOnly and -Quiet parameters
 ```powershell
 Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-The command gets disk SMART information and displays only the the critical attributes with values in Warning or Critical state.
-Disks that does not have critical attributes with values in such states does not display.
+The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0.
 
 ### Example 6: Get disk SMART info from remote computers
 ```powershell
@@ -415,10 +412,9 @@ Get-DiskSmartInfo -ComputerName SomeComputer
 
 ```
 ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -439,38 +435,7 @@ SMARTData:
 
 The command gets disk SMART information from remote computer.
 
-### Example 7: Get disk SMART info from remote computers without specifying -ComputerName parameter name
-```powershell
-Get-DiskSmartInfo SomeComputer
-```
-
-```
-ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
-SMARTData:
-
-              ID  IDHex AttributeName                                 Threshold Value Worst Data
-              --  ----- -------------                                 --------- ----- ----- ----
-              5   5     Reallocated Sectors Count                     10        100   100   0
-              9   9     Power-On Hours                                0         98    98    8397
-              12  C     Power Cycle Count                             0         99    99    22
-              177 B1    Wear Range Delta                              0         98    98    33
-              179 B3    Used Reserved Block Count Total               10        100   100   0
-              181 B5    Program Fail Count Total                      10        100   100   0
-              182 B6    Erase Fail Count                              10        100   100   0
-              183 B7    SATA Downshift Error Count                    10        100   100   0
-              187 BB    Reported Uncorrectable Errors                 0         100   100   0
-              190 BE    Temperature Difference                        0         53    48    47
-              195 C3    Hardware ECC Recovered                        0         200   200   0
-              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
-              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
-              241 F1    Total LBAs Written                            0         99    99    12720469069
-```
-
-The command gets disk SMART information from remote computer.
-
-### Example 8: Get disk SMART info from remote computers using CimSessions.
+### Example 7: Get disk SMART info from remote computers using CimSessions
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
@@ -483,10 +448,9 @@ Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 
 ```
 ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -506,10 +470,9 @@ SMARTData:
 
 
 ComputerName: SomeAnotherComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -519,6 +482,127 @@ SMARTData:
 ```
 
 The command gets disk SMART information from remote computers using CimSessions.
+
+### Example 8: Get selected attributes
+```powershell
+Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+```
+
+The command gets specified disk SMART attributes.
+
+### Example 9: Get data for selected disks
+```powershell
+Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
+```
+
+```
+Disk:         1: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+
+
+Disk:         2: Some Specific Model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    9584
+              12  C     Power Cycle Count                             0         99    99    80
+...
+```
+
+The command gets SMART information for specified disks.
+
+### Example 10: Save history data
+```powershell
+Get-DiskSmartInfo -UpdateHistory
+```
+
+```
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+
+```
+
+The command gets SMART information and saves current Data.
+
+### Example 11: Show history data
+```powershell
+Get-DiskSmartInfo -ShowHistory
+```
+
+```
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data        History
+              --  ----- -------------                                 --------- ----- ----- ----        -------
+              5   5     Reallocated Sectors Count                     10        100   100   0           0
+              9   9     Power-On Hours                                0         98    98    8398        8397
+              12  C     Power Cycle Count                             0         99    99    22          22
+              177 B1    Wear Range Delta                              0         98    98    33          33
+              179 B3    Used Reserved Block Count Total               10        100   100   0           0
+              181 B5    Program Fail Count Total                      10        100   100   0           0
+              182 B6    Erase Fail Count                              10        100   100   0           0
+              183 B7    SATA Downshift Error Count                    10        100   100   0           0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0           0
+              190 BE    Temperature Difference                        0         53    48    47          47
+              195 C3    Hardware ECC Recovered                        0         200   200   0           0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0           0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6           6
+              241 F1    Total LBAs Written                            0         99    99    12720469270 12720469069
+
+```
+
+The command gets SMART information and displays history Data.
 
 ## INPUTS
 

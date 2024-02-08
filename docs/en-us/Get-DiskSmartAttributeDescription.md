@@ -123,78 +123,41 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 
 The command gets SMART attributes description.
 
-### Example 2: Get attribute description by ID
+### Example 2: Get selected attributes
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 192
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
 
 ```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+IsCritical     : True
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
 BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
-```
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
 
-The command gets description for attribute with ID 192.
-
-### Example 3: Get attribute description by ID without specifying AttributeID parameter name
-```powershell
-Get-DiskSmartAttributeDescription 192
-```
-
-```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
-BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
-```
-
-The command gets description for attribute with ID 192.
-
-### Example 4: Get attribute description by IDHex
-```powershell
-Get-DiskSmartAttributeDescription -AttributeIDHex C2
-```
-
-```
-AttributeID    : 194
-AttributeIDHex : C2
-AttributeName  : Temperature
-BetterValue    : Low
-IsCritical     :
-Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
-```
-
-The command gets description for attribute with IDHex C2.
-
-### Example 5: Get attribute description by Name
-```powershell
-Get-DiskSmartAttributeDescription -AttributeName 'Throughput Performance', 'Temperature Celsius'
-```
-
-```
-AttributeID    : 2
-AttributeIDHex : 2
-AttributeName  : Throughput Performance
+AttributeID    : 195
+AttributeIDHex : C3
+AttributeName  : Hardware ECC Recovered
 IsCritical     : False
-BetterValue    : High
-Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.
-
-AttributeID    : 194
-AttributeIDHex : C2
-AttributeName  : Temperature
-IsCritical     : False
-BetterValue    : Low
-Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
+BetterValue    : Varies
+Description    : (Vendor-specific raw value.) The raw value has different structure for different vendors and is often
+                 not meaningful as a decimal number.
 ```
 
-The command gets description for attributes with specified names.
+The command gets description for selected attributes.
 
-### Example 6: Get critical attributes description
+### Example 3: Get critical attributes description
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
@@ -219,18 +182,28 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 
 The command gets description for critical SMART attributes.
 
-### Example 7: Get critical attributes description from specified
+### Example 4: Get critical attributes description from specified
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID (1..5) -CriticalOnly
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered' -CriticalOnly
 ```
 
 ```
 AttributeID    : 5
 AttributeIDHex : 5
 AttributeName  : Reallocated Sectors Count
-BetterValue    :
 IsCritical     : True
-Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
+BetterValue    : Low
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
 ```
 
 The command gets description for critical SMART attributes from specified.
