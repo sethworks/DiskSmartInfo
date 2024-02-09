@@ -16,7 +16,7 @@ Describe "History" {
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
             InModuleScope DiskSmartInfo {
-                $Config.HistoricalDataPath = $TestDrive
+                $Config.DataHistoryPath = $TestDrive
             }
 
             $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
@@ -123,7 +123,7 @@ Describe "History" {
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
             InModuleScope DiskSmartInfo {
-                $Config.HistoricalDataPath = $TestDrive
+                $Config.DataHistoryPath = $TestDrive
             }
             Get-DiskSmartInfo -UpdateHistory | Out-Null
         }
@@ -160,7 +160,7 @@ Describe "History" {
 
                 InModuleScope DiskSmartInfo {
                     $Config.ShowUnchangedHistoricalData = $true
-                    $Config.HistoricalDataPath = $TestDrive
+                    $Config.DataHistoryPath = $TestDrive
                 }
 
                 Get-DiskSmartInfo -UpdateHistory | Out-Null
@@ -282,7 +282,7 @@ Describe "History" {
 
                 InModuleScope DiskSmartInfo {
                     $Config.ShowUnchangedHistoricalData = $false
-                    $Config.HistoricalDataPath = $TestDrive
+                    $Config.DataHistoryPath = $TestDrive
                 }
 
                 Get-DiskSmartInfo -UpdateHistory | Out-Null
@@ -339,7 +339,7 @@ Describe "History" {
 
                 InModuleScope DiskSmartInfo {
                     $Config.ShowUnchangedHistoricalData = $true
-                    $Config.HistoricalDataPath = $TestDrive
+                    $Config.DataHistoryPath = $TestDrive
                 }
 
                 Get-DiskSmartInfo -UpdateHistory | Out-Null

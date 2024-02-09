@@ -567,7 +567,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.HistoricalDataPath = $TestDrive
+                    $Config.DataHistoryPath = $TestDrive
                 }
 
                 Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
@@ -599,7 +599,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.HistoricalDataPath = $TestDrive
+                    $Config.DataHistoryPath = $TestDrive
                 }
 
                 Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null

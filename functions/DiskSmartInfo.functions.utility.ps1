@@ -83,26 +83,26 @@ function inComposeHistoricalDataFileName
 
     if ($IsCoreCLR)
     {
-        if ([System.IO.Path]::IsPathFullyQualified($Config.HistoricalDataPath))
+        if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
         {
-            $filepath = $Config.HistoricalDataPath
+            $filepath = $Config.DataHistoryPath
         }
         else
         {
-            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.DataHistoryPath
         }
     }
     # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
     else
     {
-        $pathroot = [System.IO.Path]::GetPathRoot($Config.HistoricalDataPath)
+        $pathroot = [System.IO.Path]::GetPathRoot($Config.DataHistoryPath)
         if ($pathroot -and $pathroot[-1] -eq '\')
         {
-            $filepath = $Config.HistoricalDataPath
+            $filepath = $Config.DataHistoryPath
         }
         else
         {
-            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.HistoricalDataPath
+            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.DataHistoryPath
         }
     }
 

@@ -278,7 +278,7 @@ even if disk selection or attribute selection parameters are used.
 
 History by default is located in the history folder of the module directory.
 
-This can be changed by HistoricalDataPath config parameter.
+This can be changed by DataHistoryPath config parameter.
 
 For more information, see about_DiskSmartInfo_config.
 
