@@ -193,10 +193,10 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 183
-        AttributeName = 'SATA Downshift Error Count'
+        AttributeName = 'Runtine Bad Block'
         IsCritical = $false
         BetterValue = 'Low'
-        Description = 'Also known as "Runtine Bad Block". Western Digital, Samsung or Seagate attribute: Either the number of downshifts of link speed (e.g. from 6Gbps to 3Gbps) or the total number of data blocks with detected, uncorrectable errors encountered during normal operation. Although degradation of this parameter can be an indicator of drive aging and/or potential electromechanical problems, it does not directly indicate imminent drive failure.'
+        Description = 'Also known as "SATA Downshift Error Count". Western Digital, Samsung or Seagate attribute: Either the number of downshifts of link speed (e.g. from 6Gbps to 3Gbps) or the total number of data blocks with detected, uncorrectable errors encountered during normal operation. Although degradation of this parameter can be an indicator of drive aging and/or potential electromechanical problems, it does not directly indicate imminent drive failure.'
     },
     [ordered]@{
         AttributeID = 184
