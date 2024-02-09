@@ -113,6 +113,8 @@ Number property of MSFT_Disk class (result of Get-Disk cmdlet),
 DeviceId property of MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet),
 and disk number in diskpart utility.
 
+The result is cumulative and includes all disks specified in -DiskNumber and -DiskModel parameters.
+
 This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
 autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
 specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk numbers
@@ -144,6 +146,8 @@ and MSFT_PhysicalDisk Model property.
 This can be changed by TrimDiskDriveModel config parameter.
 
 For more information, see about_DiskSmartInfo_config.
+
+The result is cumulative and includes all disks specified in -DiskNumber and -DiskModel parameters.
 
 This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
 autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
@@ -505,7 +509,7 @@ SMARTData:
               195 C3    Hardware ECC Recovered                        0         200   200   0
 ```
 
-The command gets specified disk SMART attributes.
+The command gets specified SMART attributes.
 
 ### Example 9: Get data for selected disks
 ```powershell

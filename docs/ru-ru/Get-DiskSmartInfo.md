@@ -114,6 +114,8 @@ Accept wildcard characters: False
 свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk)
 и номеру диска в утилите diskpart.
 
+Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.
+
 Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
 не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
 имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски
@@ -146,6 +148,8 @@ Accept wildcard characters: False
 Это может быть изменено конфигурационным параметром TrimDiskDriveModel.
 
 Больше информации в about_DiskSmartInfo_config.
+
+Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.
 
 Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
 не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
@@ -497,6 +501,128 @@ SMARTData:
 ```
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием объектов CimSession.
+
+### Example 8: Получение указанных атрибутов
+```powershell
+Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+```
+
+Команда получает указанные SMART атрибуты
+
+### Example 9: Получение данных SMART для указанных дисков
+```powershell
+Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
+```
+
+```
+Disk:         1: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+
+
+Disk:         2: Some Specific Model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    9584
+              12  C     Power Cycle Count                             0         99    99    80
+...
+```
+
+Команда получает информацию SMART для указанных жестких дисков.
+
+### Example 10: Сохранение данных для последующего сравнения
+```powershell
+Get-DiskSmartInfo -UpdateHistory
+```
+
+```
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    8397
+              12  C     Power Cycle Count                             0         99    99    22
+              177 B1    Wear Range Delta                              0         98    98    33
+              179 B3    Used Reserved Block Count Total               10        100   100   0
+              181 B5    Program Fail Count Total                      10        100   100   0
+              182 B6    Erase Fail Count                              10        100   100   0
+              183 B7    SATA Downshift Error Count                    10        100   100   0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0
+              190 BE    Temperature Difference                        0         53    48    47
+              195 C3    Hardware ECC Recovered                        0         200   200   0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
+              241 F1    Total LBAs Written                            0         99    99    12720469069
+
+```
+
+Команда получает информацию SMART и сохраняет текущие значения свойства Data для всех атрибутов.
+
+### Example 11: Отображение ранее сохраненных данных
+```powershell
+Get-DiskSmartInfo -ShowHistory
+```
+
+```
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data        History
+              --  ----- -------------                                 --------- ----- ----- ----        -------
+              5   5     Reallocated Sectors Count                     10        100   100   0           0
+              9   9     Power-On Hours                                0         98    98    8398        8397
+              12  C     Power Cycle Count                             0         99    99    22          22
+              177 B1    Wear Range Delta                              0         98    98    33          33
+              179 B3    Used Reserved Block Count Total               10        100   100   0           0
+              181 B5    Program Fail Count Total                      10        100   100   0           0
+              182 B6    Erase Fail Count                              10        100   100   0           0
+              183 B7    SATA Downshift Error Count                    10        100   100   0           0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0           0
+              190 BE    Temperature Difference                        0         53    48    47          47
+              195 C3    Hardware ECC Recovered                        0         200   200   0           0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0           0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6           6
+              241 F1    Total LBAs Written                            0         99    99    12720469270 12720469069
+
+```
+
+Команда получает информацию SMART и отображает ранее сохраненные значения свойства Data
+выводимых атрибутов.
 
 ## INPUTS
 
