@@ -136,7 +136,7 @@ AttributeName  : Reallocated Sectors Count
 IsCritical     : True
 BetterValue    :
 Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
-                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
                  reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
                  which has had any reallocations at all is significantly more likely to fail in the immediate months.
 
@@ -169,7 +169,7 @@ AttributeIDHex : 5
 AttributeName  : Reallocated Sectors Count
 BetterValue    :
 IsCritical     : True
-Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
 
 AttributeID    : 10
 AttributeIDHex : A
@@ -195,7 +195,7 @@ AttributeName  : Reallocated Sectors Count
 IsCritical     : True
 BetterValue    :
 Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
-                 found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to
+                 found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
                  reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
                  which has had any reallocations at all is significantly more likely to fail in the immediate months.
 
