@@ -9,5 +9,5 @@
     DataHistoryPath = 'history'
 
     # Show historical data for all attributes. If false, show only historical data, that differ from actual.
-    ShowUnchangedHistoricalData = $true
+    ShowUnchangedDataHistory = $true
 }

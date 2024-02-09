@@ -251,7 +251,7 @@ Displays previously saved history Data alongside current Data.
 
 By default the cmdlet shows history data for all attribues, even if there were no changes occured.
 
-This can be changed by ShowUnchangedHistoricalData config parameter.
+This can be changed by ShowUnchangedDataHistory config parameter.
 
 For more information, see about_DiskSmartInfo_config.
 

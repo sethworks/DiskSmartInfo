@@ -259,7 +259,7 @@ Accept wildcard characters: False
 По умолчанию отображается сохраненное значение для всех атрибутов, даже если
 текущее значение не изменилось.
 
-Это можно изменить конфигурационным параметром ShowUnchangedHistoricalData.
+Это можно изменить конфигурационным параметром ShowUnchangedDataHistory.
 
 Больше информации в about_DiskSmartInfo_config.
 
