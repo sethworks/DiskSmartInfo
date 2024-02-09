@@ -624,7 +624,6 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0           0
               199 C7    Ultra DMA CRC Error Count          0         100   100   0           0
               241 F1    Total LBAs Written                 0         99    99    12720469270 12720469069
-
 ```
 
 The command gets SMART information and displays history Data.
@@ -676,7 +675,6 @@ SMARTData:
               9   9     Power-On Hours                     0         98    98    7395
               10  A     Spin Retry Count                   51        252   252   0
 ...
-
 ```
 
 The command gets SMART information for all disks from computers Computer1 and Computer2,
