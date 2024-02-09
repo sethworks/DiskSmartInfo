@@ -33,7 +33,7 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
 
         It "Has correct attribute" {
-            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Temperature Difference'
+            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Airflow Temperature Celsius'
         }
     }
 
@@ -44,7 +44,7 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
 
         It "Has correct attribute" {
-            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Temperature Difference'
+            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Airflow Temperature Celsius'
         }
     }
 
@@ -122,7 +122,7 @@ Describe "Get-DiskSmartAttributeDescription" {
             $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
             $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
             $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin Retry Count'
-            $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Write Error Rate'
+            $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Multi-Zone Error Rate'
             $diskSmartAttributeDescription[4].AttributeName | Should -BeExactly 'Soft ECC correction'
             $diskSmartAttributeDescription[5].AttributeName | Should -BeExactly 'Offline Seek Performance'
         }
@@ -142,7 +142,7 @@ Describe "Get-DiskSmartAttributeDescription" {
             $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
             $diskSmartAttributeDescription[1].AttributeName | Should -BeExactly 'Throughput Performance'
             $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin Retry Count'
-            $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Write Error Rate'
+            $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Multi-Zone Error Rate'
             $diskSmartAttributeDescription[4].AttributeName | Should -BeExactly 'Soft ECC correction'
             $diskSmartAttributeDescription[5].AttributeName | Should -BeExactly 'Offline Seek Performance'
         }
