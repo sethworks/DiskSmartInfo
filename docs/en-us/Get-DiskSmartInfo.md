@@ -612,6 +612,57 @@ SMARTData:
 
 The command gets SMART information and displays history Data.
 
+### Example 12: Using pipeline
+```powershell
+$ComputerName = 'Computer1'
+$CimSession = New-CimSession -ComputerName 'Computer2'
+
+$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer3'
+$Disk = Get-Disk -Number 1 -CimSession 'Computer4'
+$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer5'
+
+$ComputerName, $CimSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
+```
+
+```
+ComputerName: Computer1
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data        History
+              --  ----- -------------                                 --------- ----- ----- ----        -------
+              5   5     Reallocated Sectors Count                     10        100   100   0           0
+              9   9     Power-On Hours                                0         98    98    8398        8397
+              12  C     Power Cycle Count                             0         99    99    22          22
+              177 B1    Wear Range Delta                              0         98    98    33          33
+              179 B3    Used Reserved Block Count Total               10        100   100   0           0
+              181 B5    Program Fail Count Total                      10        100   100   0           0
+              182 B6    Erase Fail Count                              10        100   100   0           0
+              183 B7    SATA Downshift Error Count                    10        100   100   0           0
+              187 BB    Reported Uncorrectable Errors                 0         100   100   0           0
+              190 BE    Temperature Difference                        0         53    48    47          47
+              195 C3    Hardware ECC Recovered                        0         200   200   0           0
+              199 C7    Ultra DMA CRC Error Count                     0         100   100   0           0
+              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6           6
+              241 F1    Total LBAs Written                            0         99    99    12720469270 12720469069
+
+ComputerName: Computer2
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                                 Threshold Value Worst Data
+              --  ----- -------------                                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count                     10        100   100   0
+              9   9     Power-On Hours                                0         98    98    9584
+              12  C     Power Cycle Count                             0         99    99    80
+...
+
+```
+
+The command gets SMART information for all disks from computers Computer1 and Computer2,
+and for specified disks from computers Computer3, Computer4, and Computer5.
+
 ## INPUTS
 
 ### None
