@@ -64,7 +64,7 @@ Accept wildcard characters: False
 ```
 
 ### -ShowConverted
-Параметр добавляет ковертированные данные для некоторых атрибутов.
+Параметр добавляет ковертированные данные для определенных атрибутов.
 
 Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов,
 перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.
@@ -224,9 +224,9 @@ Accept wildcard characters: True
 ```
 
 ### -Quiet
-Параметр отображает только критичные атрибуты со значением свойства Data превышающим 0,
+Параметр отображает только критичные атрибуты со значением свойства Data, превышающим 0,
 а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно
-значению свойста Threshold.
+значению свойства Threshold.
 
 Если заданы любые из параметров выбора атрибутов, результат включает в себя только
 соответствующе условиям атрибуты из указанных.
@@ -278,7 +278,7 @@ Accept wildcard characters: False
 Если для определенного компьютера уже существуют сохраненные данные,
 они перезаписываются. То есть сохраняется только один экземпляр данных.
 
-Команда сохраняет значения свойста Data для всех дисков и атрибутов указанных компьютеров,
+Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров,
 даже если использовались параметры выбора дисков и атрибутов.
 
 По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.
@@ -310,10 +310,9 @@ Get-DiskSmartInfo
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -340,10 +339,9 @@ Get-DiskSmartInfo -ShowConverted
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data        ConvertedData
               --  ----- -------------                                 --------- ----- ----- ----        -------------
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -362,7 +360,7 @@ SMARTData:
               241 F1    Total LBAs Written                            0         99    99    12720469069      5.923 Tb
 ```
 
-Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для некоторых атрибутов.
+Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для определенных атрибутов.
 
 ### Example 3: Только критические атрибуты
 ```powershell
@@ -370,10 +368,9 @@ Get-DiskSmartInfo -CriticalAttributesOnly
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               5   5     Reallocated Sectors Count          10        252   252   0
@@ -385,16 +382,15 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков и выводит данные только критических атрибутов.
 
-### Example 4: Вывод только тех атрибутов, чьи значения находятся в состоянии Warning или Critical
+### Example 4: Использование параметра -Quiet
 ```powershell
 Get-DiskSmartInfo -Quiet
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               3   3     Spin-Up Time                       21        20    20    6825
@@ -402,30 +398,27 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-Команда получает информацию SMART жестких дисков и отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.
+Команда получает информацию SMART жестких дисков и отображает только критичные атрибуты
+со значением свойства Data, превышающим 0, а также не критичные атрибуты, в том случае,
+если значение их свойства Value меньше или равно значению свойства Threshold.
 
-Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
-
-### Example 5: Вывод только тех критических атрибутов, чьи значения находятся в состоянии Warning или Critical
+### Example 5: Использование параметров -CriticalAttributesOnly и -Quiet
 ```powershell
 Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 ```
 
 ```
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-Команда получает информацию SMART жестких дисков и отображает только те критические атрибуты, чьи значения находятся в состоянии Warning или Critical.
-
-Если диск не содержит критических атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
-
+Команда получает информацию SMART жестких дисков и отображает только критические атрибуты
+со значением свойства Data, превышающим 0.
 
 ### Example 6: Получение данных SMART с удаленных компьютеров
 ```powershell
@@ -434,10 +427,9 @@ Get-DiskSmartInfo -ComputerName SomeComputer
 
 ```
 ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -458,38 +450,7 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера.
 
-### Example 7: Получение данных SMART с удаленных компьютеров без указания имени параметра ComputerName
-```powershell
-Get-DiskSmartInfo SomeComputer
-```
-
-```
-ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
-SMARTData:
-
-              ID  IDHex AttributeName                                 Threshold Value Worst Data
-              --  ----- -------------                                 --------- ----- ----- ----
-              5   5     Reallocated Sectors Count                     10        100   100   0
-              9   9     Power-On Hours                                0         98    98    8397
-              12  C     Power Cycle Count                             0         99    99    22
-              177 B1    Wear Range Delta                              0         98    98    33
-              179 B3    Used Reserved Block Count Total               10        100   100   0
-              181 B5    Program Fail Count Total                      10        100   100   0
-              182 B6    Erase Fail Count                              10        100   100   0
-              183 B7    SATA Downshift Error Count                    10        100   100   0
-              187 BB    Reported Uncorrectable Errors                 0         100   100   0
-              190 BE    Temperature Difference                        0         53    48    47
-              195 C3    Hardware ECC Recovered                        0         200   200   0
-              199 C7    Ultra DMA CRC Error Count                     0         100   100   0
-              235 EB    Good Block Count AND System(Free) Block Count 0         99    99    6
-              241 F1    Total LBAs Written                            0         99    99    12720469069
-```
-
-Команда получает информацию SMART жестких дисков с удаленного компьютера.
-
-### Example 8: Получение данных SMART с удаленных компьютеров с использованием объектов CimSession
+### Example 7: Получение данных SMART с удаленных компьютеров с использованием объектов CimSession
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
@@ -502,10 +463,9 @@ Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 
 ```
 ComputerName: SomeComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
@@ -525,10 +485,9 @@ SMARTData:
 
 
 ComputerName: SomeAnotherComputer
-Model:        Disk model
-InstanceId:   Disk Instance Id
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-
               ID  IDHex AttributeName                                 Threshold Value Worst Data
               --  ----- -------------                                 --------- ----- ----- ----
               5   5     Reallocated Sectors Count                     10        100   100   0
