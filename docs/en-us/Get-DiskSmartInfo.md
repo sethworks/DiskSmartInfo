@@ -204,7 +204,7 @@ Accept wildcard characters: False
 Specifies attribute name.
 
 The parameter accepts only default (and not proprietary) attribute names,
-then tranforms them into attribute ids, that are actually used.
+then transforms them into attribute ids, that are actually used.
 
 The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
 
@@ -249,7 +249,7 @@ Accept wildcard characters: False
 ### -ShowHistory
 Displays previously saved history Data alongside current Data.
 
-By default the cmdlet shows history data for all attribues, even if there were no changes occured.
+By default the cmdlet shows history data for all attributes, even if there were no changes occurred.
 
 This can be changed by ShowUnchangedDataHistory config parameter.
 
