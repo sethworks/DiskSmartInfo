@@ -15,13 +15,15 @@ Gets disk SMART information
 ### ComputerName (Default)
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
-[-Quiet] [<CommonParameters>]
+[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
-Get-DiskSmartInfo -CimSession <String[]> [-ShowConverted] [-CriticalAttributesOnly] 
-[-Quiet] CommonParameters>]
+Get-DiskSmartInfo -CimSession <CimSession[]> [-ShowConverted] [-CriticalAttributesOnly] 
+[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -113,7 +115,7 @@ and disk number in diskpart utility.
 
 This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
 autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
-specified, autocompletion suggests disks from that computer. Autocompletion does not suggest disk numbers
+specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk numbers
 if more than one ComputerName or CimSession specified.
 
 ```yaml
@@ -131,7 +133,7 @@ Accept wildcard characters: False
 ### -DiskModel
 Specified disk models to query.
 
-Disk number corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet)
+Disk model corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet)
 and MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet).
 
 Actually, the cmdlet compares specified value to Model property of Win32_DiskDrive WMI class, after stripping
@@ -141,9 +143,11 @@ and MSFT_PhysicalDisk Model property.
 
 This can be changed by TrimDiskDriveModel config parameter.
 
+For more information, see about_DiskSmartInfo_config.
+
 This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified,
 autocompletion suggests disks from local computer, where there are single ComputerName or CimSession
-specified, autocompletion suggests disks from that computer. Autocompletion does not suggest disk models
+specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk models
 if more than one ComputerName or CimSession specified.
 
 ```yaml
@@ -224,7 +228,7 @@ If there are no such an attributes for a disk, that disk is not shown.
 
 This can be changed by SuppressEmptySmartData config parameter.
 
-For more inforrmation, see about_DiskSmartInfo_config.
+For more information, see about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter
@@ -245,7 +249,7 @@ By default the cmdlet shows history data for all attribues, even if there were n
 
 This can be changed by ShowUnchangedHistoricalData config parameter.
 
-For more inforrmation, see about_DiskSmartInfo_config.
+For more information, see about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter
@@ -272,7 +276,7 @@ History by default is located in the history folder of the module directory.
 
 This can be changed by HistoricalDataPath config parameter.
 
-For more inforrmation, see about_DiskSmartInfo_config.
+For more information, see about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter

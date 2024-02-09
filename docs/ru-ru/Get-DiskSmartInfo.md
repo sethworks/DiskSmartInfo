@@ -15,13 +15,15 @@ schema: 2.0.0
 ### ComputerName (Default)
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
-[-Quiet] [<CommonParameters>]
+[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
 ```
 
 ### CimSession
 ```
-Get-DiskSmartInfo -CimSession <String[]> [-ShowConverted] [-CriticalAttributesOnly] 
-[-Quiet] CommonParameters>]
+Get-DiskSmartInfo -CimSession <CimSession[]> [-ShowConverted] [-CriticalAttributesOnly] 
+[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -64,11 +66,11 @@ Accept wildcard characters: False
 ### -ShowConverted
 Параметр добавляет ковертированные данные для некоторых атрибутов.
 
-Такими атрибутами являются: "Spin-Up Time" (показывает данные в секундах),
-"Power-On Hours" (показывает данные в днях),
-"Temperature Difference" (показывает действительную температуру),
-"Total LBAs Written" (показывает данные в терабайтах)
-и "Total LBAs Read" (показывает данные в терабайтах).
+Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов,
+перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.
+
+Больше информации в about_DiskSmartInfo_attributes.
+
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
@@ -84,8 +86,13 @@ Accept wildcard characters: False
 ### -CriticalAttributesOnly
 Параметр отображает только критические атрибуты.
 
-Вы можете получить список критических атрибутов при помощи команды
-Get-DiskSmartAttributeDescription -CriticalOnly
+Критичность определяется свойством IsCritical атрибутов, перечисленных 
+в файлах attributes/default.ps1 и attributes/proprietary.ps1.
+
+Больше информации в about_DiskSmartInfo_attributes.
+
+Если заданы любые из параметров выбора атрибутов, результат включает в себя только
+критические атрибуты из указанных.
 
 ```yaml
 Type: SwitchParameter
@@ -97,6 +104,65 @@ Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
+```
+
+### -DiskNumber
+Задает номера дисков для запроса.
+
+Номер диска соответствует свойству Index класса WMI Win32_DiskDrive,
+свойству Number класса MSFT_Disk (результата командлета Get-Disk),
+свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk)
+и номеру диска в утилите diskpart.
+
+Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
+не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
+имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски
+с указанного удаленного компьютера. Механизм автозавершения не предлагает номера дисков в случае,
+если указаны имена нескольких компьютеров или несколько cim-сессий.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases: Index, Number, DeviceId
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
+### -DiskModel
+Задает модели дисков для запроса.
+
+Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk), 
+и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).
+
+На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive
+после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive
+может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device"
+для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.
+
+Это может быть изменено конфигурационным параметром TrimDiskDriveModel.
+
+Больше информации в about_DiskSmartInfo_config.
+
+Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
+не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
+имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски
+с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае,
+если указаны имена нескольких компьютеров или несколько cim-сессий.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: Model
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
 ```
 
 ### -Quiet
