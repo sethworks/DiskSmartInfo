@@ -165,14 +165,127 @@ Accept pipeline input: False
 Accept wildcard characters: True
 ```
 
+### -AttributeID
+Параметр указывает идентификатор атрибута.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
+
+```yaml
+Type: Int32[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeIDHex
+Параметр указывает идентификатор атрибута в шестнадцатеричном формате.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -AttributeName
+Параметр указывает имя атрибута.
+
+Параметр принимает только имена атрибутов по умолчанию (и не включает проприетарные),
+затем преобразовывает их числовые идентификаторы атрибутов, которые и используются
+для запроса.
+
+Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.
+
+Этот параметр поддерживает автоматическое завершение значений. Механизм автозавершения предлагает
+только значения по умолчанию и не включает проприетарные.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
 ### -Quiet
-Параметр отображает только те атрибуты, чьи значения находятся в состоянии Warning или Critical.
+Параметр отображает только критичные атрибуты со значением свойства Data превышающим 0,
+а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно
+значению свойста Threshold.
 
-Если атрибут относится к критичным, он отображается, если его значение (Data) больше 0.
+Если заданы любые из параметров выбора атрибутов, результат включает в себя только
+соответствующе условиям атрибуты из указанных.
 
-Если атрибут к критичным не относится, он отображается, если его значение (Value) меньше или равняется пороговому значению (Threshold).
+Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.
 
-Если диск не содержит атрибутов, чьи значения находятся в состоянии Warning или Critical, то сведения о нем не отображаются.
+Это можно изменить конфигурационным параметром SuppressEmptySmartData.
+
+Больше информации в about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ShowHistory
+Отображает ранее сохраненное значение свойства Data рядом с его текущим значением.
+
+По умолчанию отображается сохраненное значение для всех атрибутов, даже если
+текущее значение не изменилось.
+
+Это можно изменить конфигурационным параметром ShowUnchangedHistoricalData.
+
+Больше информации в about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -UpdateHistory
+Сохраняет текущие значения свойства Data для всех дисков указанных компьютеров
+для последующего сравнения.
+
+Если для определенного компьютера уже существуют сохраненные данные,
+они перезаписываются. То есть сохраняется только один экземпляр данных.
+
+Команда сохраняет значения свойста Data для всех дисков и атрибутов указанных компьютеров,
+даже если использовались параметры выбора дисков и атрибутов.
+
+По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.
+
+Это расположение может быть изменено конфигурационным параметром HistoricalDataPath.
+
+Больше информации в about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter
