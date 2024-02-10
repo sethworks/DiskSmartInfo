@@ -145,7 +145,7 @@ Accept wildcard characters: False
 может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device"
 для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.
 
-Это может быть изменено конфигурационным параметром TrimDiskDriveModel.
+Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.
 
 Больше информации в about_DiskSmartInfo_config.
 

@@ -336,7 +336,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Задает модели дисков для запроса.</maml:para>
             <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
             <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
-            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModel.</maml:para>
+            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
             <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.</maml:para>
             <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
@@ -498,7 +498,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Задает модели дисков для запроса.</maml:para>
             <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
             <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
-            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModel.</maml:para>
+            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
             <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.</maml:para>
             <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
@@ -674,7 +674,7 @@ Description    : The count of errors that could not be recovered using hardware 
           <maml:para>Задает модели дисков для запроса.</maml:para>
           <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
           <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
-          <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModel.</maml:para>
+          <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
           <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
           <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.</maml:para>
           <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>

@@ -336,7 +336,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Specified disk models to query.</maml:para>
             <maml:para>Disk model corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet) and MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet).</maml:para>
             <maml:para>Actually, the cmdlet compares specified value to Model property of Win32_DiskDrive WMI class, after stripping drive type suffix. For example, Model property of Win32_DiskDrive WMI class can be "Disk Model 2 TB ATA Device". By default the cmdlet strips " ATA Device" suffix, so that the value corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.</maml:para>
-            <maml:para>This can be changed by TrimDiskDriveModel config parameter.</maml:para>
+            <maml:para>This can be changed by TrimDiskDriveModelSuffix config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
             <maml:para>The result is cumulative and includes all disks specified in -DiskNumber and -DiskModel parameters.</maml:para>
             <maml:para>This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified, autocompletion suggests disks from local computer, where there are single ComputerName or CimSession specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk models if more than one ComputerName or CimSession specified.</maml:para>
@@ -498,7 +498,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Specified disk models to query.</maml:para>
             <maml:para>Disk model corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet) and MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet).</maml:para>
             <maml:para>Actually, the cmdlet compares specified value to Model property of Win32_DiskDrive WMI class, after stripping drive type suffix. For example, Model property of Win32_DiskDrive WMI class can be "Disk Model 2 TB ATA Device". By default the cmdlet strips " ATA Device" suffix, so that the value corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.</maml:para>
-            <maml:para>This can be changed by TrimDiskDriveModel config parameter.</maml:para>
+            <maml:para>This can be changed by TrimDiskDriveModelSuffix config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
             <maml:para>The result is cumulative and includes all disks specified in -DiskNumber and -DiskModel parameters.</maml:para>
             <maml:para>This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified, autocompletion suggests disks from local computer, where there are single ComputerName or CimSession specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk models if more than one ComputerName or CimSession specified.</maml:para>
@@ -674,7 +674,7 @@ Description    : The count of errors that could not be recovered using hardware 
           <maml:para>Specified disk models to query.</maml:para>
           <maml:para>Disk model corresponds to Model properties of MSFT_Disk class (result of Get-Disk cmdlet) and MSFT_PhysicalDisk class (result of Get-PhysicalDisk cmdlet).</maml:para>
           <maml:para>Actually, the cmdlet compares specified value to Model property of Win32_DiskDrive WMI class, after stripping drive type suffix. For example, Model property of Win32_DiskDrive WMI class can be "Disk Model 2 TB ATA Device". By default the cmdlet strips " ATA Device" suffix, so that the value corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.</maml:para>
-          <maml:para>This can be changed by TrimDiskDriveModel config parameter.</maml:para>
+          <maml:para>This can be changed by TrimDiskDriveModelSuffix config parameter.</maml:para>
           <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
           <maml:para>The result is cumulative and includes all disks specified in -DiskNumber and -DiskModel parameters.</maml:para>
           <maml:para>This parameter supports autocompletion. When -ComputerName or -CimSession parameters are not specified, autocompletion suggests disks from local computer, where there are single ComputerName or CimSession specified, autocompletion suggests disks from that remote computer. Autocompletion does not suggest disk models if more than one ComputerName or CimSession specified.</maml:para>

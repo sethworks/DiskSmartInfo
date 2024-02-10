@@ -185,7 +185,7 @@ Describe "Config" {
 
     Context "Trim Win32_DiskDrive Model property" {
 
-        Context "TrimDiskDriveModel = `$true" {
+        Context "TrimDiskDriveModelSuffix = `$true" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -194,11 +194,11 @@ Describe "Config" {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 
-            Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModelSuffix" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
@@ -216,7 +216,7 @@ Describe "Config" {
             }
         }
 
-        Context "TrimDiskDriveModel = `$false" {
+        Context "TrimDiskDriveModelSuffix = `$false" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -225,17 +225,17 @@ Describe "Config" {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $false
+                    $Config.TrimDiskDriveModelSuffix = $false
                 }
             }
 
             AfterAll {
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 
-            Context "DiskSmartInfo Model property depends on TrimDiskDriveModel" {
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModelSuffix" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo

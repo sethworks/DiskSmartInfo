@@ -3,7 +3,7 @@
     SuppressResultsWithEmptySmartData = $true
 
     # Trim Win32_DiskDrive Model property 'ATA Device' and 'SCSI Disk Device' trailing strings, so that it corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.
-    TrimDiskDriveModel = $true
+    TrimDiskDriveModelSuffix = $true
 
     # Path to save attributes' historical data. If not absolute, it is relative to module folder.
     DataHistoryPath = 'history'

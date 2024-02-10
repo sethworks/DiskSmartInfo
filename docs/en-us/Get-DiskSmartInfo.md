@@ -143,7 +143,7 @@ drive type suffix. For example, Model property of Win32_DiskDrive WMI class can 
 By default the cmdlet strips " ATA Device" suffix, so that the value corresponds to MSFT_Disk
 and MSFT_PhysicalDisk Model property.
 
-This can be changed by TrimDiskDriveModel config parameter.
+This can be changed by TrimDiskDriveModelSuffix config parameter.
 
 For more information, see about_DiskSmartInfo_config.
 

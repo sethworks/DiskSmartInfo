@@ -52,7 +52,7 @@ function inTrimDiskDriveModel
 
     $trimStrings = @(' ATA Device', ' SCSI Disk Device')
 
-    if ($Script:Config.TrimDiskDriveModel)
+    if ($Script:Config.TrimDiskDriveModelSuffix)
     {
         foreach ($ts in $trimStrings)
         {
