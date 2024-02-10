@@ -162,7 +162,7 @@ function inGetDiskSmartInfo
                     }
                 }
 
-                if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
+                if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
                 {
                     $hash.Add("SmartData", $attributes)
                     $diskSmartInfo = [PSCustomObject]$hash

@@ -9,7 +9,7 @@ Describe "Config" {
 
     Context "Suppress empty SmartData" {
 
-        Context "SuppressEmptySmartData = `$true" {
+        Context "SuppressResultsWithEmptySmartData = `$true" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -18,11 +18,11 @@ Describe "Config" {
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.SuppressEmptySmartData = $true
+                    $Config.SuppressResultsWithEmptySmartData = $true
                 }
             }
 
-            Context "AttributeID parameter results depend on SuppressEmptySmartData" {
+            Context "AttributeID parameter results depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
@@ -52,7 +52,7 @@ Describe "Config" {
                 }
             }
 
-            Context "Quiet parameter results do not depend on SuppressEmptySmartData" {
+            Context "Quiet parameter results do not depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -Quiet
@@ -77,7 +77,7 @@ Describe "Config" {
             }
         }
 
-        Context "SuppressEmptySmartData = `$false" {
+        Context "SuppressResultsWithEmptySmartData = `$false" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -86,17 +86,17 @@ Describe "Config" {
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.SuppressEmptySmartData = $false
+                    $Config.SuppressResultsWithEmptySmartData = $false
                 }
             }
 
             AfterAll {
                 InModuleScope DiskSmartInfo {
-                    $Config.SuppressEmptySmartData = $true
+                    $Config.SuppressResultsWithEmptySmartData = $true
                 }
             }
 
-            Context "AttributeID parameter results depend on SuppressEmptySmartData" {
+            Context "AttributeID parameter results depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
@@ -159,7 +159,7 @@ Describe "Config" {
                 }
             }
 
-            Context "Quiet parameter results not depend on SuppressEmptySmartData" {
+            Context "Quiet parameter results not depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo -Quiet

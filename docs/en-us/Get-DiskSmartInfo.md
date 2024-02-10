@@ -230,7 +230,7 @@ If any of the attribute selection parameters are used, the result includes such 
 
 If there are no such an attributes for a disk, that disk is not shown.
 
-This can be changed by SuppressEmptySmartData config parameter.
+This can be changed by SuppressResultsWithEmptySmartData config parameter.
 
 For more information, see about_DiskSmartInfo_config.
 

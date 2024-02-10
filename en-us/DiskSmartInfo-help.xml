@@ -395,7 +395,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
             <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
             <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
-            <maml:para>This can be changed by SuppressEmptySmartData config parameter.</maml:para>
+            <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
@@ -557,7 +557,7 @@ Description    : The count of errors that could not be recovered using hardware 
             <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
             <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
             <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
-            <maml:para>This can be changed by SuppressEmptySmartData config parameter.</maml:para>
+            <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
@@ -733,7 +733,7 @@ Description    : The count of errors that could not be recovered using hardware 
           <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
           <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
           <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
-          <maml:para>This can be changed by SuppressEmptySmartData config parameter.</maml:para>
+          <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
           <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>

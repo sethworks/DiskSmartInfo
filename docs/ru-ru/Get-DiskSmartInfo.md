@@ -237,7 +237,7 @@ Accept wildcard characters: True
 
 Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.
 
-Это можно изменить конфигурационным параметром SuppressEmptySmartData.
+Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.
 
 Больше информации в about_DiskSmartInfo_config.
 
