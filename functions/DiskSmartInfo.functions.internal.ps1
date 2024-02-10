@@ -475,7 +475,15 @@ function inReportErrors
 
     foreach ($cimError in $CimErrors)
     {
-        $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+        if ($cimError.OriginInfo.PSComputerName)
+        {
+            $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+        }
+        else
+        {
+            $message = $cimError.Exception.Message
+        }
+
         $exception = [System.Exception]::new($message, $cimError.Exception)
         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimError.FullyQualifiedErrorId, $cimError.CategoryInfo.Category, $cimError.TargetObject)
         $PSCmdlet.WriteError($errorRecord)
