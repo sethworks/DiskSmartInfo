@@ -2,7 +2,7 @@
 
 SHORT DESCRIPTION
 
-Describes SMART attribute definitions used by Get-DiskSmartInfo command.
+Describes SMART attribute definitions used by commands of DiskSmartInfo module.
 
 LONG DESCRIPTION
 
@@ -10,6 +10,7 @@ SMART attributes are defined in three files, located in the attributes folder:
     default.ps1
     proprietary.ps1
     descriptions.ps1
+
 
 DEFAULT ATTRIBUTES
 
@@ -32,7 +33,8 @@ DataType is an enum type value, that defines attribute data structure.
 IsCritical is a boolean, specifying whether an attribute is critical.
 
 ConvertScriptBlock is a ScriptBlock type value, that defines conversion process,
-that is used by the -ShowConverted command parameter.
+that is used by the the Get-DiskSmartInfo command with the -ShowConverted parameter.
+
 
 PROPRIETARY ATTRIBUTES
 
@@ -47,8 +49,8 @@ Family property is a string, used as a custom name for the device family.
 This property is not used by the commands.
 
 ModelPatterns is an array of strings. Each of them represents regular expression,
-used by the command to compare with the model of the processed disks.
-When there is a match, attributes from that family are added to actual
+used by the Get-DiskSmartInfo command to compare with the model of the processed
+disks. When there is a match, attributes from that family are added to actual
 attribute set.
 
 If selected family contains an attribute with id, that is already defined
@@ -97,6 +99,7 @@ then resulting attribute definition will be:
 
 
 New disk models and proprietary definitions should be added to this file.
+
 
 DESCRIPTIONS
 

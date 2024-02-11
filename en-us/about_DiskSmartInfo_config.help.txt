@@ -48,7 +48,7 @@ Default is $true.
 
 DataHistoryPath
 
-This parameter specifies folder, where attributes data values will be stored.
+This parameter specifies folder, where saved attributes data values are stored.
 
 It is used by the -UpdateHistory and -ShowHistory Get-DiskSmartInfo parameters.
 
@@ -69,6 +69,9 @@ If $false, the command displays only those values, that differ from actual ones.
 It is used by the -ShowHistory Get-DiskSmartInfo parameter.
 
 Default is $true.
+
+
+Config parameters are applied during module import.
 
 
 SEE ALSO
