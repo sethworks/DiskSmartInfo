@@ -1,13 +1,15 @@
 @{
-    # Suppress DiskSmartInfo objects with empty SmartData property. The -Quiet parameter always suppresses irrespective of this parameter.
-    SuppressEmptySmartData = $true
+    # Suppress DiskSmartInfo objects with empty SmartData property.
+    # The -Quiet parameter always suppresses such objects irrespective of this parameter.
+    SuppressResultsWithEmptySmartData = $true
 
-    # Trim Win32_DiskDrive Model property 'ATA Device' and 'SCSI Disk Device' trailing strings, so that it corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.
-    TrimDiskDriveModel = $true
+    # Trim Win32_DiskDrive Model property 'ATA Device' and 'SCSI Disk Device' trailing suffix,
+    # so that it corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.
+    TrimDiskDriveModelSuffix = $true
 
     # Path to save attributes' historical data. If not absolute, it is relative to module folder.
-    HistoricalDataPath = 'history'
+    DataHistoryPath = 'history'
 
     # Show historical data for all attributes. If false, show only historical data, that differ from actual.
-    ShowUnchangedHistoricalData = $true
+    ShowUnchangedDataHistory = $true
 }

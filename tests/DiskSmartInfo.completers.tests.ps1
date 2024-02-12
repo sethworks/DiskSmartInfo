@@ -187,13 +187,13 @@ Describe "DiskSmartInfo completions tests" {
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
         }
 
-        Context "TrimDiskDriveModel = `$true" {
+        Context "TrimDiskDriveModelSuffix = `$true" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 
@@ -212,19 +212,19 @@ Describe "DiskSmartInfo completions tests" {
             }
         }
 
-        Context "TrimDiskDriveModel = `$false" {
+        Context "TrimDiskDriveModelSuffix = `$false" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $false
+                    $Config.TrimDiskDriveModelSuffix = $false
                 }
             }
 
             AfterAll {
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 
@@ -298,13 +298,13 @@ Describe "DiskSmartInfo completions tests" {
             $commandCompletion.CompletionMatches | Should -BeNullOrEmpty
         }
 
-        Context "TrimDiskDriveModel = `$true" {
+        Context "TrimDiskDriveModelSuffix = `$true" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 
@@ -323,19 +323,19 @@ Describe "DiskSmartInfo completions tests" {
             }
         }
 
-        Context "TrimDiskDriveModel = `$false" {
+        Context "TrimDiskDriveModelSuffix = `$false" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskDriveATAHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $false
+                    $Config.TrimDiskDriveModelSuffix = $false
                 }
             }
 
             AfterAll {
                 InModuleScope DiskSmartInfo {
-                    $Config.TrimDiskDriveModel = $true
+                    $Config.TrimDiskDriveModelSuffix = $true
                 }
             }
 

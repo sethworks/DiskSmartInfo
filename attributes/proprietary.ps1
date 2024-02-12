@@ -1,4 +1,4 @@
-$Script:overwrites = @(
+$Script:proprietaryAttributes = @(
     @{Family = 'SK hynix SATA SSDs'
     ModelPatterns = @('^HFS(128|256|512)G39TND-N210A.*', '^HFS(120|250|500)G32TND-N1A2A.*', '^HFS(128|256|512)G32TNF-N3A0A.*')
     Attributes = @(
@@ -106,7 +106,7 @@ $Script:overwrites = @(
             DataType = [DataType]::bits48
         }
     ) },
-    @{Family = 'Samsung based SSDs'
+    @{Family = 'Samsung SATA SSDs'
     ModelPatterns = @('^Samsung SSD 8[4-7]0 EVO (mSATA |M\.2 )?((120|250|500|750)G|[124]T)B.*')
     Attributes = @(
         [ordered]@{AttributeID = 170

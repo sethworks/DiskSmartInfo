@@ -8,41 +8,29 @@ schema: 2.0.0
 # Get-DiskSmartAttributeDescription
 
 ## SYNOPSIS
-Gets SMART attributes description
+Returns default SMART attributes description
 
 ## SYNTAX
 
-### AllAttributes (Default)
+### Default
 ```
-Get-DiskSmartAttributeDescription [<CommonParameters>]
-```
-
-### AttributeID
-```
-Get-DiskSmartAttributeDescription [[-AttributeID] <Int32>] [<CommonParameters>]
-```
-
-### AttributeIDHex
-```
-Get-DiskSmartAttributeDescription [-AttributeIDHex <String>] [<CommonParameters>]
-```
-
-### CriticalOnly
-```
-Get-DiskSmartAttributeDescription [-CriticalOnly] [<CommonParameters>]
+Get-DiskSmartAttributeDescription [[-AttributeID] <Int32[]>] [-AttributeIDHex <String[]>]
+ [-AttributeIDHex <String[]>] [-CriticalOnly] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Cmdlet gets SMART (Self-Monitoring, Analysis and Reporting Technology) attributes description
+Cmdlet returns default SMART (Self-Monitoring, Analysis and Reporting Technology) attributes description
 
 ## PARAMETERS
 
 ### -AttributeID
 Specifies attribute id.
 
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
 ```yaml
-Type: Int32
-Parameter Sets: AttributeID
+Type: Int32[]
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -55,9 +43,11 @@ Accept wildcard characters: False
 ### -AttributeIDHex
 Specifies attribute id in hexadecimal.
 
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
 ```yaml
-Type: String
-Parameter Sets: AttributeIDHex
+Type: String[]
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -67,12 +57,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -AttributeName
+Specifies attribute name.
+
+The result is cumulative and includes all attributes specified in -AttributeID, -AttributeIDHex, and -AttributeName parameters.
+
+This parameter supports autocompletion.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: True
+```
+
 ### -CriticalOnly
 Displays critical attributes only.
 
+If any of the attribute selection parameters are used, the result includes only critical attributes from specified.
+
 ```yaml
 Type: SwitchParameter
-Parameter Sets: CriticalOnly
+Parameter Sets: (All)
 Aliases:
 
 Required: False
@@ -112,55 +123,41 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 
 The command gets SMART attributes description.
 
-### Example 2: Get attribute description by ID
+### Example 2: Get selected attributes
 ```powershell
-Get-DiskSmartAttributeDescription -AttributeID 192
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*"
 ```
 
 ```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+IsCritical     : True
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
 BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
+
+AttributeID    : 195
+AttributeIDHex : C3
+AttributeName  : Hardware ECC Recovered
+IsCritical     : False
+BetterValue    : Varies
+Description    : (Vendor-specific raw value.) The raw value has different structure for different vendors and is often
+                 not meaningful as a decimal number.
 ```
 
-The command gets description for attribute with ID 192.
+The command gets description for selected attributes.
 
-### Example 3: Get attribute description by ID without specifying AttributeID parameter name
-```powershell
-Get-DiskSmartAttributeDescription 192
-```
-
-```
-AttributeID    : 192
-AttributeIDHex : C0
-AttributeName  : Power-off Retract Count
-BetterValue    : Low
-IsCritical     :
-Description    : Also known as "Emergency Retract Cycle Count" (Fujitsu) or "Unsafe Shutdown Count". Number of power-off or emergency retract cycles.
-```
-
-The command gets description for attribute with ID 192.
-
-### Example 4: Get attribute description by IDHex
-```powershell
-Get-DiskSmartAttributeDescription -AttributeIDHex C2
-```
-
-```
-AttributeID    : 194
-AttributeIDHex : C2
-AttributeName  : Temperature
-BetterValue    : Low
-IsCritical     :
-Description    : Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).
-```
-
-The command gets description for attribute with IDHex C2.
-
-### Example 5: Get critical attributes description
+### Example 3: Get critical attributes description
 ```powershell
 Get-DiskSmartAttributeDescription -CriticalOnly
 ```
@@ -171,7 +168,7 @@ AttributeIDHex : 5
 AttributeName  : Reallocated Sectors Count
 BetterValue    :
 IsCritical     : True
-Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.
 
 AttributeID    : 10
 AttributeIDHex : A
@@ -185,6 +182,32 @@ Description    : Count of retry of spin start attempts. This attribute stores a 
 
 The command gets description for critical SMART attributes.
 
+### Example 4: Get critical attributes description from specified
+```powershell
+Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*" -CriticalOnly
+```
+
+```
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+IsCritical     : True
+BetterValue    :
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+IsCritical     : True
+BetterValue    : Low
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
+```
+
+The command gets description for critical SMART attributes from specified.
+
 ## INPUTS
 
 ### None
@@ -192,6 +215,7 @@ The command gets description for critical SMART attributes.
 ## OUTPUTS
 
 ### System.Object
+
 ## NOTES
 
 ## RELATED LINKS

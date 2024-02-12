@@ -39,7 +39,25 @@
                 "panel": "dedicated",
                 "showReuseMessage": false,
                 "clear": true
+            }
+        },
+        {
+            "label": "UpdateHelp",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; ./.helpers/updateHelp.ps1",
+            "group": {
+                "kind": "none",
+                "isDefault": true
             },
+            "problemMatcher": [],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            }
         }
     ],
     "inputs": [

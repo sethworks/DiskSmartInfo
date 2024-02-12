@@ -123,7 +123,7 @@ function inGetDiskSmartInfo
                                 if ($hostHistoricalData)
                                 {
                                     $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
-                                    if ($Config.ShowUnchangedHistoricalData -or ($historicalAttributeData -ne $attribute.Data))
+                                    if ($Config.ShowUnchangedDataHistory -or ($historicalAttributeData -ne $attribute.Data))
                                     {
                                         $attribute.Add("DataHistory", $historicalAttributeData)
                                     }
@@ -162,7 +162,7 @@ function inGetDiskSmartInfo
                     }
                 }
 
-                if ($attributes -or (-not $Config.SuppressEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
+                if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
                 {
                     $hash.Add("SmartData", $attributes)
                     $diskSmartInfo = [PSCustomObject]$hash
@@ -197,10 +197,10 @@ function inOverwriteAttributes
 
     $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
 
-    foreach ($overwrite in $overwrites)
+    foreach ($proprietary in $proprietaryAttributes)
     {
         $patternMatched = $false
-        foreach ($modelPattern in $overwrite.ModelPatterns)
+        foreach ($modelPattern in $proprietary.ModelPatterns)
         {
             if ($model -match $modelPattern)
             {
@@ -211,32 +211,32 @@ function inOverwriteAttributes
 
         if ($patternMatched)
         {
-            foreach ($overwriteAttribute in $overwrite.Attributes)
+            foreach ($attribute in $proprietary.Attributes)
             {
-                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $overwriteAttribute.AttributeID})) -ge 0)
+                if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
                 {
                     $newAttribute = [ordered]@{
-                        AttributeID = $overwriteAttribute.AttributeID
-                        AttributeName = $overwriteAttribute.AttributeName
-                        DataType = $overwriteAttribute.DataType
+                        AttributeID = $attribute.AttributeID
+                        AttributeName = $attribute.AttributeName
+                        DataType = $attribute.DataType
                         IsCritical = $result[$index].IsCritical
                         ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
 
-                    if ($overwriteAttribute.Keys -contains 'IsCritical')
+                    if ($attribute.Keys -contains 'IsCritical')
                     {
-                        $newAttribute.IsCritical = $overwriteAttribute.IsCritical
+                        $newAttribute.IsCritical = $attribute.IsCritical
                     }
-                    if ($overwriteAttribute.Keys -contains 'ConvertScriptBlock')
+                    if ($attribute.Keys -contains 'ConvertScriptBlock')
                     {
-                        $newAttribute.ConvertScriptBlock = $overwriteAttribute.ConvertScriptBlock
+                        $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
                     }
 
                     $result[$index] = [PSCustomObject]$newAttribute
                 }
                 else
                 {
-                    $result.Add([PSCustomObject]$overwriteAttribute)
+                    $result.Add([PSCustomObject]$attribute)
                 }
             }
             break
@@ -298,16 +298,24 @@ function inGetAttributeData
 
         $([DataType]::temperature3.value__)
         {
-            # 9, 7, 5
-            $temps = @()
+            $temps = @([long]$smartData[$a + 5])
 
-            for ($offset = 9; $offset -ge 5; $offset -= 2)
+            for ($offset = 6; $offset -le 10; $offset++)
             {
-                [long]$value = $smartData[$a + $offset] + ($smartData[$a + $offset + 1] * 256)
-
-                if ($value)
+                if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
                 {
-                    $temps += $value
+                    $temps += [long]$smartData[$a + $offset]
+                }
+
+                if ($temps.Count -eq 3)
+                {
+                    if ($temps[1] -gt $temps[2])
+                    {
+                        $t = $temps[1]
+                        $temps[1] = $temps[2]
+                        $temps[2] = $t
+                    }
+                    break
                 }
             }
 
@@ -467,7 +475,15 @@ function inReportErrors
 
     foreach ($cimError in $CimErrors)
     {
-        $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+        if ($cimError.OriginInfo.PSComputerName)
+        {
+            $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+        }
+        else
+        {
+            $message = $cimError.Exception.Message
+        }
+
         $exception = [System.Exception]::new($message, $cimError.Exception)
         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimError.FullyQualifiedErrorId, $cimError.CategoryInfo.Category, $cimError.TargetObject)
         $PSCmdlet.WriteError($errorRecord)

@@ -32,7 +32,7 @@ $descriptionsHash = @(
         AttributeName = 'Reallocated Sectors Count'
         IsCritical = $true
         BetterValue = ''
-        Description = 'Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped.[25] Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.'
+        Description = 'Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.'
     },
     [ordered]@{
         AttributeID = 6
@@ -136,28 +136,24 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     },
     [ordered]@{
         AttributeID = 175
-        AttributeName = 'Power Loss Protection Failure'
+        AttributeName = 'Program Fail Count Chip'
         IsCritical = $false
         BetterValue = ''
-        Description = 'Last test result as microseconds to discharge cap, saturated at its maximum value. Also logs minutes since last test and lifetime number of tests. Raw value contains the following data:
-Bytes 0-1: Last test result as microseconds to discharge cap, saturates at max value. Test result expected in range 25 <= result <= 5000000, lower indicates specific error code.
-Bytes 2-3: Minutes since last test, saturates at max value.
-Bytes 4-5: Lifetime number of tests, not incremented on power cycle, saturates at max value.
-Normalized value is set to one on test failure or 11 if the capacitor has been tested in an excessive temperature condition, otherwise 100.'
+        Description = 'S.M.A.R.T. parameter indicates a number of flash program failure'
     },
     [ordered]@{
         AttributeID = 176
-        AttributeName = 'Erase Fail Count'
+        AttributeName = 'Erase Fail Count Chip'
         IsCritical = $false
         BetterValue = ''
         Description = 'S.M.A.R.T. parameter indicates a number of flash erase command failures.'
     },
     [ordered]@{
         AttributeID = 177
-        AttributeName = 'Wear Range Delta'
+        AttributeName = 'Wear Leveling Count'
         IsCritical = $false
         BetterValue = ''
-        Description = 'Delta between most-worn and least-worn Flash blocks. It describes how good/bad the wearleveling of the SSD works on a more technical way.'
+        Description = 'S.M.A.R.T. parameter indicates the worst case erase count.'
     },
     [ordered]@{
         AttributeID = 178
@@ -197,10 +193,10 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     },
     [ordered]@{
         AttributeID = 183
-        AttributeName = 'SATA Downshift Error Count'
+        AttributeName = 'Runtine Bad Block'
         IsCritical = $false
         BetterValue = 'Low'
-        Description = 'Also known as "Runtine Bad Block". Western Digital, Samsung or Seagate attribute: Either the number of downshifts of link speed (e.g. from 6Gbps to 3Gbps) or the total number of data blocks with detected, uncorrectable errors encountered during normal operation. Although degradation of this parameter can be an indicator of drive aging and/or potential electromechanical problems, it does not directly indicate imminent drive failure.'
+        Description = 'Also known as "SATA Downshift Error Count". Western Digital, Samsung or Seagate attribute: Either the number of downshifts of link speed (e.g. from 6Gbps to 3Gbps) or the total number of data blocks with detected, uncorrectable errors encountered during normal operation. Although degradation of this parameter can be an indicator of drive aging and/or potential electromechanical problems, it does not directly indicate imminent drive failure.'
     },
     [ordered]@{
         AttributeID = 184
@@ -247,10 +243,10 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     },
     [ordered]@{
         AttributeID = 190
-        AttributeName = 'Temperature Difference'
+        AttributeName = 'Airflow Temperature Celsius'
         IsCritical = $false
         BetterValue = 'Varies'
-        Description = 'Also known as "Airflow Temperature". Value is equal to (100-temp. $([char]0xB0)C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
+        Description = 'Also known as "Temperature Difference". Value is equal to (100-temp. $([char]0xB0)C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
     },
     [ordered]@{
         AttributeID = 191
@@ -277,7 +273,7 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     },
     [ordered]@{
         AttributeID = 194
-        AttributeName = 'Temperature'
+        AttributeName = 'Temperature Celsius'
         IsCritical = $false
         BetterValue = 'Low'
         Description = 'Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).'
@@ -320,10 +316,10 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 200
-        AttributeName = 'Write Error Rate'
+        AttributeName = 'Multi-Zone Error Rate'
         IsCritical = $false
         BetterValue = 'Low'
-        Description = 'Also known as "Multi-Zone Error Rate". The count of errors found when writing a sector. The higher the value, the worse the disk''s mechanical condition is.'
+        Description = 'Also known as "Write Error Rate". The count of errors found when writing a sector. The higher the value, the worse the disk''s mechanical condition is.'
     },
     [ordered]@{
         AttributeID = 201
@@ -579,7 +575,7 @@ However, some drives will not immediately remap such sectors when written; inste
     },
     [ordered]@{
         AttributeID = 254
-        AttributeName = 'Free Fall Protection'
+        AttributeName = 'Free Fall Sensor'
         IsCritical = $false
         BetterValue = 'Low'
         Description = 'Count of "Free Fall Events" detected.'

@@ -1,0 +1,79 @@
+﻿ABOUT DISKSMARTINFO CONFIG
+
+SHORT DESCRIPTION
+
+Describes DiskSmartInfo module configuration parameters.
+
+LONG DESCRIPTION
+
+DiskSmartInfo module supports several configuration parameters.
+
+They are located in the DiskSmartInfo.config.psd1 file in the root folder
+of the module.
+
+
+SuppressResultsWithEmptySmartData
+
+This parameter specifies whether disk objects with empty SmartData property
+should be returned. By default, they are suppressed.
+
+For example, if the following command is run:
+
+    Get-DiskSmartInfo -AttributeID 100
+
+and there are no such an attribute in the disk SMART data, by default
+command results will be empty.
+
+Use of the -Quiet parameter always suppresses such objects irrespective
+of the value of this parameter.
+
+Default is $true.
+
+
+TrimDiskDriveModelSuffix
+
+This parameter specifies whether the Get-DiskSmartInfo command should trim
+device type suffix from the Win32_DiskDrive object Model property, so that
+it corresponds to MSFT_Disk (result of Get-Disk cmdlet) and MSFT_PhysicalDisk
+(result of Get-PhysicalDisk cmdlet) Model property.
+
+Such suffixes include 'ATA Device' and 'SCSI Disk Device'.
+
+For example, if Win32_DiskDrive Model property value is
+'Vendor Model Size ATA Device', then by default it will be trimmed to
+'Vendor Model Size'.
+
+Default is $true.
+
+
+DataHistoryPath
+
+This parameter specifies folder, where saved attributes data values are stored.
+
+It is used by the -UpdateHistory and -ShowHistory Get-DiskSmartInfo parameters.
+
+If path is not absolute, then it is relative to module folder.
+
+Default is 'history'.
+
+
+ShowUnchangedDataHistory
+
+This parameter specifies whether saved data values should be displayed
+for all attributes.
+
+If $true, the command displays data values for all saved attributes.
+
+If $false, the command displays only those values, that differ from actual ones.
+
+It is used by the -ShowHistory Get-DiskSmartInfo parameter.
+
+Default is $true.
+
+
+Config parameters are applied during module import.
+
+
+SEE ALSO
+
+about_DiskSmartInfo_attributes
