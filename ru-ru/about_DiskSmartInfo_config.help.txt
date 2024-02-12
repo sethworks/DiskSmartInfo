@@ -6,7 +6,7 @@
 
 ПОЛНОЕ ОПИСАНИЕ
 
-Модуль DiskSmartInfo поддерживет четыре конфигурационных параметра.
+Модуль DiskSmartInfo поддерживает четыре конфигурационных параметра.
 
 Они расположены в файле DiskSmartInfo.config.psd1, находящемся в корневом
 каталоге модуля.
@@ -33,13 +33,13 @@ SuppressResultsWithEmptySmartData
 
 TrimDiskDriveModelSuffix
 
-Этот параметр указыват, должна ли команда Get-DiskSmartInfo удалять указывающий
+Этот параметр указывает, должна ли команда Get-DiskSmartInfo удалять указывающий
 тип диска суффикс из свойства Model объекта Win32_DiskDrive, для того чтобы
 его значение соответствовало значениям свойства Model объектов MSFT_Disk
-(результат выполнения команы Get-Disk) и MSFT_PhysicalDisk (результат выполнения
-команы Get-PhysicalDisk).
+(результат выполнения команды Get-Disk) и MSFT_PhysicalDisk (результат выполнения
+команды Get-PhysicalDisk).
 
-Подобными суффиксами являются 'ATA Device' and 'SCSI Disk Device'.
+Подобными суффиксами являются 'ATA Device' и 'SCSI Disk Device'.
 
 Например, если значение свойства Model объекта Win32_DiskDrive -
 'Vendor Model Size ATA Device', то по умолчанию оно будет преобразовано в
