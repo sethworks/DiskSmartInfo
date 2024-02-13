@@ -1,5 +1,5 @@
 {
-    "powershell.scriptAnalysis.settingsPath": "psScriptAnalyzer\\PSScriptAnalyzerSettings.psd1",
+    "powershell.scriptAnalysis.settingsPath": ".pssa\\PSScriptAnalyzerSettings.psd1",
 
     "[plaintext]": {
         "editor.rulers": [
