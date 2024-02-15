@@ -16,7 +16,8 @@ schema: 2.0.0
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Credential <PSCredential>]
+[<CommonParameters>]
 ```
 
 ### CimSession
@@ -294,6 +295,24 @@ Accept wildcard characters: False
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+Задает учетные данные для подключения к компьютерам, указанным в параметре
+-ComputerName.
+
+Не используется при локальных запросах, а также с параметром -CimSession.
+
+```yaml
+Type: PSCredential
+Parameter Sets: ComputerName
 Aliases:
 
 Required: False
