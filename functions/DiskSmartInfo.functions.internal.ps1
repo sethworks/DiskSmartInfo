@@ -7,6 +7,7 @@ function inGetDiskSmartInfo
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [int[]]$AttributeIDs,
+        [AttributeTypes]$AttributeType,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory
@@ -106,7 +107,10 @@ function inGetDiskSmartInfo
 
                     if ($attributeID -and
                     (isAttributeRequested -AttributeID $attributeID) -and
-                    ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
+                    ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)) -and
+                    (($AttributeType -eq [AttributeTypes]::All) -or
+                     ((($AttributeType -eq [AttributeTypes]::Advisory) -and -not ($smartData[$a + 1] -band 1))) -or
+                     ((($AttributeType -eq [AttributeTypes]::PreFail) -and ($smartData[$a + 1] -band 1)))))
                     {
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))

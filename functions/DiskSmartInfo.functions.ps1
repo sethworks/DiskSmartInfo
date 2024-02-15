@@ -1,3 +1,10 @@
+enum AttributeTypes
+{
+    All
+    Advisory
+    PreFail
+}
+
 function Get-DiskSmartInfo
 {
     [CmdletBinding(PositionalBinding=$false,DefaultParameterSetName='ComputerName')]
@@ -22,6 +29,7 @@ function Get-DiskSmartInfo
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
+        [AttributeTypes]$AttributeType = [AttributeTypes]::All,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory
@@ -170,6 +178,7 @@ function Get-DiskSmartInfo
                     -DiskNumbers $scd.DiskNumber `
                     -DiskModels $DiskModel `
                     -AttributeIDs $attributeIDs `
+                    -AttributeType $AttributeType `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
