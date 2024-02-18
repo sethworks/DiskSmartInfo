@@ -40,6 +40,11 @@ function Get-DiskSmartInfo
             break
         }
 
+        if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
+        {
+            Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
+        }
+
         $errorParameters = @{
             ErrorVariable = 'cimSessionErrors'
             ErrorAction = 'SilentlyContinue'

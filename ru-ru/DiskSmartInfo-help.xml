@@ -291,7 +291,7 @@ Description    : The count of errors that could not be recovered using hardware 
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:description>
-            <maml:para>Задает учетные данные для подключения к компьютерам, указанным в параметре -ComputerName.</maml:para>
+            <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
             <maml:para>Не используется при локальных запросах, а также с параметром -CimSession.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
@@ -791,7 +791,7 @@ Description    : The count of errors that could not be recovered using hardware 
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
-          <maml:para>Задает учетные данные для подключения к компьютерам, указанным в параметре -ComputerName.</maml:para>
+          <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
           <maml:para>Не используется при локальных запросах, а также с параметром -CimSession.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>

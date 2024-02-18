@@ -291,7 +291,7 @@ Description    : The count of errors that could not be recovered using hardware 
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>Credential</maml:name>
           <maml:description>
-            <maml:para>Specifies credential used for connecting to computers, listed in the -ComputerName parameter.</maml:para>
+            <maml:para>Specifies credential used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
             <maml:para>It is not used locally or with -CimSession parameter.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
@@ -791,7 +791,7 @@ Description    : The count of errors that could not be recovered using hardware 
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
         <maml:name>Credential</maml:name>
         <maml:description>
-          <maml:para>Specifies credential used for connecting to computers, listed in the -ComputerName parameter.</maml:para>
+          <maml:para>Specifies credential used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
           <maml:para>It is not used locally or with -CimSession parameter.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>

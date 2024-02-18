@@ -296,7 +296,7 @@ Accept wildcard characters: False
 ```
 
 ### -Credential
-Specifies credential used for connecting to computers, listed in the
+Specifies credential used for connecting to computers, listed or bound to the
 -ComputerName parameter.
 
 It is not used locally or with -CimSession parameter.
