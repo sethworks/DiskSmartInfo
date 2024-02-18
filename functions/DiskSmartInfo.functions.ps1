@@ -25,7 +25,7 @@ function Get-DiskSmartInfo
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory,
-        [Parameter(ParameterSetName='ComputerName')]
+        [Parameter(Position=1,ParameterSetName='ComputerName')]
         [pscredential]$Credential
     )
 
