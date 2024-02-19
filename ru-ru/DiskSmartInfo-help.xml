@@ -288,6 +288,19 @@ Description    : The count of errors that could not be recovered using hardware 
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+            <maml:para>Не используется при локальных запросах, а также с параметром -CimSession.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>ShowConverted</maml:name>
           <maml:description>
@@ -774,6 +787,19 @@ Description    : The count of errors that could not be recovered using hardware 
           <maml:uri />
         </dev:type>
         <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+          <maml:para>Не используется при локальных запросах, а также с параметром -CimSession.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>

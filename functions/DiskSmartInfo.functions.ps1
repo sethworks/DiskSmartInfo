@@ -24,7 +24,9 @@ function Get-DiskSmartInfo
         [string[]]$AttributeName,
         [switch]$Quiet,
         [switch]$ShowHistory,
-        [switch]$UpdateHistory
+        [switch]$UpdateHistory,
+        [Parameter(Position=1,ParameterSetName='ComputerName')]
+        [pscredential]$Credential
     )
 
     begin
@@ -36,6 +38,11 @@ function Get-DiskSmartInfo
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
             $PSCmdlet.WriteError($errorRecord)
             break
+        }
+
+        if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
+        {
+            Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
         }
 
         $errorParameters = @{
@@ -157,7 +164,7 @@ function Get-DiskSmartInfo
         {
             foreach ($scd in $sessionsComputersDisks)
             {
-                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName @errorParameters))
+                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -Credential $Credential @errorParameters))
                 {
                     inReportErrors -CimErrors $cimSessionErrors
                     continue

@@ -5,6 +5,7 @@
         'PSAvoidUsingWMICmdlet',
         'PSPossibleIncorrectUsageOfAssignmentOperator',
         'PSPossibleIncorrectComparisonWithNull',
-        'PSAvoidUsingComputerNameHardcoded'
+        'PSAvoidUsingComputerNameHardcoded',
+        'PSAvoidUsingConvertToSecureStringWithPlainText'
     )
 }

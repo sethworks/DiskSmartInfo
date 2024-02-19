@@ -16,7 +16,8 @@ Gets disk SMART information
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
+[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Credential <PSCredential>]
+[<CommonParameters>]
 ```
 
 ### CimSession
@@ -289,6 +290,24 @@ Aliases:
 
 Required: False
 Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Credential
+Specifies credential used for connecting to computers, listed or bound to the
+-ComputerName parameter.
+
+It is not used locally or with -CimSession parameter.
+
+```yaml
+Type: PSCredential
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
