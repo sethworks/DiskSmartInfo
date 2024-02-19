@@ -423,5 +423,5 @@ $Script:descriptions = [System.Collections.Generic.List[PSCustomObject]]::new()
 foreach ($descriptionHash in $descriptionsHash)
 {
     $descriptionHash.Insert(1, "AttributeIDHex", $descriptionHash.AttributeID.ToString("X"))
-    $descriptions.Add([PSCustomObject]$descriptionHash)
+    $descriptions.Add(([PSCustomObject]$descriptionHash | Add-Member -TypeName 'DiskSmartAttributeDescription' -PassThru))
 }
