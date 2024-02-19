@@ -9,15 +9,14 @@ function Get-DiskSmartAttributeDescription
         [string[]]$AttributeIDHex,
         [Parameter(Position=2)]
         [ArgumentCompleter([AttributeNameCompleter])]
-        [string[]]$AttributeName,
-        [switch]$CriticalOnly
+        [string[]]$AttributeName
     )
 
     $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
     foreach ($attribute in $descriptions)
     {
-        if ((isAttributeRequested -AttributeID $attribute.AttributeID) -and (-not $CriticalOnly -or $attribute.IsCritical))
+        if (isAttributeRequested -AttributeID $attribute.AttributeID)
         {
             $attribute
         }
