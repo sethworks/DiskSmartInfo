@@ -23,14 +23,18 @@ function isAttributeRequested
         # [string[]]$attributeNames
     )
 
+    # if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
+    #     ($attributeIDs.Count -and $attributeIDs -contains $attributeID) -or
+    #     ($AttributeName.Count -and
+    #         (($AttributeName |
+    #             ForEach-Object -Process {
+    #                 # $smartAttributes.Where{$PSItem.AttributeID -eq $AttributeID}.AttributeName -like $PSItem}) -contains $true
+    #                 $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}) -contains $true
+    #     ) ) )
     if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
         ($attributeIDs.Count -and $attributeIDs -contains $attributeID) -or
-        ($AttributeName.Count -and
-            (($AttributeName |
-                ForEach-Object -Process {
-                    # $smartAttributes.Where{$PSItem.AttributeID -eq $AttributeID}.AttributeName -like $PSItem}) -contains $true
-                    $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}) -contains $true
-        ) ) )
+        ($AttributeName.Count -and $AttributeName.Where{$attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}
+        ))
     {
         return $true
     }
