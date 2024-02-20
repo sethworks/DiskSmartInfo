@@ -12,7 +12,7 @@ function Get-DiskSmartAttributeDescription
         [string[]]$AttributeName
     )
 
-    $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
+    $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName -IsDescription
 
     foreach ($attribute in $descriptions)
     {

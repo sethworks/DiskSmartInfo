@@ -3,7 +3,8 @@ function inComposeAttributeIDs
     Param (
         [int[]]$AttributeID,
         [string[]]$AttributeIDHex,
-        [string[]]$AttributeName
+        [string[]]$AttributeName,
+        [switch]$IsDescription
         )
 
     $attributeIDs = [System.Collections.Generic.List[int]]::new()
@@ -27,7 +28,16 @@ function inComposeAttributeIDs
 
     foreach ($at in $AttributeName)
     {
-        if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -like $at}))
+        if (-not $IsDescription)
+        {
+            $value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -like $at})
+        }
+        else
+        {
+            $value = $descriptions.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -like $at})
+        }
+        # if ($value = $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -like $at}))
+        if ($value)
         {
             if (-not $attributeIDs.Contains($value.AttributeID))
             {
