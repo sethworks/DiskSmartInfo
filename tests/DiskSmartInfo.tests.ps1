@@ -511,21 +511,41 @@ Describe "Get-DiskSmartInfo" {
             }
         }
 
-        Context "AttributeName wildcard" {
+        Context "AttributeName wildcards" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-
-                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*put*'
             }
 
-            It "Has requested attributes" {
+            It "Has requested attribute" {
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*put*'
+
                 $diskSmartInfo.SmartData | Should -HaveCount 1
                 $diskSmartInfo.SmartData.ID | Should -Be 2
                 $diskSmartInfo.SmartData.AttributeName | Should -BeExactly 'Throughput Performance'
+            }
+
+            It "Has 2 requested attributes" {
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName 't*'
+
+                $diskSmartInfo.SmartData | Should -HaveCount 2
+                $diskSmartInfo.SmartData[0].ID | Should -Be 2
+                $diskSmartInfo.SmartData[0].AttributeName | Should -BeExactly 'Throughput Performance'
+                $diskSmartInfo.SmartData[1].ID | Should -Be 194
+                $diskSmartInfo.SmartData[1].AttributeName | Should -BeExactly 'Temperature Celsius'
+            }
+
+            It "Has 5 requested attributes" {
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName 't*','r*'
+
+                $diskSmartInfo.SmartData | Should -HaveCount 5
+                $diskSmartInfo.SmartData[0].ID | Should -Be 1
+                $diskSmartInfo.SmartData[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
+                $diskSmartInfo.SmartData[4].ID | Should -Be 196
+                $diskSmartInfo.SmartData[4].AttributeName | Should -BeExactly 'Reallocation Event Count'
             }
         }
 
