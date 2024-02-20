@@ -31,10 +31,11 @@ function isAttributeRequested
     #                 # $smartAttributes.Where{$PSItem.AttributeID -eq $AttributeID}.AttributeName -like $PSItem}) -contains $true
     #                 $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}) -contains $true
     #     ) ) )
+    $atName = $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
+
     if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
-        ($attributeIDs.Count -and $attributeIDs -contains $attributeID) -or
-        ($AttributeName.Count -and $AttributeName.Where{$attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}
-        ))
+        ($attributeIDs -contains $attributeID) -or
+        ($AttributeName.Where{$atName -like $PSItem}))
     {
         return $true
     }

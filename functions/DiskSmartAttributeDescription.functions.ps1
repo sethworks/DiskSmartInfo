@@ -16,7 +16,8 @@ function Get-DiskSmartAttributeDescription
 
     foreach ($attribute in $descriptions)
     {
-        if (isAttributeRequested -AttributeID $attribute.AttributeID)
+        # if (isAttributeRequested -AttributeID $attribute.AttributeID)
+        if (isAttributeRequested -AttributeID $attribute.AttributeID -attributeSet $descriptions)
         {
             $attribute
         }

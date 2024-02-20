@@ -25,7 +25,7 @@ function inComposeAttributeIDs
             $attributeIDs.Add($value)
         }
     }
-
+<#
     foreach ($at in $AttributeName)
     {
         if (-not $IsDescription)
@@ -45,11 +45,11 @@ function inComposeAttributeIDs
             }
         }
     }
-
-    if (($AttributeID -or $AttributeIDHex -or $AttributeName) -and -not $attributeIDs.Count)
-    {
-        break
-    }
+#>
+    # if (($AttributeID -or $AttributeIDHex -or $AttributeName) -and -not $attributeIDs.Count)
+    # {
+    #     break
+    # }
 
     return $attributeIDs
 }
