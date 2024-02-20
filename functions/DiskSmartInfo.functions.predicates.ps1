@@ -17,10 +17,20 @@ function isCritical
 function isAttributeRequested
 {
     Param (
-        [int]$AttributeID
+        # [int]$AttributeID
+        [int]$attributeID,
+        [PSCustomObject[]]$attributeSet
+        # [string[]]$attributeNames
     )
 
-    if (-not $attributeIDs.Count -or $AttributeIDs -contains $AttributeID)
+    if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
+        ($attributeIDs.Count -and $attributeIDs -contains $attributeID) -or
+        ($AttributeName.Count -and
+            (($AttributeName |
+                ForEach-Object -Process {
+                    # $smartAttributes.Where{$PSItem.AttributeID -eq $AttributeID}.AttributeName -like $PSItem}) -contains $true
+                    $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName -like $PSItem}) -contains $true
+        ) ) )
     {
         return $true
     }
@@ -28,6 +38,14 @@ function isAttributeRequested
     {
         return $false
     }
+    # if (-not $attributeIDs.Count -or $AttributeIDs -contains $AttributeID)
+    # {
+    #     return $true
+    # }
+    # else
+    # {
+    #     return $false
+    # }
 }
 
 function isThresholdReached
