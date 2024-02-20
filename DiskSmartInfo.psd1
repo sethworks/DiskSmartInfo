@@ -56,7 +56,8 @@ PowerShellVersion = '5.1'
 
 # Format files (.ps1xml) to be loaded when importing this module
 FormatsToProcess = @('formats/DiskSmartInfo.format.ps1xml',
-                     'formats/DiskSmartAttribute.format.ps1xml')
+                     'formats/DiskSmartAttribute.format.ps1xml',
+                     'formats/DiskSmartAttributeDescription.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
 NestedModules = @('functions/DiskSmartInfo.completers.ps1',
@@ -98,6 +99,7 @@ FileList = 'DiskSmartInfo.psd1',
            'functions/DiskSmartInfo.functions.predicates.ps1',
            'formats/DiskSmartInfo.format.ps1xml',
            'formats/DiskSmartAttribute.format.ps1xml',
+           'formats/DiskSmartAttributeDescription.format.ps1xml',
            'attributes/default.ps1',
            'attributes/proprietary.ps1',
            'attributes/descriptions.ps1'

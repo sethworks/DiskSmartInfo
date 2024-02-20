@@ -19,9 +19,6 @@ Describe "Get-DiskSmartAttributeDescription" {
             $diskSmartAttributeDescription[0].AttributeID | Should -Be 1
             $diskSmartAttributeDescription[38].AttributeIDHex | Should -BeExactly 'C2'
             $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin-Up Time'
-            $diskSmartAttributeDescription[28].BetterValue | Should -BeExactly 'Low'
-            $diskSmartAttributeDescription[45].IsCritical | Should -BeExactly $true
-            $diskSmartAttributeDescription[48].IsCritical | Should -BeExactly $false
             $diskSmartAttributeDescription[81].Description | Should -BeExactly 'Count of "Free Fall Events" detected.'
         }
     }
@@ -93,21 +90,6 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
     }
 
-    Context "-CriticalOnly" {
-
-        BeforeAll {
-            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -CriticalOnly
-        }
-
-        It "Has 9 attributes" {
-            $diskSmartAttributeDescription | Should -HaveCount 9
-        }
-
-        It "Has critical attributes only" {
-            $diskSmartAttributeDescription.IsCritical | Get-Unique | Should -BeExactly $true
-        }
-    }
-
     Context "-AttributeID -AttributeIDHex -AttributeName" {
 
         BeforeAll {
@@ -145,21 +127,6 @@ Describe "Get-DiskSmartAttributeDescription" {
             $diskSmartAttributeDescription[3].AttributeName | Should -BeExactly 'Multi-Zone Error Rate'
             $diskSmartAttributeDescription[4].AttributeName | Should -BeExactly 'Soft ECC correction'
             $diskSmartAttributeDescription[5].AttributeName | Should -BeExactly 'Offline Seek Performance'
-        }
-    }
-
-    Context "-AttributeID -AttributeIDHex -AttributeName -CriticalOnly" {
-
-        BeforeAll {
-            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeID 1, 2 -AttributeIDHex 'A', 'C8' -AttributeName 'Soft ECC correction', 'Offline Seek Performance' -CriticalOnly
-        }
-
-        It "Has correct results count" {
-            $diskSmartAttributeDescription | Should -HaveCount 1
-        }
-
-        It "Has correct attributes" {
-            $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Spin Retry Count'
         }
     }
 }

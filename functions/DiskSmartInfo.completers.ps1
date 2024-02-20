@@ -10,7 +10,15 @@ class AttributeNameCompleter : IArgumentCompleter
         [System.Collections.IDictionary] $fakeBoundParameters
     )
     {
-        $attributeNames = $Script:defaultAttributes.AttributeName
+        if ($commandName -eq 'Get-DiskSmartInfo')
+        {
+            $attributeNames = $Script:defaultAttributes.AttributeName
+        }
+        else
+        {
+            $attributeNames = $Script:descriptions.AttributeName
+        }
+
         $result = New-Object -TypeName "System.Collections.Generic.List[CompletionResult]"
 
         [System.Collections.Generic.List[String]]$valuesToExclude = $null
@@ -49,7 +57,15 @@ class AttributeNameCompleter : IArgumentCompleter
         {
             if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
             {
-                $id = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
+                if ($commandName -eq 'Get-DiskSmartInfo')
+                {
+                    $id = ($Script:defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
+                }
+                else
+                {
+                    $id = ($Script:descriptions.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
+                }
+
                 if ($completionResult.Contains(" "))
                 {
                     $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))

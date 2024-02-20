@@ -76,60 +76,60 @@ Describe "DiskSmartInfo completions tests" {
             $command = "Get-DiskSmartAttributeDescription -AttributeName "
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -HaveCount 64
+            $commandCompletion.CompletionMatches | Should -HaveCount 82
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly "'Raw Read Error Rate'"
             $commandCompletion.CompletionMatches[0].ListItemText | Should -BeExactly "Raw Read Error Rate"
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly "1: Raw Read Error Rate"
 
-            $commandCompletion.CompletionMatches[63].CompletionText | Should -BeExactly "'Free Fall Sensor'"
-            $commandCompletion.CompletionMatches[63].ListItemText | Should -BeExactly "Free Fall Sensor"
-            $commandCompletion.CompletionMatches[63].ToolTip | Should -BeExactly "254: Free Fall Sensor"
+            $commandCompletion.CompletionMatches[81].CompletionText | Should -BeExactly "'Free Fall Sensor'"
+            $commandCompletion.CompletionMatches[81].ListItemText | Should -BeExactly "Free Fall Sensor"
+            $commandCompletion.CompletionMatches[81].ToolTip | Should -BeExactly "254: Free Fall Sensor"
         }
 
         It "Suggests proper values" {
             $command = "Get-DiskSmartAttributeDescription -AttributeName T"
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -HaveCount 7
+            $commandCompletion.CompletionMatches | Should -HaveCount 8
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly "'Throughput Performance'"
             $commandCompletion.CompletionMatches[0].ListItemText | Should -BeExactly "Throughput Performance"
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly "2: Throughput Performance"
 
-            $commandCompletion.CompletionMatches[6].CompletionText | Should -BeExactly "'Total LBAs Read'"
-            $commandCompletion.CompletionMatches[6].ListItemText | Should -BeExactly "Total LBAs Read"
-            $commandCompletion.CompletionMatches[6].ToolTip | Should -BeExactly "242: Total LBAs Read"
+            $commandCompletion.CompletionMatches[7].CompletionText | Should -BeExactly "'Total LBAs Read Expanded'"
+            $commandCompletion.CompletionMatches[7].ListItemText | Should -BeExactly "Total LBAs Read Expanded"
+            $commandCompletion.CompletionMatches[7].ToolTip | Should -BeExactly "244: Total LBAs Read Expanded"
         }
 
         It "Suggests proper values and omits already specified" {
             $command = "Get-DiskSmartAttributeDescription -AttributeName 'Thermal Asperity Rate', 'Torque Amplification Count', T"
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -HaveCount 5
+            $commandCompletion.CompletionMatches | Should -HaveCount 6
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly "'Throughput Performance'"
             $commandCompletion.CompletionMatches[0].ListItemText | Should -BeExactly "Throughput Performance"
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly "2: Throughput Performance"
 
-            $commandCompletion.CompletionMatches[4].CompletionText | Should -BeExactly "'Total LBAs Read'"
-            $commandCompletion.CompletionMatches[4].ListItemText | Should -BeExactly "Total LBAs Read"
-            $commandCompletion.CompletionMatches[4].ToolTip | Should -BeExactly "242: Total LBAs Read"
+            $commandCompletion.CompletionMatches[5].CompletionText | Should -BeExactly "'Total LBAs Read Expanded'"
+            $commandCompletion.CompletionMatches[5].ListItemText | Should -BeExactly "Total LBAs Read Expanded"
+            $commandCompletion.CompletionMatches[5].ToolTip | Should -BeExactly "244: Total LBAs Read Expanded"
         }
 
         It "Omits already specified values" {
             $command = "Get-DiskSmartAttributeDescription -AttributeName 'Thermal Asperity Rate', 'Torque Amplification Count', "
             $commandCompletion = TabExpansion2 -inputScript $command -cursorColumn $command.Length
 
-            $commandCompletion.CompletionMatches | Should -HaveCount 62
+            $commandCompletion.CompletionMatches | Should -HaveCount 80
 
             $commandCompletion.CompletionMatches[0].CompletionText | Should -BeExactly "'Raw Read Error Rate'"
             $commandCompletion.CompletionMatches[0].ListItemText | Should -BeExactly "Raw Read Error Rate"
             $commandCompletion.CompletionMatches[0].ToolTip | Should -BeExactly "1: Raw Read Error Rate"
 
-            $commandCompletion.CompletionMatches[61].CompletionText | Should -BeExactly "'Free Fall Sensor'"
-            $commandCompletion.CompletionMatches[61].ListItemText | Should -BeExactly "Free Fall Sensor"
-            $commandCompletion.CompletionMatches[61].ToolTip | Should -BeExactly "254: Free Fall Sensor"
+            $commandCompletion.CompletionMatches[79].CompletionText | Should -BeExactly "'Free Fall Sensor'"
+            $commandCompletion.CompletionMatches[79].ListItemText | Should -BeExactly "Free Fall Sensor"
+            $commandCompletion.CompletionMatches[79].ToolTip | Should -BeExactly "254: Free Fall Sensor"
         }
     }
 
