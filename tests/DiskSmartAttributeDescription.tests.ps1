@@ -67,15 +67,21 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
     }
 
-    Context "AttributeName wildcard" {
-
-        BeforeAll {
-            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*put*'
-        }
+    Context "AttributeName wildcards" {
 
         It "Has correct attribute" {
+            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*put*'
+
             $diskSmartAttributeDescription | Should -HaveCount 1
             $diskSmartAttributeDescription.AttributeName | Should -BeExactly 'Throughput Performance'
+        }
+
+        It "Has correct attributes" {
+            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName 'r*'
+
+            $diskSmartAttributeDescription | Should -HaveCount 9
+            $diskSmartAttributeDescription[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
+            $diskSmartAttributeDescription[8].AttributeName | Should -BeExactly 'Read Error Retry Rate'
         }
     }
 

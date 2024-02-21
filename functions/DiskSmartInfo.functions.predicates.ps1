@@ -17,10 +17,15 @@ function isCritical
 function isAttributeRequested
 {
     Param (
-        [int]$AttributeID
+        [int]$attributeID,
+        [PSCustomObject[]]$attributeSet
     )
 
-    if (-not $attributeIDs.Count -or $AttributeIDs -contains $AttributeID)
+    $atName = $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
+
+    if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
+        ($attributeIDs -contains $attributeID) -or
+        ($AttributeName.Where{$atName -like $PSItem}))
     {
         return $true
     }
