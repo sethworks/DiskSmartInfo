@@ -132,16 +132,15 @@
 AttributeID    : 1
 AttributeIDHex : 1
 AttributeName  : Read Error Rate
-BetterValue    : Low
-IsCritical     :
-Description    : (Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred when reading data from a disk surface. The raw value has different structure for different vendors and is often not meaningful as a decimal number.
+Description    : (Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred
+                 when reading data from a disk surface. The raw value has different structure for different vendors
+                 and is often not meaningful as a decimal number.
 
 AttributeID    : 2
 AttributeIDHex : 2
 AttributeName  : Throughput Performance
-BetterValue    : High
-IsCritical     :
-Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.
+Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is
+                 decreasing there is a high probability that there is a problem with the disk.
 
 ...</dev:code>
         <dev:remarks>
@@ -157,8 +156,6 @@ Description    : Overall (general) throughput performance of a hard disk drive. 
 AttributeID    : 5
 AttributeIDHex : 5
 AttributeName  : Reallocated Sectors Count
-IsCritical     : True
-BetterValue    :
 Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
                  found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
                  reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
@@ -167,15 +164,11 @@ Description    : Count of reallocated sectors. The raw value represents a count 
 AttributeID    : 187
 AttributeIDHex : BB
 AttributeName  : Reported Uncorrectable Errors
-IsCritical     : True
-BetterValue    : Low
 Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
 
 AttributeID    : 195
 AttributeIDHex : C3
 AttributeName  : Hardware ECC Recovered
-IsCritical     : False
-BetterValue    : Varies
 Description    : (Vendor-specific raw value.) The raw value has different structure for different vendors and is often
                  not meaningful as a decimal number.</dev:code>
         <dev:remarks>
