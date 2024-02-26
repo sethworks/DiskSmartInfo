@@ -93,9 +93,12 @@ class DiskCompleter : IArgumentCompleter
         $result = New-Object -TypeName "System.Collections.Generic.List[CompletionResult]"
         [System.Collections.Generic.List[String]]$valuesToExclude = $null
 
-        $parameters = @{
+        $instanceParameters = @{
             ClassName = 'Win32_DiskDrive'
         }
+        $sessionParameters = @{}
+        $cimSession = $null
+        $diskDrive = @()
 
         if (($fakeBoundParameters.ContainsKey('ComputerName') -and $fakeBoundParameters.ContainsKey('CimSession')) -or
            ($fakeBoundParameters.ContainsKey('ComputerName') -and $fakeBoundParameters.ComputerName.Count -gt 1) -or
@@ -106,14 +109,32 @@ class DiskCompleter : IArgumentCompleter
 
         if ($fakeBoundParameters.ContainsKey('ComputerName'))
         {
-            $parameters.Add('ComputerName', $fakeBoundParameters.ComputerName)
+            $sessionParameters.Add('ComputerName', $fakeBoundParameters.ComputerName)
+            if ($fakeBoundParameters.ContainsKey('Credential'))
+            {
+                $sessionParameters.Add('Credential', $fakeBoundParameters.Credential)
+            }
+            if ($cimSession = New-CimSession @sessionParameters)
+            {
+                $instanceParameters.Add('CimSession', $cimSession)
+            }
         }
         elseif  ($fakeBoundParameters.ContainsKey('CimSession'))
         {
-            $parameters.Add('CimSession', $fakeBoundParameters.CimSession)
+            $instanceParameters.Add('CimSession', $fakeBoundParameters.CimSession)
         }
 
-        $diskDrive = Get-CimInstance @parameters | Sort-Object -Property Index
+        try
+        {
+            $diskDrive = Get-CimInstance @instanceParameters | Sort-Object -Property Index
+        }
+        finally
+        {
+            if ($cimSession)
+            {
+                Remove-CimSession -CimSession $cimSession
+            }
+        }
 
         if ($commandParameterAst = $commandAst.Find({$args[0].GetType().Name -eq 'CommandParameterAst' -and $args[0].ParameterName -eq $parameterName}, $false))
         {
