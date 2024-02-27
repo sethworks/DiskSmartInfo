@@ -114,9 +114,17 @@ class DiskCompleter : IArgumentCompleter
             {
                 $sessionParameters.Add('Credential', $fakeBoundParameters.Credential)
             }
-            if ($cimSession = New-CimSession @sessionParameters)
+
+            $option = [Microsoft.Management.Infrastructure.Options.WSManSessionOptions]::new()
+            $option.Timeout = New-TimeSpan -Seconds 1
+
+            if ($cimSession = New-CimSession -SessionOption $option @sessionParameters)
             {
                 $instanceParameters.Add('CimSession', $cimSession)
+            }
+            else
+            {
+                return $result
             }
         }
         elseif  ($fakeBoundParameters.ContainsKey('CimSession'))
