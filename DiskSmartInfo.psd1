@@ -60,7 +60,8 @@ FormatsToProcess = @('formats/DiskSmartInfo.format.ps1xml',
                      'formats/DiskSmartAttributeDescription.format.ps1xml')
 
 # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = @('functions/DiskSmartInfo.completers.ps1',
+NestedModules = @('types/DiskSmartInfo.types.ps1',
+                  'functions/DiskSmartInfo.completers.ps1',
                   'functions/DiskSmartInfo.functions.ps1',
                   'functions/DiskSmartAttributeDescription.functions.ps1',
                   'functions/DiskSmartInfo.functions.internal.ps1',
@@ -91,6 +92,7 @@ AliasesToExport = @()
 # List of all files packaged with this module
 FileList = 'DiskSmartInfo.psd1',
            'DiskSmartInfo.psm1',
+           'types/DiskSmartInfo.types.ps1',
            'functions/DiskSmartInfo.completers.ps1',
            'functions/DiskSmartInfo.functions.ps1',
            'functions/DiskSmartAttributeDescription.functions.ps1',
