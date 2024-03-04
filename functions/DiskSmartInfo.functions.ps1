@@ -7,7 +7,7 @@ function Get-DiskSmartInfo
         [string[]]$ComputerName,
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
-        [switch]$ShowConverted,
+        [switch]$Convert,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
@@ -172,7 +172,7 @@ function Get-DiskSmartInfo
 
                 inGetDiskSmartInfo `
                     -Session $scd.CimSession `
-                    -ShowConverted:$ShowConverted `
+                    -Convert:$Convert `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
                     -DiskNumbers $scd.DiskNumber `
                     -DiskModels $DiskModel `
