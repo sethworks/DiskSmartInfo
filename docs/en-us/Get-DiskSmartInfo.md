@@ -14,7 +14,7 @@ Gets disk SMART information
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Convert] [-CriticalAttributesOnly] 
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Credential <PSCredential>]
 [<CommonParameters>]
@@ -22,7 +22,7 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-ShowConverted] [-CriticalAttrib
 
 ### CimSession
 ```
-Get-DiskSmartInfo -CimSession <CimSession[]> [-ShowConverted] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo -CimSession <CimSession[]> [-Convert] [-CriticalAttributesOnly] 
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
 ```
@@ -64,7 +64,7 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ShowConverted
+### -Convert
 Adds converted data for some of the attributes.
 
 These conversions are defined as ConvertScriptBlock property of attributes, listed in
@@ -352,7 +352,7 @@ The command gets disk SMART information.
 
 ### Example 2: Converted data
 ```powershell
-Get-DiskSmartInfo -ShowConverted
+Get-DiskSmartInfo -Convert
 ```
 
 ```
