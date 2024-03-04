@@ -119,14 +119,14 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
-    Context "-ShowConverted" {
+    Context "-Convert" {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-            $diskSmartInfo = Get-DiskSmartInfo -ShowConverted
+            $diskSmartInfo = Get-DiskSmartInfo -Convert
         }
 
         It "Converts Spin-Up Time" {
@@ -322,7 +322,7 @@ Describe "Get-DiskSmartInfo" {
                 mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1, $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                $diskSmartInfo = Get-DiskSmartInfo -ShowConverted
+                $diskSmartInfo = Get-DiskSmartInfo -Convert
             }
 
             It "Has 3 DiskSmartInfo objects" {

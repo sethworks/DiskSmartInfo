@@ -329,7 +329,7 @@ Describe "History" {
             }
         }
 
-        Context "-ShowHistory -ShowConverted" {
+        Context "-ShowHistory -Convert" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -353,7 +353,7 @@ Describe "History" {
                     (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
                 }
 
-                $diskSmartInfo = Get-DiskSmartInfo -ShowHistory -ShowConverted
+                $diskSmartInfo = Get-DiskSmartInfo -ShowHistory -Convert
             }
 
             It "Object is of proper type" {
