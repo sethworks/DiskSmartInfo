@@ -219,7 +219,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConverted</maml:name>
+          <maml:name>Convert</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
             <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -381,7 +381,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>ShowConverted</maml:name>
+          <maml:name>Convert</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
             <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -555,7 +555,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>ShowConverted</maml:name>
+        <maml:name>Convert</maml:name>
         <maml:description>
           <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
           <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -779,7 +779,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>-------------- Example 2: Конвертированные данные --------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -ShowConverted
+        <dev:code>Get-DiskSmartInfo -Convert
 
 Disk:         0: Disk model
 PNPDeviceId:  Disk PNPDeviceId

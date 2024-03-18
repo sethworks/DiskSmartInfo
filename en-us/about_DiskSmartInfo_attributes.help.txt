@@ -33,7 +33,7 @@ DataType is an enum type value, that defines attribute data structure.
 IsCritical is a boolean, specifying whether an attribute is critical.
 
 ConvertScriptBlock is a ScriptBlock type value, that defines conversion process,
-that is used by the the Get-DiskSmartInfo command with the -ShowConverted parameter.
+that is used by the the Get-DiskSmartInfo command with the -Convert parameter.
 
 
 PROPRIETARY ATTRIBUTES
