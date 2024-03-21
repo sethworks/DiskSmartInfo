@@ -191,6 +191,36 @@ function Get-DiskSmartInfo
                     Remove-CimSession -CimSession $scd.CimSession
                 }
             }
+
+            # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
+            inClearRemotingErrorRecords
         }
+
+
+        # $length = $PSCmdlet.SessionState.PSVariable.GetValue($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable).Count
+        # $value = $PSCmdlet.SessionState.PSVariable.Get($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable).Value
+        # $value.RemoveAt(0)
+        # $PSCmdlet.SessionState.PSVariable.Get($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable).Value.RemoveAt($length - 1)
+
+        # while ($value.ForEach{$PSItem.GetType().FullName} -contains 'System.Management.Automation.Runspaces.RemotingErrorRecord')
+        # {
+            #     $value.ForEach{if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord') {$value.Remove($PSItem); continue}}
+            # }
+
+        # if ($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+        # {
+        #     $value = $PSCmdlet.SessionState.PSVariable.GetValue($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+        #     while ($true)
+        #     {
+        #         $value.ForEach{
+        #             if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord')
+        #             {
+        #                 $value.Remove($PSItem)
+        #                 continue
+        #             }
+        #         }
+        #         break
+        #     }
+        # }
     }
 }
