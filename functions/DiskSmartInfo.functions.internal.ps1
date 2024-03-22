@@ -110,7 +110,7 @@ function inGetDiskSmartInfo
                     {
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
-                        $attribute.Add("AttributeName", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                        $attribute.Add("Name", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                         $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
                         $attribute.Add("Value", [byte]$smartData[$a + 3])
                         $attribute.Add("Worst", [byte]$smartData[$a + 4])
