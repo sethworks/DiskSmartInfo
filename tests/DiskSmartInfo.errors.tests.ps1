@@ -57,4 +57,28 @@ Describe "Errors" {
             # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
         }
     }
+
+    Context "Error variable" {
+
+        BeforeAll {
+            $nonExistentHost = 'non_existent_host'
+        }
+
+        It "Should contain error if non-existent or untrusted host is specified" {
+            Get-DiskSmartInfo $nonExistentHost -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+            $ev | Should -HaveCount 1
+            $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
+            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+        }
+
+        It "Should contain error if cim session to non-existent or untrusted host is specified" {
+            $cimSession = New-CimSession -ComputerName $nonExistentHost -SkipTestConnection
+            Get-DiskSmartInfo -CimSession $cimSession -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+            $ev | Should -HaveCount 1
+            $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
+            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+        }
+    }
 }

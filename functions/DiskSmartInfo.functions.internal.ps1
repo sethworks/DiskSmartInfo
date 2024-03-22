@@ -489,3 +489,22 @@ function inReportErrors
         $PSCmdlet.WriteError($errorRecord)
     }
 }
+
+function inClearRemotingErrorRecords
+{
+    if ($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+    {
+        $value = $PSCmdlet.SessionState.PSVariable.GetValue($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+        while ($true)
+        {
+            $value.ForEach{
+                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord')
+                {
+                    $value.Remove($PSItem)
+                    continue
+                }
+            }
+            break
+        }
+    }
+}

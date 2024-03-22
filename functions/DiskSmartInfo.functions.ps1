@@ -191,6 +191,9 @@ function Get-DiskSmartInfo
                     Remove-CimSession -CimSession $scd.CimSession
                 }
             }
+
+            # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
+            inClearRemotingErrorRecords
         }
     }
 }
