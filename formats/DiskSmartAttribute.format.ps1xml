@@ -10,7 +10,9 @@
                 <TableHeaders>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>AttributeName</Label>
+                    </TableColumnHeader>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
@@ -26,7 +28,7 @@
                                 <PropertyName>IDHex</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>AttributeName</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
@@ -54,7 +56,9 @@
                 <TableHeaders>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>AttributeName</Label>
+                    </TableColumnHeader>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
@@ -76,7 +80,7 @@
                                 <PropertyName>IDHex</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>AttributeName</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
@@ -111,7 +115,9 @@
                 <TableHeaders>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>AttributeName</Label>
+                    </TableColumnHeader>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
@@ -130,7 +136,7 @@
                                 <PropertyName>IDHex</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>AttributeName</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
@@ -161,7 +167,9 @@
                 <TableHeaders>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
-                    <TableColumnHeader/>
+                    <TableColumnHeader>
+                        <Label>AttributeName</Label>
+                    </TableColumnHeader>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
                     <TableColumnHeader/>
@@ -180,7 +188,7 @@
                                 <PropertyName>IDHex</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <PropertyName>AttributeName</PropertyName>
+                                <PropertyName>Name</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
                                 <PropertyName>Threshold</PropertyName>
