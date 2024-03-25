@@ -36,7 +36,7 @@ Describe "Get-DiskSmartInfo" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo.SmartData[0].ID | Should -Be 1
             $diskSmartInfo.SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo.SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo.SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo.SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo.SmartData[2].Value | Should -Be 71
             $diskSmartInfo.SmartData[2].Worst | Should -Be 69
@@ -90,8 +90,8 @@ Describe "Get-DiskSmartInfo" {
             $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
 
-            $diskSmartInfo.SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo.SmartData[0].AttributeName | Should -BeOfType 'System.String'
+            $diskSmartInfo.SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo.SmartData[0].Name | Should -BeOfType 'System.String'
 
             $diskSmartInfo.SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Threshold | Should -BeOfType 'System.Byte'
@@ -160,8 +160,8 @@ Describe "Get-DiskSmartInfo" {
             $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
 
-            $diskSmartInfo[0].SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].SmartData[0].AttributeName | Should -BeOfType 'System.String'
+            $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
@@ -291,27 +291,27 @@ Describe "Get-DiskSmartInfo" {
             It "Has default attribute definitions" {
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
                 $diskSmartInfo[0].SmartData[13].ID | Should -Be 241
-                $diskSmartInfo[0].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[0].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[0].SmartData[14].ID | Should -Be 242
-                $diskSmartInfo[0].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
+                $diskSmartInfo[0].SmartData[14].Name | Should -BeExactly "Total LBAs Read"
             }
 
             It "Has overwritten attrubute definitions" {
                 $diskSmartInfo[1].SmartData | Should -HaveCount 30
                 $diskSmartInfo[1].SmartData[27].ID | Should -Be 241
-                $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
+                $diskSmartInfo[1].SmartData[27].Name | Should -BeExactly "Total Writes GB"
                 $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
-                $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
+                $diskSmartInfo[1].SmartData[28].Name | Should -BeExactly "Total Reads GB"
                 $diskSmartInfo[1].SmartData[29].ID | Should -Be 249
-                $diskSmartInfo[1].SmartData[29].AttributeName | Should -BeExactly "NAND Writes GiB"
+                $diskSmartInfo[1].SmartData[29].Name | Should -BeExactly "NAND Writes GiB"
             }
 
             It "Has default attribute definitions" {
                 $diskSmartInfo[2].SmartData | Should -HaveCount 15
                 $diskSmartInfo[2].SmartData[13].ID | Should -Be 241
-                $diskSmartInfo[2].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[2].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[2].SmartData[14].ID | Should -Be 242
-                $diskSmartInfo[2].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
+                $diskSmartInfo[2].SmartData[14].Name | Should -BeExactly "Total LBAs Read"
             }
         }
 
@@ -337,11 +337,11 @@ Describe "Get-DiskSmartInfo" {
             It "Has default attribute definitions" {
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
                 $diskSmartInfo[0].SmartData[13].ID | Should -Be 241
-                $diskSmartInfo[0].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[0].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[0].SmartData[13].Data | Should -Be 12740846422
                 $diskSmartInfo[0].SmartData[13].DataConverted | Should -BeExactly "5.933 TB"
                 $diskSmartInfo[0].SmartData[14].ID | Should -Be 242
-                $diskSmartInfo[0].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
+                $diskSmartInfo[0].SmartData[14].Name | Should -BeExactly "Total LBAs Read"
                 $diskSmartInfo[0].SmartData[14].Data | Should -Be 9556432520
                 $diskSmartInfo[0].SmartData[14].DataConverted | Should -BeExactly "4.450 TB"
             }
@@ -349,14 +349,14 @@ Describe "Get-DiskSmartInfo" {
             It "Has overwritten attrubute definitions" {
                 $diskSmartInfo[1].SmartData | Should -HaveCount 30
                 $diskSmartInfo[1].SmartData[27].ID | Should -Be 241
-                $diskSmartInfo[1].SmartData[27].AttributeName | Should -BeExactly "Total Writes GB"
+                $diskSmartInfo[1].SmartData[27].Name | Should -BeExactly "Total Writes GB"
                 $diskSmartInfo[1].SmartData[27].Data | Should -Be 2034
                 $diskSmartInfo[1].SmartData[27].DataConverted | Should -BeExactly "1.986 TB"
                 $diskSmartInfo[1].SmartData[28].ID | Should -Be 242
-                $diskSmartInfo[1].SmartData[28].AttributeName | Should -BeExactly "Total Reads GB"
+                $diskSmartInfo[1].SmartData[28].Name | Should -BeExactly "Total Reads GB"
                 $diskSmartInfo[1].SmartData[28].Data | Should -Be 2596
                 $diskSmartInfo[1].SmartData[28].DataConverted | Should -BeExactly "2.535 TB"
-                $diskSmartInfo[1].SmartData[29].AttributeName | Should -BeExactly "NAND Writes GiB"
+                $diskSmartInfo[1].SmartData[29].Name | Should -BeExactly "NAND Writes GiB"
                 $diskSmartInfo[1].SmartData[29].Data | Should -Be 1745
                 $diskSmartInfo[1].SmartData[29].DataConverted | Should -BeExactly "1.704 TB"
             }
@@ -364,11 +364,11 @@ Describe "Get-DiskSmartInfo" {
             It "Has default attribute definitions" {
                 $diskSmartInfo[2].SmartData | Should -HaveCount 15
                 $diskSmartInfo[2].SmartData[13].ID | Should -Be 241
-                $diskSmartInfo[2].SmartData[13].AttributeName | Should -BeExactly "Total LBAs Written"
+                $diskSmartInfo[2].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[2].SmartData[13].Data | Should -Be 12757689431
                 $diskSmartInfo[2].SmartData[13].DataConverted | Should -BeExactly "5.941 TB"
                 $diskSmartInfo[2].SmartData[14].ID | Should -Be 242
-                $diskSmartInfo[2].SmartData[14].AttributeName | Should -BeExactly "Total LBAs Read"
+                $diskSmartInfo[2].SmartData[14].Name | Should -BeExactly "Total LBAs Read"
                 $diskSmartInfo[2].SmartData[14].Data | Should -Be 9573275529
                 $diskSmartInfo[2].SmartData[14].DataConverted | Should -BeExactly "4.458 TB"
             }
@@ -389,7 +389,7 @@ Describe "Get-DiskSmartInfo" {
                 It "Retains IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 6
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
-                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+                    $diskSmartInfo[1].SmartData[0].Name | Should -BeExactly "Retired Block Count"
                 }
             }
 
@@ -417,9 +417,9 @@ Describe "Get-DiskSmartInfo" {
                 It "Update IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 5
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 184
-                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "End-to-End Error"
+                    $diskSmartInfo[1].SmartData[0].Name | Should -BeExactly "End-to-End Error"
 
-                    $diskSmartInfo[1].SmartData.AttributeName | Should -Not -Contain 'Retired Block Count'
+                    $diskSmartInfo[1].SmartData.Name | Should -Not -Contain 'Retired Block Count'
                 }
             }
 
@@ -449,7 +449,7 @@ Describe "Get-DiskSmartInfo" {
                 It "Update IsCritical property value during attribute overwriting" {
                     $diskSmartInfo[1].SmartData | Should -HaveCount 6
                     $diskSmartInfo[1].SmartData[0].ID | Should -Be 5
-                    $diskSmartInfo[1].SmartData[0].AttributeName | Should -BeExactly "Retired Block Count"
+                    $diskSmartInfo[1].SmartData[0].Name | Should -BeExactly "Retired Block Count"
                 }
             }
         }
@@ -525,7 +525,7 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo.SmartData | Should -HaveCount 1
                 $diskSmartInfo.SmartData.ID | Should -Be 2
-                $diskSmartInfo.SmartData.AttributeName | Should -BeExactly 'Throughput Performance'
+                $diskSmartInfo.SmartData.Name | Should -BeExactly 'Throughput Performance'
             }
 
             It "Has 2 requested attributes" {
@@ -533,9 +533,9 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo.SmartData | Should -HaveCount 2
                 $diskSmartInfo.SmartData[0].ID | Should -Be 2
-                $diskSmartInfo.SmartData[0].AttributeName | Should -BeExactly 'Throughput Performance'
+                $diskSmartInfo.SmartData[0].Name | Should -BeExactly 'Throughput Performance'
                 $diskSmartInfo.SmartData[1].ID | Should -Be 194
-                $diskSmartInfo.SmartData[1].AttributeName | Should -BeExactly 'Temperature Celsius'
+                $diskSmartInfo.SmartData[1].Name | Should -BeExactly 'Temperature Celsius'
             }
 
             It "Has 5 requested attributes" {
@@ -543,9 +543,9 @@ Describe "Get-DiskSmartInfo" {
 
                 $diskSmartInfo.SmartData | Should -HaveCount 5
                 $diskSmartInfo.SmartData[0].ID | Should -Be 1
-                $diskSmartInfo.SmartData[0].AttributeName | Should -BeExactly 'Raw Read Error Rate'
+                $diskSmartInfo.SmartData[0].Name | Should -BeExactly 'Raw Read Error Rate'
                 $diskSmartInfo.SmartData[4].ID | Should -Be 196
-                $diskSmartInfo.SmartData[4].AttributeName | Should -BeExactly 'Reallocation Event Count'
+                $diskSmartInfo.SmartData[4].Name | Should -BeExactly 'Reallocation Event Count'
             }
         }
 

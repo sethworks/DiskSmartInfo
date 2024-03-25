@@ -48,7 +48,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -134,7 +134,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -185,7 +185,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -236,7 +236,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -287,7 +287,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -335,7 +335,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
@@ -383,7 +383,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[1].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[1].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[1].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[1].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[1].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[1].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[1].SmartData[2].Worst | Should -Be 69
@@ -431,7 +431,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
             $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
-            $diskSmartInfo[0].SmartData[2].AttributeName | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
             $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69

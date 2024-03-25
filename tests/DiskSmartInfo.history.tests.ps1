@@ -79,8 +79,8 @@ Describe "History" {
             $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
 
-            $diskSmartInfo[0].SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].SmartData[0].AttributeName | Should -BeOfType 'System.String'
+            $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
@@ -236,8 +236,8 @@ Describe "History" {
                 $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
 
-                $diskSmartInfo[0].SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].AttributeName | Should -BeOfType 'System.String'
+                $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
@@ -386,8 +386,8 @@ Describe "History" {
                 $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
 
-                $diskSmartInfo[0].SmartData[0].psobject.properties['AttributeName'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo[0].SmartData[0].AttributeName | Should -BeOfType 'System.String'
+                $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
