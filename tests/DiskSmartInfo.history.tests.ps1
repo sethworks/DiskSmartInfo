@@ -129,21 +129,21 @@ Describe "History" {
         }
 
         It "Historical data file exists" {
-            'TestDrive:\localhost.txt' | Should -Exist
+            'TestDrive:/localhost.json' | Should -Exist
         }
 
         It "Historical data file contains proper data" {
             if ($IsCoreCLR)
             {
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
             }
             else
             {
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                'TestDrive:\localhost.txt' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
             }
         }
     }
@@ -167,11 +167,11 @@ Describe "History" {
 
                 if ($IsCoreCLR)
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
                 else
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
 
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
@@ -289,11 +289,11 @@ Describe "History" {
 
                 if ($IsCoreCLR)
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
                 else
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
 
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory
@@ -346,11 +346,11 @@ Describe "History" {
 
                 if ($IsCoreCLR)
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data": 358', '"Data": 357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
                 else
                 {
-                    (Get-Content -Path 'TestDrive:/localhost.txt') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.txt'
+                    (Get-Content -Path 'TestDrive:/localhost.json') -replace '"Data":  358', '"Data":  357' | Set-Content -Path 'TestDrive:/localhost.json'
                 }
 
                 $diskSmartInfo = Get-DiskSmartInfo -ShowHistory -Convert
