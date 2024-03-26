@@ -59,11 +59,11 @@ function inComposeHistoricalDataFileName
 
     if ($session)
     {
-        $filename = "$($session.ComputerName).txt"
+        $filename = "$($session.ComputerName).json"
     }
     else
     {
-        $filename = 'localhost.txt'
+        $filename = 'localhost.json'
     }
 
     if ($IsCoreCLR)
