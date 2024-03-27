@@ -59,11 +59,11 @@ function inComposeHistoricalDataFileName
 
     if ($session)
     {
-        $filename = "$($session.ComputerName).txt"
+        $filename = "$($session.ComputerName).json"
     }
     else
     {
-        $filename = 'localhost.txt'
+        $filename = 'localhost.json'
     }
 
     if ($IsCoreCLR)
@@ -74,7 +74,7 @@ function inComposeHistoricalDataFileName
         }
         else
         {
-            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.DataHistoryPath
+            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
     # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
@@ -87,7 +87,7 @@ function inComposeHistoricalDataFileName
         }
         else
         {
-            $filepath = Join-Path -Path $PSScriptRoot -ChildPath $Config.DataHistoryPath
+            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
 

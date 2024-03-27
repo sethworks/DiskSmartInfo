@@ -619,7 +619,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
                 }
 
                 Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
-                $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).txt"
+                $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).json"
             }
 
             It "Historical data file exists" {
