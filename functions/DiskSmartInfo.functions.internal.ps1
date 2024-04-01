@@ -33,10 +33,10 @@ function inGetDiskSmartInfo
         $parameters.Add('CimSession', $Session)
     }
 
-    if (($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters @errorParameters) -and
+    if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters @errorParameters) -and
+        ($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @parameters @errorParameters) -and
         ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @parameters @errorParameters) -and
-        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters @errorParameters) -and
-        ($diskDrives = Get-CimInstance -ClassName $classDiskDrive @parameters @errorParameters))
+        ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @parameters @errorParameters))
     {
         if ($ShowHistory)
         {
