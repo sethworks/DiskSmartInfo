@@ -561,7 +561,14 @@ Describe "Get-DiskSmartInfo" {
             }
 
             It "Has empty result" {
-                $diskSmartInfo | Should -BeNullOrEmpty
+                if ($Config.SuppressResultsWithEmptySmartData)
+                {
+                    $diskSmartInfo | Should -BeNullOrEmpty
+                }
+                else
+                {
+                    $diskSmartInfo.SmartData | Should -BeNullOrEmpty
+                }
             }
         }
 
