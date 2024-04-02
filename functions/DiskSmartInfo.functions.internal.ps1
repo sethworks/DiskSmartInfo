@@ -123,7 +123,6 @@ function inGetDiskSmartInfo
                                 if ($hostHistoricalData)
                                 {
                                     $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
-                                    # if ($Config.ShowUnchangedDataHistory -or ($historicalAttributeData -ne $attribute.Data))
                                     if ($Config.ShowUnchangedDataHistory -or
                                        -not (inCompareAttributeData -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
                                     {
