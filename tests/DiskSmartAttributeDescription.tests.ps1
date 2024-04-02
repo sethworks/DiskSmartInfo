@@ -85,10 +85,10 @@ Describe "Get-DiskSmartAttributeDescription" {
         }
     }
 
-    Context "Non-existing attributes" {
+    Context "Nonexistent attributes" {
 
         BeforeAll {
-            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*SomeNonExistingAttribute*'
+            $diskSmartAttributeDescription = Get-DiskSmartAttributeDescription -AttributeName '*SomeNonexistentAttribute*'
         }
 
         It "Has empty result" {

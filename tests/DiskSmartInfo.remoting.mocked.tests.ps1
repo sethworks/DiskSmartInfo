@@ -652,6 +652,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
+                    $Config.ShowUnchangedDataHistory = $true
                 }
 
                 Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
