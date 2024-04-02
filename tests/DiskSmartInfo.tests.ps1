@@ -549,7 +549,7 @@ Describe "Get-DiskSmartInfo" {
             }
         }
 
-        Context "Non-existing attributes" {
+        Context "Nonexistent attributes" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -557,7 +557,7 @@ Describe "Get-DiskSmartInfo" {
                 mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
-                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*SomeNonExistingAttribute*'
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeName '*SomeNonexistentAttribute*'
             }
 
             It "Has empty result" {
