@@ -307,7 +307,7 @@ Describe "Get-DiskSmartInfo" {
             }
 
             It "Has default attribute definitions" {
-                $diskSmartInfo[2].SmartData | Should -HaveCount 15
+                $diskSmartInfo[2].SmartData | Should -HaveCount 16
                 $diskSmartInfo[2].SmartData[13].ID | Should -Be 241
                 $diskSmartInfo[2].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[2].SmartData[14].ID | Should -Be 242
@@ -362,7 +362,7 @@ Describe "Get-DiskSmartInfo" {
             }
 
             It "Has default attribute definitions" {
-                $diskSmartInfo[2].SmartData | Should -HaveCount 15
+                $diskSmartInfo[2].SmartData | Should -HaveCount 16
                 $diskSmartInfo[2].SmartData[13].ID | Should -Be 241
                 $diskSmartInfo[2].SmartData[13].Name | Should -BeExactly "Total LBAs Written"
                 $diskSmartInfo[2].SmartData[13].Data | Should -Be 12757689431
@@ -452,6 +452,29 @@ Describe "Get-DiskSmartInfo" {
                     $diskSmartInfo[1].SmartData[0].Name | Should -BeExactly "Retired Block Count"
                 }
             }
+        }
+    }
+
+    Context "Unknown attributes" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            $diskSmartInfo = Get-DiskSmartInfo
+        }
+
+        It "Has unknown attribute processed" {
+            $diskSmartInfo[0].SmartData | Should -HaveCount 16
+            $diskSmartInfo[0].SmartData[15].ID | Should -Be 255
+            $diskSmartInfo[0].SmartData[15].IDHex | Should -BeExactly 'FF'
+            $diskSmartInfo[0].SmartData[15].Name | Should -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData[15].Threshold | Should -Be 1
+            $diskSmartInfo[0].SmartData[15].Value | Should -Be 100
+            $diskSmartInfo[0].SmartData[15].Worst | Should -Be 100
+            $diskSmartInfo[0].SmartData[15].Data | Should -Be 6618611909121
+
         }
     }
 
