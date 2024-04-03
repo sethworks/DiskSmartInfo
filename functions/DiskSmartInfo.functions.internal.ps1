@@ -261,80 +261,86 @@ function inGetAttributeData
     {
         $([DataType]::bits48.value__)
         {
-            [long]$result = 0
-            $dataStartOffset = $a + 5
+            # [long]$result = 0
+            # $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 6; $offset++)
-            {
-                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
-            }
+            # for ($offset = 0; $offset -lt 6; $offset++)
+            # {
+                # $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            # }
 
-            return $result
+            # return $result
+            # $startOffset = $a + 5
+            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
         }
 
         $([DataType]::bits24.value__)
         {
-            [long]$result = 0
-            $dataStartOffset = $a + 5
+            # [long]$result = 0
+            # $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 3; $offset++)
-            {
-                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
-            }
+            # for ($offset = 0; $offset -lt 3; $offset++)
+            # {
+            #     $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            # }
 
-            return $result
+            # return $result
+            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
         }
 
         $([DataType]::bits16.value__)
         {
-            [long]$result = 0
-            $dataStartOffset = $a + 5
+            # [long]$result = 0
+            # $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 2; $offset++)
-            {
-                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
-            }
+            # for ($offset = 0; $offset -lt 2; $offset++)
+            # {
+            #     $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            # }
 
-            return $result
+            # return $result
+            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
         }
 
         $([DataType]::temperature3.value__)
         {
-            $temps = @([long]$smartData[$a + 5])
+            # $temps = @([long]$smartData[$a + 5])
 
-            for ($offset = 6; $offset -le 10; $offset++)
-            {
-                if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
-                {
-                    $temps += [long]$smartData[$a + $offset]
-                }
+            # for ($offset = 6; $offset -le 10; $offset++)
+            # {
+            #     if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
+            #     {
+            #         $temps += [long]$smartData[$a + $offset]
+            #     }
 
-                if ($temps.Count -eq 3)
-                {
-                    if ($temps[1] -gt $temps[2])
-                    {
-                        $t = $temps[1]
-                        $temps[1] = $temps[2]
-                        $temps[2] = $t
-                    }
-                    break
-                }
-            }
+            #     if ($temps.Count -eq 3)
+            #     {
+            #         if ($temps[1] -gt $temps[2])
+            #         {
+            #             $t = $temps[1]
+            #             $temps[1] = $temps[2]
+            #             $temps[2] = $t
+            #         }
+            #         break
+            #     }
+            # }
 
-            return $temps
+            # return $temps
+            return inExtractAttributeTemps -smartData $smartData -a $a
         }
 
         default
         {
-            [long]$result = 0
-            $dataStartOffset = $a + 5
+            # [long]$result = 0
+            # $dataStartOffset = $a + 5
 
-            for ($offset = 0; $offset -lt 6; $offset++)
-            {
-                $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
-            }
+            # for ($offset = 0; $offset -lt 6; $offset++)
+            # {
+            #     $result += $smartData[$dataStartOffset + $offset] * ( [math]::Pow(256, $offset) )
+            # }
 
-            return $result
+            # return $result
+            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
         }
     }
 }
