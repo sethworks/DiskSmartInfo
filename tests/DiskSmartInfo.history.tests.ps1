@@ -324,6 +324,8 @@ Describe "History" {
             }
 
             It "Unchanged attribute data" {
+                $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeNullOrEmpty
+                $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39,14,47)
                 $diskSmartInfo[0].SmartData[20].DataHistory | Should -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[20].Data | Should -Be 702
             }

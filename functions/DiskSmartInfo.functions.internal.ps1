@@ -114,7 +114,7 @@ function inGetDiskSmartInfo
                         $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
                         $attribute.Add("Value", [byte]$smartData[$a + 3])
                         $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+                        $attribute.Add("Data", $(inGetAttributeData -smartAttributes $smartAttributes -smartData $smartData -a $a))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
                         {
@@ -123,7 +123,8 @@ function inGetDiskSmartInfo
                                 if ($hostHistoricalData)
                                 {
                                     $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
-                                    if ($Config.ShowUnchangedDataHistory -or ($historicalAttributeData -ne $attribute.Data))
+                                    if ($Config.ShowUnchangedDataHistory -or
+                                       -not (inCompareAttributeData -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
                                     {
                                         $attribute.Add("DataHistory", $historicalAttributeData)
                                     }
@@ -249,6 +250,7 @@ function inOverwriteAttributes
 function inGetAttributeData
 {
     Param(
+        $smartAttributes,
         $smartData,
         $a
     )
@@ -372,6 +374,8 @@ function inUpdateHistoricalData
 
         $attributes = @()
 
+        $smartAttributes = inOverwriteAttributes -model $model
+
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {
             $attribute = [ordered]@{}
@@ -381,7 +385,7 @@ function inUpdateHistoricalData
             if ($attributeID)
             {
                 $attribute.Add("ID", $attributeID)
-                $attribute.Add("Data", $(inGetAttributeData -smartData $smartData -a $a))
+                $attribute.Add("Data", $(inGetAttributeData -smartAttributes $smartAttributes -smartData $smartData -a $a))
 
                 $attributes += [PSCustomObject]$attribute
             }
