@@ -35,13 +35,13 @@ function isAttributeRequested
     }
 }
 
-function isThresholdReached
+function isThresholdExceeded
 {
     Param (
         [System.Collections.Specialized.OrderedDictionary]$Attribute
     )
 
-    if ($Attribute.Value -le $Attribute.Threshold)
+    if ($Attribute.Value -lt $Attribute.Threshold)
     {
         return $true
     }

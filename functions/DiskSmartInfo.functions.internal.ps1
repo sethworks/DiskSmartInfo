@@ -116,7 +116,7 @@ function inGetDiskSmartInfo
                         $attribute.Add("Worst", [byte]$smartData[$a + 4])
                         $attribute.Add("Data", $(inGetAttributeData -smartAttributes $smartAttributes -smartData $smartData -a $a))
 
-                        if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdReached -Attribute $attribute)))
+                        if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
                             if ($ShowHistory)
                             {
