@@ -128,3 +128,52 @@ function inCompareAttributeData
     }
     return $false
 }
+
+function inExtractAttributeData
+{
+    Param (
+        $smartData,
+        $startOffset,
+        $byteCount
+    )
+
+    [long]$result = 0
+
+    for ($offset = 0; $offset -lt $byteCount; $offset++)
+    {
+        $result += $smartData[$startOffset + $offset] * ( [math]::Pow(256, $offset) )
+    }
+
+    return $result
+}
+
+function inExtractAttributeTemps
+{
+    Param (
+        $smartData,
+        $a
+    )
+
+    $temps = @([long]$smartData[$a + 5])
+
+    for ($offset = 6; $offset -le 10; $offset++)
+    {
+        if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
+        {
+            $temps += [long]$smartData[$a + $offset]
+        }
+
+        if ($temps.Count -eq 3)
+        {
+            if ($temps[1] -gt $temps[2])
+            {
+                $t = $temps[1]
+                $temps[1] = $temps[2]
+                $temps[2] = $t
+            }
+            break
+        }
+    }
+
+    return $temps
+}
