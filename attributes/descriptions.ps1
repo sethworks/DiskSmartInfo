@@ -2,69 +2,67 @@ $descriptionsHash = @(
     [ordered]@{
         AttributeID = 1
         AttributeName = 'Raw Read Error Rate'
-        Description = '(Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred when reading data from a disk surface. The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
+        Description = 'Read Error Rate S.M.A.R.T. parameter indicates the rate of hardware read errors that occurred when reading data from a disk surface. Any value differing from zero means there is a problem with the disk surface, read/write heads (including crack on a head, broken head, head contamination, head resonance, bad connection to electronics module, handling damage). The higher parameter''s value is, the more the hard disk failure is possible.'
     },
     [ordered]@{
         AttributeID = 2
         AttributeName = 'Throughput Performance'
-        Description = 'Overall (general) throughput performance of a hard disk drive. If the value of this attribute is decreasing there is a high probability that there is a problem with the disk.'
+        Description = 'Throughput Performance S.M.A.R.T. parameter indicates the general throughput performance of the hard disk.'
     },
     [ordered]@{
         AttributeID = 3
         AttributeName = 'Spin-Up Time'
-        Description = 'Average time of spindle spin up (from zero RPM to fully operational [milliseconds]).'
+        Description = 'Spin-Up Time S.M.A.R.T. parameter indicates an average time (in milliseconds or seconds) of spindle spinup (from zero RPM (Revolutions Per Minute) to fully operational).'
     },
     [ordered]@{
         AttributeID = 4
         AttributeName = 'Start/Stop Count'
-        Description = 'A tally of spindle start/stop cycles. The spindle turns on, and hence the count is increased, both when the hard disk is turned on after having before been turned entirely off (disconnected from power source) and when the hard disk returns from having previously been put to sleep mode.'
+        Description = 'Start/Stop Count S.M.A.R.T. parameter indicates a count of hard disk spindle start/stop cycles.'
     },
     [ordered]@{
         AttributeID = 5
         AttributeName = 'Reallocated Sectors Count'
-        Description = 'Count of reallocated sectors. The raw value represents a count of the bad sectors that have been found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive which has had any reallocations at all is significantly more likely to fail in the immediate months.'
+        Description = 'Reallocated Sectors Count S.M.A.R.T. parameter indicates the count of reallocated sectors (512 bytes). When the hard drive finds a read/write/verification error, it marks this sector as "reallocated" and transfers data to a special reserved area (spare area). This process is also known as remapping and "reallocated" sectors are called remaps. This is why, on a modern hard disks, you will not see "bad blocks" while testing the surface - all bad blocks are hidden in reallocated sectors.'
     },
     [ordered]@{
         AttributeID = 6
         AttributeName = 'Read Channel Margin'
-        Description = 'Margin of a channel while reading data. The function of this attribute is not specified.'
+        Description = 'Read Channel Margin S.M.A.R.T. parameter indicates a margin of a channel while reading data. Usually manufacturers do not use this parameter.'
     },
     [ordered]@{
         AttributeID = 7
         AttributeName = 'Seek Error Rate'
-        Description = '(Vendor specific raw value.) Rate of seek errors of the magnetic heads. If there is a partial failure in the mechanical positioning system, then seek errors will arise. Such a failure may be due to numerous factors, such as damage to a servo, or thermal widening of the hard disk. The raw value has different structure for different vendors and is often not meaningful as a decimal number.'
+        Description = 'Seek Error Rate S.M.A.R.T. parameter indicates a rate of seek errors of the magnetic heads. In case of a failure in the mechanical positioning system, a servo damage or a thermal widening of the hard disk, seek errors arise.'
     },
     [ordered]@{
         AttributeID = 8
         AttributeName = 'Seek Time Performance'
-        Description = 'Average performance of seek operations of the magnetic heads. If this attribute is decreasing, it is a sign of problems in the mechanical subsystem.'
+        Description = 'Seek Time Performance S.M.A.R.T. parameter indicates the average performance of seek operations of the hard disk''s magnetic heads.'
     },
     [ordered]@{
         AttributeID = 9
         AttributeName = 'Power-On Hours'
-        Description = 'Count of hours in power-on state. The raw value of this attribute shows total count of hours (or minutes, or seconds, depending on manufacturer) in power-on state.
-"By default, the total expected lifetime of a hard disk in perfect condition is defined as 5 years (running every day and night on all days). This is equal to 1825 days in 24/7 mode or 43800 hours."
-On some pre-2005 drives, this raw value may advance erratically and/or "wrap around" (reset to zero periodically).'
+        Description = 'Power-On Hours (POH) S.M.A.R.T. parameter indicates a count of hours in power-on state. The value of this attribute shows total count of hours (or minutes, or seconds, depending on manufacturer) in power-on state. A decrease of this attribute value to the critical level (threshold) indicates a decrease of the MTBF (Mean Time Between Failures).'
     },
     [ordered]@{
         AttributeID = 10
         AttributeName = 'Spin Retry Count'
-        Description = 'Count of retry of spin start attempts. This attribute stores a total count of the spin start attempts to reach the fully operational speed (under the condition that the first attempt was unsuccessful). An increase of this attribute value is a sign of problems in the hard disk mechanical subsystem.'
+        Description = 'Spin Retry Count S.M.A.R.T. parameter indicates the count of retry of spin start attempts. This attribute stores a total count of the spin start attempts to reach the fully operational speed (under the condition that the first attempt was unsuccessful). Spin attempts are counted for the entire hard drive''s lifetime so far.'
     },
     [ordered]@{
         AttributeID = 11
         AttributeName = 'Calibration Retry Count'
-        Description = 'Also known as "Calibration Retries". This attribute indicates the count that recalibration was requested (under the condition that the first attempt was unsuccessful). An increase of this attribute value is a sign of problems in the hard disk mechanical subsystem.'
+        Description = 'Recalibration Retries S.M.A.R.T. parameter indicates the number of attempts to calibrate the hard drive after the first unsuccessful try.'
     },
     [ordered]@{
         AttributeID = 12
         AttributeName = 'Power Cycle Count'
-        Description = 'This attribute indicates the count of full hard disk power on/off cycles.'
+        Description = 'Power Cycle Count S.M.A.R.T. parameter is an informational parameter and indicates the count of full hard disk power on/off cycles.'
     },
     [ordered]@{
         AttributeID = 13
         AttributeName = 'Read Soft Error Rate'
-        Description = 'Uncorrected read errors reported to the operating system.'
+        Description = 'Soft Read Error Count S.M.A.R.T. parameter indicates the number of uncorrected read errors reported to an operating system.'
     },
     [ordered]@{
         AttributeID = 22
@@ -74,42 +72,42 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     [ordered]@{
         AttributeID = 170
         AttributeName = 'Available Reserved Space'
-        Description = 'Identical to attribute 232 (E8)'
+        Description = 'Reserved Block Count S.M.A.R.T. parameter indicates a number of reserved bad block handling.'
     },
     [ordered]@{
         AttributeID = 171
         AttributeName = 'SSD Program Fail Count'
-        Description = '(Kingston) The total number of flash program operation failures since the drive was deployed. Identical to attribute 181.'
+        Description = 'Program Fail Count S.M.A.R.T. parameter indicates a number of flash program failures.'
     },
     [ordered]@{
         AttributeID = 172
         AttributeName = 'SSD Erase Fail Count'
-        Description = '(Kingston) Counts the number of flash erase failures. This attribute returns the total number of Flash erase operation failures since the drive was deployed. This attribute is identical to attribute 182.'
+        Description = 'Erase Fail Count S.M.A.R.T. parameter indicates a number of flash erase command failures.'
     },
     [ordered]@{
         AttributeID = 173
         AttributeName = 'SSD Wear Leveling Count'
-        Description = 'Counts the maximum worst erase count on any block.'
+        Description = 'Wear Leveling Count S.M.A.R.T. parameter indicates the worst case erase count.'
     },
     [ordered]@{
         AttributeID = 174
         AttributeName = 'Unexpected power loss count'
-        Description = 'Also known as "Power-off Retract Count" per conventional HDD terminology. Raw value reports the number of unclean shutdowns, cumulative over the life of an SSD, where an "unclean shutdown" is the removal of power without STANDBY IMMEDIATE as the last command (regardless of PLI activity using capacitor power). Normalized value is always 100.'
+        Description = 'Unexpected Power Loss S.M.A.R.T. parameter indicates a number of unexpected power loss events.'
     },
     [ordered]@{
         AttributeID = 175
         AttributeName = 'Program Fail Count Chip'
-        Description = 'S.M.A.R.T. parameter indicates a number of flash program failure'
+        Description = 'Program Fail Count (chip) S.M.A.R.T. parameter indicates a number of flash program failures.'
     },
     [ordered]@{
         AttributeID = 176
         AttributeName = 'Erase Fail Count Chip'
-        Description = 'S.M.A.R.T. parameter indicates a number of flash erase command failures.'
+        Description = 'Erase Fail Count (chip) S.M.A.R.T. parameter indicates a number of flash erase command failures.'
     },
     [ordered]@{
         AttributeID = 177
         AttributeName = 'Wear Leveling Count'
-        Description = 'S.M.A.R.T. parameter indicates the worst case erase count.'
+        Description = 'Wear Leveling Count (chip) S.M.A.R.T. parameter indicates the worst case erase count.'
     },
     [ordered]@{
         AttributeID = 178
@@ -119,7 +117,7 @@ On some pre-2005 drives, this raw value may advance erratically and/or "wrap aro
     [ordered]@{
         AttributeID = 179
         AttributeName = 'Used Reserved Block Count Total'
-        Description = '"Pre-Fail" attribute used at least in Samsung devices.'
+        Description = 'Used Reserved Block Count (Total) S.M.A.R.T. parameter indicates the number of used reserved blocks.'
     },
     [ordered]@{
         AttributeID = 180
@@ -160,28 +158,27 @@ Number of user data accesses (both reads and writes) where LBAs are not 4 KiB al
     [ordered]@{
         AttributeID = 187
         AttributeName = 'Reported Uncorrectable Errors'
-        Description = 'The count of errors that could not be recovered using hardware ECC (see attribute 195).'
+        Description = 'Reported Uncorrectable Errors S.M.A.R.T. parameter indicates a number of errors that could not be recovered using hardware ECC (error-correcting code).'
     },
     [ordered]@{
         AttributeID = 188
         AttributeName = 'Command Timeout'
-        Description = 'The count of aborted operations due to HDD timeout. Normally this attribute value should be equal to zero.'
+        Description = 'Command Timeout S.M.A.R.T. parameter indicates a number of aborted operations due to hard disk timeout.'
     },
     [ordered]@{
         AttributeID = 189
         AttributeName = 'High Fly Writes'
-        Description = 'HDD manufacturers implement a flying height sensor that attempts to provide additional protections for write operations by detecting when a recording head is flying outside its normal operating range. If an unsafe fly height condition is encountered, the write process is stopped, and the information is rewritten or reallocated to a safe region of the hard drive. This attribute indicates the count of these errors detected over the lifetime of the drive.
-This feature is implemented in most modern Seagate drives and some of Western Digital''s drives, beginning with the WD Enterprise WDE18300 and WDE9180 Ultra2 SCSI hard drives, and will be included on all future WD Enterprise products.'
+        Description = 'High Fly Writes S.M.A.R.T. parameter indicates the count of these errors detected over the lifetime of the drive. HDD producers implement a Fly Height Monitor that attempts to provide additional protections for write operations by detecting when a recording head is flying outside its normal operating range. If an unsafe fly height condition is encountered, the write process is stopped, and the information is rewritten or reallocated to a safe region of the hard drive.'
     },
     [ordered]@{
         AttributeID = 190
         AttributeName = 'Airflow Temperature Celsius'
-        Description = 'Also known as "Temperature Difference". Value is equal to (100-temp. $([char]0xB0)C), allowing manufacturer to set a minimum threshold which corresponds to a maximum temperature. This also follows the convention of 100 being a best-case value and lower values being undesirable. However, some older drives may instead report raw Temperature (identical to 0xC2) or Temperature minus 50 here.'
+        Description = 'Also known as "Temperature Difference". Temperature Difference from 100 (Airflow Temperature) S.M.A.R.T. parameter indicates the temperature of the air inside the Seagate and Samsung hard disk housing. The value is equal to [100 - specified by manufacturer temperature °C], which allows setting the minimum threshold.'
     },
     [ordered]@{
         AttributeID = 191
         AttributeName = 'G-Sense Error Rate'
-        Description = 'The count of errors resulting from externally induced shock and vibration.'
+        Description = 'G-sense error rate S.M.A.R.T. parameter indicates the number of errors caused by externally-induced shock or vibration.'
     },
     [ordered]@{
         AttributeID = 192
@@ -191,14 +188,12 @@ This feature is implemented in most modern Seagate drives and some of Western Di
     [ordered]@{
         AttributeID = 193
         AttributeName = 'Load Cycle Count'
-        Description = 'Also known as "Load/Unload Cycle Count" (Fujitsu). Count of load/unload cycles into head landing zone position. Some drives use 225 (0xE1) for Load Cycle Count instead.
-Western Digital rates their VelociRaptor drives for 600,000 load/unload cycles, and WD Green drives for 300,000 cycles; the latter ones are designed to unload heads often to conserve power. On the other hand, the WD3000GLFS (a desktop drive) is specified for only 50,000 load/unload cycles.
-Some laptop drives and "green power" desktop drives are programmed to unload the heads whenever there has not been any activity for a short period, to save power. Operating systems often access the file system a few times a minute in the background, causing 100 or more load cycles per hour if the heads unload: the load cycle rating may be exceeded in less than a year. There are programs for most operating systems that disable the Advanced Power Management (APM) and Automatic acoustic management (AAM) features causing frequent load cycles.'
+        Description = 'Also known as "Load/Unload Cycle Count" (Fujitsu). Load Cycle Count S.M.A.R.T. parameter indicates the number of cycles into Landing Zone position.'
     },
     [ordered]@{
         AttributeID = 194
         AttributeName = 'Temperature Celsius'
-        Description = 'Indicates the device temperature, if the appropriate sensor is fitted. Lowest byte of the raw value contains the exact temperature value (Celsius degrees).'
+        Description = 'HDA Temperature S.M.A.R.T. parameter indicates a hard disk drive current internal temperature. The raw value of this attribute shows built-in heat sensor registrations (in degrees centigrade).'
     },
     [ordered]@{
         AttributeID = 195
@@ -208,73 +203,72 @@ Some laptop drives and "green power" desktop drives are programmed to unload the
     [ordered]@{
         AttributeID = 196
         AttributeName = 'Reallocation Event Count'
-        Description = 'Count of remap operations. The raw value of this attribute shows the total count of attempts to transfer data from reallocated sectors to a spare area. Both successful and unsuccessful attempts are counted.'
+        Description = 'Reallocation Event Count S.M.A.R.T. parameter indicates a count of remap operations (transferring data from a bad sector to a special reserved disk area - spare area).'
     },
     [ordered]@{
         AttributeID = 197
         AttributeName = 'Current Pending Sector Count'
-        Description = 'Count of "unstable" sectors (waiting to be remapped, because of unrecoverable read errors). If an unstable sector is subsequently read successfully, the sector is remapped and this value is decreased. Read errors on a sector will not remap the sector immediately (since the correct value cannot be read and so the value to remap is not known, and also it might become readable later); instead, the drive firmware remembers that the sector needs to be remapped, and will remap it the next time it''s written.
-However, some drives will not immediately remap such sectors when written; instead the drive will first attempt to write to the problem sector and if the write operation is successful then the sector will be marked good (in this case, the "Reallocation Event Count" (0xC4) will not be increased). This is a serious shortcoming, for if such a drive contains marginal sectors that consistently fail only after some time has passed following a successful write operation, then the drive will never remap these problem sectors.'
+        Description = 'Current Pending Sector Count S.M.A.R.T. parameter is a critical parameter and indicates the current count of unstable sectors (waiting for remapping). The raw value of this attribute indicates the total number of sectors waiting for remapping. Later, when some of these sectors are read successfully, the value is decreased. If errors still occur when reading some sector, the hard drive will try to restore the data, transfer it to the reserved disk area (spare area) and mark this sector as remapped.'
     },
     [ordered]@{
         AttributeID = 198
         AttributeName = 'Offline Uncorrectable Sector Count'
-        Description = 'The total count of uncorrectable errors when reading/writing a sector. A rise in the value of this attribute indicates defects of the disk surface and/or problems in the mechanical subsystem.'
+        Description = 'Uncorrectable Sector Count S.M.A.R.T. parameter is a critical parameter and indicates the quantity of uncorrectable errors. The raw value of this attribute indicates the total number of uncorrectable errors when reading/writing a sector.'
     },
     [ordered]@{
         AttributeID = 199
         AttributeName = 'Ultra DMA CRC Error Count'
-        Description = 'The count of errors in data transfer via the interface cable as determined by ICRC (Interface Cyclic Redundancy Check).'
+        Description = 'UltraDMA CRC Error Count S.M.A.R.T. parameter indicates the total quantity of CRC errors during UltraDMA mode. The raw value of this attribute indicates the number of errors found during data transfer in UltraDMA mode by ICRC (Interface CRC).'
     },
     [ordered]@{
         AttributeID = 200
         AttributeName = 'Multi-Zone Error Rate'
-        Description = 'Also known as "Write Error Rate". The count of errors found when writing a sector. The higher the value, the worse the disk''s mechanical condition is.'
+        Description = 'Also known as "Write Error Rate". Write Error Rate / Multi-Zone Error Rate (Western Digital) S.M.A.R.T. parameter indicates the total number of errors appearing while recording data to a hard disk. This may be caused by problems with disk surface or the read/write heads.'
     },
     [ordered]@{
         AttributeID = 201
         AttributeName = 'Soft Read Error Rate'
-        Description = 'Also known as "TA Counter Detected". Count indicates the number of uncorrectable software read errors.'
+        Description = 'Soft Read Error Rate / Off Track Errors (Maxtor) S.M.A.R.T. parameter indicates the number of uncorrectable software read errors.'
     },
     [ordered]@{
         AttributeID = 202
         AttributeName = 'Data Address Mark Errors'
-        Description = 'Also known as "TA Counter Increased". Count of Data Address Mark errors (or vendor-specific).'
+        Description = 'Data Address Mark errors S.M.A.R.T. parameter indicates the number of incorrect or invalid address marks.'
     },
     [ordered]@{
         AttributeID = 203
         AttributeName = 'Run Out Cancel'
-        Description = 'The number of errors caused by incorrect checksum during the error correction.'
+        Description = 'Run Out Cancel S.M.A.R.T. parameter indicates that an invalid error correction checksum was found during error correction.'
     },
     [ordered]@{
         AttributeID = 204
         AttributeName = 'Soft ECC correction'
-        Description = 'Count of errors corrected by the internal error correction software.'
+        Description = 'Soft ECC Correction S.M.A.R.T. parameter indicates the number of errors corrected by the internal error correction mechanism.'
     },
     [ordered]@{
         AttributeID = 205
         AttributeName = 'Thermal Asperity Rate'
-        Description = 'Count of errors due to high temperature.'
+        Description = 'Thermal Asperity Rate (TAR) S.M.A.R.T. parameter indicates the total number of problems caused by high temperature.'
     },
     [ordered]@{
         AttributeID = 206
         AttributeName = 'Flying Height'
-        Description = 'Height of heads above the disk surface. If too low, head crash is more likely; if too high, read/write errors are more likely.'
+        Description = 'Flying Height S.M.A.R.T. parameter indicates the height of heads above the disk surface. The low value of this parameter increases the chances of a head crash while a flying height that is too high increases the chances of a read/write error.'
     },
     [ordered]@{
         AttributeID = 207
         AttributeName = 'Spin High Current'
-        Description = 'Amount of surge current used to spin up the drive.'
+        Description = 'Spin High Current S.M.A.R.T. parameter indicates the current needed to spin up the drive.'
     },
     [ordered]@{
         AttributeID = 208
         AttributeName = 'Spin Buzz'
-        Description = 'Count of buzz routines needed to spin up the drive due to insufficient power.'
+        Description = 'Spin Buzz S.M.A.R.T. parameter indicates the number of retries during spin up because of low current available.'
     },
     [ordered]@{
         AttributeID = 209
         AttributeName = 'Offline Seek Performance'
-        Description = 'Drive''s seek performance during its internal tests.'
+        Description = 'Offline Seek Performance S.M.A.R.T. parameter indicates the seek performance of the hard drive during internal self tests.'
     },
     [ordered]@{
         AttributeID = 210
@@ -284,52 +278,52 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 211
         AttributeName = 'Vibration Diring Write'
-        Description = 'A recording of a vibration encountered during write operations.'
+        Description = 'Vibration During Write S.M.A.R.T. parameter indicates a vibration encountered during write operations.'
     },
     [ordered]@{
         AttributeID = 212
         AttributeName = 'Shock During Write'
-        Description = 'A recording of shock encountered during write operations.'
+        Description = 'Shock During Write S.M.A.R.T. parameter indicates shock encountered during write operations.'
     },
     [ordered]@{
         AttributeID = 220
         AttributeName = 'Disk Shift'
-        Description = 'Distance the disk has shifted relative to the spindle (usually due to shock or temperature). Unit of measure is unknown.'
+        Description = 'Disk Shift S.M.A.R.T. parameter indicates that a distance of the disk has shifted relative to the spindle, which could be caused by a mechanical shock or high temperature.'
     },
     [ordered]@{
         AttributeID = 221
         AttributeName = 'G-Sense Error Rate'
-        Description = 'The count of errors resulting from externally induced shock and vibration.'
+        Description = 'G-Sense Error Rate (Shock Sense Error Rate for Hitachi) S.M.A.R.T. parameter indicates a number of errors resulting from shock or vibration.'
     },
     [ordered]@{
         AttributeID = 222
         AttributeName = 'Loaded Hours'
-        Description = 'Time spent operating under data load (movement of magnetic head armature).'
+        Description = 'Loaded Hours S.M.A.R.T. parameter indicates a number of powered on hours. This value is constantly increasing (once per every hour).'
     },
     [ordered]@{
         AttributeID = 223
         AttributeName = 'Load/Unload Retry Count'
-        Description = 'Count of times head changes position.'
+        Description = 'Load/Unload Retry Count S.M.A.R.T. parameter indicates a number of drive head enters/leaves the data zone.'
     },
     [ordered]@{
         AttributeID = 224
         AttributeName = 'Load Friction'
-        Description = 'Resistance caused by friction in mechanical parts while operating.'
+        Description = 'Load Friction S.M.A.R.T. parameter indicates the rate of friction between mechanical parts of the hard disk. The increasing value means there is a problem with the mechanical subsystem of the drive.'
     },
     [ordered]@{
         AttributeID = 225
         AttributeName = 'Load/Unload Cycle Count'
-        Description = 'Total count of load cycles. Some drives use 193 (0xC1) for Load Cycle Count instead. See Description for 193 for significance of this number.'
+        Description = 'Load/Unload Cycle Count S.M.A.R.T. parameter indicates a total number of load cycles.'
     },
     [ordered]@{
         AttributeID = 226
         AttributeName = 'Load-in time'
-        Description = 'Total time of loading on the magnetic heads actuator (time not spent in parking area).'
+        Description = 'Load-in Time S.M.A.R.T. parameter indicates total time the heads are loaded.'
     },
     [ordered]@{
         AttributeID = 227
         AttributeName = 'Torque Amplification Count'
-        Description = 'Count of attempts to compensate for platter speed variations.'
+        Description = 'Torque Amplification Count S.M.A.R.T. parameter indicates a number of attempts to compensate for platter speed variations.'
     },
     [ordered]@{
         AttributeID = 228
@@ -369,17 +363,17 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 240
         AttributeName = 'Head Flying Hours or Transfer Error Rate (Fujitsu)'
-        Description = 'Time spent during the positioning of the drive heads. Some Fujitsu drives report the count of link resets during a data transfer.'
+        Description = 'Head Flying Hours / Transfer Error Rate (Fujitsu) S.M.A.R.T. parameter indicates time spent during the positioning of the drive heads.'
     },
     [ordered]@{
         AttributeID = 241
         AttributeName = 'Total LBAs Written'
-        Description = 'Total count of LBAs written.'
+        Description = 'Total LBAs Written S.M.A.R.T. parameter indicates a total number of LBAs written.'
     },
     [ordered]@{
         AttributeID = 242
         AttributeName = 'Total LBAs Read'
-        Description = 'Total count of LBAs read. Some S.M.A.R.T. utilities will report a negative number for the raw value since in reality it has 48 bits rather than 32.'
+        Description = 'Total LBAs Read S.M.A.R.T. parameter indicates a total number of LBAs read.'
     },
     [ordered]@{
         AttributeID = 243
@@ -399,7 +393,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 250
         AttributeName = 'Read Error Retry Rate'
-        Description = 'Count of errors while reading from a disk.'
+        Description = 'Read Error Retry Rate S.M.A.R.T. parameter indicates a number of errors found during reading a sector from disk surface.'
     },
     [ordered]@{
         AttributeID = 251
@@ -414,7 +408,7 @@ However, some drives will not immediately remap such sectors when written; inste
     [ordered]@{
         AttributeID = 254
         AttributeName = 'Free Fall Sensor'
-        Description = 'Count of "Free Fall Events" detected.'
+        Description = 'Free Fall Protection S.M.A.R.T. parameter indicates a number of free fall events detected by the accelerometer sensor.'
     }
 )
 

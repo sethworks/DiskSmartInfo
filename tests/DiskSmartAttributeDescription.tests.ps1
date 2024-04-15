@@ -19,7 +19,7 @@ Describe "Get-DiskSmartAttributeDescription" {
             $diskSmartAttributeDescription[0].AttributeID | Should -Be 1
             $diskSmartAttributeDescription[38].AttributeIDHex | Should -BeExactly 'C2'
             $diskSmartAttributeDescription[2].AttributeName | Should -BeExactly 'Spin-Up Time'
-            $diskSmartAttributeDescription[81].Description | Should -BeExactly 'Count of "Free Fall Events" detected.'
+            $diskSmartAttributeDescription[81].Description | Should -BeExactly 'Free Fall Protection S.M.A.R.T. parameter indicates a number of free fall events detected by the accelerometer sensor.'
         }
     }
 
