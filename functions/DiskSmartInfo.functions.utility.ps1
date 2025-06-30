@@ -54,12 +54,15 @@ function inTrimDiskDriveModel
 function inComposeHistoricalDataFileName
 {
     Param (
-        $session
+        # $session
+        [string]$computerName
     )
 
-    if ($session)
+    # if ($session)
+    if ($computerName)
     {
-        $filename = "$($session.ComputerName).json"
+        # $filename = "$($session.ComputerName).json"
+        $filename = "$computerName.json"
     }
     else
     {
