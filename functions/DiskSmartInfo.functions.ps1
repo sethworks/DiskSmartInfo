@@ -7,6 +7,7 @@ function Get-DiskSmartInfo
         [string[]]$ComputerName,
         [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
         [CimSession[]]$CimSession,
+        [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
         [switch]$Convert,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
@@ -53,6 +54,7 @@ function Get-DiskSmartInfo
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
         $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+        $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     }
 
     process
@@ -153,6 +155,40 @@ function Get-DiskSmartInfo
                 else
                 {
                     $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@()})
+                }
+            }
+        }
+        if ($PSSession)
+        {
+            foreach ($ps in $PSSession)
+            {
+                if (($index = $PSSessionQueries.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].PSSession.ComputerName -eq $ps.ComputerName})) -ge 0)
+                {
+                    if ($DiskNumber.Count)
+                    {
+                        foreach ($dn in $DiskNumber)
+                        {
+                            if ($PSSessionQueries[$index].DiskNumber.Count -and ($PSSessionQueries[$index].DiskNumber -notcontains $ps))
+                            {
+                                $PSSessionQueries[$index].DiskNumber += $dn
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $PSSessionQueries[$index].DiskNumber = @()
+                    }
+                }
+                else
+                {
+                    if ($DiskNumber.Count)
+                    {
+                        $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
+                    }
+                    else
+                    {
+                        $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
+                    }
                 }
             }
         }
