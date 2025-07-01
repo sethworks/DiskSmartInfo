@@ -5,6 +5,9 @@ function Get-DiskSmartInfo
         [Alias('PSComputerName')]
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
+        [Parameter(ParameterSetName='ComputerName')]
+        [ValidateSet('CimSession','PSSession')]
+        [string]$Transport,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
