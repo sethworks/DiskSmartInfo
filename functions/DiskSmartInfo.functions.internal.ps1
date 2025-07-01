@@ -39,6 +39,36 @@ function inGetHostsSmartData
         }
     }
 
+    foreach ($ps in $PSSession)
+    {
+        Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'cimInstanceErrors'; ErrorAction = 'SilentlyContinue' } }
+        $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters }
+        $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters }
+        $disksThresholds = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters }
+        $disksFailurePredictStatus = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters }
+        $cimInstanceErrors = Invoke-Command -Session $ps -ScriptBlock { $cimInstanceErrors }
+
+        # if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive -CimSession $cs @errorParameters) -and
+        #     ($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData -CimSession $cs @errorParameters) -and
+        #     ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds -CimSession $cs @errorParameters) -and
+        #     ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus -CimSession $cs @errorParameters))
+
+        if ($diskDrives -and $disksSmartData -and $disksThresholds -and $disksFailurePredictStatus)
+        {
+            $HostsSmartData.Add(@{
+                diskDrives = $diskDrives
+                disksSmartData = $disksSmartData
+                disksThresholds = $disksThresholds
+                disksFailurePredictStatus = $disksFailurePredictStatus
+                computerName = $ps.ComputerName
+            })
+        }
+        else
+        {
+            inReportErrors -CimErrors $cimInstanceErrors
+        }
+    }
+
     if (-not $CimSession -and -not $PSSession)
     {
         if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and

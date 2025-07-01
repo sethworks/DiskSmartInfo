@@ -59,7 +59,7 @@ function Get-DiskSmartInfo
 
     process
     {
-        if ($CimSession)
+        if ($CimSession -or $PSSession)
         {
             foreach ($cs in $CimSession)
             {
@@ -103,7 +103,51 @@ function Get-DiskSmartInfo
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
             }
+
+            foreach ($ps in $PSSession)
+            {
+                # if (($index = $PSSessionQueries.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].PSSession.ComputerName -eq $ps.ComputerName})) -ge 0)
+                # {
+                #     if ($DiskNumber.Count)
+                #     {
+                #         foreach ($dn in $DiskNumber)
+                #         {
+                #             if ($PSSessionQueries[$index].DiskNumber.Count -and ($PSSessionQueries[$index].DiskNumber -notcontains $ps))
+                #             {
+                #                 $PSSessionQueries[$index].DiskNumber += $dn
+                #             }
+                #         }
+                #     }
+                #     else
+                #     {
+                #         $PSSessionQueries[$index].DiskNumber = @()
+                #     }
+                # }
+                # else
+                # {
+                #     if ($DiskNumber.Count)
+                #     {
+                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
+                #     }
+                #     else
+                #     {
+                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
+                #     }
+                # }
+                $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                inGetDiskSmartInfoCIM `
+                    -HostsSmartData $HostsSmartData `
+                    -Convert:$Convert `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -DiskNumbers $DiskNumber `
+                    -DiskModels $DiskModel `
+                    -AttributeIDs $attributeIDs `
+                    -Quiet:$Quiet `
+                    -ShowHistory:$ShowHistory `
+                    -UpdateHistory:$UpdateHistory
+            }
         }
+
         elseif ($ComputerName)
         {
             foreach ($cn in $ComputerName)
@@ -196,6 +240,7 @@ function Get-DiskSmartInfo
                 -ShowHistory:$ShowHistory `
                 -UpdateHistory:$UpdateHistory
         }
+<#
         if ($PSSession)
         {
             foreach ($ps in $PSSession)
@@ -233,7 +278,6 @@ function Get-DiskSmartInfo
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    # -DiskNumbers $scd.DiskNumber `
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -AttributeIDs $attributeIDs `
@@ -242,6 +286,7 @@ function Get-DiskSmartInfo
                     -UpdateHistory:$UpdateHistory
             }
         }
+#>
     }
 
     end
