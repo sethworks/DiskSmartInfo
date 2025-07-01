@@ -2,20 +2,13 @@ function inUpdateHistoricalData
 {
     Param (
         $hostSmartData
-        # $disksSmartData,
-        # $disksThresholds,
-        # $diskDrives,
-        # $session
-        # $computerName
     )
 
     $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
 
-    # foreach ($diskSmartData in $disksSmartData)
     foreach ($diskSmartData in $hostSmartData.disksSmartData)
     {
         $smartData = $diskSmartData.VendorSpecific
-        # $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
         $thresholdsData = $hostSmartData.disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
 
         $pNPDeviceId = $diskSmartData.InstanceName
@@ -60,8 +53,6 @@ function inUpdateHistoricalData
 
     if ($historicalData.Count)
     {
-        # $fullname = inComposeHistoricalDataFileName -session $session
-        # $fullname = inComposeHistoricalDataFileName -computerName $computerName
         $fullname = inComposeHistoricalDataFileName -computerName $hostSmartData.computerName
 
         $hostHistoricalData = @{
@@ -76,11 +67,9 @@ function inUpdateHistoricalData
 function inGetHistoricalData
 {
     Param (
-        # $session
         $computerName
     )
 
-    # $fullname = inComposeHistoricalDataFileName -session $session
     $fullname = inComposeHistoricalDataFileName -computerName $computerName
 
     if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
@@ -138,14 +127,11 @@ function inGetHistoricalData
 function inComposeHistoricalDataFileName
 {
     Param (
-        # $session
         [string]$computerName
     )
 
-    # if ($session)
     if ($computerName)
     {
-        # $filename = "$($session.ComputerName).json"
         $filename = "$computerName.json"
     }
     else
