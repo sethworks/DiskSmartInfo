@@ -5,8 +5,9 @@ function Get-DiskSmartInfo
         [Alias('PSComputerName')]
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
-        [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
+        [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
+        [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
         [switch]$Convert,
         [switch]$CriticalAttributesOnly,
@@ -59,7 +60,8 @@ function Get-DiskSmartInfo
 
     process
     {
-        if ($CimSession -or $PSSession)
+        # if ($CimSession -or $PSSession)
+        if ($PSCmdlet.ParameterSetName -eq 'Session')
         {
             foreach ($cs in $CimSession)
             {
@@ -92,6 +94,7 @@ function Get-DiskSmartInfo
             }
         }
 
+        # elseif ($PSCmdlet.ParameterSetName -eq 'ComputerName')
         elseif ($ComputerName)
         {
             foreach ($cn in $ComputerName)
