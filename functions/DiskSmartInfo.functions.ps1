@@ -63,34 +63,6 @@ function Get-DiskSmartInfo
         {
             foreach ($cs in $CimSession)
             {
-                # if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].CimSession.ComputerName -eq $cs.ComputerName})) -ge 0)
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         foreach ($dn in $DiskNumber)
-                #         {
-                #             if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-                #             {
-                #                 $sessionsComputersDisks[$in].DiskNumber += $dn
-                #             }
-                #         }
-                #     }
-                #     else
-                #     {
-                #         $sessionsComputersDisks[$in].DiskNumber = @()
-                #     }
-                # }
-                # else
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@($DiskNumber)})
-                #     }
-                #     else
-                #     {
-                #         $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@()})
-                #     }
-                # }
                 $HostsSmartData = inGetHostsSmartData -CimSession $cs
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
@@ -106,34 +78,6 @@ function Get-DiskSmartInfo
 
             foreach ($ps in $PSSession)
             {
-                # if (($index = $PSSessionQueries.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].PSSession.ComputerName -eq $ps.ComputerName})) -ge 0)
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         foreach ($dn in $DiskNumber)
-                #         {
-                #             if ($PSSessionQueries[$index].DiskNumber.Count -and ($PSSessionQueries[$index].DiskNumber -notcontains $ps))
-                #             {
-                #                 $PSSessionQueries[$index].DiskNumber += $dn
-                #             }
-                #         }
-                #     }
-                #     else
-                #     {
-                #         $PSSessionQueries[$index].DiskNumber = @()
-                #     }
-                # }
-                # else
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
-                #     }
-                #     else
-                #     {
-                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
-                #     }
-                # }
                 $HostsSmartData = inGetHostsSmartData -PSSession $ps
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
@@ -152,34 +96,6 @@ function Get-DiskSmartInfo
         {
             foreach ($cn in $ComputerName)
             {
-                # if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cn})) -ge 0)
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         foreach ($dn in $DiskNumber)
-                #         {
-                #             if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-                #             {
-                #                 $sessionsComputersDisks[$in].DiskNumber += $dn
-                #             }
-                #         }
-                #     }
-                #     else
-                #     {
-                #         $sessionsComputersDisks[$in].DiskNumber = @()
-                #     }
-                # }
-                # else
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@($DiskNumber)})
-                #     }
-                #     else
-                #     {
-                #         $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@()})
-                #     }
-                # }
                 if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
                 {
                     inReportErrors -CimErrors $cimSessionErrors
@@ -200,34 +116,6 @@ function Get-DiskSmartInfo
         }
         else
         {
-            # if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{($args[0].ComputerName -eq $null -and $args[0].CimSession -eq $null)})) -ge 0)
-            # {
-            #     if ($DiskNumber.Count)
-            #     {
-            #         foreach ($dn in $DiskNumber)
-            #         {
-            #             if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-            #             {
-            #                 $sessionsComputersDisks[$in].DiskNumber += $dn
-            #             }
-            #         }
-            #     }
-            #     else
-            #     {
-            #         $sessionsComputersDisks[$in].DiskNumber = @()
-            #     }
-            # }
-            # else
-            # {
-            #     if ($DiskNumber.Count)
-            #     {
-            #         $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@($DiskNumber)})
-            #     }
-            #     else
-            #     {
-            #         $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@()})
-            #     }
-            # }
             $HostsSmartData = inGetHostsSmartData
             inGetDiskSmartInfoCIM `
                 -HostsSmartData $HostsSmartData `
@@ -240,53 +128,6 @@ function Get-DiskSmartInfo
                 -ShowHistory:$ShowHistory `
                 -UpdateHistory:$UpdateHistory
         }
-<#
-        if ($PSSession)
-        {
-            foreach ($ps in $PSSession)
-            {
-                # if (($index = $PSSessionQueries.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].PSSession.ComputerName -eq $ps.ComputerName})) -ge 0)
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         foreach ($dn in $DiskNumber)
-                #         {
-                #             if ($PSSessionQueries[$index].DiskNumber.Count -and ($PSSessionQueries[$index].DiskNumber -notcontains $ps))
-                #             {
-                #                 $PSSessionQueries[$index].DiskNumber += $dn
-                #             }
-                #         }
-                #     }
-                #     else
-                #     {
-                #         $PSSessionQueries[$index].DiskNumber = @()
-                #     }
-                # }
-                # else
-                # {
-                #     if ($DiskNumber.Count)
-                #     {
-                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
-                #     }
-                #     else
-                #     {
-                #         $PSSessionQueries.Add(@{PSSession = $ps; ComputerName = $null; DiskNumber = @($DiskNumber)})
-                #     }
-                # }
-                $HostsSmartData = inGetHostsSmartData -PSSession $ps
-                inGetDiskSmartInfoCIM `
-                    -HostsSmartData $HostsSmartData `
-                    -Convert:$Convert `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -DiskNumbers $DiskNumber `
-                    -DiskModels $DiskModel `
-                    -AttributeIDs $attributeIDs `
-                    -Quiet:$Quiet `
-                    -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory
-            }
-        }
-#>
     }
 
     end
@@ -315,13 +156,13 @@ function Get-DiskSmartInfo
         }
         finally
         {
-            foreach ($scd in $sessionsComputersDisks)
-            {
-                if ($scd.ComputerName -and $scd.CimSession)
-                {
-                    Remove-CimSession -CimSession $scd.CimSession
-                }
-            }
+            # foreach ($scd in $sessionsComputersDisks)
+            # {
+            #     if ($scd.ComputerName -and $scd.CimSession)
+            #     {
+            #         Remove-CimSession -CimSession $scd.CimSession
+            #     }
+            # }
 
             # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
             inClearRemotingErrorRecords
