@@ -134,40 +134,7 @@ function Get-DiskSmartInfo
 
     end
     {
-        try
-        {
-            # foreach ($scd in $sessionsComputersDisks)
-            # {
-            #     if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -Credential $Credential @errorParameters))
-            #     {
-            #         inReportErrors -CimErrors $cimSessionErrors
-            #         continue
-            #     }
-
-            #     inGetDiskSmartInfo `
-            #         -Session $scd.CimSession `
-            #         -Convert:$Convert `
-            #         -CriticalAttributesOnly:$CriticalAttributesOnly `
-            #         -DiskNumbers $scd.DiskNumber `
-            #         -DiskModels $DiskModel `
-            #         -AttributeIDs $attributeIDs `
-            #         -Quiet:$Quiet `
-            #         -ShowHistory:$ShowHistory `
-            #         -UpdateHistory:$UpdateHistory
-            # }
-        }
-        finally
-        {
-            # foreach ($scd in $sessionsComputersDisks)
-            # {
-            #     if ($scd.ComputerName -and $scd.CimSession)
-            #     {
-            #         Remove-CimSession -CimSession $scd.CimSession
-            #     }
-            # }
-
-            # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
-            inClearRemotingErrorRecords
-        }
+        # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
+        inClearRemotingErrorRecords
     }
 }

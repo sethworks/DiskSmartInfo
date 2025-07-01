@@ -110,14 +110,12 @@ function inGetDiskSmartInfoCIM
     {
         if ($ShowHistory)
         {
-            # $hostHistoricalData = inGetHistoricalData -session $Session
             $hostHistoricalData = inGetHistoricalData -computerName $hostSmartData.ComputerName
         }
 
         foreach ($diskSmartData in $hostSmartData.disksSmartData)
         {
             $smartData = $diskSmartData.VendorSpecific
-            # $thresholdsData = $disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
             $thresholdsData = $hostSmartData.disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
             $failurePredictStatus = $hostSmartData.disksFailurePredictStatus | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName PredictFailure
 
@@ -135,10 +133,8 @@ function inGetDiskSmartInfoCIM
             {
                 $hash = [ordered]@{}
 
-                # if ($Session)
                 if ($hostSmartData.ComputerName)
                 {
-                    # $hash.Add('ComputerName', [string]$Session.ComputerName)
                     $hash.Add('ComputerName', [string]$hostSmartData.ComputerName)
                 }
                 else
@@ -255,16 +251,9 @@ function inGetDiskSmartInfoCIM
 
         if ($UpdateHistory)
         {
-            # inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -session $Session
-            # inUpdateHistoricalData -disksSmartData $disksSmartData -disksThresholds $disksThresholds -diskDrives $diskDrives -computerName $hostSmartData.ComputerName
             inUpdateHistoricalData -hostSmartData $hostSmartData
         }
     }
-    # else
-    # {
-    #     inReportErrors -CimErrors $cimInstanceErrors
-    # }
-
 }
 
 function inOverwriteAttributes
