@@ -51,59 +51,6 @@ function inTrimDiskDriveModel
     return $Model
 }
 
-function inComposeHistoricalDataFileName
-{
-    Param (
-        # $session
-        [string]$computerName
-    )
-
-    # if ($session)
-    if ($computerName)
-    {
-        # $filename = "$($session.ComputerName).json"
-        $filename = "$computerName.json"
-    }
-    else
-    {
-        $filename = 'localhost.json'
-    }
-
-    if ($IsCoreCLR)
-    {
-        if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
-        {
-            $filepath = $Config.DataHistoryPath
-        }
-        else
-        {
-            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
-        }
-    }
-    # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
-    else
-    {
-        $pathroot = [System.IO.Path]::GetPathRoot($Config.DataHistoryPath)
-        if ($pathroot -and $pathroot[-1] -eq '\')
-        {
-            $filepath = $Config.DataHistoryPath
-        }
-        else
-        {
-            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
-        }
-    }
-
-    if (-not (Test-Path -Path $filepath))
-    {
-        New-Item -ItemType Directory -Path $filepath | Out-Null
-    }
-
-    $fullname = Join-Path -Path $filepath -ChildPath $filename
-
-    return $fullname
-}
-
 function inCompareAttributeData
 {
     Param (
