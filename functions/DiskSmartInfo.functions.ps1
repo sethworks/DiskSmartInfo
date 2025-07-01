@@ -102,6 +102,7 @@ function Get-DiskSmartInfo
                     continue
                 }
                 $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                Remove-CimSession -CimSession $cs
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
@@ -114,6 +115,7 @@ function Get-DiskSmartInfo
                     -UpdateHistory:$UpdateHistory
             }
         }
+        # Localhost
         else
         {
             $HostsSmartData = inGetHostsSmartData
