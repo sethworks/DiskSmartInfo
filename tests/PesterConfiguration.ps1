@@ -5,6 +5,7 @@ $PesterConfiguration.Run.Path = '.\tests\DiskSmartInfo.completers.tests.ps1',
                                 '.\tests\DiskSmartInfo.history.tests.ps1',
                                 '.\tests\DiskSmartInfo.remoting.tests.ps1',
                                 '.\tests\DiskSmartInfo.remoting.mocked.tests.ps1',
+                                '.\tests\DiskSmartInfo.remoting.PSSession.mocked.tests.ps1',
                                 '.\tests\DiskSmartInfo.config.tests.ps1',
                                 '.\tests\DiskSmartInfo.errors.tests.ps1',
                                 '.\tests\DiskSmartAttributeDescription.tests.ps1'
