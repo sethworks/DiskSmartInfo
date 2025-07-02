@@ -35,7 +35,8 @@ function inGetHostsSmartData
         }
         else
         {
-            inReportErrors -CimErrors $cimInstanceErrors
+            # inReportErrors -CimErrors $cimInstanceErrors
+            inReportErrors -Errors $cimInstanceErrors
         }
     }
 
@@ -60,7 +61,8 @@ function inGetHostsSmartData
         }
         else
         {
-            inReportErrors -CimErrors $cimInstanceErrors
+            # inReportErrors -CimErrors $cimInstanceErrors
+            inReportErrors -Errors $cimInstanceErrors
         }
     }
 
@@ -81,7 +83,8 @@ function inGetHostsSmartData
         }
         else
         {
-            inReportErrors -CimErrors $cimInstanceErrors
+            # inReportErrors -CimErrors $cimInstanceErrors
+            inReportErrors -Errors $cimInstanceErrors
         }
     }
 
@@ -371,22 +374,39 @@ function inConvertData
 function inReportErrors
 {
     Param (
-        $CimErrors
+        $Errors
     )
 
-    foreach ($cimError in $CimErrors)
+    foreach ($err in $Errors)
     {
-        if ($cimError.OriginInfo.PSComputerName)
+        # CIMSession
+        if ($err.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord')
         {
-            $message = "ComputerName: ""$($cimError.OriginInfo.PSComputerName)"". $($cimError.Exception.Message)"
+            if ($err.OriginInfo.PSComputerName)
+            {
+                $message = "ComputerName: ""$($err.OriginInfo.PSComputerName)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
         }
-        else
+        # PSSession
+        elseif ($err.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
         {
-            $message = $cimError.Exception.Message
+            if ($err.ErrorDetails.Message -match '\[(?<ComputerName>\S+)]')
+            {
+                $message = "ComputerName: ""$($Matches.ComputerName)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
         }
 
-        $exception = [System.Exception]::new($message, $cimError.Exception)
-        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $cimError.FullyQualifiedErrorId, $cimError.CategoryInfo.Category, $cimError.TargetObject)
+
+        $exception = [System.Exception]::new($message, $err.Exception)
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $err.FullyQualifiedErrorId, $err.CategoryInfo.Category, $err.TargetObject)
         $PSCmdlet.WriteError($errorRecord)
     }
 }
@@ -399,7 +419,8 @@ function inClearRemotingErrorRecords
         while ($true)
         {
             $value.ForEach{
-                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord')
+                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
                 {
                     $value.Remove($PSItem)
                     continue

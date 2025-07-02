@@ -56,7 +56,7 @@ function Get-DiskSmartInfo
         }
 
         $errorParameters = @{
-            ErrorVariable = 'cimSessionErrors'
+            ErrorVariable = 'sessionErrors'
             ErrorAction = 'SilentlyContinue'
         }
 
@@ -111,7 +111,8 @@ function Get-DiskSmartInfo
                 {
                     if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
                     {
-                        inReportErrors -CimErrors $cimSessionErrors
+                        # inReportErrors -CimErrors $cimSessionErrors
+                        inReportErrors -Errors $sessionErrors
                         continue
                     }
                     $HostsSmartData = inGetHostsSmartData -CimSession $cs
@@ -143,7 +144,8 @@ function Get-DiskSmartInfo
                     # if (-not ($ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters))
                     if (-not $ps)
                     {
-                        inReportErrors -CimErrors $cimSessionErrors
+                        # inReportErrors -CimErrors $cimSessionErrors
+                        inReportErrors -Errors $sessionErrors
                         continue
                     }
                     $HostsSmartData = inGetHostsSmartData -PSSession $ps
