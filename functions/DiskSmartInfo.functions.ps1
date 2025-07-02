@@ -45,6 +45,11 @@ function Get-DiskSmartInfo
             break
         }
 
+        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $PSCmdlet.ParameterSetName -eq 'ComputerName')
+        {
+            $Transport = 'CimSession'
+        }
+
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
@@ -100,25 +105,60 @@ function Get-DiskSmartInfo
         # elseif ($PSCmdlet.ParameterSetName -eq 'ComputerName')
         elseif ($ComputerName)
         {
-            foreach ($cn in $ComputerName)
+            if ($Transport -eq 'CimSession')
             {
-                if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
+                foreach ($cn in $ComputerName)
                 {
-                    inReportErrors -CimErrors $cimSessionErrors
-                    continue
+                    if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
+                    {
+                        inReportErrors -CimErrors $cimSessionErrors
+                        continue
+                    }
+                    $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                    Remove-CimSession -CimSession $cs
+                    inGetDiskSmartInfoCIM `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -AttributeIDs $attributeIDs `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
                 }
-                $HostsSmartData = inGetHostsSmartData -CimSession $cs
-                Remove-CimSession -CimSession $cs
-                inGetDiskSmartInfoCIM `
-                    -HostsSmartData $HostsSmartData `
-                    -Convert:$Convert `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -DiskNumbers $DiskNumber `
-                    -DiskModels $DiskModel `
-                    -AttributeIDs $attributeIDs `
-                    -Quiet:$Quiet `
-                    -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory
+            }
+            elseif ($Transport -eq 'PSSession')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    if ($Credential)
+                    {
+                        $ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters
+                    }
+                    else
+                    {
+                        $ps = New-PSSession -ComputerName $cn @errorParameters
+                    }
+                    # if (-not ($ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters))
+                    if (-not $ps)
+                    {
+                        inReportErrors -CimErrors $cimSessionErrors
+                        continue
+                    }
+                    $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                    Remove-PSSession -Session $ps
+                    inGetDiskSmartInfoCIM `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -AttributeIDs $attributeIDs `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
+                }
             }
         }
         # Localhost
