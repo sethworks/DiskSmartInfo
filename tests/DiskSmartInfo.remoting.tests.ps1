@@ -21,6 +21,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -90,6 +91,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
             $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
         }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
+        }
     }
 
     Context "ComputerName IP Address" -Skip:$skipIPAddresses {
@@ -100,6 +105,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -133,6 +139,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(39, 14, 47)
+        }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
         }
     }
 
@@ -144,6 +154,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo $computerNames
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -178,6 +189,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
+        }
     }
 
     Context "ComputerName positional IP Address" -Skip:$skipIPAddresses {
@@ -188,6 +203,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = Get-DiskSmartInfo $ipAddresses
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -222,6 +238,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[1].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[1].SmartData[13].Data | Should -Be @(39, 14, 47)
         }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
+        }
     }
 
     Context "ComputerName pipeline" {
@@ -232,6 +252,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $computerNames | Get-DiskSmartInfo
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -265,6 +286,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
+        }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
         }
     }
 
@@ -423,6 +448,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $diskDriveHost1, $diskDriveHost2 | Get-DiskSmartInfo
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -459,6 +485,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
+        }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
         }
     }
 
@@ -470,6 +500,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $diskHost1, $diskHost2 | Get-DiskSmartInfo
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -506,6 +537,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
+        }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
         }
     }
 
@@ -517,6 +552,7 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
             $diskSmartInfo = $physicalDiskHost1, $physicalDiskHost2 | Get-DiskSmartInfo
+            $cimSessions = Get-CimSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -553,6 +589,10 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
+        }
+
+        It "Has no CimSessions left" {
+            $cimSessions | Should -BeNullOrEmpty
         }
     }
 
