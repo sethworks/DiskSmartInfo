@@ -441,6 +441,17 @@ Describe "DiskSmartInfo remoting mocked tests" {
         }
     }
 
+    Context "CimSession empty" {
+
+        BeforeAll {
+            $diskSmartInfo = Get-DiskSmartInfo -CimSession $empty
+        }
+
+        It "Returns empty results" {
+            $diskSmartInfo | Should -BeNullOrEmpty
+        }
+    }
+
     Context "Win32_DiskDrive pipeline" {
 
         BeforeAll {

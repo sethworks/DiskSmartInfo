@@ -486,7 +486,7 @@ Describe "DiskSmartInfo remoting mocked tests" {
         }
     }
 
-    Context "CimSession pipeline" {
+    Context "PSSession pipeline" {
 
         BeforeAll {
             $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
@@ -544,6 +544,17 @@ Describe "DiskSmartInfo remoting mocked tests" {
             $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
             $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
+        }
+    }
+
+    Context "PSSession empty" {
+
+        BeforeAll {
+            $diskSmartInfo = Get-DiskSmartInfo -PSSession $empty
+        }
+
+        It "Returns empty results" {
+            $diskSmartInfo | Should -BeNullOrEmpty
         }
     }
 

@@ -366,17 +366,6 @@ Describe "DiskSmartInfo remoting tests" -Skip:$skipRemoting {
         }
     }
 
-    Context "CimSession empty" {
-
-        BeforeAll {
-            $diskSmartInfo = Get-DiskSmartInfo -CimSession $empty
-        }
-
-        It "Returns empty results" {
-            $diskSmartInfo | Should -BeNullOrEmpty
-        }
-    }
-
     Context "CimSession pipeline" {
 
         BeforeAll {
