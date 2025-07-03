@@ -14,7 +14,7 @@ function inGetHostsSmartData
     $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
 
     $errorParameters = @{
-        ErrorVariable = 'cimInstanceErrors'
+        ErrorVariable = 'instanceErrors'
         ErrorAction = 'SilentlyContinue'
     }
 
@@ -36,18 +36,19 @@ function inGetHostsSmartData
         else
         {
             # inReportErrors -CimErrors $cimInstanceErrors
-            inReportErrors -Errors $cimInstanceErrors
+            # inReportErrors -Errors $cimInstanceErrors
+            inReportErrors -Errors $instanceErrors
         }
     }
 
     foreach ($ps in $PSSession)
     {
-        Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'cimInstanceErrors'; ErrorAction = 'SilentlyContinue' } }
+        Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } }
         $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters }
         $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters }
         $disksThresholds = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters }
         $disksFailurePredictStatus = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters }
-        $cimInstanceErrors = Invoke-Command -Session $ps -ScriptBlock { $cimInstanceErrors }
+        $instanceErrors = Invoke-Command -Session $ps -ScriptBlock { $instanceErrors }
 
         if ($diskDrives -and $disksSmartData -and $disksThresholds -and $disksFailurePredictStatus)
         {
@@ -62,7 +63,8 @@ function inGetHostsSmartData
         else
         {
             # inReportErrors -CimErrors $cimInstanceErrors
-            inReportErrors -Errors $cimInstanceErrors
+            # inReportErrors -Errors $cimInstanceErrors
+            inReportErrors -Errors $instanceErrors
         }
     }
 
@@ -84,7 +86,8 @@ function inGetHostsSmartData
         else
         {
             # inReportErrors -CimErrors $cimInstanceErrors
-            inReportErrors -Errors $cimInstanceErrors
+            # inReportErrors -Errors $cimInstanceErrors
+            inReportErrors -Errors $instanceErrors
         }
     }
 
@@ -403,7 +406,6 @@ function inReportErrors
                 $message = $err.Exception.Message
             }
         }
-
 
         $exception = [System.Exception]::new($message, $err.Exception)
         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $err.FullyQualifiedErrorId, $err.CategoryInfo.Category, $err.TargetObject)

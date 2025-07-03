@@ -182,7 +182,8 @@ function Get-DiskSmartInfo
 
     end
     {
-        # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
+        # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord (CIMSession errors) objects
+        # or errors with exception System.Management.Automation.Remoting.PSRemotingTransportException (PSSession errors) from ErrorVariable
         inClearRemotingErrorRecords
     }
 }
