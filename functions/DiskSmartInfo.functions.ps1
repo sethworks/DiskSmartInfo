@@ -68,7 +68,6 @@ function Get-DiskSmartInfo
 
     process
     {
-        # if ($CimSession -or $PSSession)
         if ($PSCmdlet.ParameterSetName -eq 'Session')
         {
             foreach ($cs in $CimSession)
@@ -104,7 +103,6 @@ function Get-DiskSmartInfo
             }
         }
 
-        # elseif ($PSCmdlet.ParameterSetName -eq 'ComputerName')
         elseif ($ComputerName)
         {
             if ($Transport -eq 'CimSession')
@@ -113,7 +111,6 @@ function Get-DiskSmartInfo
                 {
                     if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
                     {
-                        # inReportErrors -CimErrors $cimSessionErrors
                         inReportErrors -Errors $sessionErrors
                         continue
                     }
@@ -152,10 +149,8 @@ function Get-DiskSmartInfo
                         $ps = New-PSSession -ComputerName $cn @errorParameters
                     }
 
-                    # if (-not ($ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters))
                     if (-not $ps)
                     {
-                        # inReportErrors -CimErrors $cimSessionErrors
                         inReportErrors -Errors $sessionErrors
                         continue
                     }

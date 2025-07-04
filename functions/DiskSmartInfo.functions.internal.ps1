@@ -35,8 +35,6 @@ function inGetHostsSmartData
         }
         else
         {
-            # inReportErrors -CimErrors $cimInstanceErrors
-            # inReportErrors -Errors $cimInstanceErrors
             inReportErrors -Errors $instanceErrors
         }
     }
@@ -62,8 +60,6 @@ function inGetHostsSmartData
         }
         else
         {
-            # inReportErrors -CimErrors $cimInstanceErrors
-            # inReportErrors -Errors $cimInstanceErrors
             inReportErrors -Errors $instanceErrors
         }
     }
@@ -85,8 +81,6 @@ function inGetHostsSmartData
         }
         else
         {
-            # inReportErrors -CimErrors $cimInstanceErrors
-            # inReportErrors -Errors $cimInstanceErrors
             inReportErrors -Errors $instanceErrors
         }
     }
