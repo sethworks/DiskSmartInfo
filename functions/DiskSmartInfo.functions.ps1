@@ -74,6 +74,7 @@ function Get-DiskSmartInfo
             foreach ($cs in $CimSession)
             {
                 $HostsSmartData = inGetHostsSmartData -CimSession $cs
+
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
@@ -89,6 +90,7 @@ function Get-DiskSmartInfo
             foreach ($ps in $PSSession)
             {
                 $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
@@ -115,18 +117,26 @@ function Get-DiskSmartInfo
                         inReportErrors -Errors $sessionErrors
                         continue
                     }
-                    $HostsSmartData = inGetHostsSmartData -CimSession $cs
-                    Remove-CimSession -CimSession $cs
-                    inGetDiskSmartInfoCIM `
-                        -HostsSmartData $HostsSmartData `
-                        -Convert:$Convert `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $DiskNumber `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -CimSession $cs
+
+                        inGetDiskSmartInfoCIM `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-CimSession -CimSession $cs
+                    }
                 }
             }
             elseif ($Transport -eq 'PSSession')
@@ -141,6 +151,7 @@ function Get-DiskSmartInfo
                     {
                         $ps = New-PSSession -ComputerName $cn @errorParameters
                     }
+
                     # if (-not ($ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters))
                     if (-not $ps)
                     {
@@ -148,9 +159,12 @@ function Get-DiskSmartInfo
                         inReportErrors -Errors $sessionErrors
                         continue
                     }
-                    $HostsSmartData = inGetHostsSmartData -PSSession $ps
-                    Remove-PSSession -Session $ps
-                    inGetDiskSmartInfoCIM `
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
+                        inGetDiskSmartInfoCIM `
                         -HostsSmartData $HostsSmartData `
                         -Convert:$Convert `
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -160,6 +174,11 @@ function Get-DiskSmartInfo
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
                         -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-PSSession -Session $ps
+                    }
                 }
             }
         }
