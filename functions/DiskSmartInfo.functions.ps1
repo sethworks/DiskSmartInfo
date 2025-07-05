@@ -5,8 +5,13 @@ function Get-DiskSmartInfo
         [Alias('PSComputerName')]
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
-        [Parameter(ValueFromPipeline,ParameterSetName='CimSession')]
+        [Parameter(ParameterSetName='ComputerName')]
+        [ValidateSet('CimSession','PSSession')]
+        [string]$Transport,
+        [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
+        [Parameter(ValueFromPipeline,ParameterSetName='Session')]
+        [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
         [switch]$Convert,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]
@@ -40,141 +45,56 @@ function Get-DiskSmartInfo
             break
         }
 
+        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $PSCmdlet.ParameterSetName -eq 'ComputerName')
+        {
+            $Transport = 'CimSession'
+        }
+
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
         }
 
         $errorParameters = @{
-            ErrorVariable = 'cimSessionErrors'
+            ErrorVariable = 'sessionErrors'
             ErrorAction = 'SilentlyContinue'
         }
 
         $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
 
         $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+        $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     }
 
     process
     {
-        if ($CimSession)
+        if ($PSCmdlet.ParameterSetName -eq 'Session')
         {
             foreach ($cs in $CimSession)
             {
-                if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].CimSession.ComputerName -eq $cs.ComputerName})) -ge 0)
-                {
-                    if ($DiskNumber.Count)
-                    {
-                        foreach ($dn in $DiskNumber)
-                        {
-                            if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-                            {
-                                $sessionsComputersDisks[$in].DiskNumber += $dn
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $sessionsComputersDisks[$in].DiskNumber = @()
-                    }
-                }
-                else
-                {
-                    if ($DiskNumber.Count)
-                    {
-                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@($DiskNumber)})
-                    }
-                    else
-                    {
-                        $sessionsComputersDisks.Add(@{CimSession = $cs; ComputerName = $null; DiskNumber=@()})
-                    }
-                }
-            }
-        }
-        elseif ($ComputerName)
-        {
-            foreach ($cn in $ComputerName)
-            {
-                if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{$args[0].ComputerName -eq $cn})) -ge 0)
-                {
-                    if ($DiskNumber.Count)
-                    {
-                        foreach ($dn in $DiskNumber)
-                        {
-                            if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-                            {
-                                $sessionsComputersDisks[$in].DiskNumber += $dn
-                            }
-                        }
-                    }
-                    else
-                    {
-                        $sessionsComputersDisks[$in].DiskNumber = @()
-                    }
-                }
-                else
-                {
-                    if ($DiskNumber.Count)
-                    {
-                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@($DiskNumber)})
-                    }
-                    else
-                    {
-                        $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $cn; DiskNumber=@()})
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (($in = $sessionsComputersDisks.FindIndex([Predicate[System.Collections.Hashtable]]{($args[0].ComputerName -eq $null -and $args[0].CimSession -eq $null)})) -ge 0)
-            {
-                if ($DiskNumber.Count)
-                {
-                    foreach ($dn in $DiskNumber)
-                    {
-                        if ($sessionsComputersDisks[$in].DiskNumber.Count -and ($sessionsComputersDisks[$in].DiskNumber -notcontains $dn))
-                        {
-                            $sessionsComputersDisks[$in].DiskNumber += $dn
-                        }
-                    }
-                }
-                else
-                {
-                    $sessionsComputersDisks[$in].DiskNumber = @()
-                }
-            }
-            else
-            {
-                if ($DiskNumber.Count)
-                {
-                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@($DiskNumber)})
-                }
-                else
-                {
-                    $sessionsComputersDisks.Add(@{CimSession = $null; ComputerName = $null; DiskNumber=@()})
-                }
-            }
-        }
-    }
+                $HostsSmartData = inGetHostsSmartData -CimSession $cs
 
-    end
-    {
-        try
-        {
-            foreach ($scd in $sessionsComputersDisks)
-            {
-                if ($scd.ComputerName -and -not ($scd.CimSession = New-CimSession -ComputerName $scd.ComputerName -Credential $Credential @errorParameters))
-                {
-                    inReportErrors -CimErrors $cimSessionErrors
-                    continue
-                }
-
-                inGetDiskSmartInfo `
-                    -Session $scd.CimSession `
+                inGetDiskSmartInfoCIM `
+                    -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -DiskNumbers $scd.DiskNumber `
+                    -DiskNumbers $DiskNumber `
+                    -DiskModels $DiskModel `
+                    -AttributeIDs $attributeIDs `
+                    -Quiet:$Quiet `
+                    -ShowHistory:$ShowHistory `
+                    -UpdateHistory:$UpdateHistory
+            }
+
+            foreach ($ps in $PSSession)
+            {
+                $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
+                inGetDiskSmartInfoCIM `
+                    -HostsSmartData $HostsSmartData `
+                    -Convert:$Convert `
+                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -AttributeIDs $attributeIDs `
                     -Quiet:$Quiet `
@@ -182,18 +102,102 @@ function Get-DiskSmartInfo
                     -UpdateHistory:$UpdateHistory
             }
         }
-        finally
+
+        elseif ($ComputerName)
         {
-            foreach ($scd in $sessionsComputersDisks)
+            if ($Transport -eq 'CimSession')
             {
-                if ($scd.ComputerName -and $scd.CimSession)
+                foreach ($cn in $ComputerName)
                 {
-                    Remove-CimSession -CimSession $scd.CimSession
+                    if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
+                    {
+                        inReportErrors -Errors $sessionErrors
+                        continue
+                    }
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -CimSession $cs
+
+                        inGetDiskSmartInfoCIM `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-CimSession -CimSession $cs
+                    }
                 }
             }
+            elseif ($Transport -eq 'PSSession')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    if ($Credential)
+                    {
+                        $ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters
+                    }
+                    else
+                    {
+                        $ps = New-PSSession -ComputerName $cn @errorParameters
+                    }
 
-            # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord objects from ErrorVariable
-            inClearRemotingErrorRecords
+                    if (-not $ps)
+                    {
+                        inReportErrors -Errors $sessionErrors
+                        continue
+                    }
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
+                        inGetDiskSmartInfoCIM `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -AttributeIDs $attributeIDs `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-PSSession -Session $ps
+                    }
+                }
+            }
         }
+        # Localhost
+        else
+        {
+            $HostsSmartData = inGetHostsSmartData
+            inGetDiskSmartInfoCIM `
+                -HostsSmartData $HostsSmartData `
+                -Convert:$Convert `
+                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                -DiskNumbers $DiskNumber `
+                -DiskModels $DiskModel `
+                -AttributeIDs $attributeIDs `
+                -Quiet:$Quiet `
+                -ShowHistory:$ShowHistory `
+                -UpdateHistory:$UpdateHistory
+        }
+    }
+
+    end
+    {
+        # Remove unnecessary System.Management.Automation.Runspaces.RemotingErrorRecord (CIMSession errors) objects
+        # or errors with exception System.Management.Automation.Remoting.PSRemotingTransportException (PSSession errors) from ErrorVariable
+        inClearRemotingErrorRecords
     }
 }

@@ -6,6 +6,7 @@
         'PSPossibleIncorrectUsageOfAssignmentOperator',
         'PSPossibleIncorrectComparisonWithNull',
         'PSAvoidUsingComputerNameHardcoded',
-        'PSAvoidUsingConvertToSecureStringWithPlainText'
+        'PSAvoidUsingConvertToSecureStringWithPlainText',
+        'PSUseUsingScopeModifierInNewRunspaces'
     )
 }
