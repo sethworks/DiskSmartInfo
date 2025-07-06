@@ -347,13 +347,11 @@ function inGetAttributeData
 
         $([DataType]::bytes1032.value__)
         {
-            # return inExtractAttributeBytes1032 -smartData $smartData -startOffset ($a + 5)
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
         }
 
         $([DataType]::bytes1054.value__)
         {
-            # return inExtractAttributeBytes1054 -smartData $smartData -startOffset ($a + 5)
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
         }
 

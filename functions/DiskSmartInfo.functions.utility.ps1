@@ -128,7 +128,6 @@ function inExtractAttributeTemps
     return $temps
 }
 
-# function inExtractAttributeBytes1054
 function inExtractAttributeWords
 {
     Param (
@@ -143,9 +142,6 @@ function inExtractAttributeWords
     {
         $result += [long]($smartData[$startOffset + $word * 2] + $smartData[$startOffset + $word * 2 + 1] * 256)
     }
-
-    # $result += @([long]($smartData[$startOffset] + $smartData[$startOffset + 1] * 256))
-    # $result += [long]($smartData[$startOffset + 4] + $smartData[$startOffset + 5] * 256)
 
     return $result
 }
