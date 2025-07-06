@@ -1,4 +1,6 @@
+# Do not use -SkipLimitCheck because there are no such a parameter in Windows PowerShell 5.1
 $testData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
+$testDataProprietary = Import-PowerShellDataFile -Path $PSScriptRoot\testData.proprietary.psd1
 
 # Class names
 $namespaceWMI = 'root/WMI'
@@ -159,33 +161,64 @@ $physicalDiskPropertiesSSD2 = @{
 
 # HFSSSD1
 $diskSmartDataPropertiesHFSSSD1 = @{
-    VendorSpecific = $testData.AtapiSmartData_VendorSpecific_HFSSSD1
-    InstanceName = $testData.InstanceName_HFSSSD1
+    VendorSpecific = $testDataProprietary.AtapiSmartData_VendorSpecific_HFSSSD1
+    InstanceName = $testDataProprietary.InstanceName_HFSSSD1
 }
 
 $diskThresholdsPropertiesHFSSSD1 = @{
-    VendorSpecific = $testData.FailurePredictThresholds_VendorSpecific_HFSSSD1
-    InstanceName = $testData.InstanceName_HFSSSD1
+    VendorSpecific = $testDataProprietary.FailurePredictThresholds_VendorSpecific_HFSSSD1
+    InstanceName = $testDataProprietary.InstanceName_HFSSSD1
 }
 
 $diskFailurePredictStatusPropertiesHFSSSD1 = @{
-    PredictFailure = $testData.FailurePredictStatus_PredictFailure_HFSSSD1
-    InstanceName = $testData.InstanceName_HFSSSD1
+    PredictFailure = $testDataProprietary.FailurePredictStatus_PredictFailure_HFSSSD1
+    InstanceName = $testDataProprietary.InstanceName_HFSSSD1
 }
 
 $diskDrivePropertiesHFSSSD1 = @{
-    Index = $testData.Index_HFSSSD1
-    PNPDeviceID = $testData.PNPDeviceID_HFSSSD1
-    Model = $testData.Model_HFSSSD1
-    BytesPerSector = $testData.BytesPerSector_HFSSSD1
+    Index = $testDataProprietary.Index_HFSSSD1
+    PNPDeviceID = $testDataProprietary.PNPDeviceID_HFSSSD1
+    Model = $testDataProprietary.Model_HFSSSD1
+    BytesPerSector = $testDataProprietary.BytesPerSector_HFSSSD1
 }
 
 $diskPropertiesHFSSSD1 = @{
-    Number = $testData.Index_HFSSSD1
+    Number = $testDataProprietary.Index_HFSSSD1
 }
 
-$physicalDiskPropertiesHFSSSDD1 = @{
-    DeviceId = $testData.Index_HFSSSD1
+$physicalDiskPropertiesHFSSSD1 = @{
+    DeviceId = $testDataProprietary.Index_HFSSSD1
+}
+
+# KINGSTONSSD1
+$diskSmartDataPropertiesKINGSTONSSD1 = @{
+    VendorSpecific = $testDataProprietary.AtapiSmartData_VendorSpecific_KINGSTONSSD1
+    InstanceName = $testDataProprietary.InstanceName_KINGSTONSSD1
+}
+
+$diskThresholdsPropertiesKINGSTONSSD1 = @{
+    VendorSpecific = $testDataProprietary.FailurePredictThresholds_VendorSpecific_KINGSTONSSD1
+    InstanceName = $testDataProprietary.InstanceName_KINGSTONSSD1
+}
+
+$diskFailurePredictStatusPropertiesKINGSTONSSD1 = @{
+    PredictFailure = $testDataProprietary.FailurePredictStatus_PredictFailure_KINGSTONSSD1
+    InstanceName = $testDataProprietary.InstanceName_KINGSTONSSD1
+}
+
+$diskDrivePropertiesKINGSTONSSD1 = @{
+    Index = $testDataProprietary.Index_KINGSTONSSD1
+    PNPDeviceID = $testDataProprietary.PNPDeviceID_KINGSTONSSD1
+    Model = $testDataProprietary.Model_KINGSTONSSD1
+    BytesPerSector = $testDataProprietary.BytesPerSector_KINGSTONSSD1
+}
+
+$diskPropertiesKINGSTONSSD1 = @{
+    Number = $testDataProprietary.Index_KINGSTONSSD1
+}
+
+$physicalDiskPropertiesKINGSTONSSD1 = @{
+    DeviceId = $testDataProprietary.Index_KINGSTONSSD1
 }
 
 # CIM object
@@ -194,12 +227,14 @@ $diskSmartDataHDD2 = New-CimInstance -CimClass $cimClassSmartData -Property $dis
 $diskSmartDataSSD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesSSD1 -ClientOnly
 $diskSmartDataSSD2 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesSSD2 -ClientOnly
 $diskSmartDataHFSSSD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesHFSSSD1 -ClientOnly
+$diskSmartDataKINGSTONSSD1 = New-CimInstance -CimClass $cimClassSmartData -Property $diskSmartDataPropertiesKINGSTONSSD1 -ClientOnly
 
 $diskThresholdsHDD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD1 -ClientOnly
 $diskThresholdsHDD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHDD2 -ClientOnly
 $diskThresholdsSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD1 -ClientOnly
 $diskThresholdsSSD2 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesSSD2 -ClientOnly
 $diskThresholdsHFSSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesHFSSSD1 -ClientOnly
+$diskThresholdsKINGSTONSSD1 = New-CimInstance -CimClass $cimClassThresholds -Property $diskThresholdsPropertiesKINGSTONSSD1 -ClientOnly
 
 $diskFailurePredictStatusHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHDD1 -ClientOnly
 $diskFailurePredictStatusTrueHDD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusTruePropertiesHDD1 -ClientOnly
@@ -207,6 +242,7 @@ $diskFailurePredictStatusHDD2 = New-CimInstance -CimClass $cimClassFailurePredic
 $diskFailurePredictStatusSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesSSD1 -ClientOnly
 $diskFailurePredictStatusSSD2 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesSSD2 -ClientOnly
 $diskFailurePredictStatusHFSSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesHFSSSD1 -ClientOnly
+$diskFailurePredictStatusKINGSTONSSD1 = New-CimInstance -CimClass $cimClassFailurePredictStatus -Property $diskFailurePredictStatusPropertiesKINGSTONSSD1 -ClientOnly
 
 $diskDriveHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHDD1 -ClientOnly
 $diskDriveATAHDD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesATAHDD1 -ClientOnly
@@ -214,18 +250,21 @@ $diskDriveHDD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDri
 $diskDriveSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD1 -ClientOnly
 $diskDriveSSD2 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesSSD2 -ClientOnly
 $diskDriveHFSSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesHFSSSD1 -ClientOnly
+$diskDriveKINGSTONSSD1 = New-CimInstance -CimClass $cimClassDiskDrive -Property $diskDrivePropertiesKINGSTONSSD1 -ClientOnly
 
 $diskHDD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD1 -ClientOnly
 $diskHDD2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHDD2 -ClientOnly
 $diskSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesSSD1 -ClientOnly
 $diskSSD2 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesSSD2 -ClientOnly
 $diskHFSSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesHFSSSD1 -ClientOnly
+$diskKINGSTONSSD1 = New-CimInstance -CimClass $cimClassDisk -Property $diskPropertiesKINGSTONSSD1 -ClientOnly
 
 $physicalDiskHDD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD1 -ClientOnly
 $physicalDiskHDD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHDD2 -ClientOnly
 $physicalDiskSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD1 -ClientOnly
 $physicalDiskSSD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD2 -ClientOnly
 $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
+$physicalDiskKINGSTONSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesKINGSTONSSD1 -ClientOnly
 
 # Remoting
 $computerNames = $env:computername, 'localhost'

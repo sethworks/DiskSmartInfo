@@ -345,6 +345,16 @@ function inGetAttributeData
             return inExtractAttributeTemps -smartData $smartData -a $a
         }
 
+        $([DataType]::bytes1032.value__)
+        {
+            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
+        }
+
+        $([DataType]::bytes1054.value__)
+        {
+            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
+        }
+
         default
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6

@@ -209,5 +209,76 @@ $Script:proprietaryAttributes = @(
             AttributeName = 'Added Bad Flash Block Count'
             DataType = [DataType]::bits48
         }
+    ) },
+    @{Family = 'Kingston SATA SSDs'
+    ModelPatterns = @('^KINGSTON  ?SA400(M8|S37)(120|240|480|960)G.*')
+    Attributes = @(
+        [ordered]@{AttributeID = 167
+            AttributeName = 'Write Protect Mode'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 168
+            AttributeName = 'SATA Phy Error Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 169
+            AttributeName = 'Bad Block Rate'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 170
+            AttributeName = 'Bad Block Count Early/Later'
+            DataType = [DataType]::bytes1054
+        },
+        [ordered]@{AttributeID = 172
+            AttributeName = 'Erase Fail Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 173
+            AttributeName = 'Erase Count Max/Average'
+            DataType = [DataType]::bytes1032
+        },
+        [ordered]@{AttributeID = 192
+            AttributeName = 'Unsafe Shutdown Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 199
+            AttributeName = 'CRC Error Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 218
+            AttributeName = 'CRC Error Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 231
+            AttributeName = 'SSD Life Left'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 233
+            AttributeName = 'Flash Writes GiB'
+            DataType = [DataType]::bits48
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
+        },
+        [ordered]@{AttributeID = 241
+            AttributeName = 'Host Writes GiB'
+            DataType = [DataType]::bits48
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
+        },
+        [ordered]@{AttributeID = 242
+            AttributeName = 'Host Reads GiB'
+            DataType = [DataType]::bits48
+            ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] / 1KB)}
+        },
+        [ordered]@{AttributeID = 244
+            AttributeName = 'Average Erase Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 245
+            AttributeName = 'Max Erase Count'
+            DataType = [DataType]::bits48
+        },
+        [ordered]@{AttributeID = 246
+            AttributeName = 'Total Erase Count'
+            DataType = [DataType]::bits48
+        }
     ) }
 )

@@ -127,3 +127,21 @@ function inExtractAttributeTemps
 
     return $temps
 }
+
+function inExtractAttributeWords
+{
+    Param (
+        $smartData,
+        $startOffset,
+        $words
+    )
+
+    $result = @()
+
+    foreach ($word in $words)
+    {
+        $result += [long]($smartData[$startOffset + $word * 2] + $smartData[$startOffset + $word * 2 + 1] * 256)
+    }
+
+    return $result
+}

@@ -3,4 +3,6 @@ enum DataType {
     bits24
     bits16
     temperature3
+    bytes1032
+    bytes1054
 }
