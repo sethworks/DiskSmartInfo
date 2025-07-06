@@ -22,7 +22,7 @@ Context "Actual attributes list" {
             $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 
             $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_SSD1
-            $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_HFSSSD1
+            $diskSmartInfo[1].DiskNumber | Should -Be $testDataProprietary.Index_HFSSSD1
             $diskSmartInfo[2].DiskNumber | Should -Be $testData.Index_SSD2
         }
 
@@ -68,7 +68,7 @@ Context "Actual attributes list" {
             $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
 
             $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_SSD1
-            $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_HFSSSD1
+            $diskSmartInfo[1].DiskNumber | Should -Be $testDataProprietary.Index_HFSSSD1
             $diskSmartInfo[2].DiskNumber | Should -Be $testData.Index_SSD2
         }
 
