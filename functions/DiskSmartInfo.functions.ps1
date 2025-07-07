@@ -6,7 +6,7 @@ function Get-DiskSmartInfo
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
         [Parameter(ParameterSetName='ComputerName')]
-        [ValidateSet('CimSession','PSSession')]
+        [ValidateSet('CimSession','PSSession','SSHSession')]
         [string]$Transport,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
@@ -45,11 +45,13 @@ function Get-DiskSmartInfo
             break
         }
 
+        # Defaults
         if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $PSCmdlet.ParameterSetName -eq 'ComputerName')
         {
             $Transport = 'CimSession'
         }
 
+        # Restrictions
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
@@ -160,15 +162,46 @@ function Get-DiskSmartInfo
                         $HostsSmartData = inGetHostsSmartData -PSSession $ps
 
                         inGetDiskSmartInfoCIM `
-                        -HostsSmartData $HostsSmartData `
-                        -Convert:$Convert `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $DiskNumber `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-PSSession -Session $ps
+                    }
+                }
+            }
+            elseif ($Transport -eq 'SSHSession')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    if (-not ($ps = New-PSSession -HostName $cn @errorParameters))
+                    {
+                        inReportErrors -Errors $sessionErrors
+                        continue
+                    }
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
+                        inGetDiskSmartInfoCIM `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
                     }
                     finally
                     {
