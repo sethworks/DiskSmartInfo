@@ -36,25 +36,32 @@ function Get-DiskSmartInfo
 
     begin
     {
+        # Restrictions
         if ($IsLinux -or $IsMacOS)
         {
             $message = "Platform is not supported"
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
-            $PSCmdlet.WriteError($errorRecord)
-            break
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+            # $PSCmdlet.WriteError($errorRecord)
+            # break
         }
 
-        # Defaults
-        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $PSCmdlet.ParameterSetName -eq 'ComputerName')
-        {
-            $Transport = 'CimSession'
-        }
-
-        # Restrictions
+        # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
+        }
+
+        if ($Credential -and $Transport -eq 'SSHSession')
+        {
+            Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
+        }
+
+        # Defaults
+        if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
+        {
+            $Transport = 'CimSession'
         }
 
         $errorParameters = @{
