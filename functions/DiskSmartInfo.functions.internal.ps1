@@ -321,9 +321,9 @@ function inGetAttributeData
         $a
     )
 
-    $dt = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
+    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
 
-    switch ($dt.value__)
+    switch ($df.value__)
     {
         $([AttributeDataFormat]::bits48.value__)
         {
