@@ -5,15 +5,15 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting PSSession mocked tests" {
+Describe "DiskSmartInfo remoting SSHSession mocked tests" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
 
     Context "ComputerName" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -23,7 +23,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport PSSession
+            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -98,10 +98,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "ComputerName IP Address" {
 
         BeforeAll {
-            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]}
-            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]}
-            mock New-PSSession -MockWith { $psSessionHost3 } -ParameterFilter {$ComputerName -eq $ipAddresses[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost4 } -ParameterFilter {$ComputerName -eq $ipAddresses[1]} -ModuleName DiskSmartInfo
+            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]; Transport = 'SSH'}
+            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost3 } -ParameterFilter {$HostName -eq $ipAddresses[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost4 } -ParameterFilter {$HostName -eq $ipAddresses[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -111,7 +111,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport PSSession
+            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -151,10 +151,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "ComputerName positional" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -164,7 +164,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport PSSession
+            $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -204,10 +204,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "ComputerName positional IP Address" {
 
         BeforeAll {
-            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]}
-            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]}
-            mock New-PSSession -MockWith { $psSessionHost3 } -ParameterFilter {$ComputerName -eq $ipAddresses[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost4 } -ParameterFilter {$ComputerName -eq $ipAddresses[1]} -ModuleName DiskSmartInfo
+            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]; Transport = 'SSH'}
+            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost3 } -ParameterFilter {$HostName -eq $ipAddresses[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost4 } -ParameterFilter {$HostName -eq $ipAddresses[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -217,7 +217,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport PSSession
+            $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -257,10 +257,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "ComputerName pipeline" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -270,7 +270,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport PSSession
+            $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -310,8 +310,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "PSSession" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -361,8 +361,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "PSSession IP Address" {
 
         BeforeAll {
-            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]}
-            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]}
+            $psSessionHost3 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[0]; Transport = 'SSH'}
+            $psSessionHost4 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $ipAddresses[1]; Transport = 'SSH'}
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -412,8 +412,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "PSSession pipeline" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -474,10 +474,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "Win32_DiskDrive pipeline" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -487,7 +487,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $diskDriveHost1, $diskDriveHost2 | Get-DiskSmartInfo -Transport PSSession
+            $diskSmartInfo = $diskDriveHost1, $diskDriveHost2 | Get-DiskSmartInfo -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -530,10 +530,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "MSFT_Disk pipeline" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -543,7 +543,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $diskHost1, $diskHost2 | Get-DiskSmartInfo -Transport PSSession
+            $diskSmartInfo = $diskHost1, $diskHost2 | Get-DiskSmartInfo -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -586,10 +586,10 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
     Context "MSFT_PhysicalDisk pipeline" {
 
         BeforeAll {
-            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
-            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
-            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]; Transport = 'SSH'}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$HostName -eq $computerNames[1]} -ModuleName DiskSmartInfo
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -599,7 +599,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             mock Invoke-Command -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $physicalDiskHost1, $physicalDiskHost2 | Get-DiskSmartInfo -Transport PSSession
+            $diskSmartInfo = $physicalDiskHost1, $physicalDiskHost2 | Get-DiskSmartInfo -Transport SSHSession
         }
 
         It "Returns DiskSmartInfo object" {
@@ -644,8 +644,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
         Context "-UpdateHistory" {
 
             BeforeAll {
-                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
                 mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -659,7 +659,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
                     $Config.DataHistoryPath = $TestDrive
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -UpdateHistory | Out-Null
+                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -UpdateHistory | Out-Null
                 $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).json"
             }
 
@@ -682,8 +682,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
         Context "-ShowHistory" {
 
             BeforeAll {
-                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
-                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
                 mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
@@ -698,8 +698,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
                     $Config.ShowUnchangedDataHistory = $true
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -UpdateHistory | Out-Null
-                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -ShowHistory
+                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -UpdateHistory | Out-Null
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -ShowHistory
             }
 
             It "HistoricalDate property exists" {

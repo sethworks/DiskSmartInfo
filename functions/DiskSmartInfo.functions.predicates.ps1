@@ -4,7 +4,7 @@ function isCritical
         [int]$AttributeID
     )
 
-    if ($smartAttributes.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
+    if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
     {
         return $true
     }
@@ -18,10 +18,10 @@ function isAttributeRequested
 {
     Param (
         [int]$attributeID,
-        [PSCustomObject[]]$attributeSet
+        [PSCustomObject[]]$actualAttributesList
     )
 
-    $atName = $attributeSet.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
+    $atName = $actualAttributesList.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
 
     if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
         ($attributeIDs -contains $attributeID) -or

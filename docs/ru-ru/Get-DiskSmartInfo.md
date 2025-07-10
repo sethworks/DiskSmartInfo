@@ -53,7 +53,13 @@ Accept wildcard characters: False
 
 Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.
 
-Могут быть заданы следующие значения: CIMSession (по умолчанию) или PSSession.
+Могут быть заданы следующие значения:
+
+CIMSession (по умолчанию) - использование CIMSession для удаленных подключений
+
+PSSession - использование PSSession с WSMan в качестве транспортного механизма
+
+SSHSession - использование PSSession с SSH в качестве транспортного механизма
 
 ```yaml
 Type: String
@@ -519,7 +525,7 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера.
 
-### Example 7: Получение данных SMART с удаленных компьютеров с использованием PSSession
+### Example 7: Получение данных SMART с удаленных компьютеров с использованием PSSession и WSMan в качестве транспорта
 ```powershell
 Get-DiskSmartInfo -ComputerName SomeComputer -Transport PSSession
 ```
@@ -550,15 +556,49 @@ SMARTData:
               241 F1    Total LBAs Written                 0         99    99    12720469069
 ```
 
-Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession.
+Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession
+и WSMan в качестве транспорта.
 
-### Example 8: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession
+### Example 8: Получение данных SMART с удаленных компьютеров с использованием PSSession и SSH в качестве транспорта
+```powershell
+Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+```
+
+Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта.
+
+### Example 9: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
 $SessionOption = New-CimSessionOption -Protocol Dcom
-$CimSession_DCOM = New-CimSession -ComputerName SomeAnotherComputer -SessionOption $SessionOption -Credential $Credential
+$CimSession_DCOM = New-CimSession -ComputerName SomeOtherComputer -SessionOption $SessionOption -Credential $Credential
 
 Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 ```
@@ -588,7 +628,7 @@ SMARTData:
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069
 
-ComputerName: SomeAnotherComputer
+ComputerName: SomeOtherComputer
 Disk:         0: Disk model
 PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
@@ -602,12 +642,13 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов CimSession.
 
-### Example 9: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession
+### Example 10: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession
 ```powershell
 $Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
+$SSHSession = New-PSSession -HostName SomeOtherComputer
 
-Get-DiskSmartInfo -PSSession $PSSession
+Get-DiskSmartInfo -PSSession $PSSession, $SSHSession
 ```
 
 ```
@@ -634,11 +675,22 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: SomeOtherComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...
 ```
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов PSSession.
 
-### Example 10: Получение указанных атрибутов
+### Example 11: Получение указанных атрибутов
 ```powershell
 Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
@@ -657,7 +709,7 @@ SMARTData:
 
 Команда получает указанные SMART атрибуты
 
-### Example 11: Получение данных SMART для указанных дисков
+### Example 12: Получение данных SMART для указанных дисков
 ```powershell
 Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
 ```
@@ -699,7 +751,7 @@ SMARTData:
 
 Команда получает информацию SMART для указанных жестких дисков.
 
-### Example 12: Сохранение данных для последующего сравнения
+### Example 13: Сохранение данных для последующего сравнения
 ```powershell
 Get-DiskSmartInfo -UpdateHistory
 ```
@@ -731,7 +783,7 @@ SMARTData:
 
 Команда получает информацию SMART и сохраняет текущие значения свойства Data для всех атрибутов.
 
-### Example 13: Отображение ранее сохраненных данных
+### Example 14: Отображение ранее сохраненных данных
 ```powershell
 Get-DiskSmartInfo -ShowHistory
 ```
@@ -765,17 +817,18 @@ SMARTData:
 Команда получает информацию SMART и отображает ранее сохраненные значения свойства Data
 выводимых атрибутов.
 
-### Example 14: Использование конвейера
+### Example 15: Использование конвейера
 ```powershell
 $ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
 $PSSession = New-PSSession -ComputerName 'Computer3'
+$SSHSession = New-PSSession -HostName 'Computer4'
 
-$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer4'
-$Disk = Get-Disk -Number 1 -CimSession 'Computer5'
-$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer6'
+$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer5'
+$Disk = Get-Disk -Number 1 -CimSession 'Computer6'
+$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer7'
 
-$ComputerName, $CimSession, $PSSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
+$ComputerName, $CimSession, $PSSession, $SSHSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
 ```
 
 ```
@@ -815,8 +868,8 @@ SMARTData:
 ...
 ```
 
-Команда получает информацию SMART для всех дисков компьютеров Computer1, Computer2 и Computer3,
-и для указанных дисков компьютеров Computer4, Computer5 и Computer6.
+Команда получает информацию SMART для всех дисков компьютеров Computer1, Computer2, Computer3 и
+Computer4, и для указанных дисков компьютеров Computer5, Computer6 и Computer7.
 
 ## INPUTS
 

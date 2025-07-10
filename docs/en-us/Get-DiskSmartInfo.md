@@ -53,7 +53,13 @@ Specifies type of session used for connecting to computers, listed or bound to t
 
 It is not used locally or with -CimSession or -PSSession parameters.
 
-The following values can be specified: CIMSession (default) or PSSession.
+The following values can be specified:
+
+CIMSession (default) - use CIMSession for remote connection
+
+PSSession - use PSSession with WSMan transport
+
+SSHSession - use PSSession with SSH transport
 
 ```yaml
 Type: String
@@ -508,7 +514,7 @@ SMARTData:
 
 The command gets disk SMART information from remote computer.
 
-### Example 7: Get disk SMART info from remote computers using PSSession
+### Example 7: Get disk SMART info from remote computers using PSSession with WSMan transport
 ```powershell
 Get-DiskSmartInfo -ComputerName SomeComputer -Transport PSSession
 ```
@@ -539,15 +545,48 @@ SMARTData:
               241 F1    Total LBAs Written                 0         99    99    12720469069
 ```
 
-The command gets disk SMART information from remote computer using PSSession.
+The command gets disk SMART information from remote computer using PSSession with WSMan transport.
 
-### Example 8: Get disk SMART info from remote computers using specified CimSessions
+### Example 8: Get disk SMART info from remote computers using PSSession with SSH transport
+```powershell
+Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+```
+
+The command gets disk SMART information from remote computer using PSSession with SSH transport.
+
+### Example 9: Get disk SMART info from remote computers using specified CimSessions
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
 $SessionOption = New-CimSessionOption -Protocol Dcom
-$CimSession_DCOM = New-CimSession -ComputerName SomeAnotherComputer -SessionOption $SessionOption -Credential $Credential
+$CimSession_DCOM = New-CimSession -ComputerName SomeOtherComputer -SessionOption $SessionOption -Credential $Credential
 
 Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 ```
@@ -577,7 +616,7 @@ SMARTData:
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069
 
-ComputerName: SomeAnotherComputer
+ComputerName: SomeOtherComputer
 Disk:         0: Disk model
 PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
@@ -591,12 +630,13 @@ SMARTData:
 
 The command gets disk SMART information from remote computers using specified CimSessions.
 
-### Example 9: Get disk SMART info from remote computers using specified PSSession
+### Example 10: Get disk SMART info from remote computers using specified PSSession
 ```powershell
 $Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
+$SSHSession = New-PSSession -HostName SomeOtherComputer
 
-Get-DiskSmartInfo -PSSession $PSSession
+Get-DiskSmartInfo -PSSession $PSSession, $SSHSession
 ```
 
 ```
@@ -623,11 +663,22 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: SomeOtherComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...
 ```
 
 The command gets disk SMART information from remote computers using specified PSSession.
 
-### Example 10: Get selected attributes
+### Example 11: Get selected attributes
 ```powershell
 Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
@@ -646,7 +697,7 @@ SMARTData:
 
 The command gets specified SMART attributes.
 
-### Example 11: Get data for selected disks
+### Example 12: Get data for selected disks
 ```powershell
 Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
 ```
@@ -688,7 +739,7 @@ SMARTData:
 
 The command gets SMART information for specified disks.
 
-### Example 12: Save history data
+### Example 13: Save history data
 ```powershell
 Get-DiskSmartInfo -UpdateHistory
 ```
@@ -720,7 +771,7 @@ SMARTData:
 
 The command gets SMART information and saves current Data.
 
-### Example 13: Show history data
+### Example 14: Show history data
 ```powershell
 Get-DiskSmartInfo -ShowHistory
 ```
@@ -753,17 +804,18 @@ SMARTData:
 
 The command gets SMART information and displays history Data.
 
-### Example 14: Using pipeline
+### Example 15: Using pipeline
 ```powershell
 $ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
 $PSSession = New-PSSession -ComputerName 'Computer3'
+$SSHSession = New-PSSession -HostName 'Computer4'
 
-$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer4'
-$Disk = Get-Disk -Number 1 -CimSession 'Computer5'
-$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer6'
+$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer5'
+$Disk = Get-Disk -Number 1 -CimSession 'Computer6'
+$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer7'
 
-$ComputerName, $CimSession, $PSSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
+$ComputerName, $CimSession, $PSSession, $SSHSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
 ```
 
 ```
@@ -803,8 +855,8 @@ SMARTData:
 ...
 ```
 
-The command gets SMART information for all disks from computers Computer1, Computer2, and Computer3,
-and for specified disks from computers Computer4, Computer5, and Computer6.
+The command gets SMART information for all disks from computers Computer1, Computer2, Computer3, and
+Computer4, and for specified disks from computers Computer5, Computer6, and Computer7.
 
 ## INPUTS
 

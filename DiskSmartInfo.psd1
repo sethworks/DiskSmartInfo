@@ -4,7 +4,7 @@
 RootModule = 'DiskSmartInfo.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.1'
+ModuleVersion = '2.2'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core', 'Desktop')
@@ -16,7 +16,7 @@ GUID = '7da6c80e-01da-4c70-98c1-3dc2f877a8ba'
 Author = 'Sergey Vasin'
 
 # Company or vendor of this module
-CompanyName = 'Unknown'
+# CompanyName = ''
 
 # Copyright statement for this module
 Copyright = '(c) Sergey Vasin. All rights reserved.'
@@ -93,6 +93,7 @@ AliasesToExport = @()
 # List of all files packaged with this module
 FileList = 'DiskSmartInfo.psd1',
            'DiskSmartInfo.psm1',
+           'DiskSmartInfo.config.psd1',
            'types/DiskSmartInfo.types.ps1',
            'functions/DiskSmartInfo.completers.ps1',
            'functions/DiskSmartInfo.functions.ps1',

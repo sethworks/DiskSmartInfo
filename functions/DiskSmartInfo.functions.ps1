@@ -6,7 +6,7 @@ function Get-DiskSmartInfo
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
         [Parameter(ParameterSetName='ComputerName')]
-        [ValidateSet('CimSession','PSSession')]
+        [ValidateSet('CimSession','PSSession','SSHSession')]
         [string]$Transport,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
@@ -36,23 +36,38 @@ function Get-DiskSmartInfo
 
     begin
     {
+        # Restrictions
         if ($IsLinux -or $IsMacOS)
         {
             $message = "Platform is not supported"
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
-            $PSCmdlet.WriteError($errorRecord)
-            break
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
-        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $PSCmdlet.ParameterSetName -eq 'ComputerName')
+        if (-not $IsCoreCLR -and $Transport -eq 'SSHSession')
         {
-            $Transport = 'CimSession'
+            $message = "PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
+        # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
+        }
+
+        if ($Credential -and $Transport -eq 'SSHSession')
+        {
+            Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
+        }
+
+        # Defaults
+        if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
+        {
+            $Transport = 'CimSession'
         }
 
         $errorParameters = @{
@@ -160,15 +175,46 @@ function Get-DiskSmartInfo
                         $HostsSmartData = inGetHostsSmartData -PSSession $ps
 
                         inGetDiskSmartInfoCIM `
-                        -HostsSmartData $HostsSmartData `
-                        -Convert:$Convert `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        -DiskNumbers $DiskNumber `
-                        -DiskModels $DiskModel `
-                        -AttributeIDs $attributeIDs `
-                        -Quiet:$Quiet `
-                        -ShowHistory:$ShowHistory `
-                        -UpdateHistory:$UpdateHistory
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
+                    }
+                    finally
+                    {
+                        Remove-PSSession -Session $ps
+                    }
+                }
+            }
+            elseif ($Transport -eq 'SSHSession')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    if (-not ($ps = New-PSSession -HostName $cn @errorParameters))
+                    {
+                        inReportErrors -Errors $sessionErrors
+                        continue
+                    }
+
+                    try
+                    {
+                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+
+                        inGetDiskSmartInfoCIM `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -AttributeIDs $attributeIDs `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory
                     }
                     finally
                     {

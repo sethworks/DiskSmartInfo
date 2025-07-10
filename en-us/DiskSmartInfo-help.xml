@@ -223,7 +223,10 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:description>
             <maml:para>Specifies type of session used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
             <maml:para>It is not used locally or with -CimSession or -PSSession parameters.</maml:para>
-            <maml:para>The following values can be specified: CIMSession (default) or PSSession.</maml:para>
+            <maml:para>The following values can be specified:</maml:para>
+            <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
+            <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
+            <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -573,7 +576,10 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:description>
           <maml:para>Specifies type of session used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
           <maml:para>It is not used locally or with -CimSession or -PSSession parameters.</maml:para>
-          <maml:para>The following values can be specified: CIMSession (default) or PSSession.</maml:para>
+          <maml:para>The following values can be specified:</maml:para>
+          <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
+          <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
+          <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -952,7 +958,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 7: Get disk SMART info from remote computers using PSSession</maml:title>
+        <maml:title>Example 7: Get disk SMART info from remote computers using PSSession with WSMan transport</maml:title>
         <dev:code>Get-DiskSmartInfo -ComputerName SomeComputer -Transport PSSession
 
 ComputerName: SomeComputer
@@ -979,18 +985,51 @@ SMARTData:
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
         <dev:remarks>
-          <maml:para>The command gets disk SMART information from remote computer using PSSession.</maml:para>
+          <maml:para>The command gets disk SMART information from remote computer using PSSession with WSMan transport.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 8: Get disk SMART info from remote computers using specified CimSessions</maml:title>
+        <maml:title>Example 8: Get disk SMART info from remote computers using PSSession with SSH transport</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>The command gets disk SMART information from remote computer using PSSession with SSH transport.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 9: Get disk SMART info from remote computers using specified CimSessions</maml:title>
         <dev:code>$Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
 $SessionOption = New-CimSessionOption -Protocol Dcom
-$CimSession_DCOM = New-CimSession -ComputerName SomeAnotherComputer -SessionOption $SessionOption -Credential $Credential
+$CimSession_DCOM = New-CimSession -ComputerName SomeOtherComputer -SessionOption $SessionOption -Credential $Credential
 
 Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 
@@ -1018,7 +1057,7 @@ SMARTData:
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
               241 F1    Total LBAs Written                 0         99    99    12720469069
 
-ComputerName: SomeAnotherComputer
+ComputerName: SomeOtherComputer
 Disk:         0: Disk model
 PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
@@ -1035,11 +1074,12 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 9: Get disk SMART info from remote computers using specified PSSession</maml:title>
+        <maml:title>Example 10: Get disk SMART info from remote computers using specified PSSession</maml:title>
         <dev:code>$Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
+$SSHSession = New-PSSession -HostName SomeOtherComputer
 
-Get-DiskSmartInfo -PSSession $PSSession
+Get-DiskSmartInfo -PSSession $PSSession, $SSHSession
 
 ComputerName: SomeComputer
 Disk:         0: Disk model
@@ -1063,7 +1103,18 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         252   252   0
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
-              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: SomeOtherComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...</dev:code>
         <dev:remarks>
           <maml:para>The command gets disk SMART information from remote computers using specified PSSession.</maml:para>
           <maml:para/>
@@ -1071,7 +1122,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------------- Example 10: Get selected attributes -------------</maml:title>
+        <maml:title>------------- Example 11: Get selected attributes -------------</maml:title>
         <dev:code>Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 
 Disk:         0: Disk model
@@ -1090,7 +1141,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>----------- Example 11: Get data for selected disks -----------</maml:title>
+        <maml:title>----------- Example 12: Get data for selected disks -----------</maml:title>
         <dev:code>Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
 
 Disk:         1: Disk model
@@ -1132,7 +1183,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>---------------- Example 12: Save history data ----------------</maml:title>
+        <maml:title>---------------- Example 13: Save history data ----------------</maml:title>
         <dev:code>Get-DiskSmartInfo -UpdateHistory
 
 Disk:         0: Disk model
@@ -1164,7 +1215,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>---------------- Example 13: Show history data ----------------</maml:title>
+        <maml:title>---------------- Example 14: Show history data ----------------</maml:title>
         <dev:code>Get-DiskSmartInfo -ShowHistory
 
 Disk:         0: Disk model
@@ -1197,16 +1248,17 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------------------ Example 14: Using pipeline ------------------</maml:title>
+        <maml:title>------------------ Example 15: Using pipeline ------------------</maml:title>
         <dev:code>$ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
 $PSSession = New-PSSession -ComputerName 'Computer3'
+$SSHSession = New-PSSession -HostName 'Computer4'
 
-$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer4'
-$Disk = Get-Disk -Number 1 -CimSession 'Computer5'
-$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer6'
+$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer5'
+$Disk = Get-Disk -Number 1 -CimSession 'Computer6'
+$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer7'
 
-$ComputerName, $CimSession, $PSSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
+$ComputerName, $CimSession, $PSSession, $SSHSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
 
 ComputerName: Computer1
 Disk:         0: Disk model
@@ -1243,7 +1295,7 @@ SMARTData:
               10  A     Spin Retry Count                   51        252   252   0
 ...</dev:code>
         <dev:remarks>
-          <maml:para>The command gets SMART information for all disks from computers Computer1, Computer2, and Computer3, and for specified disks from computers Computer4, Computer5, and Computer6.</maml:para>
+          <maml:para>The command gets SMART information for all disks from computers Computer1, Computer2, Computer3, and Computer4, and for specified disks from computers Computer5, Computer6, and Computer7.</maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

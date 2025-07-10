@@ -161,7 +161,7 @@ function inGetDiskSmartInfoCIM
 
                 $attributes = @()
 
-                $smartAttributes = inOverwriteAttributes -model $model
+                $actualAttributesList = inUpdateActualAttributesList -model $model
 
                 if ($hostHistoricalData)
                 {
@@ -175,16 +175,16 @@ function inGetDiskSmartInfoCIM
                     $attributeID = $smartData[$a]
 
                     if ($attributeID -and
-                    (isAttributeRequested -attributeID $attributeID -attributeSet $smartAttributes) -and
+                    (isAttributeRequested -attributeID $attributeID -actualAttributesList $actualAttributesList) -and
                     ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                     {
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
-                        $attribute.Add("Name", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                        $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                         $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
                         $attribute.Add("Value", [byte]$smartData[$a + 3])
                         $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -smartAttributes $smartAttributes -smartData $smartData -a $a))
+                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
@@ -256,7 +256,7 @@ function inGetDiskSmartInfoCIM
     }
 }
 
-function inOverwriteAttributes
+function inUpdateActualAttributesList
 {
     Param (
         [string]$model
@@ -285,7 +285,7 @@ function inOverwriteAttributes
                     $newAttribute = [ordered]@{
                         AttributeID = $attribute.AttributeID
                         AttributeName = $attribute.AttributeName
-                        DataType = $attribute.DataType
+                        DataFormat = $attribute.DataFormat
                         IsCritical = $result[$index].IsCritical
                         ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
@@ -316,41 +316,41 @@ function inOverwriteAttributes
 function inGetAttributeData
 {
     Param(
-        $smartAttributes,
+        $actualAttributesList,
         $smartData,
         $a
     )
 
-    $dt = $smartAttributes.Where{$_.AttributeID -eq $smartData[$a]}.DataType
+    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
 
-    switch ($dt.value__)
+    switch ($df.value__)
     {
-        $([DataType]::bits48.value__)
+        $([AttributeDataFormat]::bits48.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
         }
 
-        $([DataType]::bits24.value__)
+        $([AttributeDataFormat]::bits24.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
         }
 
-        $([DataType]::bits16.value__)
+        $([AttributeDataFormat]::bits16.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
         }
 
-        $([DataType]::temperature3.value__)
+        $([AttributeDataFormat]::temperature3.value__)
         {
             return inExtractAttributeTemps -smartData $smartData -a $a
         }
 
-        $([DataType]::bytes1032.value__)
+        $([AttributeDataFormat]::bytes1032.value__)
         {
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
         }
 
-        $([DataType]::bytes1054.value__)
+        $([AttributeDataFormat]::bytes1054.value__)
         {
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
         }
@@ -368,7 +368,7 @@ function inConvertData
         $attribute
     )
 
-    if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
+    if ($convertScriptBlock = $actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
     {
         return $convertScriptBlock.Invoke($attribute.Data)
     }
