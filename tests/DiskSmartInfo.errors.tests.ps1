@@ -19,6 +19,20 @@ Describe "Errors" {
         }
     }
 
+    Context "Restrictions" {
+
+        Context "SSHSession in Windows PowerShell 5.1" -Skip:($IsCoreCLR) {
+
+            BeforeAll {
+                $ComputerName = 'Host1'
+            }
+
+            It "Should throw an error" {
+                { Get-DiskSmartInfo -ComputerName $comp -Transport SSHSession } | Should -Throw "PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier." -ErrorId 'PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier.,Get-DiskSmartInfo'
+            }
+        }
+    }
+
     Context "Notifications" {
 
         Context "Credential without ComputerName" {

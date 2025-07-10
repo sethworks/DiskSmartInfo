@@ -47,6 +47,14 @@ function Get-DiskSmartInfo
             # break
         }
 
+        if (-not $IsCoreCLR -and $Transport -eq 'SSHSession')
+        {
+            $message = "PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+
         # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
