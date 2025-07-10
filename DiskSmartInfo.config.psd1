@@ -1,3 +1,5 @@
+# Module configuration parameters
+
 @{
     # Suppress DiskSmartInfo objects with empty SmartData property.
     # The -Quiet parameter always suppresses such objects irrespective of this parameter.
@@ -13,3 +15,6 @@
     # Show historical data for all attributes. If false, show only historical data, that differ from actual.
     ShowUnchangedDataHistory = $true
 }
+
+# Module configuration parameters are applied during the import of the module.
+# To update module configuration parameters, reimport the module with the -Force parameter.
