@@ -325,32 +325,32 @@ function inGetAttributeData
 
     switch ($dt.value__)
     {
-        $([DataType]::bits48.value__)
+        $([AttributeDataFormat]::bits48.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
         }
 
-        $([DataType]::bits24.value__)
+        $([AttributeDataFormat]::bits24.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
         }
 
-        $([DataType]::bits16.value__)
+        $([AttributeDataFormat]::bits16.value__)
         {
             return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
         }
 
-        $([DataType]::temperature3.value__)
+        $([AttributeDataFormat]::temperature3.value__)
         {
             return inExtractAttributeTemps -smartData $smartData -a $a
         }
 
-        $([DataType]::bytes1032.value__)
+        $([AttributeDataFormat]::bytes1032.value__)
         {
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
         }
 
-        $([DataType]::bytes1054.value__)
+        $([AttributeDataFormat]::bytes1054.value__)
         {
             return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
         }

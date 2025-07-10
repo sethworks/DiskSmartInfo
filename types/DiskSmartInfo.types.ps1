@@ -1,4 +1,4 @@
-enum DataType {
+enum AttributeDataFormat {
     bits48
     bits24
     bits16

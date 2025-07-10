@@ -82,7 +82,7 @@ ModelPatterns - это массив строк, каждая из которых
 
     AttributeID = n
     AttributeName = 'Attribute Name'
-    DataType = [DataType]::bits24
+    DataType = [AttributeDataFormat]::bits24
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 
@@ -90,13 +90,13 @@ ModelPatterns - это массив строк, каждая из которых
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [DataType]::bits48
+    DataType = [AttributeDataFormat]::bits48
 
 тогда итоговое определение атрибута будет следующим:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [DataType]::bits48
+    DataType = [AttributeDataFormat]::bits48
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 

@@ -79,7 +79,7 @@ For example, if there is a default attribute with the following definition:
 
     AttributeID = n
     AttributeName = 'Attribute Name'
-    DataType = [DataType]::bits24
+    DataType = [AttributeDataFormat]::bits24
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 
@@ -87,13 +87,13 @@ and proprietary attribute with the following definition:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [DataType]::bits48
+    DataType = [AttributeDataFormat]::bits48
 
 then resulting attribute definition will be:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [DataType]::bits48
+    DataType = [AttributeDataFormat]::bits48
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 
