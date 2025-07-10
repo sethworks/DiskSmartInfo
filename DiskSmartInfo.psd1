@@ -93,6 +93,7 @@ AliasesToExport = @()
 # List of all files packaged with this module
 FileList = 'DiskSmartInfo.psd1',
            'DiskSmartInfo.psm1',
+           'DiskSmartInfo.config.psd1',
            'types/DiskSmartInfo.types.ps1',
            'functions/DiskSmartInfo.completers.ps1',
            'functions/DiskSmartInfo.functions.ps1',
