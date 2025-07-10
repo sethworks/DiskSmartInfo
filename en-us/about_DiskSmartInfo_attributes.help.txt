@@ -20,7 +20,7 @@ when they are not redefined by proprietary attributes.
 The structure of default attribute definition is as follows:
     AttributeID
     AttributeName
-    DataType
+    DataFormat
     IsCritical
     ConvertScriptBlock
 
@@ -28,7 +28,7 @@ AttributeID is a numerical value, that defines attribute number.
 
 AttributeName is a string value, that specifies the name of an attribute.
 
-DataType is an enum type value, that defines attribute data structure.
+DataFormat is an enum type value, that defines attribute data structure.
 
 IsCritical is a boolean, specifying whether an attribute is critical.
 
@@ -61,7 +61,7 @@ proprietary attribute definition corresponds to the structure of default
 attribute definition:
     AttributeID
     AttributeName
-    DataType
+    DataFormat
     IsCritical
     ConvertScriptBlock
 
@@ -79,7 +79,7 @@ For example, if there is a default attribute with the following definition:
 
     AttributeID = n
     AttributeName = 'Attribute Name'
-    DataType = [AttributeDataFormat]::bits24
+    DataFormat = [AttributeDataFormat]::bits24
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 
@@ -87,13 +87,13 @@ and proprietary attribute with the following definition:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [AttributeDataFormat]::bits48
+    DataFormat = [AttributeDataFormat]::bits48
 
 then resulting attribute definition will be:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [AttributeDataFormat]::bits48
+    DataFormat = [AttributeDataFormat]::bits48
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 

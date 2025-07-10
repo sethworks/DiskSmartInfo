@@ -21,7 +21,7 @@ default.ps1 содержит определения атрибутов, испо
 Структура определений атрибутов по умолчанию следующая:
     AttributeID
     AttributeName
-    DataType
+    DataFormat
     IsCritical
     ConvertScriptBlock
 
@@ -29,7 +29,7 @@ AttributeID - это численное значение, задающее но�
 
 AttributeName - это строчное значение, определяющее имя атрибута.
 
-DataType - это значение типа enum, указывающее структуру данных атрибута.
+DataFormat - это значение типа enum, указывающее структуру данных атрибута.
 
 IsCritical - это логическое значение, определяющее, является ли атрибут критическим.
 
@@ -63,7 +63,7 @@ ModelPatterns - это массив строк, каждая из которых
 по умолчанию:
     AttributeID
     AttributeName
-    DataType
+    DataFormat
     IsCritical
     ConvertScriptBlock
 
@@ -82,7 +82,7 @@ ModelPatterns - это массив строк, каждая из которых
 
     AttributeID = n
     AttributeName = 'Attribute Name'
-    DataType = [AttributeDataFormat]::bits24
+    DataFormat = [AttributeDataFormat]::bits24
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 
@@ -90,13 +90,13 @@ ModelPatterns - это массив строк, каждая из которых
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [AttributeDataFormat]::bits48
+    DataFormat = [AttributeDataFormat]::bits48
 
 тогда итоговое определение атрибута будет следующим:
 
     AttributeID = n
     AttributeName = 'New Attribute Name'
-    DataType = [AttributeDataFormat]::bits48
+    DataFormat = [AttributeDataFormat]::bits48
     IsCritical = $true
     ConvertScriptBlock = {$args[0] * 1000}
 

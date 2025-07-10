@@ -285,7 +285,7 @@ function inUpdateActualAttributesList
                     $newAttribute = [ordered]@{
                         AttributeID = $attribute.AttributeID
                         AttributeName = $attribute.AttributeName
-                        DataType = $attribute.DataType
+                        DataFormat = $attribute.DataFormat
                         IsCritical = $result[$index].IsCritical
                         ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
@@ -321,7 +321,7 @@ function inGetAttributeData
         $a
     )
 
-    $dt = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataType
+    $dt = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
 
     switch ($dt.value__)
     {
