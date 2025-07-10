@@ -161,7 +161,7 @@ function inGetDiskSmartInfoCIM
 
                 $attributes = @()
 
-                $smartAttributes = inUpdateActualAttributesList -model $model
+                $actualAttributesList = inUpdateActualAttributesList -model $model
 
                 if ($hostHistoricalData)
                 {
@@ -175,16 +175,16 @@ function inGetDiskSmartInfoCIM
                     $attributeID = $smartData[$a]
 
                     if ($attributeID -and
-                    (isAttributeRequested -attributeID $attributeID -attributeSet $smartAttributes) -and
+                    (isAttributeRequested -attributeID $attributeID -attributeSet $actualAttributesList) -and
                     ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                     {
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
-                        $attribute.Add("Name", [string]$smartAttributes.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                        $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
                         $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
                         $attribute.Add("Value", [byte]$smartData[$a + 3])
                         $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -smartAttributes $smartAttributes -smartData $smartData -a $a))
+                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
@@ -316,12 +316,12 @@ function inUpdateActualAttributesList
 function inGetAttributeData
 {
     Param(
-        $smartAttributes,
+        $actualAttributesList,
         $smartData,
         $a
     )
 
-    $dt = $smartAttributes.Where{$_.AttributeID -eq $smartData[$a]}.DataType
+    $dt = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataType
 
     switch ($dt.value__)
     {
@@ -368,7 +368,7 @@ function inConvertData
         $attribute
     )
 
-    if ($convertScriptBlock = $smartAttributes.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
+    if ($convertScriptBlock = $actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.ConvertScriptBlock)
     {
         return $convertScriptBlock.Invoke($attribute.Data)
     }

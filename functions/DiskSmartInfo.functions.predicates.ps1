@@ -4,7 +4,7 @@ function isCritical
         [int]$AttributeID
     )
 
-    if ($smartAttributes.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
+    if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
     {
         return $true
     }
