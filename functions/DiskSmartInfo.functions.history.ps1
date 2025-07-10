@@ -27,7 +27,7 @@ function inUpdateHistoricalData
 
         $attributes = @()
 
-        $smartAttributes = inOverwriteAttributes -model $model
+        $smartAttributes = inUpdateActualAttributesList -model $model
 
         for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
         {

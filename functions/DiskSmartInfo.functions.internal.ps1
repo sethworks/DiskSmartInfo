@@ -161,7 +161,7 @@ function inGetDiskSmartInfoCIM
 
                 $attributes = @()
 
-                $smartAttributes = inOverwriteAttributes -model $model
+                $smartAttributes = inUpdateActualAttributesList -model $model
 
                 if ($hostHistoricalData)
                 {
@@ -256,7 +256,7 @@ function inGetDiskSmartInfoCIM
     }
 }
 
-function inOverwriteAttributes
+function inUpdateActualAttributesList
 {
     Param (
         [string]$model
