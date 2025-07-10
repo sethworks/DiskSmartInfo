@@ -175,7 +175,7 @@ function inGetDiskSmartInfoCIM
                     $attributeID = $smartData[$a]
 
                     if ($attributeID -and
-                    (isAttributeRequested -attributeID $attributeID -attributeSet $actualAttributesList) -and
+                    (isAttributeRequested -attributeID $attributeID -actualAttributesList $actualAttributesList) -and
                     ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeID)))
                     {
                         $attribute.Add("ID", [byte]$attributeID)
