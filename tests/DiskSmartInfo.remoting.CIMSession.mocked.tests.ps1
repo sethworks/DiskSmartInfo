@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting mocked tests" {
+Describe "DiskSmartInfo remoting CIMSession mocked tests" {
 
     Context "ComputerName" {
 
