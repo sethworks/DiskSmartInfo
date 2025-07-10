@@ -43,8 +43,6 @@ function Get-DiskSmartInfo
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
-            # $PSCmdlet.WriteError($errorRecord)
-            # break
         }
 
         if (-not $IsCoreCLR -and $Transport -eq 'SSHSession')
