@@ -170,11 +170,11 @@ function inGetDiskSmartInfoCIM
                     $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
                 }
 
-                for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+                for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
                 {
                     $attribute = [ordered]@{}
 
-                    $attributeID = $smartData[$a]
+                    $attributeID = $smartData[$attributeStart]
 
                     if ($attributeID -and
                     (isAttributeRequested -attributeID $attributeID -actualAttributesList $actualAttributesList) -and
@@ -183,10 +183,10 @@ function inGetDiskSmartInfoCIM
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
                         $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                        $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
-                        $attribute.Add("Value", [byte]$smartData[$a + 3])
-                        $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
+                        $attribute.Add("Threshold", [byte]$thresholdsData[$attributeStart + 1])
+                        $attribute.Add("Value", [byte]$smartData[$attributeStart + 3])
+                        $attribute.Add("Worst", [byte]$smartData[$attributeStart + 4])
+                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $attributeStart))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
