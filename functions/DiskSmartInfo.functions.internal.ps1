@@ -196,7 +196,7 @@ function inGetDiskSmartInfoCIM
                                 {
                                     $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
                                     if ($Config.ShowUnchangedDataHistory -or
-                                       -not (inCompareAttributeData -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
+                                       -not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
                                     {
                                         $attribute.Add("DataHistory", $historicalAttributeData)
                                     }

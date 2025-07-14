@@ -51,34 +51,6 @@ function inTrimDiskDriveModel
     return $Model
 }
 
-function inCompareAttributeData
-{
-    Param (
-        $attributeData,
-        $historicalAttributeData
-    )
-
-    if ($attributeData.Count -eq $historicalAttributeData.Count)
-    {
-        if ($attributeData.Count -eq 1)
-        {
-            return $attributeData -eq $historicalAttributeData
-        }
-        elseif ($attributeData.Count -gt 1)
-        {
-            for ($i = 0; $i -lt $attributeData.Count; $i++)
-            {
-                if ($attributeData[$i] -ne $historicalAttributeData[$i])
-                {
-                    return $false
-                }
-            }
-            return $true
-        }
-    }
-    return $false
-}
-
 function inExtractAttributeData
 {
     Param (
