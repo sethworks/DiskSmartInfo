@@ -384,7 +384,8 @@ function inGetAttributeData
 
         $([AttributeDataFormat]::temperature3.value__)
         {
-            return inExtractAttributeTemps -smartData $smartData -a $a
+            # return inExtractAttributeTemps -smartData $smartData -a ($a + 5)
+            return inExtractAttributeTemps -smartData $smartData -startOffset ($a + 5)
         }
 
         $([AttributeDataFormat]::bytes1032.value__)

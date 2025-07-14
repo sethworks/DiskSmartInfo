@@ -73,16 +73,22 @@ function inExtractAttributeTemps
 {
     Param (
         $smartData,
-        $a
+        # $a
+        $startOffset
     )
 
-    $temps = @([long]$smartData[$a + 5])
+    # $temps = @([long]$smartData[$a + 5])
+    # $temps = @([long]$smartData[$a])
+    $temps = @([long]$smartData[$startOffset])
 
-    for ($offset = 6; $offset -le 10; $offset++)
+    # for ($offset = 6; $offset -le 10; $offset++)
+    for ($offset = 1; $offset -le 5; $offset++)
     {
-        if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
+        # if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
+        if ($smartData[$startOffset + $offset] -ne 0 -and $smartData[$startOffset + $offset] -ne 255)
         {
-            $temps += [long]$smartData[$a + $offset]
+            # $temps += [long]$smartData[$a + $offset]
+            $temps += [long]$smartData[$startOffset + $offset]
         }
 
         if ($temps.Count -eq 3)
