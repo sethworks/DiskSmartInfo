@@ -98,6 +98,7 @@ function inGetDiskSmartInfoCIM
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [int[]]$AttributeIDs,
+        [AttributeProperty[]]$AttributeProperties,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory
@@ -168,11 +169,11 @@ function inGetDiskSmartInfoCIM
                     $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $pNPDeviceId}.SmartData
                 }
 
-                for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+                for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
                 {
                     $attribute = [ordered]@{}
 
-                    $attributeID = $smartData[$a]
+                    $attributeID = $smartData[$attributeStart]
 
                     if ($attributeID -and
                     (isAttributeRequested -attributeID $attributeID -actualAttributesList $actualAttributesList) -and
@@ -181,10 +182,10 @@ function inGetDiskSmartInfoCIM
                         $attribute.Add("ID", [byte]$attributeID)
                         $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
                         $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                        $attribute.Add("Threshold", [byte]$thresholdsData[$a + 1])
-                        $attribute.Add("Value", [byte]$smartData[$a + 3])
-                        $attribute.Add("Worst", [byte]$smartData[$a + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
+                        $attribute.Add("Threshold", [byte]$thresholdsData[$attributeStart + 1])
+                        $attribute.Add("Value", [byte]$smartData[$attributeStart + 3])
+                        $attribute.Add("Worst", [byte]$smartData[$attributeStart + 4])
+                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
@@ -194,7 +195,7 @@ function inGetDiskSmartInfoCIM
                                 {
                                     $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attributeID}.Data
                                     if ($Config.ShowUnchangedDataHistory -or
-                                       -not (inCompareAttributeData -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
+                                       -not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData))
                                     {
                                         $attribute.Add("DataHistory", $historicalAttributeData)
                                     }
@@ -235,7 +236,23 @@ function inGetDiskSmartInfoCIM
 
                 if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
                 {
-                    $hash.Add("SmartData", $attributes)
+                    if ($AttributeProperties)
+                    {
+                        $formatProperties = $AttributeProperties.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
+                        $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
+                        $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
+
+                        $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock))
+
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
+                        Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+                    }
+                    else
+                    {
+                        $hash.Add("SmartData", $attributes)
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
+                    }
+
                     $diskSmartInfo = [PSCustomObject]$hash
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
@@ -318,46 +335,46 @@ function inGetAttributeData
     Param(
         $actualAttributesList,
         $smartData,
-        $a
+        $attributeStart
     )
 
-    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
+    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$attributeStart]}.DataFormat
 
     switch ($df.value__)
     {
         $([AttributeDataFormat]::bits48.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 6
         }
 
         $([AttributeDataFormat]::bits24.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 3
         }
 
         $([AttributeDataFormat]::bits16.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 2
         }
 
         $([AttributeDataFormat]::temperature3.value__)
         {
-            return inExtractAttributeTemps -smartData $smartData -a $a
+            return inExtractAttributeTemps -smartData $smartData -startOffset ($attributeStart + 5)
         }
 
         $([AttributeDataFormat]::bytes1032.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 1
         }
 
         $([AttributeDataFormat]::bytes1054.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 2
         }
 
         default
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 6
         }
     }
 }

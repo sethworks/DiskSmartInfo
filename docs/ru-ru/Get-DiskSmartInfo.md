@@ -14,17 +14,18 @@ schema: 2.0.0
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Credential <PSCredential>]
-[<CommonParameters>]
+[-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
+[-UpdateHistory] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
 ```
-Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Convert] [-CriticalAttributesOnly] 
+Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [<CommonParameters>]
+[-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
+[-UpdateHistory] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -271,6 +272,27 @@ Accept pipeline input: False
 Accept wildcard characters: True
 ```
 
+### -AttributeProperty
+Параметр задает, какие свойства атрибутов должны быть выведены.
+
+Если среди свойств атрибутов указаны History или Converted, то параметры
+-ShowHistory и -Convert, соответственно, будут установлены автоматически.
+
+Результатом применения данного параметра будут объекты атрибутов типа
+DiskSmartAttributeCustom.
+
+```yaml
+Type: AttributeProperty[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Quiet
 Параметр отображает только критичные атрибуты со значением свойства Data, превышающим 0,
 а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно
@@ -411,10 +433,10 @@ Get-DiskSmartInfo -Convert
 Disk:         0: Disk model
 PNPDeviceId:  Disk PNPDeviceId
 SMARTData:
-              ID  IDHex AttributeName                      Threshold Value Worst Data        ConvertedData
-              --  ----- -------------                      --------- ----- ----- ----        -------------
+              ID  IDHex AttributeName                      Threshold Value Worst Data        Converted
+              --  ----- -------------                      --------- ----- ----- ----        ---------
               5   5     Reallocated Sectors Count          10        100   100   0
-              9   9     Power-On Hours                     0         98    98    8397          349.88 Days
+              9   9     Power-On Hours                     0         98    98    8397        349.88 Days
               10  A     Spin Retry Count                   51        252   252   0
               12  C     Power Cycle Count                  0         99    99    22
               177 B1    Wear Leveling Count                0         98    98    33
@@ -423,13 +445,13 @@ SMARTData:
               182 B6    Erase Fail Count Total             10        100   100   0
               183 B7    Runtime Bad Block                  10        100   100   0
               187 BB    Reported Uncorrectable Errors      0         100   100   0
-              190 BE    Airflow Temperature Celsius        0         53    48    47                   53 C
+              190 BE    Airflow Temperature Celsius        0         53    48    47          53 C
               195 C3    Hardware ECC Recovered             0         200   200   0
               196 C4    Reallocation Event Count           0         252   252   0
               197 C5    Current Pending Sector Count       0         252   252   0
               198 C6    Offline Uncorrectable Sector Count 0         252   252   0
               199 C7    Ultra DMA CRC Error Count          0         100   100   0
-              241 F1    Total LBAs Written                 0         99    99    12720469069      5.923 Tb
+              241 F1    Total LBAs Written                 0         99    99    12720469069 5.923 Tb
 ```
 
 Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для определенных атрибутов.
@@ -817,7 +839,40 @@ SMARTData:
 Команда получает информацию SMART и отображает ранее сохраненные значения свойства Data
 выводимых атрибутов.
 
-### Example 15: Использование конвейера
+### Example 15: Получение указанных свойств атрибутов
+```powershell
+Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
+```
+
+```
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  AttributeName                      Data        History     Converted
+              --  -------------                      ----        -------     ---------
+              5   Reallocated Sectors Count          0           0
+              9   Power-On Hours                     8398        8397        349.88 Days
+              10  Spin Retry Count                   0           0
+              12  Power Cycle Count                  22          22
+              177 Wear Leveling Count                33          33
+              179 Used Reserved Block Count Total    0           0
+              181 Program Fail Count Total           0           0
+              182 Erase Fail Count Total             0           0
+              183 Runtime Bad Block                  0           0
+              187 Reported Uncorrectable Errors      0           0
+              190 Airflow Temperature Celsius        47          47          53 C
+              195 Hardware ECC Recovered             0           0
+              196 Reallocation Event Count           0           0
+              197 Current Pending Sector Count       0           0
+              198 Offline Uncorrectable Sector Count 0           0
+              199 Ultra DMA CRC Error Count          0           0
+              241 Total LBAs Written                 12720469270 12720469069 5.923 Tb
+```
+
+Команда получает указанные свойства атрибутов SMART.
+
+### Example 16: Использование конвейера
 ```powershell
 $ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'

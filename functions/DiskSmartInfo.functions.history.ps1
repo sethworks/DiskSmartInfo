@@ -29,16 +29,16 @@ function inUpdateHistoricalData
 
         $actualAttributesList = inUpdateActualAttributesList -model $model
 
-        for ($a = $initialOffset; $a -lt $smartData.Count; $a += $attributeLength)
+        for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
         {
             $attribute = [ordered]@{}
 
-            $attributeID = $smartData[$a]
+            $attributeID = $smartData[$attributeStart]
 
             if ($attributeID)
             {
                 $attribute.Add("ID", $attributeID)
-                $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
+                $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
 
                 $attributes += [PSCustomObject]$attribute
             }

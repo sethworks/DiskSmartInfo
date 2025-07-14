@@ -27,6 +27,7 @@ function Get-DiskSmartInfo
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
+        [AttributeProperty[]]$AttributeProperty,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory,
@@ -70,6 +71,21 @@ function Get-DiskSmartInfo
             $Transport = 'CimSession'
         }
 
+        if ($AttributeProperty)
+        {
+            $AttributeProperty = $AttributeProperty | Select-Object -Unique
+
+            if ('History' -in $AttributeProperty)
+            {
+                $ShowHistory = $true
+            }
+
+            if ('Converted' -in $AttributeProperty)
+            {
+                $Convert = $true
+            }
+        }
+
         $errorParameters = @{
             ErrorVariable = 'sessionErrors'
             ErrorAction = 'SilentlyContinue'
@@ -96,6 +112,7 @@ function Get-DiskSmartInfo
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -AttributeIDs $attributeIDs `
+                    -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
@@ -112,6 +129,7 @@ function Get-DiskSmartInfo
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -AttributeIDs $attributeIDs `
+                    -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
@@ -141,6 +159,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -AttributeIDs $attributeIDs `
+                            -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
@@ -181,6 +200,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -AttributeIDs $attributeIDs `
+                            -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
@@ -212,6 +232,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -AttributeIDs $attributeIDs `
+                            -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
@@ -234,6 +255,7 @@ function Get-DiskSmartInfo
                 -DiskNumbers $DiskNumber `
                 -DiskModels $DiskModel `
                 -AttributeIDs $attributeIDs `
+                -AttributeProperties $AttributeProperty `
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `
                 -UpdateHistory:$UpdateHistory

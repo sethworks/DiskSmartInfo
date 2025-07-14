@@ -51,34 +51,6 @@ function inTrimDiskDriveModel
     return $Model
 }
 
-function inCompareAttributeData
-{
-    Param (
-        $attributeData,
-        $historicalAttributeData
-    )
-
-    if ($attributeData.Count -eq $historicalAttributeData.Count)
-    {
-        if ($attributeData.Count -eq 1)
-        {
-            return $attributeData -eq $historicalAttributeData
-        }
-        elseif ($attributeData.Count -gt 1)
-        {
-            for ($i = 0; $i -lt $attributeData.Count; $i++)
-            {
-                if ($attributeData[$i] -ne $historicalAttributeData[$i])
-                {
-                    return $false
-                }
-            }
-            return $true
-        }
-    }
-    return $false
-}
-
 function inExtractAttributeData
 {
     Param (
@@ -101,16 +73,16 @@ function inExtractAttributeTemps
 {
     Param (
         $smartData,
-        $a
+        $startOffset
     )
 
-    $temps = @([long]$smartData[$a + 5])
+    $temps = @([long]$smartData[$startOffset])
 
-    for ($offset = 6; $offset -le 10; $offset++)
+    for ($offset = 1; $offset -le 5; $offset++)
     {
-        if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
+        if ($smartData[$startOffset + $offset] -ne 0 -and $smartData[$startOffset + $offset] -ne 255)
         {
-            $temps += [long]$smartData[$a + $offset]
+            $temps += [long]$smartData[$startOffset + $offset]
         }
 
         if ($temps.Count -eq 3)
@@ -141,6 +113,55 @@ function inExtractAttributeWords
     foreach ($word in $words)
     {
         $result += [long]($smartData[$startOffset + $word * 2] + $smartData[$startOffset + $word * 2 + 1] * 256)
+    }
+
+    return $result
+}
+
+function inSelectAttributeProperties
+{
+    Param (
+        $attributes,
+        [AttributeProperty[]]$properties,
+        $formatScriptBlock
+    )
+
+    $result = @()
+
+    foreach ($attribute in $attributes)
+    {
+        $attributeSelected = [ordered]@{}
+        foreach ($property in $properties)
+        {
+            switch ($property.value__)
+            {
+                ([AttributeProperty]::AttributeName.value__)
+                {
+                    $attributeSelected.Add('Name', $attribute.Name)
+                    break
+                }
+                ([AttributeProperty]::History.value__)
+                {
+                    $attributeSelected.Add('DataHistory', $attribute.DataHistory)
+                    break
+                }
+                ([AttributeProperty]::Converted.value__)
+                {
+                    $attributeSelected.Add('DataConverted', $attribute.DataConverted)
+                    break
+                }
+                default
+                {
+                    $attributeSelected.Add($property, $attribute.$property)
+                }
+            }
+        }
+
+        $attributeObject = [PSCustomObject]$attributeSelected
+        $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+        $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+
+        $result += $attributeObject
     }
 
     return $result
