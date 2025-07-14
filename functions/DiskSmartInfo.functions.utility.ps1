@@ -145,3 +145,82 @@ function inExtractAttributeWords
 
     return $result
 }
+
+function inSelectAttributeProperties
+{
+    Param (
+        $attributes,
+        [AttributeProperty[]]$properties,
+        $formatScriptBlock
+    )
+
+    $result = @()
+
+    foreach ($attribute in $attributes)
+    {
+        $attributeSelected = [ordered]@{}
+        foreach ($property in $properties)
+        {
+            switch ($property.value__)
+            {
+                ([AttributeProperty]::AttributeName.value__)
+                {
+                    $attributeSelected.Add('Name', $attribute.Name)
+                    break
+                }
+                ([AttributeProperty]::History.value__)
+                {
+                    $attributeSelected.Add('DataHistory', $attribute.DataHistory)
+                    break
+                }
+                ([AttributeProperty]::Converted.value__)
+                {
+                    $attributeSelected.Add('DataConverted', $attribute.DataConverted)
+                    break
+                }
+                default
+                {
+                    $attributeSelected.Add($property, $attribute.$property)
+                }
+            }
+        }
+        $attributeObject = [PSCustomObject]$attributeSelected
+        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute#Custom"
+        $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+        $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+
+
+
+        # $attributeObject | Add-Member -MemberType ScriptMethod -Name F -Value {$this | Format-Table -Property @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}}
+        # $attributeObject | Update-TypeData -DefaultDisplayPropertySet $properties -Force
+
+        # if ('Name' -in $properties)
+        # {
+        #     $attributeObject | Add-Member -MemberType AliasProperty -Name AttributeName -Value Name
+        # }
+        $result += $attributeObject
+    }
+
+    # Add-Member -InputObject $result -TypeName 'DiskSmartAttribute#Custom[]'
+    # Add-Member -InputObject $result -MemberType ScriptMethod -Name FF -Value {$this | Format-Table -Property @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}}
+
+    # $ddps = @()
+    # foreach ($property in $properties)
+    # {
+    #     if ($property -eq [AttributeProperty]::Name)
+    #     {
+    #         $ddps += @{'Name'='AttributeName'; 'Expression' = {$PSItem.Name}}
+    #     }
+    #     else
+    #     {
+    #         $ddps += $property.ToString()
+    #     }
+    # }
+    # $result[0] | Update-TypeData -DefaultDisplayPropertySet $properties
+    # Update-TypeData -TypeName 'DiskSmartAttribute#Custom' -DefaultDisplayPropertySet $ddps -Force
+
+    # $result[0] | Get-TypeData
+
+    return $result
+}

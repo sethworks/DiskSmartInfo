@@ -98,6 +98,7 @@ function inGetDiskSmartInfoCIM
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [int[]]$AttributeIDs,
+        [AttributeProperty[]]$AttributeProperties,
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory
@@ -156,6 +157,7 @@ function inGetDiskSmartInfoCIM
                     else
                     {
                         $hash.Add('HistoryDate', $null)
+                        # $hash.Add('HistoryDate', 'None')
                     }
                 }
 
@@ -216,6 +218,10 @@ function inGetDiskSmartInfoCIM
                             $attributeObject = [PSCustomObject]$attribute
                             $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
+                            # if (-not ($ShowHistory -or $Convert))
+                            # {
+                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#Default'
+                            # }
                             if ($ShowHistory -and $Convert)
                             {
                                 $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
@@ -235,10 +241,46 @@ function inGetDiskSmartInfoCIM
 
                 if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $failurePredictStatus)
                 {
-                    $hash.Add("SmartData", $attributes)
+                    # Write-Host $AttributeProperties
+                    # if (-not $AttributeProperties.Count -or $AttributeProperties -eq @([AttributeProperty]::ID, [AttributeProperty]::'IDHex', [AttributeProperty]::'AttributeName', [AttributeProperty]::'Threshold', [AttributeProperty]::'Value', [AttributeProperty]::'Worst', [AttributeProperty]::'Data'))
+                    if ($AttributeProperties)
+                    {
+                        $formatProperties = $AttributeProperties.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
+                        $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
+                        $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
+
+                        $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock))
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
+
+                        # Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FF -Value {$this | Format-Table -Property @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}}
+                        # Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FF -Value {$this | Format-Table -Property $($AttributeProperties.ForEach{$AttributeFormat.$PSItem})}
+                        # $fp = $AttributeProperties.ForEach{$AttributeFormat.($PSItem.ToString())}
+                        # $fp = @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}
+                        # $fp = '@{Name="ID"; Expression={$PSItem.ID}; Alignment="Left"}', '@{Name="AttributeName"; Expression={$PSItem.Name}; Alignment="Left"}'
+
+                        # $fp = '@{Name="ID"; Expression={$PSItem.ID}; Alignment="Left"}, @{Name="AttributeName"; Expression={$PSItem.Name}; Alignment="Left"}'
+                        # $sb = {$this | Format-Table -Property $fp}
+                        # Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FF -Value {$this | Format-Table -Property $($fp)}
+                        Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+                        # Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value ([scriptblock]::Create($sbs))
+                    }
+                    else
+                    {
+                        $hash.Add("SmartData", $attributes)
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
+                    }
+
                     $diskSmartInfo = [PSCustomObject]$hash
                     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
 
+                    # if ($AttributeProperties)
+                    # {
+                    #     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#Custom"
+                    # }
+                    # elseif ($ShowHistory)
+                    # {
+                    #     $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
+                    # }
                     if ($ShowHistory)
                     {
                         $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"

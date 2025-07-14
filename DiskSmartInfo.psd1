@@ -68,6 +68,7 @@ NestedModules = @('types/DiskSmartInfo.types.ps1',
                   'functions/DiskSmartInfo.functions.utility.ps1',
                   'functions/DiskSmartInfo.functions.history.ps1',
                   'functions/DiskSmartInfo.functions.predicates.ps1',
+                  'formats/DiskSmartAttributeCustomFormat.data.ps1',
                   'attributes/default.ps1',
                   'attributes/proprietary.ps1',
                   'attributes/descriptions.ps1')
