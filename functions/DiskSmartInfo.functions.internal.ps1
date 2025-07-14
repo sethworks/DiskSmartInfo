@@ -186,7 +186,7 @@ function inGetDiskSmartInfoCIM
                         $attribute.Add("Threshold", [byte]$thresholdsData[$attributeStart + 1])
                         $attribute.Add("Value", [byte]$smartData[$attributeStart + 3])
                         $attribute.Add("Worst", [byte]$smartData[$attributeStart + 4])
-                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $attributeStart))
+                        $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
 
                         if ((-not $Quiet) -or (((isCritical -AttributeID $attributeID) -and $attribute.Data) -or (isThresholdExceeded -Attribute $attribute)))
                         {
@@ -360,47 +360,56 @@ function inGetAttributeData
     Param(
         $actualAttributesList,
         $smartData,
-        $a
+        # $a
+        $attributeStart
     )
 
-    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
+    # $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$a]}.DataFormat
+    $df = $actualAttributesList.Where{$_.AttributeID -eq $smartData[$attributeStart]}.DataFormat
 
     switch ($df.value__)
     {
         $([AttributeDataFormat]::bits48.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            # return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 6
         }
 
         $([AttributeDataFormat]::bits24.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
+            # return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 3
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 3
         }
 
         $([AttributeDataFormat]::bits16.value__)
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
+            # return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 2
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 2
         }
 
         $([AttributeDataFormat]::temperature3.value__)
         {
             # return inExtractAttributeTemps -smartData $smartData -a ($a + 5)
-            return inExtractAttributeTemps -smartData $smartData -startOffset ($a + 5)
+            # return inExtractAttributeTemps -smartData $smartData -startOffset ($a + 5)
+            return inExtractAttributeTemps -smartData $smartData -startOffset ($attributeStart + 5)
         }
 
         $([AttributeDataFormat]::bytes1032.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
+            # return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 1
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 1
         }
 
         $([AttributeDataFormat]::bytes1054.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
+            # return inExtractAttributeWords -smartData $smartData -startOffset ($a + 5) -words 0, 2
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 2
         }
 
         default
         {
-            return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            # return inExtractAttributeData -smartData $smartData -startOffset ($a + 5) -byteCount 6
+            return inExtractAttributeData -smartData $smartData -startOffset ($attributeStart + 5) -byteCount 6
         }
     }
 }

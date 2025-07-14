@@ -38,7 +38,7 @@ function inUpdateHistoricalData
             if ($attributeID)
             {
                 $attribute.Add("ID", $attributeID)
-                $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -a $a))
+                $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $a))
 
                 $attributes += [PSCustomObject]$attribute
             }
