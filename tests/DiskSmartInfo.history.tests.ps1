@@ -547,10 +547,8 @@ Describe "History" {
             }
 
             It "DiskSmartAttribute object is formatted correctly" {
-                # $format = $diskSmartInfo[0].SmartData | Format-Table
                 $format = $diskSmartInfo[0].SmartData.FormatTable()
 
-                # $labels = $format.shapeInfo.tableColumnInfoList.Label
                 $propertyNames = $format.shapeInfo.tableColumnInfoList.propertyName
 
                 $propertyNames | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History')
@@ -707,10 +705,8 @@ Describe "History" {
             }
 
             It "DiskSmartAttribute object is formatted correctly" {
-                # $format = $diskSmartInfo[0].SmartData | Format-Table
                 $format = $diskSmartInfo[0].SmartData.FormatTable()
 
-                # $labels = $format.shapeInfo.tableColumnInfoList.Label
                 $propertyNames = $format.shapeInfo.tableColumnInfoList.propertyName
 
                 $propertyNames | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History', 'Converted')

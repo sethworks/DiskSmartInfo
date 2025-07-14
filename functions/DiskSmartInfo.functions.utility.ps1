@@ -73,21 +73,15 @@ function inExtractAttributeTemps
 {
     Param (
         $smartData,
-        # $a
         $startOffset
     )
 
-    # $temps = @([long]$smartData[$a + 5])
-    # $temps = @([long]$smartData[$a])
     $temps = @([long]$smartData[$startOffset])
 
-    # for ($offset = 6; $offset -le 10; $offset++)
     for ($offset = 1; $offset -le 5; $offset++)
     {
-        # if ($smartData[$a + $offset] -ne 0 -and $smartData[$a + $offset] -ne 255)
         if ($smartData[$startOffset + $offset] -ne 0 -and $smartData[$startOffset + $offset] -ne 255)
         {
-            # $temps += [long]$smartData[$a + $offset]
             $temps += [long]$smartData[$startOffset + $offset]
         }
 
@@ -162,43 +156,13 @@ function inSelectAttributeProperties
                 }
             }
         }
+
         $attributeObject = [PSCustomObject]$attributeSelected
-        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
-        # $attributeObject | Add-Member -TypeName "DiskSmartAttribute#Custom"
         $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
         $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
 
-
-
-        # $attributeObject | Add-Member -MemberType ScriptMethod -Name F -Value {$this | Format-Table -Property @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}}
-        # $attributeObject | Update-TypeData -DefaultDisplayPropertySet $properties -Force
-
-        # if ('Name' -in $properties)
-        # {
-        #     $attributeObject | Add-Member -MemberType AliasProperty -Name AttributeName -Value Name
-        # }
         $result += $attributeObject
     }
-
-    # Add-Member -InputObject $result -TypeName 'DiskSmartAttribute#Custom[]'
-    # Add-Member -InputObject $result -MemberType ScriptMethod -Name FF -Value {$this | Format-Table -Property @{Name='ID'; Expression={$PSItem.ID}; Alignment='Left'}, @{Name='AttributeName'; Expression={$PSItem.Name}; Alignment='Left'}}
-
-    # $ddps = @()
-    # foreach ($property in $properties)
-    # {
-    #     if ($property -eq [AttributeProperty]::Name)
-    #     {
-    #         $ddps += @{'Name'='AttributeName'; 'Expression' = {$PSItem.Name}}
-    #     }
-    #     else
-    #     {
-    #         $ddps += $property.ToString()
-    #     }
-    # }
-    # $result[0] | Update-TypeData -DefaultDisplayPropertySet $properties
-    # Update-TypeData -TypeName 'DiskSmartAttribute#Custom' -DefaultDisplayPropertySet $ddps -Force
-
-    # $result[0] | Get-TypeData
 
     return $result
 }

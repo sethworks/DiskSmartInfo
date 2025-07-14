@@ -106,6 +106,7 @@ FileList = 'DiskSmartInfo.psd1',
            'formats/DiskSmartInfo.format.ps1xml',
            'formats/DiskSmartAttribute.format.ps1xml',
            'formats/DiskSmartAttributeDescription.format.ps1xml',
+           'formats/DiskSmartAttributeCustomFormat.data.ps1',
            'attributes/default.ps1',
            'attributes/proprietary.ps1',
            'attributes/descriptions.ps1'

@@ -111,10 +111,8 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "DiskSmartAttribute object is formatted correctly" {
-            # $format = $diskSmartInfo.SmartData | Format-Table
             $format = $diskSmartInfo.SmartData.FormatTable()
 
-            # $labels = $format.shapeInfo.tableColumnInfoList.Label
             $propertyNames = $format.shapeInfo.tableColumnInfoList.propertyName
 
             $propertyNames | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data')
@@ -189,10 +187,8 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "DiskSmartAttribute object is formatted correctly" {
-            # $format = $diskSmartInfo[0].SmartData | Format-Table
             $format = $diskSmartInfo[0].SmartData.FormatTable()
 
-            # $labels = $format.shapeInfo.tableColumnInfoList.Label
             $propertyNames = $format.shapeInfo.tableColumnInfoList.propertyName
 
             $propertyNames | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'Converted')
@@ -227,11 +223,9 @@ Describe "Get-DiskSmartInfo" {
 
         It "Has correct DiskSmartAttribute objects" {
             $diskSmartInfo.SmartData[0].ID | Should -Be 1
-            # $diskSmartInfo.SmartData[12].IDHex | Should -BeExactly 'C0'
             $diskSmartInfo.SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
             $diskSmartInfo.SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo.SmartData[2].Value | Should -Be 71
-            # $diskSmartInfo.SmartData[2].Worst | Should -Be 69
             $diskSmartInfo.SmartData[3].Data | Should -Be 25733
             $diskSmartInfo.SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo.SmartData[13].Data | Should -Be @(39, 14, 47)
@@ -279,9 +273,6 @@ Describe "Get-DiskSmartInfo" {
             $diskSmartInfo.SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].ID | Should -BeOfType 'System.Byte'
 
-            # $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
-
             $diskSmartInfo.SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Name | Should -BeOfType 'System.String'
 
@@ -290,9 +281,6 @@ Describe "Get-DiskSmartInfo" {
 
             $diskSmartInfo.SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
             $diskSmartInfo.SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.Int64'
@@ -303,10 +291,8 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "DiskSmartAttribute object is formatted correctly" {
-            # $format = $diskSmartInfo.SmartData | Format-Table
             $format = $diskSmartInfo.SmartData.FormatTable()
 
-            # $labels = $format.shapeInfo.tableColumnInfoList.Label
             $propertyNames = $format.shapeInfo.tableColumnInfoList.propertyName
 
             $propertyNames | Should -BeExactly @('ID', 'AttributeName', 'Data', 'Value', 'Threshold')
