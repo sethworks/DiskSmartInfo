@@ -62,13 +62,6 @@ function inUpdateHistoricalData
 
         inEnsureFolderExists -folder (Split-Path -Path $fullname -Parent)
 
-        # $folder = Split-Path -Path $fullname -Parent
-        # if (-not (Test-Path -Path (Split-Path -Path $folderpath -Parent)))
-        # if (-not (Test-Path -Path $folder))
-        # {
-        #     New-Item -ItemType Directory -Path $folder | Out-Null
-        # }
-
         Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
     }
 }
@@ -152,12 +145,10 @@ function inComposeHistoricalDataFileName
     {
         if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
         {
-            # $filepath = $Config.DataHistoryPath
             $folder = $Config.DataHistoryPath
         }
         else
         {
-            # $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
             $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
@@ -165,28 +156,18 @@ function inComposeHistoricalDataFileName
     else
     {
         $pathroot = [System.IO.Path]::GetPathRoot($Config.DataHistoryPath)
-        # if ($pathroot -and $pathroot[-1] -eq '\')
 
         # not '\folder' or 'c:folder'
         if ($pathroot -and $pathroot -ne '\' -and $pathroot -notlike "?:")
         {
-            # $filepath = $Config.DataHistoryPath
             $folder = $Config.DataHistoryPath
         }
         else
         {
-            # $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
             $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
 
-    # if (-not (Test-Path -Path $filepath))
-    # {
-    #     New-Item -ItemType Directory -Path $filepath | Out-Null
-    # }
-
-    # $fullname = Join-Path -Path $filepath -ChildPath $filename
-    # $fullname = Join-Path -Path $folderpath -ChildPath $filename
     $fullname = Join-Path -Path $folder -ChildPath $filename
 
     return $fullname
