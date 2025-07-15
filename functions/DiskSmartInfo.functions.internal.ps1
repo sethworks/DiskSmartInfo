@@ -1,4 +1,4 @@
-function inGetHostsSmartData
+function inGetSourceSmartDataCIM
 {
     Param (
         [Microsoft.Management.Infrastructure.CimSession[]]$CimSession,

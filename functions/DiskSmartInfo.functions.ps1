@@ -103,7 +103,7 @@ function Get-DiskSmartInfo
         {
             foreach ($cs in $CimSession)
             {
-                $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                $HostsSmartData = inGetSourceSmartDataCIM -CimSession $cs
 
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
@@ -120,7 +120,7 @@ function Get-DiskSmartInfo
 
             foreach ($ps in $PSSession)
             {
-                $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                $HostsSmartData = inGetSourceSmartDataCIM -PSSession $ps
 
                 inGetDiskSmartInfoCIM `
                     -HostsSmartData $HostsSmartData `
@@ -150,7 +150,7 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                        $HostsSmartData = inGetSourceSmartDataCIM -CimSession $cs
 
                         inGetDiskSmartInfoCIM `
                             -HostsSmartData $HostsSmartData `
@@ -191,7 +191,7 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                        $HostsSmartData = inGetSourceSmartDataCIM -PSSession $ps
 
                         inGetDiskSmartInfoCIM `
                             -HostsSmartData $HostsSmartData `
@@ -223,7 +223,7 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                        $HostsSmartData = inGetSourceSmartDataCIM -PSSession $ps
 
                         inGetDiskSmartInfoCIM `
                             -HostsSmartData $HostsSmartData `
@@ -247,7 +247,7 @@ function Get-DiskSmartInfo
         # Localhost
         else
         {
-            $HostsSmartData = inGetHostsSmartData
+            $HostsSmartData = inGetSourceSmartDataCIM
 
             inGetDiskSmartInfoCIM `
                 -HostsSmartData $HostsSmartData `
