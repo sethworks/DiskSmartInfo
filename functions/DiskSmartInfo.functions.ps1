@@ -248,6 +248,7 @@ function Get-DiskSmartInfo
         else
         {
             $HostsSmartData = inGetHostsSmartData
+
             inGetDiskSmartInfoCIM `
                 -HostsSmartData $HostsSmartData `
                 -Convert:$Convert `

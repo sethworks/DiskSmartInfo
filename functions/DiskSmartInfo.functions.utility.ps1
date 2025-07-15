@@ -166,3 +166,15 @@ function inSelectAttributeProperties
 
     return $result
 }
+
+function inEnsureFolderExists
+{
+    Param (
+        $folder
+    )
+
+    if (-not (Test-Path -Path $folder))
+    {
+        New-Item -ItemType Directory -Path $folder | Out-Null
+    }
+}
