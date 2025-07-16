@@ -6,42 +6,19 @@ function inUpdateHistoricalData
 
     $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
 
-    foreach ($diskSmartData in $hostSmartData.disksSmartData)
+    foreach ($diskSmartData in $hostSmartData.DisksSmartData)
     {
-        $smartData = $diskSmartData.VendorSpecific
-        $thresholdsData = $hostSmartData.disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
-
-        $pNPDeviceId = $diskSmartData.InstanceName
-        if ($pNPDeviceId -match '_\d$')
-        {
-            $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
-        }
-
-        $diskDrive = $hostSmartData.diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
-
-        $model = inTrimDiskDriveModel -Model $diskDrive.Model
-
         $hash = [ordered]@{}
-
-        $hash.Add('PNPDeviceId', $pNPDeviceId)
+        $hash.Add('PNPDeviceId', $diskSmartData.PNPDeviceId)
 
         $attributes = @()
 
-        $actualAttributesList = inUpdateActualAttributesList -model $model
-
-        for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
+        foreach ($attributeSmartData in $diskSmartData.SmartData)
         {
             $attribute = [ordered]@{}
-
-            $attributeID = $smartData[$attributeStart]
-
-            if ($attributeID)
-            {
-                $attribute.Add("ID", $attributeID)
-                $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
-
-                $attributes += [PSCustomObject]$attribute
-            }
+            $attribute.Add('ID', $attributeSmartData.ID)
+            $attribute.Add('Data', $attributeSmartData.Data)
+            $attributes += [PSCustomObject]$attribute
         }
 
         if ($attributes)
@@ -59,6 +36,8 @@ function inUpdateHistoricalData
             TimeStamp = Get-Date
             HistoricalData = $historicalData
         }
+
+        inEnsureFolderExists -folder (Split-Path -Path $fullname -Parent)
 
         Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
     }
@@ -143,33 +122,30 @@ function inComposeHistoricalDataFileName
     {
         if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
         {
-            $filepath = $Config.DataHistoryPath
+            $folder = $Config.DataHistoryPath
         }
         else
         {
-            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
+            $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
     # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
     else
     {
         $pathroot = [System.IO.Path]::GetPathRoot($Config.DataHistoryPath)
-        if ($pathroot -and $pathroot[-1] -eq '\')
+
+        # not '\folder' or 'c:folder'
+        if ($pathroot -and $pathroot -ne '\' -and $pathroot -notlike "?:")
         {
-            $filepath = $Config.DataHistoryPath
+            $folder = $Config.DataHistoryPath
         }
         else
         {
-            $filepath = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
+            $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
 
-    if (-not (Test-Path -Path $filepath))
-    {
-        New-Item -ItemType Directory -Path $filepath | Out-Null
-    }
-
-    $fullname = Join-Path -Path $filepath -ChildPath $filename
+    $fullname = Join-Path -Path $folder -ChildPath $filename
 
     return $fullname
 }

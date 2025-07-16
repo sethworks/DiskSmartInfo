@@ -103,9 +103,11 @@ function Get-DiskSmartInfo
         {
             foreach ($cs in $CimSession)
             {
-                $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
 
-                inGetDiskSmartInfoCIM `
+                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -120,9 +122,11 @@ function Get-DiskSmartInfo
 
             foreach ($ps in $PSSession)
             {
-                $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
 
-                inGetDiskSmartInfoCIM `
+                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -150,9 +154,11 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -CimSession $cs
+                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
 
-                        inGetDiskSmartInfoCIM `
+                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                        inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
                             -Convert:$Convert `
                             -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -191,9 +197,11 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
 
-                        inGetDiskSmartInfoCIM `
+                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                        inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
                             -Convert:$Convert `
                             -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -223,9 +231,11 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $HostsSmartData = inGetHostsSmartData -PSSession $ps
+                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
 
-                        inGetDiskSmartInfoCIM `
+                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                        inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
                             -Convert:$Convert `
                             -CriticalAttributesOnly:$CriticalAttributesOnly `
@@ -247,8 +257,11 @@ function Get-DiskSmartInfo
         # Localhost
         else
         {
-            $HostsSmartData = inGetHostsSmartData
-            inGetDiskSmartInfoCIM `
+            $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
+
+            $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+            inGetDiskSmartInfo `
                 -HostsSmartData $HostsSmartData `
                 -Convert:$Convert `
                 -CriticalAttributesOnly:$CriticalAttributesOnly `

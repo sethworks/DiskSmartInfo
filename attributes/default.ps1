@@ -424,14 +424,16 @@ $defaultAttributesHash = @(
         AttributeName = 'Total LBAs Written'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $false
-        ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
+        # ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
+        ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskSmartData.AuxiliaryData.BytesPerSector / 1TB)}
     },
     [ordered]@{
         AttributeID = 242
         AttributeName = 'Total LBAs Read'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $false
-        ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
+        # ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskDrive.BytesPerSector / 1TB)}
+        ConvertScriptBlock = {"{0:f3} TB" -f $($args[0] * $diskSmartData.AuxiliaryData.BytesPerSector / 1TB)}
     },
     [ordered]@{
         AttributeID = 250
