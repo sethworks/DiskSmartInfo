@@ -106,7 +106,6 @@ function Get-DiskSmartInfo
                 $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
 
                 $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
-                # $HostsSmartData
 
                 inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
@@ -119,18 +118,6 @@ function Get-DiskSmartInfo
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
-
-                    # inGetDiskSmartInfoCIM `
-                #     -HostsSmartData $SourceSmartDataCIM `
-                #     -Convert:$Convert `
-                #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                #     -DiskNumbers $DiskNumber `
-                #     -DiskModels $DiskModel `
-                #     -AttributeIDs $attributeIDs `
-                #     -AttributeProperties $AttributeProperty `
-                #     -Quiet:$Quiet `
-                #     -ShowHistory:$ShowHistory `
-                #     -UpdateHistory:$UpdateHistory
             }
 
             foreach ($ps in $PSSession)
@@ -150,18 +137,6 @@ function Get-DiskSmartInfo
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
                     -UpdateHistory:$UpdateHistory
-
-                # inGetDiskSmartInfoCIM `
-                #     -HostsSmartData $SourceSmartDataCIM `
-                #     -Convert:$Convert `
-                #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                #     -DiskNumbers $DiskNumber `
-                #     -DiskModels $DiskModel `
-                #     -AttributeIDs $attributeIDs `
-                #     -AttributeProperties $AttributeProperty `
-                #     -Quiet:$Quiet `
-                #     -ShowHistory:$ShowHistory `
-                #     -UpdateHistory:$UpdateHistory
             }
         }
 
@@ -194,18 +169,6 @@ function Get-DiskSmartInfo
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
-
-                        # inGetDiskSmartInfoCIM `
-                        #     -HostsSmartData $SourceSmartDataCIM `
-                        #     -Convert:$Convert `
-                        #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        #     -DiskNumbers $DiskNumber `
-                        #     -DiskModels $DiskModel `
-                        #     -AttributeIDs $attributeIDs `
-                        #     -AttributeProperties $AttributeProperty `
-                        #     -Quiet:$Quiet `
-                        #     -ShowHistory:$ShowHistory `
-                        #     -UpdateHistory:$UpdateHistory
                     }
                     finally
                     {
@@ -249,18 +212,6 @@ function Get-DiskSmartInfo
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
-
-                        # inGetDiskSmartInfoCIM `
-                        #     -HostsSmartData $SourceSmartDataCIM `
-                        #     -Convert:$Convert `
-                        #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        #     -DiskNumbers $DiskNumber `
-                        #     -DiskModels $DiskModel `
-                        #     -AttributeIDs $attributeIDs `
-                        #     -AttributeProperties $AttributeProperty `
-                        #     -Quiet:$Quiet `
-                        #     -ShowHistory:$ShowHistory `
-                        #     -UpdateHistory:$UpdateHistory
                     }
                     finally
                     {
@@ -295,18 +246,6 @@ function Get-DiskSmartInfo
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
                             -UpdateHistory:$UpdateHistory
-
-                        # inGetDiskSmartInfoCIM `
-                        #     -HostsSmartData $SourceSmartDataCIM `
-                        #     -Convert:$Convert `
-                        #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-                        #     -DiskNumbers $DiskNumber `
-                        #     -DiskModels $DiskModel `
-                        #     -AttributeIDs $attributeIDs `
-                        #     -AttributeProperties $AttributeProperty `
-                        #     -Quiet:$Quiet `
-                        #     -ShowHistory:$ShowHistory `
-                        #     -UpdateHistory:$UpdateHistory
                     }
                     finally
                     {
@@ -321,7 +260,6 @@ function Get-DiskSmartInfo
             $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
 
             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
-            # $HostsSmartData
 
             inGetDiskSmartInfo `
                 -HostsSmartData $HostsSmartData `
@@ -334,19 +272,6 @@ function Get-DiskSmartInfo
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `
                 -UpdateHistory:$UpdateHistory
-            # $SourceSmartDataCIM = inGetSourceSmartDataCIM
-
-            # inGetDiskSmartInfoCIM `
-            #     -HostsSmartData $SourceSmartDataCIM `
-            #     -Convert:$Convert `
-            #     -CriticalAttributesOnly:$CriticalAttributesOnly `
-            #     -DiskNumbers $DiskNumber `
-            #     -DiskModels $DiskModel `
-            #     -AttributeIDs $attributeIDs `
-            #     -AttributeProperties $AttributeProperty `
-            #     -Quiet:$Quiet `
-            #     -ShowHistory:$ShowHistory `
-            #     -UpdateHistory:$UpdateHistory
         }
     }
 
