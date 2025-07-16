@@ -66,10 +66,13 @@ function isCritical
 function isThresholdExceeded
 {
     Param (
-        [System.Collections.Specialized.OrderedDictionary]$Attribute
+        # [System.Collections.Specialized.OrderedDictionary]$Attribute
+        $Value,
+        $Threshold
     )
 
-    if ($Attribute.Value -lt $Attribute.Threshold)
+    # if ($Attribute.Value -lt $Attribute.Threshold)
+    if ($Value -lt $Threshold)
     {
         return $true
     }

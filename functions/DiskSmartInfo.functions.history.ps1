@@ -6,6 +6,85 @@ function inUpdateHistoricalData
 
     $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
 
+    # foreach ($diskSmartData in $hostSmartData.disksSmartData)
+    foreach ($diskSmartData in $hostSmartData.DisksSmartData)
+    {
+        # $smartData = $diskSmartData.VendorSpecific
+        # $thresholdsData = $hostSmartData.disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
+
+        # $pNPDeviceId = $diskSmartData.InstanceName
+        # if ($pNPDeviceId -match '_\d$')
+        # {
+            # $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+        # }
+
+        # $diskDrive = $hostSmartData.diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
+
+        # $model = inTrimDiskDriveModel -Model $diskDrive.Model
+
+        $hash = [ordered]@{}
+
+        # $hash.Add('PNPDeviceId', $pNPDeviceId)
+        $hash.Add('PNPDeviceId', $diskSmartData.PNPDeviceId)
+
+        $attributes = @()
+
+        # $actualAttributesList = inUpdateActualAttributesList -model $model
+
+        foreach ($attributeSmartData in $diskSmartData.SmartData)
+        {
+            $attribute = [ordered]@{}
+            $attribute.Add('ID', $attributeSmartData.ID)
+            $attribute.Add('Data', $attributeSmartData.Data)
+            $attributes += [PSCustomObject]$attribute
+        }
+
+        # for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
+        # {
+        #     $attribute = [ordered]@{}
+
+        #     $attributeID = $smartData[$attributeStart]
+
+        #     if ($attributeID)
+        #     {
+        #         $attribute.Add("ID", $attributeID)
+        #         $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
+
+        #         $attributes += [PSCustomObject]$attribute
+        #     }
+        # }
+
+        if ($attributes)
+        {
+            $hash.Add("SmartData", $attributes)
+            $historicalData.Add([PSCustomObject]$hash)
+        }
+    }
+
+    if ($historicalData.Count)
+    {
+        # $fullname = inComposeHistoricalDataFileName -computerName $hostSmartData[0].computerName
+        $fullname = inComposeHistoricalDataFileName -computerName $hostSmartData.computerName
+
+        $hostHistoricalData = @{
+            TimeStamp = Get-Date
+            HistoricalData = $historicalData
+        }
+
+        inEnsureFolderExists -folder (Split-Path -Path $fullname -Parent)
+
+        Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
+    }
+}
+<#
+function inUpdateHistoricalData
+{
+    Param (
+        $hostSmartData
+    )
+
+    $historicalData = [System.Collections.Generic.List[PSCustomObject]]::new()
+
     foreach ($diskSmartData in $hostSmartData.disksSmartData)
     {
         $smartData = $diskSmartData.VendorSpecific
@@ -65,7 +144,7 @@ function inUpdateHistoricalData
         Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostHistoricalData -Depth 5)
     }
 }
-
+#>
 function inGetHistoricalData
 {
     Param (
