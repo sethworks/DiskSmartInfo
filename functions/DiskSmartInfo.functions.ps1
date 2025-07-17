@@ -31,6 +31,7 @@ function Get-DiskSmartInfo
         [switch]$Quiet,
         [switch]$ShowHistory,
         [switch]$UpdateHistory,
+        [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
         [pscredential]$Credential
     )
@@ -117,7 +118,8 @@ function Get-DiskSmartInfo
                     -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory
+                    -UpdateHistory:$UpdateHistory `
+                    -Archive:$Archive
             }
 
             foreach ($ps in $PSSession)
@@ -136,7 +138,8 @@ function Get-DiskSmartInfo
                     -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory
+                    -UpdateHistory:$UpdateHistory `
+                    -Archive:$Archive
             }
         }
 
@@ -168,7 +171,8 @@ function Get-DiskSmartInfo
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory
+                            -UpdateHistory:$UpdateHistory `
+                            -Archive:$Archive
                     }
                     finally
                     {
@@ -211,7 +215,8 @@ function Get-DiskSmartInfo
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory
+                            -UpdateHistory:$UpdateHistory `
+                            -Archive:$Archive
                     }
                     finally
                     {
@@ -245,7 +250,8 @@ function Get-DiskSmartInfo
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory
+                            -UpdateHistory:$UpdateHistory `
+                            -Archive:$Archive
                     }
                     finally
                     {
@@ -271,7 +277,8 @@ function Get-DiskSmartInfo
                 -AttributeProperties $AttributeProperty `
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `
-                -UpdateHistory:$UpdateHistory
+                -UpdateHistory:$UpdateHistory `
+                -Archive:$Archive
         }
     }
 

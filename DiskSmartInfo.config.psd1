@@ -14,6 +14,9 @@
 
     # Show historical data for all attributes. If false, show only historical data, that differ from actual.
     ShowUnchangedDataHistory = $true
+
+    # Path to archive. If not absolute, it is relative to module folder.
+    ArchivePath = 'archive'
 }
 
 # Module configuration parameters are applied during the import of the module.
