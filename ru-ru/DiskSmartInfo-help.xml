@@ -395,6 +395,21 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+            <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-DiskSmartInfo</maml:name>
@@ -576,6 +591,21 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
             <maml:para>По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.</maml:para>
             <maml:para>Это расположение может быть изменено конфигурационным параметром DataHistoryPath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+            <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
@@ -798,6 +828,22 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
           <maml:para>По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.</maml:para>
           <maml:para>Это расположение может быть изменено конфигурационным параметром DataHistoryPath.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Archive</maml:name>
+        <maml:description>
+          <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+          <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+          <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+          <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
           <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>

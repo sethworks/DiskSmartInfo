@@ -71,6 +71,17 @@ It is used by the -ShowHistory Get-DiskSmartInfo parameter.
 Default is $true.
 
 
+ArchivePath
+
+This parameter specifies folder, where archive data is stored.
+
+It is used by the -Archive Get-DiskSmartInfo parameter.
+
+If path is not absolute, then it is relative to module folder.
+
+Default is 'archive'.
+
+
 Config parameters are applied during module import.
 
 

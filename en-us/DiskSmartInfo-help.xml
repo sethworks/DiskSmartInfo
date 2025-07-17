@@ -395,6 +395,21 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           </dev:type>
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Specifies that SMART data should be saved to archive folder.</maml:para>
+            <maml:para>The cmdlet stores SMART data for all disks and attributes of specified computers, even if disk selection or attribute selection parameters are used.</maml:para>
+            <maml:para>Archive by default is located in the archive folder of the module directory.</maml:para>
+            <maml:para>This can be changed by ArchivePath config parameter.</maml:para>
+            <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
       <command:syntaxItem>
         <maml:name>Get-DiskSmartInfo</maml:name>
@@ -576,6 +591,21 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>The cmdlet stores Data for all disks and attributes of specified computers, even if disk selection or attribute selection parameters are used.</maml:para>
             <maml:para>History by default is located in the history folder of the module directory.</maml:para>
             <maml:para>This can be changed by DataHistoryPath config parameter.</maml:para>
+            <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Specifies that SMART data should be saved to archive folder.</maml:para>
+            <maml:para>The cmdlet stores SMART data for all disks and attributes of specified computers, even if disk selection or attribute selection parameters are used.</maml:para>
+            <maml:para>Archive by default is located in the archive folder of the module directory.</maml:para>
+            <maml:para>This can be changed by ArchivePath config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
@@ -798,6 +828,22 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>The cmdlet stores Data for all disks and attributes of specified computers, even if disk selection or attribute selection parameters are used.</maml:para>
           <maml:para>History by default is located in the history folder of the module directory.</maml:para>
           <maml:para>This can be changed by DataHistoryPath config parameter.</maml:para>
+          <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Archive</maml:name>
+        <maml:description>
+          <maml:para>Specifies that SMART data should be saved to archive folder.</maml:para>
+          <maml:para>The cmdlet stores SMART data for all disks and attributes of specified computers, even if disk selection or attribute selection parameters are used.</maml:para>
+          <maml:para>Archive by default is located in the archive folder of the module directory.</maml:para>
+          <maml:para>This can be changed by ArchivePath config parameter.</maml:para>
           <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>

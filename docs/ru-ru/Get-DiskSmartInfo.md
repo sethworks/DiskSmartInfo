@@ -17,7 +17,7 @@ schema: 2.0.0
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [-Credential <PSCredential>] [<CommonParameters>]
+[-UpdateHistory] [-Archive] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
@@ -25,7 +25,7 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] 
 Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [<CommonParameters>]
+[-UpdateHistory] [-Archive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -354,6 +354,30 @@ Accept wildcard characters: False
 По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.
 
 Это расположение может быть изменено конфигурационным параметром DataHistoryPath.
+
+Больше информации в about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Archive
+Указывает, что данные SMART должны быть сохранены в каталоге архива.
+
+Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров,
+даже если использовались параметры выбора дисков и атрибутов.
+
+По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.
+
+Это расположение может быть изменено конфигурационным параметром ArchivePath.
 
 Больше информации в about_DiskSmartInfo_config.
 
