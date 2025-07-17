@@ -82,7 +82,7 @@ function inComposeArchiveDataFileName
 
     if ($IsCoreCLR)
     {
-        if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
+        if ([System.IO.Path]::IsPathFullyQualified($Config.ArchivePath))
         {
             $folder = $Config.ArchivePath
         }
