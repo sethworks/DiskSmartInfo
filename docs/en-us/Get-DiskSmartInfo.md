@@ -17,7 +17,7 @@ Gets disk SMART information
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [-Credential <PSCredential>] [<CommonParameters>]
+[-UpdateHistory] [-Archive] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
@@ -25,7 +25,7 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] 
 Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Convert] [-CriticalAttributesOnly]
 [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
 [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [<CommonParameters>]
+[-UpdateHistory] [-Archive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -344,6 +344,30 @@ even if disk selection or attribute selection parameters are used.
 History by default is located in the history folder of the module directory.
 
 This can be changed by DataHistoryPath config parameter.
+
+For more information, see about_DiskSmartInfo_config.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+
+```
+### -Archive
+Specifies that SMART data should be saved to archive folder.
+
+The cmdlet stores SMART data for all disks and attributes of specified computers,
+even if disk selection or attribute selection parameters are used.
+
+Archive by default is located in the archive folder of the module directory.
+
+This can be changed by ArchivePath config parameter.
 
 For more information, see about_DiskSmartInfo_config.
 

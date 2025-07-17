@@ -185,7 +185,8 @@ function inGetDiskSmartInfo
         [AttributeProperty[]]$AttributeProperties,
         [switch]$Quiet,
         [switch]$ShowHistory,
-        [switch]$UpdateHistory
+        [switch]$UpdateHistory,
+        [switch]$Archive
     )
 
     foreach ($hostSmartData in $HostsSmartData)
@@ -335,6 +336,11 @@ function inGetDiskSmartInfo
         if ($UpdateHistory)
         {
             inUpdateHistoricalData -hostSmartData $hostSmartData
+        }
+
+        if ($Archive)
+        {
+            inUpdateArchive -hostSmartData $hostSmartData
         }
     }
 }
