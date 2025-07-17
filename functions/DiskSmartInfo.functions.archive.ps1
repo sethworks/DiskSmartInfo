@@ -41,19 +41,10 @@ function inUpdateArchive
 
     if ($archiveData.Count)
     {
-        # $dateTime = Get-Date
-        # $fullname = inComposeArchiveDataFileName -computerName $hostSmartData.computerName
         $fullname = inComposeArchiveDataFileName -computerName $hostSmartData.computerName -dateTime $dateTime
-
-        # $hostArchiveData = @{
-            # TimeStamp = Get-Date
-            # TimeStamp = $dateTime
-            # ArchiveData = $archiveData
-        # }
 
         inEnsureFolderExists -folder (Split-Path -Path $fullname -Parent)
 
-        # Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $hostArchiveData -Depth 5)
         Set-Content -Path $fullname -Value (ConvertTo-Json -InputObject $archiveData -Depth 5)
     }
 }
@@ -68,15 +59,11 @@ function inComposeArchiveDataFileName
     if ($computerName)
     {
         $hostfolder = $computerName
-        # $filename = "$computerName.json"
-        # $filename = "$computerName$((Get-Date).ToString('_yyyy-MM-dd_HH-mm-ss')).json"
         $filename = "$computerName$($dateTime.ToString('_yyyy-MM-dd_HH-mm-ss')).json"
     }
     else
     {
         $hostfolder = 'localhost'
-        # $filename = 'localhost.json'
-        # $filename = "localhost$((Get-Date).ToString('_yyyy-MM-dd_HH-mm-ss')).json"
         $filename = "localhost$($dateTime.ToString('_yyyy-MM-dd_HH-mm-ss')).json"
     }
 
