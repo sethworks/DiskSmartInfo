@@ -8,6 +8,8 @@ function Get-DiskSmartInfo
         [Parameter(ParameterSetName='ComputerName')]
         [ValidateSet('CimSession','PSSession','SSHSession')]
         [string]$Transport,
+        [ValidateSet('CIM','SmartCtl')]
+        [string]$Source,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
@@ -55,6 +57,22 @@ function Get-DiskSmartInfo
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
+        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'CIMSession' -and $Source -eq 'SmartCtl')
+        {
+            $message = "CIMSession transport only supports CIM source"
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+
+        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $Source -eq 'SmartCtl' -and -not $PSCmdlet.MyInvocation.ExpectingInput)
+        {
+            $message = "Transport parameter is not specified and its default value is CIMSession. CIMSession transport only supports CIM source"
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+
         # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
@@ -70,6 +88,11 @@ function Get-DiskSmartInfo
         if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
         {
             $Transport = 'CimSession'
+        }
+
+        if (-not $IsLinux -and -not $IsMacOS -and -not $Source)
+        {
+            $Source = 'CIM'
         }
 
         if ($AttributeProperty)
@@ -124,9 +147,20 @@ function Get-DiskSmartInfo
 
             foreach ($ps in $PSSession)
             {
-                $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                if ($Source -eq 'CIM')
+                {
+                    $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                    $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                }
+                elseif ($Source -eq 'SmartCtl')
+                {
+                    $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                    continue
+                }
 
-                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+
+                # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                 inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
@@ -201,9 +235,20 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                        if ($Source -eq 'CIM')
+                        {
+                            $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                            $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                        }
+                        elseif ($Source -eq 'SmartCtl')
+                        {
+                            $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                            continue
+                        }
 
-                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+
+                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
@@ -236,9 +281,20 @@ function Get-DiskSmartInfo
 
                     try
                     {
-                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                        if ($Source -eq 'CIM')
+                        {
+                            $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                            $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                        }
+                        elseif ($Source -eq 'SmartCtl')
+                        {
+                            $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                            continue
+                        }
 
-                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+
+                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
@@ -263,9 +319,20 @@ function Get-DiskSmartInfo
         # Localhost
         else
         {
-            $SourceSmartDataCIM = inGetSourceSmartDataCIM
+            if ($Source -eq 'CIM')
+            {
+                $SourceSmartDataCIM = inGetSourceSmartDataCIM
+                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+            }
+            elseif ($Source -eq 'SmartCtl')
+            {
+                $SourceSmartDataSCtl = inGetSourceSmartDataSCtl
+                continue
+            }
 
-            $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+            # $SourceSmartDataCIM = inGetSourceSmartDataCIM
+
+            # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
             inGetDiskSmartInfo `
                 -HostsSmartData $HostsSmartData `
