@@ -263,7 +263,7 @@ function Get-DiskSmartInfo
         # Localhost
         else
         {
-            $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
+            $SourceSmartDataCIM = inGetSourceSmartDataCIM
 
             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
