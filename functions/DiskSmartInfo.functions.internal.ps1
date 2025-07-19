@@ -64,6 +64,7 @@ function inGetSourceSmartDataCIM
         }
     }
 
+    # Localhost
     if (-not $CimSession -and -not $PSSession)
     {
         if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and
@@ -172,25 +173,25 @@ function inGetSmartDataStructureCIM
     return $hostsSmartData
 }
 
-function inGetSourceSmartDataSCtl
+function inGetSourceSmartDataCtl
 {
     Param (
         # [Microsoft.Management.Infrastructure.CimSession[]]$CimSession,
         [System.Management.Automation.Runspaces.PSSession[]]$PSSession
     )
 
-    $namespaceWMI = 'root/WMI'
-    $classSmartData = 'MSStorageDriver_ATAPISmartData'
-    $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
-    $classFailurePredictStatus = 'MSStorageDriver_FailurePredictStatus'
-    $classDiskDrive = 'Win32_DiskDrive'
+    # $namespaceWMI = 'root/WMI'
+    # $classSmartData = 'MSStorageDriver_ATAPISmartData'
+    # $classThresholds = 'MSStorageDriver_FailurePredictThresholds'
+    # $classFailurePredictStatus = 'MSStorageDriver_FailurePredictStatus'
+    # $classDiskDrive = 'Win32_DiskDrive'
 
     $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
 
-    $errorParameters = @{
-        ErrorVariable = 'instanceErrors'
-        ErrorAction = 'SilentlyContinue'
-    }
+    # $errorParameters = @{
+    #     ErrorVariable = 'instanceErrors'
+    #     ErrorAction = 'SilentlyContinue'
+    # }
 
     # foreach ($cs in $CimSession)
     # {
@@ -215,51 +216,56 @@ function inGetSourceSmartDataSCtl
 
     foreach ($ps in $PSSession)
     {
-        Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } }
-        $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters }
-        $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters }
-        $disksThresholds = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters }
-        $disksFailurePredictStatus = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters }
-        $instanceErrors = Invoke-Command -Session $ps -ScriptBlock { $instanceErrors }
+        $scan = Invoke-Command -Session $ps -ScriptBlock { smartctl --scan }
+        return $scan
+        # Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } }
+        # $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters }
+        # $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters }
+        # $disksThresholds = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters }
+        # $disksFailurePredictStatus = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters }
+        # $instanceErrors = Invoke-Command -Session $ps -ScriptBlock { $instanceErrors }
 
-        if ($diskDrives -and $disksSmartData -and $disksThresholds -and $disksFailurePredictStatus)
-        {
-            $HostsSmartData.Add(@{
-                diskDrives = $diskDrives
-                disksSmartData = $disksSmartData
-                disksThresholds = $disksThresholds
-                disksFailurePredictStatus = $disksFailurePredictStatus
-                computerName = $ps.ComputerName
-            })
-        }
-        else
-        {
-            inReportErrors -Errors $instanceErrors
-        }
+        # if ($diskDrives -and $disksSmartData -and $disksThresholds -and $disksFailurePredictStatus)
+        # {
+        #     $HostsSmartData.Add(@{
+        #         diskDrives = $diskDrives
+        #         disksSmartData = $disksSmartData
+        #         disksThresholds = $disksThresholds
+        #         disksFailurePredictStatus = $disksFailurePredictStatus
+        #         computerName = $ps.ComputerName
+        #     })
+        # }
+        # else
+        # {
+        #     inReportErrors -Errors $instanceErrors
+        # }
     }
 
+    # Localhost
     if (-not $CimSession -and -not $PSSession)
     {
-        if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and
-            ($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @errorParameters) -and
-            ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @errorParameters) -and
-            ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @errorParameters))
-        {
-            $HostsSmartData.Add(@{
-                diskDrives = $diskDrives
-                disksSmartData = $disksSmartData
-                disksThresholds = $disksThresholds
-                disksFailurePredictStatus = $disksFailurePredictStatus
-                computerName = $null
-            })
-        }
-        else
-        {
-            inReportErrors -Errors $instanceErrors
-        }
+        $scan = smartctl --scan
+        return $scan
+        # if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and
+        #     ($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @errorParameters) -and
+        #     ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @errorParameters) -and
+        #     ($disksFailurePredictStatus = Get-CimInstance -Namespace $namespaceWMI -ClassName $classFailurePredictStatus @errorParameters))
+        # {
+        #     $HostsSmartData.Add(@{
+        #         diskDrives = $diskDrives
+        #         disksSmartData = $disksSmartData
+        #         disksThresholds = $disksThresholds
+        #         disksFailurePredictStatus = $disksFailurePredictStatus
+        #         computerName = $null
+        #     })
+        # }
+        # else
+        # {
+        #     inReportErrors -Errors $instanceErrors
+        # }
     }
 
-    return $HostsSmartData
+    # return $HostsSmartData
 }
 
 function inGetDiskSmartInfo

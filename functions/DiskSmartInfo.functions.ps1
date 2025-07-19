@@ -43,7 +43,7 @@ function Get-DiskSmartInfo
         # Restrictions
         if ($IsLinux -or $IsMacOS)
         {
-            $message = "Platform is not supported"
+            $message = "Platform is not supported."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -57,17 +57,26 @@ function Get-DiskSmartInfo
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
-        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'CIMSession' -and $Source -eq 'SmartCtl')
+        # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+        # InputObject | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+
+        # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
+        # InputObject | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
+        if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
         {
-            $message = "CIMSession transport only supports CIM source"
+            $message = "CIMSession transport only supports CIM source."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
-        if (-not $IsLinux -and -not $IsMacOS -and -not $Transport -and $Source -eq 'SmartCtl' -and -not $PSCmdlet.MyInvocation.ExpectingInput)
+        # if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport -and -not $PSCmdlet.MyInvocation.ExpectingInput)
+
+        # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+        # InputObject | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+        if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
         {
-            $message = "Transport parameter is not specified and its default value is CIMSession. CIMSession transport only supports CIM source"
+            $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -127,22 +136,33 @@ function Get-DiskSmartInfo
         {
             foreach ($cs in $CimSession)
             {
-                $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
+                if ($Source -eq 'CIM')
+                {
+                    $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
 
-                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                    $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
-                inGetDiskSmartInfo `
-                    -HostsSmartData $HostsSmartData `
-                    -Convert:$Convert `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
-                    -DiskNumbers $DiskNumber `
-                    -DiskModels $DiskModel `
-                    -AttributeIDs $attributeIDs `
-                    -AttributeProperties $AttributeProperty `
-                    -Quiet:$Quiet `
-                    -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory `
-                    -Archive:$Archive
+                    inGetDiskSmartInfo `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -AttributeIDs $attributeIDs `
+                        -AttributeProperties $AttributeProperty `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory `
+                        -Archive:$Archive
+                }
+
+                # $CIMSession | Get-DiskSmartInfo -Source SmartCtl
+                elseif ($Source -eq 'SmartCtl')
+                {
+                    # Write-Warning -Message "Transport parameter is not specified and its default value is CIMSession. CIMSession transport only supports CIM source"
+
+                    Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                }
             }
 
             foreach ($ps in $PSSession)
@@ -154,7 +174,8 @@ function Get-DiskSmartInfo
                 }
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                    $SourceSmartDataCtl
                     continue
                 }
 
@@ -183,34 +204,43 @@ function Get-DiskSmartInfo
             {
                 foreach ($cn in $ComputerName)
                 {
-                    if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
+                    if ($Source -eq 'CIM')
                     {
-                        inReportErrors -Errors $sessionErrors
-                        continue
+                        if (-not ($cs = New-CimSession -ComputerName $cn -Credential $Credential @errorParameters))
+                        {
+                            inReportErrors -Errors $sessionErrors
+                            continue
+                        }
+
+                        try
+                        {
+                            $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
+
+                            $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                            inGetDiskSmartInfo `
+                                -HostsSmartData $HostsSmartData `
+                                -Convert:$Convert `
+                                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                                -DiskNumbers $DiskNumber `
+                                -DiskModels $DiskModel `
+                                -AttributeIDs $attributeIDs `
+                                -AttributeProperties $AttributeProperty `
+                                -Quiet:$Quiet `
+                                -ShowHistory:$ShowHistory `
+                                -UpdateHistory:$UpdateHistory `
+                                -Archive:$Archive
+                        }
+                        finally
+                        {
+                            Remove-CimSession -CimSession $cs
+                        }
                     }
-
-                    try
+                    # $ComputerName | Get-DiskSmartInfo -Source SmartCtl
+                    elseif ($Source -eq 'SmartCtl')
                     {
-                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-
-                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
-
-                        inGetDiskSmartInfo `
-                            -HostsSmartData $HostsSmartData `
-                            -Convert:$Convert `
-                            -CriticalAttributesOnly:$CriticalAttributesOnly `
-                            -DiskNumbers $DiskNumber `
-                            -DiskModels $DiskModel `
-                            -AttributeIDs $attributeIDs `
-                            -AttributeProperties $AttributeProperty `
-                            -Quiet:$Quiet `
-                            -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory `
-                            -Archive:$Archive
-                    }
-                    finally
-                    {
-                        Remove-CimSession -CimSession $cs
+                        # Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source"
+                        Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                     }
                 }
             }
@@ -242,7 +272,8 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl
                             continue
                         }
 
@@ -288,7 +319,8 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataSCtl = inGetSourceSmartDataSCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl
                             continue
                         }
 
@@ -326,7 +358,8 @@ function Get-DiskSmartInfo
             }
             elseif ($Source -eq 'SmartCtl')
             {
-                $SourceSmartDataSCtl = inGetSourceSmartDataSCtl
+                $SourceSmartDataCtl = inGetSourceSmartDataCtl
+                $SourceSmartDataCtl
                 continue
             }
 
