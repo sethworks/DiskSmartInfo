@@ -176,7 +176,7 @@ function Get-DiskSmartInfo
                 {
                     $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                     $SourceSmartDataCtl
-                    continue
+                    # continue
                 }
 
                 # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
@@ -274,7 +274,7 @@ function Get-DiskSmartInfo
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                             $SourceSmartDataCtl
-                            continue
+                            # continue
                         }
 
                         # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
@@ -321,7 +321,7 @@ function Get-DiskSmartInfo
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                             $SourceSmartDataCtl
-                            continue
+                            # continue
                         }
 
                         # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
@@ -360,7 +360,8 @@ function Get-DiskSmartInfo
             {
                 $SourceSmartDataCtl = inGetSourceSmartDataCtl
                 $SourceSmartDataCtl
-                continue
+                # continue
+                # break
             }
 
             # $SourceSmartDataCIM = inGetSourceSmartDataCIM

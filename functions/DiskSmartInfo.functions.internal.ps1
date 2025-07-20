@@ -216,8 +216,41 @@ function inGetSourceSmartDataCtl
 
     foreach ($ps in $PSSession)
     {
-        $scan = Invoke-Command -Session $ps -ScriptBlock { smartctl --scan }
-        return $scan
+        $disksSmartData = @()
+
+        if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
+        {
+            $sbs = 'sudo smartctl --info --health --attributes '
+        }
+        else
+        {
+            $sbs = 'smartctl --info --health --attributes '
+        }
+
+        # $scan = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
+        $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
+
+        foreach ($device in $devices)
+        {
+            if ($device -match '^(?<device>/dev/\w{3})')
+            {
+                $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+                $disksSmartData += @{
+                    device = $Matches.device
+                    # diskSmartData = Invoke-Command -ScriptBlock { smartctl --info --health --attributes $Using:Matches.device } -Session $ps
+                    diskSmartData = Invoke-Command -ScriptBlock $sb -Session $ps
+                }
+                # $diskSmartData = Invoke-Command -ScriptBlock { smartctl --info --health --attributes $Using:Matches.device } -Session $ps
+
+            }
+        }
+
+        $HostsSmartData.Add(@{
+            computerName = $null
+            disksSmartData = $disksSmartData
+        })
+
+        # return $scan
         # Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } }
         # $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters }
         # $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters }
@@ -242,10 +275,43 @@ function inGetSourceSmartDataCtl
     }
 
     # Localhost
-    if (-not $CimSession -and -not $PSSession)
+    # if (-not $CimSession -and -not $PSSession)
+    if (-not $PSSession)
     {
-        $scan = smartctl --scan
-        return $scan
+        $disksSmartData = @()
+
+        if ($IsLinux)
+        {
+            $sbs = 'sudo smartctl --info --health --attributes '
+        }
+        else
+        {
+            $sbs = 'smartctl --info --health --attributes '
+        }
+
+        # $scan = smartctl --scan
+        # $scan = Invoke-Command -ScriptBlock { smartctl --scan }
+        $devices = Invoke-Command -ScriptBlock { smartctl --scan }
+
+        foreach ($device in $devices)
+        {
+            if ($device -match '^(?<device>/dev/\w{3})')
+            {
+                $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+                $disksSmartData += @{
+                    device = $Matches.device
+                    # diskSmartData = Invoke-Command -ScriptBlock { smartctl --info --health --attributes $Matches.device }
+                    diskSmartData = Invoke-Command -ScriptBlock $sb
+                }
+            }
+            # $disksSmartData += ,(Invoke-Command -ScriptBlock { smartctl --info --health --attributes $Matches.device })
+        }
+
+        $HostsSmartData.Add(@{
+            computerName = $null
+            disksSmartData = $disksSmartData
+        })
+        # return $scan
         # if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and
         #     ($disksSmartData = Get-CimInstance -Namespace $namespaceWMI -ClassName $classSmartData @errorParameters) -and
         #     ($disksThresholds = Get-CimInstance -Namespace $namespaceWMI -ClassName $classThresholds @errorParameters) -and
@@ -265,7 +331,7 @@ function inGetSourceSmartDataCtl
         # }
     }
 
-    # return $HostsSmartData
+    return $HostsSmartData
 }
 
 function inGetDiskSmartInfo
