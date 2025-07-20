@@ -70,8 +70,6 @@ function Get-DiskSmartInfo
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
-        # if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport -and -not $PSCmdlet.MyInvocation.ExpectingInput)
-
         # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
         # InputObject | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
         if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
@@ -159,8 +157,6 @@ function Get-DiskSmartInfo
                 # $CIMSession | Get-DiskSmartInfo -Source SmartCtl
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    # Write-Warning -Message "Transport parameter is not specified and its default value is CIMSession. CIMSession transport only supports CIM source"
-
                     Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
                 }
             }
@@ -176,12 +172,7 @@ function Get-DiskSmartInfo
                 {
                     $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                     $SourceSmartDataCtl
-                    # continue
                 }
-
-                # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-
-                # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                 inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
@@ -239,7 +230,6 @@ function Get-DiskSmartInfo
                     # $ComputerName | Get-DiskSmartInfo -Source SmartCtl
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        # Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source"
                         Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                     }
                 }
@@ -274,12 +264,7 @@ function Get-DiskSmartInfo
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                             $SourceSmartDataCtl
-                            # continue
                         }
-
-                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-
-                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
@@ -321,12 +306,7 @@ function Get-DiskSmartInfo
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                             $SourceSmartDataCtl
-                            # continue
                         }
-
-                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-
-                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
@@ -360,13 +340,7 @@ function Get-DiskSmartInfo
             {
                 $SourceSmartDataCtl = inGetSourceSmartDataCtl
                 $SourceSmartDataCtl
-                # continue
-                # break
             }
-
-            # $SourceSmartDataCIM = inGetSourceSmartDataCIM
-
-            # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
             inGetDiskSmartInfo `
                 -HostsSmartData $HostsSmartData `
