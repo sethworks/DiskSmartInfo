@@ -253,6 +253,181 @@ function inGetSourceSmartDataCtl
     return $HostsSmartData
 }
 
+function inGetSmartDataStructureCtl
+{
+    Param (
+        $SourceSmartDataCtl
+    )
+
+    # $initialOffset = 2
+    # $attributeLength = 12
+
+    $hostsSmartData = @()
+
+    foreach ($sourceSmartData in $SourceSmartDataCtl)
+    {
+        $hostSmartData = [ordered]@{}
+
+        if ($sourceSmartData.ComputerName)
+        {
+            $hostSmartData.Add('ComputerName', $sourceSmartData.ComputerName)
+        }
+        else
+        {
+            $hostSmartData.Add('ComputerName', $null)
+        }
+
+        $hostSmartData.Add('DisksSmartData', @())
+
+        foreach ($diskSmartData in $sourceSmartData.disksSmartData)
+        {
+            # $smartData = $diskSmartData.VendorSpecific
+            # $thresholdsData = $sourceSmartData.disksThresholds | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName VendorSpecific
+            # $failurePredictStatus = $sourceSmartData.disksFailurePredictStatus | Where-Object -FilterScript { $_.InstanceName -eq $diskSmartData.InstanceName} | ForEach-Object -MemberName PredictFailure
+
+
+            # $pNPDeviceId = $diskSmartData.InstanceName
+            # if ($pNPDeviceId -match '_\d$')
+            # {
+                # $pNPDeviceId = $pNPDeviceId.Remove($pNPDeviceId.Length - 2)
+            # }
+
+            # $diskDrive = $sourceSmartData.diskDrives | Where-Object -FilterScript { $_.PNPDeviceID -eq $pNPDeviceId }
+
+            # $model = inTrimDiskDriveModel -Model $diskDrive.Model
+
+            $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
+
+            if ($diskSmartData.diskSmartData -match '^Device model:' | ForEach-Object { $PSItem -match '^Device model:\s+(?<model>.+)$' })
+            {
+                $model = $Matches.model
+            }
+            else
+            {
+                $model = $null
+            }
+
+            if ($diskSmartData.diskSmartData -match '^SMART overall-health self-assessment test result:' | ForEach-Object { $PSItem -match '^SMART overall-health self-assessment test result:\s+(?<failurePredictStatus>.+)$' })
+            {
+                $failurePredictStatus = $Matches.failurePredictStatus -ne 'PASSED'
+            }
+            else
+            {
+                $failurePredictStatus = $null
+            }
+
+            $hash = [ordered]@{}
+            # $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
+            # $hash.Add('DiskModel', [string]$model)
+            # $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
+
+            $hash.Add('DiskNumber', [uint32]$diskNumber)
+            $hash.Add('DiskModel', [string]$model)
+            $hash.Add('PNPDeviceId', [string]$diskSmartData.device)
+            $hash.Add('PredictFailure', [bool]$failurePredictStatus)
+
+            $attributes = @()
+
+            $actualAttributesList = inUpdateActualAttributesList -model $model
+
+            $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
+
+            if ($headerIndex -ge 0)
+            {
+
+                $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
+
+                foreach ($entry in $table)
+                {
+                    $attribute = [ordered]@{}
+
+                    # if ($entry -match '^\s*(?<id>\S+)\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s+\S+\s*$')
+                    if ($entry -match '^\s*(?<id>\S+)\s+(?<name>\S+)\s+\S+\s+(?<value>\S+)\s+(?<worst>\S+)\s+(?<threshold>\S+)\s+\S+\s+\S+\s+\S+\s+(?<data>\S+.*)$')
+                    {
+                        $attribute.Add("ID", [byte]$Matches.id)
+                        # $attribute.Add("IDHex", [string](([byte]$Matches.id).ToString("X")))
+                        $attribute.Add("IDHex", [string]($attribute.ID.ToString("X")))
+
+                        # $sourcename = [string]$Matches.name
+                        if ($Config.ReplaceSmartCtlAttributeNames)
+                        {
+                            $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
+                        }
+                        else
+                        {
+                            $attribute.Add("Name", [string]$Matches.name)
+                            # $attribute.Add("Name", $sourcename)
+                        }
+
+                        $attribute.Add("Threshold", [byte]$Matches.threshold)
+                        $attribute.Add("Value", [byte]$Matches.value)
+                        $attribute.Add("Worst", [byte]$Matches.worst)
+
+                        $sourcedata = $Matches.data
+
+                        # 32 (Min/Max 18/40)
+                        if ($sourcedata -match '^(?<data>\d+) \(Min/Max (?<min>\d+)/(?<max>\d+)\)$')
+                        {
+                            $attribute.Add("Data", @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
+                        }
+                        # 10/11
+                        elseif ($sourcedata -match '^(?<first>\d+)/(?<second>\d+)$')
+                        {
+                            $attribute.Add("Data", @([long]$Matches.first, [long]$Matches.second))
+                        }
+                        # 1
+                        else
+                        {
+                            $attribute.Add("Data", [long]$Matches.data)
+                        }
+                    }
+
+                    $attributes += $attribute
+                }
+            }
+
+            # for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
+            # {
+                # $attribute = [ordered]@{}
+
+                # $attributeID = $smartData[$attributeStart]
+
+                # if ($attributeID)
+                # {
+                    # $attribute.Add("ID", [byte]$attributeID)
+                    # $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
+                    # $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    # $attribute.Add("Threshold", [byte]$thresholdsData[$attributeStart + 1])
+                    # $attribute.Add("Value", [byte]$smartData[$attributeStart + 3])
+                    # $attribute.Add("Worst", [byte]$smartData[$attributeStart + 4])
+                    # $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
+
+                    # $attributes += $attribute
+                # }
+            # }
+
+            $hash.Add("SmartData", $attributes)
+
+            if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
+            {
+                $sectorSize = $Matches.sectorsize
+            }
+            else
+            {
+                $sectorSize = $null
+            }
+            # $hash.Add("AuxiliaryData", @{BytesPerSector=$diskDrive.BytesPerSector})
+            $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
+
+            $hostSmartData.DisksSmartData += $hash
+        }
+
+        $hostsSmartData += $hostSmartData
+    }
+
+    return $hostsSmartData
+}
+
 function inGetDiskSmartInfo
 {
         Param (

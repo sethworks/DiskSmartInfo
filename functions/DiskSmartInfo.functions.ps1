@@ -171,7 +171,7 @@ function Get-DiskSmartInfo
                 elseif ($Source -eq 'SmartCtl')
                 {
                     $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
-                    $SourceSmartDataCtl
+                    $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                 }
 
                 inGetDiskSmartInfo `
@@ -263,7 +263,7 @@ function Get-DiskSmartInfo
                         elseif ($Source -eq 'SmartCtl')
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
-                            $SourceSmartDataCtl
+                            $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
                         inGetDiskSmartInfo `
@@ -305,7 +305,7 @@ function Get-DiskSmartInfo
                         elseif ($Source -eq 'SmartCtl')
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
-                            $SourceSmartDataCtl
+                            $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
                         inGetDiskSmartInfo `
@@ -339,7 +339,7 @@ function Get-DiskSmartInfo
             elseif ($Source -eq 'SmartCtl')
             {
                 $SourceSmartDataCtl = inGetSourceSmartDataCtl
-                $SourceSmartDataCtl
+                $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
             }
 
             inGetDiskSmartInfo `
