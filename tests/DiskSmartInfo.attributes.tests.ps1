@@ -235,8 +235,8 @@ Describe "Attributes" {
             $diskSmartInfo[1].SmartData[10].Data | Should -Be @(530, 270)
         }
 
-        It "Has correct values for attribute data format: bytes1054" {
-            $diskSmartInfo[1].SmartData[8].Data | Should -Be @(258, 260)
+        It "Has correct values for attribute data format: bytes5410" {
+            $diskSmartInfo[1].SmartData[8].Data | Should -Be @(260, 258)
         }
     }
 }

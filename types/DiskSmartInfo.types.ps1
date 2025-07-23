@@ -4,7 +4,7 @@ enum AttributeDataFormat {
     bits16
     temperature3
     bytes1032
-    bytes1054
+    bytes5410
 }
 
 enum AttributeProperty {

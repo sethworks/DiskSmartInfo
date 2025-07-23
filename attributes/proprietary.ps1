@@ -226,8 +226,8 @@ $Script:proprietaryAttributes = @(
             DataFormat = [AttributeDataFormat]::bits48
         },
         [ordered]@{AttributeID = 170
-            AttributeName = 'Bad Block Count Early/Later'
-            DataFormat = [AttributeDataFormat]::bytes1054
+            AttributeName = 'Bad Block Count Later/Early'
+            DataFormat = [AttributeDataFormat]::bytes5410
         },
         [ordered]@{AttributeID = 172
             AttributeName = 'Erase Fail Count'

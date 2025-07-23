@@ -695,9 +695,9 @@ function inGetAttributeData
             return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 1
         }
 
-        $([AttributeDataFormat]::bytes1054.value__)
+        $([AttributeDataFormat]::bytes5410.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 2
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 2, 0
         }
 
         default
