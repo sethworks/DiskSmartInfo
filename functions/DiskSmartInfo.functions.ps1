@@ -8,12 +8,12 @@ function Get-DiskSmartInfo
         [Parameter(ParameterSetName='ComputerName')]
         [ValidateSet('CimSession','PSSession','SSHSession')]
         [string]$Transport,
-        [ValidateSet('CIM','SmartCtl')]
-        [string]$Source,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
+        [ValidateSet('CIM','SmartCtl')]
+        [string]$Source,
         [switch]$Convert,
         [switch]$CriticalAttributesOnly,
         [Alias('Index','Number','DeviceId')]

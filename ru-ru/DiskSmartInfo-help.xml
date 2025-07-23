@@ -236,6 +236,22 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Source</maml:name>
+          <maml:description>
+            <maml:para>Задает источник данных SMART.</maml:para>
+            <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+            <maml:para>Могут быть заданы следующие значения:</maml:para>
+            <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Convert</maml:name>
           <maml:description>
             <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
@@ -435,6 +451,22 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <command:parameterValue required="true" variableLength="false">PSSession[]</command:parameterValue>
           <dev:type>
             <maml:name>PSSession[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Source</maml:name>
+          <maml:description>
+            <maml:para>Задает источник данных SMART.</maml:para>
+            <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+            <maml:para>Могут быть заданы следующие значения:</maml:para>
+            <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
             <maml:uri />
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
@@ -668,6 +700,22 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <command:parameterValue required="true" variableLength="false">PSSession[]</command:parameterValue>
         <dev:type>
           <maml:name>PSSession[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Source</maml:name>
+        <maml:description>
+          <maml:para>Задает источник данных SMART.</maml:para>
+          <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+          <maml:para>Могут быть заданы следующие значения:</maml:para>
+          <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+          <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
@@ -1112,7 +1160,40 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 9: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession</maml:title>
+        <maml:title>Example 9: Получение данных SMART с удаленных компьютеров с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession -Source SmartCtl
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 10: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession</maml:title>
         <dev:code>$Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
@@ -1162,7 +1243,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 10: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession</maml:title>
+        <maml:title>Example 11: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession</maml:title>
         <dev:code>$Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
 $SSHSession = New-PSSession -HostName SomeOtherComputer
@@ -1210,7 +1291,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>---------- Example 11: Получение указанных атрибутов ----------</maml:title>
+        <maml:title>---------- Example 12: Получение указанных атрибутов ----------</maml:title>
         <dev:code>Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 
 Disk:         0: Disk model
@@ -1229,7 +1310,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>--- Example 12: Получение данных SMART для указанных дисков ---</maml:title>
+        <maml:title>--- Example 13: Получение данных SMART для указанных дисков ---</maml:title>
         <dev:code>Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
 
 Disk:         1: Disk model
@@ -1271,7 +1352,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>--- Example 13: Сохранение данных для последующего сравнения ---</maml:title>
+        <maml:title>--- Example 14: Сохранение данных для последующего сравнения ---</maml:title>
         <dev:code>Get-DiskSmartInfo -UpdateHistory
 
 Disk:         0: Disk model
@@ -1303,7 +1384,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------- Example 14: Отображение ранее сохраненных данных -------</maml:title>
+        <maml:title>------- Example 15: Отображение ранее сохраненных данных -------</maml:title>
         <dev:code>Get-DiskSmartInfo -ShowHistory
 
 Disk:         0: Disk model
@@ -1336,7 +1417,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------ Example 15: Получение указанных свойств атрибутов ------</maml:title>
+        <maml:title>------ Example 16: Получение указанных свойств атрибутов ------</maml:title>
         <dev:code>Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
 
 Disk:         0: Disk model
@@ -1369,7 +1450,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------------- Example 16: Использование конвейера -------------</maml:title>
+        <maml:title>------------- Example 17: Использование конвейера -------------</maml:title>
         <dev:code>$ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
 $PSSession = New-PSSession -ComputerName 'Computer3'
