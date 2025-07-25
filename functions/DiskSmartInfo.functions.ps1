@@ -157,7 +157,11 @@ function Get-DiskSmartInfo
                 # $CIMSession | Get-DiskSmartInfo -Source SmartCtl
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                    # Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                    $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                    $exception = [System.Exception]::new($message)
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                    $PSCmdlet.WriteError($errorRecord)
                 }
             }
 
@@ -230,7 +234,11 @@ function Get-DiskSmartInfo
                     # $ComputerName | Get-DiskSmartInfo -Source SmartCtl
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                        # Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                        $message = "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                        $exception = [System.Exception]::new($message)
+                        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                        $PSCmdlet.WriteError($errorRecord)
                     }
                 }
             }
