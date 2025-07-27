@@ -58,10 +58,10 @@ function Get-DiskSmartInfo
         }
 
         # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
-        # InputObject | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+        # Win32_DiskDrive, MSFT_DIsk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
 
         # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
-        # InputObject | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
+        # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
         if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
         {
             $message = "CIMSession transport only supports CIM source."
@@ -71,7 +71,7 @@ function Get-DiskSmartInfo
         }
 
         # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-        # InputObject | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+        # Win32_DiskDrive, MSFT_DIsk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
         if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
         {
             $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
@@ -154,7 +154,7 @@ function Get-DiskSmartInfo
                         -Archive:$Archive
                 }
 
-                # $CIMSession | Get-DiskSmartInfo -Source SmartCtl
+                # CIMSession | Get-DiskSmartInfo -Source SmartCtl
                 elseif ($Source -eq 'SmartCtl')
                 {
                     # Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
@@ -231,7 +231,8 @@ function Get-DiskSmartInfo
                             Remove-CimSession -CimSession $cs
                         }
                     }
-                    # $ComputerName | Get-DiskSmartInfo -Source SmartCtl
+                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl
+                    # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
                     elseif ($Source -eq 'SmartCtl')
                     {
                         # Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."

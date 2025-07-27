@@ -31,6 +31,170 @@ Describe "Errors" {
                 { Get-DiskSmartInfo -ComputerName $ComputerName -Transport SSHSession } | Should -Throw "PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier." -ErrorId 'PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier.,Get-DiskSmartInfo'
             }
         }
+
+        Context "SmartCtl with CIMSession" {
+
+            Context "-Source SmartCtl -CIMSession" {
+
+                BeforeAll {
+                    $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
+                }
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Source SmartCtl -CimSession $cimSessionHost1 } | Should -Throw 'CIMSession transport only supports CIM source.' -ErrorId 'CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Source SmartCtl -CIMSession" {
+
+                BeforeAll {
+                    $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
+                }
+
+                It "Should throw an error" {
+                    { $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Source SmartCtl -CimSession $cimSessionHost1 } | Should -Throw 'CIMSession transport only supports CIM source.' -ErrorId 'CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "-Source SmartCtl -Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Source SmartCtl -Transport CimSession } | Should -Throw 'CIMSession transport only supports CIM source.' -ErrorId 'CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Source SmartCtl -Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { $computerNames[0], $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Source SmartCtl -Transport CimSession } | Should -Throw 'CIMSession transport only supports CIM source.' -ErrorId 'CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
+
+        Context "SmartCtl with ComputerName" {
+
+            Context "-Source SmartCtl -ComputerName" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Source SmartCtl -ComputerName $computerNames } | Should -Throw 'Transport parameter is not specified and its default value is "CIMSession". CIMSession transport only supports CIM source.' -ErrorId 'Transport parameter is not specified and its default value is "CIMSession". CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Source SmartCtl -ComputerName" {
+
+                It "Should throw an error" {
+                    { $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Source SmartCtl -ComputerName $computerNames } | Should -Throw 'Transport parameter is not specified and its default value is "CIMSession". CIMSession transport only supports CIM source.' -ErrorId 'Transport parameter is not specified and its default value is "CIMSession". CIMSession transport only supports CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
+    }
+
+    Context "Process restrictions" {
+
+        Context "CIMSession, PSSession, SSHSession | -Source SmartCtl" -Skip {
+
+            BeforeAll {
+                $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                $pssshSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+
+                $diskSmartInfo = $cimSessionHost1, $psSessionHost1, $pssshSessionHost1 | Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return error on CIMSession use" {
+                $diskSmartInfo | Should -HaveCount 2
+                $ev | Should -HaveCount 1
+            }
+        }
+
+        Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Source SmartCtl" {
+
+            BeforeAll {
+                $diskSmartInfo = $computerNames, $diskDriveHost1, $diskHost1, $physicalDiskHost1 | Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return error on ComputerName use" {
+                $diskSmartInfo | Should -BeNullOrEmpty
+                $ev | Should -HaveCount 5
+
+                $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[2].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[2].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[3].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[3].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[4].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[4].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+            }
+        }
+
+        Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk, CIMSession, PSSession, SSHSession | -Source SmartCtl" -Skip {
+
+            BeforeAll {
+                $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                $pssshSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+
+                $diskSmartInfo = $computerNames, $diskDriveHost1, $diskHost1, $physicalDiskHost1, $cimSessionHost1, $psSessionHost1, $pssshSessionHost1 | Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return error on ComputerName use" {
+                $diskSmartInfo | Should -HaveCount 2
+                $ev | Should -HaveCount 5
+
+                $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+            }
+        }
+    }
+
+    Context "SmartCtl utility existence" {
+
+        Context "Local query" {
+
+            BeforeAll {
+                mock Get-Command -MockWith { $null } -ParameterFilter {$Name -eq 'smartctl'} -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return an error" {
+                $diskSmartInfo | Should -BeNullOrEmpty
+                $ev | Should -HaveCount 1
+
+                $ev.Exception.Message | Should -BeExactly 'SmartCtl utility is not found.'
+                $ev.FullyQualifiedErrorId | Should -BeExactly 'SmartCtl utility is not found.,Get-DiskSmartInfo'
+            }
+        }
+
+        Context "Remote queries" -Skip {
+
+            BeforeAll {
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue " -and $Session.ComputerName -eq $computerNames[0] } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Source SmartCtl -Transport PSSession -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return an error" {
+                $diskSmartInfo | Should -HaveCount 1
+                $ev | Should -HaveCount 1
+            }
+        }
     }
 
     Context "Notifications" {
