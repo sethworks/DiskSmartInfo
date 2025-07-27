@@ -718,7 +718,20 @@ function inReportErrors
                 $message = $err.Exception.Message
             }
         }
-        # PSSession
+        # New-PSSession -ComputerName user@host
+        elseif ($err.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException')
+        {
+            $err = $err.ErrorRecord
+            if ($err.TargetObject)
+            {
+                $message = "ComputerName: ""$($err.TargetObject)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
+        }
+        # New-PSSession -ComputerName nonexistenthost
         elseif ($err.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
         {
             if ($err.ErrorDetails.Message -match '\[(?<ComputerName>\S+)]')

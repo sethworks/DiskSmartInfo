@@ -247,14 +247,26 @@ function Get-DiskSmartInfo
             {
                 foreach ($cn in $ComputerName)
                 {
-                    if ($Credential)
+                    # non-existent computer name results in non-terminating error
+                    # computername format error, e.g user@host (for -ComputerName, not -HostName) results in terminating error
+                    # we need to suppress both types of cmdlet error messages and replace them with with our own
+                    try
                     {
-                        $ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters
+                        if ($Credential)
+                        {
+                            $ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters
+                            # $ps = New-PSSession -ComputerName $cn -Credential $Credential -ErrorVariable sessionErrors
+                            # $ps = New-PSSession -ComputerName $cn -Credential $Credential -ErrorVariable sessionErrors -ErrorAction Stop
+                        }
+                        else
+                        {
+                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors -ErrorAction SilentlyContinue 2>$null
+                            $ps = New-PSSession -ComputerName $cn @errorParameters
+                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors
+                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors -ErrorAction Stop
+                        }
                     }
-                    else
-                    {
-                        $ps = New-PSSession -ComputerName $cn @errorParameters
-                    }
+                    catch { }
 
                     if (-not $ps)
                     {

@@ -244,47 +244,53 @@ Describe "Errors" {
 
     Context "Nonexistent host" {
 
-        BeforeAll {
-            $nonexistentHost = 'nonexistent_host'
-        }
+        Context "CIM" {
 
-        It "Should return error if nonexistent or untrusted host is specified" {
-            $e = { Get-DiskSmartInfo $nonexistentHost -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
-            $e.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
-            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
-            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
-        }
+            BeforeAll {
+                $nonexistentHost = 'nonexistent_host'
+            }
 
-        It "Should return error if cim session to nonexistent or untrusted host is specified" {
-            $cimSession = New-CimSession -ComputerName $nonexistentHost -SkipTestConnection
-            $e = { Get-DiskSmartInfo -CimSession $cimSession -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
-            $e.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
-            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
-            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            It "Should return error if nonexistent or untrusted host is specified" {
+                $e = { Get-DiskSmartInfo $nonexistentHost -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
+                $e.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
+                # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+                # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            }
+
+            It "Should return error if cim session to nonexistent or untrusted host is specified" {
+                $cimSession = New-CimSession -ComputerName $nonexistentHost -SkipTestConnection
+                $e = { Get-DiskSmartInfo -CimSession $cimSession -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
+                $e.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
+                # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+                # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            }
         }
     }
 
     Context "Error variable" {
 
-        BeforeAll {
-            $nonexistentHost = 'nonexistent_host'
-        }
+        Context "CIM" {
 
-        It "Should contain error if nonexistent or untrusted host is specified" {
-            Get-DiskSmartInfo $nonexistentHost -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
-            $ev | Should -HaveCount 1
-            $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
-            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
-            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
-        }
+            BeforeAll {
+                $nonexistentHost = 'nonexistent_host'
+            }
 
-        It "Should contain error if cim session to nonexistent or untrusted host is specified" {
-            $cimSession = New-CimSession -ComputerName $nonexistentHost -SkipTestConnection
-            Get-DiskSmartInfo -CimSession $cimSession -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
-            $ev | Should -HaveCount 1
-            $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
-            # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
-            # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            It "Should contain error if nonexistent or untrusted host is specified" {
+                Get-DiskSmartInfo $nonexistentHost -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+                $ev | Should -HaveCount 1
+                $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
+                # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+                # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            }
+
+            It "Should contain error if cim session to nonexistent or untrusted host is specified" {
+                $cimSession = New-CimSession -ComputerName $nonexistentHost -SkipTestConnection
+                Get-DiskSmartInfo -CimSession $cimSession -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+                $ev | Should -HaveCount 1
+                $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
+                # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
+                # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            }
         }
     }
 }
