@@ -212,7 +212,7 @@ function inGetSourceSmartDataCtl
             }
 
             $HostsSmartData.Add(@{
-                computerName = $null
+                computerName = $ps.ComputerName
                 disksSmartData = $disksSmartData
             })
         }
