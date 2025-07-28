@@ -189,11 +189,11 @@ function inGetSourceSmartDataCtl
         {
             if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
             {
-                $sbs = 'sudo smartctl --info --health --attributes '
+                $sbs = 'sudo smartctl --info --health --attributes'
             }
             else
             {
-                $sbs = 'smartctl --info --health --attributes '
+                $sbs = 'smartctl --info --health --attributes'
             }
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
@@ -235,11 +235,11 @@ function inGetSourceSmartDataCtl
         {
             if ($IsLinux)
             {
-                $sbs = 'sudo smartctl --info --health --attributes '
+                $sbs = 'sudo smartctl --info --health --attributes'
             }
             else
             {
-                $sbs = 'smartctl --info --health --attributes '
+                $sbs = 'smartctl --info --health --attributes'
             }
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan }
@@ -302,7 +302,7 @@ function inGetSmartDataStructureCtl
         {
             $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
 
-            if ($diskSmartData.diskSmartData -match '^Device model:' | ForEach-Object { $PSItem -match '^Device model:\s+(?<model>.+)$' })
+            if ($diskSmartData.diskSmartData -match '^Device Model:' | ForEach-Object { $PSItem -match '^Device Model:\s+(?<model>.+)$' })
             {
                 $model = $Matches.model
             }

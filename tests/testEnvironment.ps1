@@ -1,6 +1,7 @@
 # Do not use -SkipLimitCheck because there are no such a parameter in Windows PowerShell 5.1
 $testData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
 $testDataProprietary = Import-PowerShellDataFile -Path $PSScriptRoot\testData.proprietary.psd1
+$testDataCtl = Import-PowerShellDataFile -Path $PSScriptRoot\testData.ctl.psd1
 
 # Class names
 $namespaceWMI = 'root/WMI'
@@ -265,6 +266,25 @@ $physicalDiskSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $p
 $physicalDiskSSD2 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesSSD2 -ClientOnly
 $physicalDiskHFSSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesHFSSSD1 -ClientOnly
 $physicalDiskKINGSTONSSD1 = New-CimInstance -CimClass $cimClassPhysicalDisk -Property $physicalDiskPropertiesKINGSTONSSD1 -ClientOnly
+
+# CtlData
+
+# $ctlDataHDD1 = $testDataCtl.CtlData_HDD1.Split("`r`n")
+# $ctlDataPredictFailureTrueHDD1 = $testDataCtl.CtlDataPredictFailureTrue_HDD1.Split("`r`n")
+# $ctlDataHDD2 = $testDataCtl.CtlData_HDD2.Split("`r`n")
+# $ctlDataSSD1 = $testDataCtl.CtlData_SSD1.Split("`r`n")
+# $ctlDataSSD2 = $testDataCtl.CtlData_SSD2.Split("`r`n")
+# $ctlDataHFSSSD1 = $testDataCtl.CtlData_HFSSSD1.Split("`r`n")
+# $ctlDataKINGSTONSSD1 = $testDataCtl.CtlData_KINGSTONSSD1.Split("`r`n")
+
+# Because Windows PowerShell 5.1 (.net 4) Split() can't use "`r`n" as a separator
+$ctlDataHDD1 = $testDataCtl.CtlData_HDD1.Replace("`r`n","`n").Split("`n")
+$ctlDataPredictFailureTrueHDD1 = $testDataCtl.CtlDataPredictFailureTrue_HDD1.Replace("`r`n","`n").Split("`n")
+$ctlDataHDD2 = $testDataCtl.CtlData_HDD2.Replace("`r`n","`n").Split("`n")
+$ctlDataSSD1 = $testDataCtl.CtlData_SSD1.Replace("`r`n","`n").Split("`n")
+$ctlDataSSD2 = $testDataCtl.CtlData_SSD2.Replace("`r`n","`n").Split("`n")
+$ctlDataHFSSSD1 = $testDataCtl.CtlData_HFSSSD1.Replace("`r`n","`n").Split("`n")
+$ctlDataKINGSTONSSD1 = $testDataCtl.CtlData_KINGSTONSSD1.Replace("`r`n","`n").Split("`n")
 
 # Remoting
 $computerNames = $env:computername, 'localhost'

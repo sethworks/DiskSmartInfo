@@ -42,6 +42,31 @@
             }
         },
         {
+            "label": "InvokePester - Windows PowerShell 5.1",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; ${input:codeCoverage} Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+                }
+            }
+        },
+        {
             "label": "UpdateHelp",
             "type": "shell",
             "command": "Set-Location ${workspaceFolder}; ./.helpers/updateHelp.ps1",
