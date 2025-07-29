@@ -315,7 +315,56 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
     CtlBytesPerSector_HFSSSD1 = 512
 
     # KINGSTONSSD1
-    CtlData_KINGSTONSSD1 = ''
+    CtlData_KINGSTONSSD1 = '
+=== START OF INFORMATION SECTION ===
+Model Family:     Phison Driven SSDs
+Device Model:     KINGSTON SA400S37480G
+Serial Number:    50026B778421AC56
+LU WWN Device Id: 5 0026b7 78421ac56
+Firmware Version: S3H01103
+User Capacity:    480,103,981,056 bytes [480 GB]
+Sector Size:      512 bytes logical/physical
+Rotation Rate:    Solid State Device
+TRIM Command:     Available
+Device is:        In smartctl database
+ATA Version is:   ACS-3 T13/2161-D revision 4
+SATA Version is:  SATA 3.2, 6.0 Gb/s (current: 6.0 Gb/s)
+Local Time is:    Tue Jul 29 16:03:22 2025 RTZ
+SMART support is: Available - device has SMART capability.
+SMART support is: Enabled
+
+=== START OF READ SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART Attributes Data Structure revision number: 1
+Vendor Specific SMART Attributes with Thresholds:
+ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE
+  1 Raw_Read_Error_Rate     0x0032   100   100   000    Old_age   Always       -       100
+  9 Power_On_Hours          0x0032   100   100   000    Old_age   Always       -       6240
+ 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       870
+148 Unknown_Attribute       0x0000   100   100   000    Old_age   Offline      -       2
+149 Unknown_Attribute       0x0000   100   100   000    Old_age   Offline      -       0
+167 Write_Protect_Mode      0x0000   100   100   000    Old_age   Offline      -       0
+168 SATA_Phy_Error_Count    0x0012   100   100   000    Old_age   Always       -       0
+169 Bad_Block_Rate          0x0000   100   100   000    Old_age   Offline      -       0
+170 Bad_Blk_Ct_Lat/Erl      0x0000   100   100   010    Old_age   Offline      -       260/258
+172 Erase_Fail_Count        0x0032   100   100   000    Old_age   Always       -       0
+173 MaxAvgErase_Ct          0x0000   100   100   000    Old_age   Offline      -       0
+181 Program_Fail_Count      0x0032   100   100   000    Old_age   Always       -       0
+182 Erase_Fail_Count        0x0000   100   100   000    Old_age   Offline      -       2
+187 Reported_Uncorrect      0x0032   100   100   000    Old_age   Always       -       0
+192 Unsafe_Shutdown_Count   0x0012   100   100   000    Old_age   Always       -       19
+194 Temperature_Celsius     0x0022   034   040   000    Old_age   Always       -       34 (Min/Max 18/40)
+196 Reallocated_Event_Count 0x0032   100   100   000    Old_age   Always       -       1
+199 SATA_CRC_Error_Count    0x0032   100   100   000    Old_age   Always       -       0
+218 CRC_Error_Count         0x0032   100   100   000    Old_age   Always       -       0
+231 SSD_Life_Left           0x0000   095   095   000    Old_age   Offline      -       95
+233 Flash_Writes_GiB        0x0032   100   100   000    Old_age   Always       -       1886
+241 Lifetime_Writes_GiB     0x0032   100   100   000    Old_age   Always       -       7389
+242 Lifetime_Reads_GiB      0x0032   100   100   000    Old_age   Always       -       7223
+244 Average_Erase_Count     0x0000   100   100   000    Old_age   Offline      -       59
+245 Max_Erase_Count         0x0000   100   100   000    Old_age   Offline      -       94
+246 Total_Erase_Count       0x0000   100   100   000    Old_age   Offline      -       315801'
 
     CtlIndex_KINGSTONSSD1 = 5
     CtlModel_KINGSTONSSD1 = "KINGSTON SA400S37480G"
