@@ -249,7 +249,7 @@ function Get-DiskSmartInfo
                 {
                     # non-existent computer name results in non-terminating error
                     # computername format error, e.g user@host (for -ComputerName, not -HostName) results in terminating error
-                    # we need to suppress both types of cmdlet error messages and replace them with with our own
+                    # we need to suppress both types of cmdlet error messages and replace them with our own
                     try
                     {
                         if ($Credential)

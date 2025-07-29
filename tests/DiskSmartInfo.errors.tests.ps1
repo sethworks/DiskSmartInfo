@@ -89,21 +89,33 @@ Describe "Errors" {
         }
     }
 
-    Context "Process restrictions" {
+    Context "Process block restrictions" {
 
-        Context "CIMSession, PSSession, SSHSession | -Source SmartCtl" -Skip {
+        Context "CIMSession, PSSession, SSHSession | -Source SmartCtl" {
 
             BeforeAll {
                 $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
                 $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
                 $pssshSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
 
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
                 $diskSmartInfo = $cimSessionHost1, $psSessionHost1, $pssshSessionHost1 | Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
             }
 
             It "Should return error on CIMSession use" {
                 $diskSmartInfo | Should -HaveCount 2
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
                 $ev | Should -HaveCount 1
+                $ev.Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": CIMSession only supports CIM source."
+                $ev.FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": CIMSession only supports CIM source.,Get-DiskSmartInfo"
             }
         }
 
@@ -134,25 +146,44 @@ Describe "Errors" {
             }
         }
 
-        Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk, CIMSession, PSSession, SSHSession | -Source SmartCtl" -Skip {
+        Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk, CIMSession, PSSession, SSHSession | -Source SmartCtl" {
 
             BeforeAll {
                 $cimSessionHost1 = New-MockObject -Type 'Microsoft.Management.Infrastructure.CimSession' -Properties @{ComputerName = $computerNames[0]} -Methods @{TestConnection = {$true}}
                 $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
                 $pssshSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
 
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
                 $diskSmartInfo = $computerNames, $diskDriveHost1, $diskHost1, $physicalDiskHost1, $cimSessionHost1, $psSessionHost1, $pssshSessionHost1 | Get-DiskSmartInfo -Source SmartCtl -ErrorVariable ev -ErrorAction SilentlyContinue
             }
 
             It "Should return error on ComputerName use" {
                 $diskSmartInfo | Should -HaveCount 2
-                $ev | Should -HaveCount 5
+                $ev | Should -HaveCount 6
 
                 $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                 $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
 
                 $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                 $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[2].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[2].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[3].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[3].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[4].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $ev[4].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source.,Get-DiskSmartInfo"
+
+                $ev[5].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": CIMSession only supports CIM source."
+                $ev[5].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": CIMSession only supports CIM source.,Get-DiskSmartInfo"
             }
         }
     }
@@ -176,7 +207,7 @@ Describe "Errors" {
             }
         }
 
-        Context "Remote queries" -Skip {
+        Context "Remote queries" {
 
             BeforeAll {
                 $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
@@ -185,7 +216,12 @@ Describe "Errors" {
                 mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
+                # mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue " -and $Session.ComputerName -eq $computerNames[0] } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue " -and $Session.ComputerName -eq $computerNames[1] } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Source SmartCtl -Transport PSSession -ErrorVariable ev -ErrorAction SilentlyContinue
             }
