@@ -245,11 +245,6 @@ Describe "Attributes" {
         Context "Ctl" {
 
             BeforeAll {
-                # mock Get-CimInstance -MockWith { $diskSmartDataHFSSSD1, $diskSmartDataKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHFSSSD1, $diskThresholdsKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHFSSSD1, $diskDriveKINGSTONSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HFSSSD1, $testDataCtl.CtlScan_KINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo

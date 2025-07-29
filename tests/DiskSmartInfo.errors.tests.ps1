@@ -216,7 +216,6 @@ Describe "Errors" {
                 mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
-                # mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue " -and $Session.ComputerName -eq $computerNames[0] } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue " -and $Session.ComputerName -eq $computerNames[1] } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
