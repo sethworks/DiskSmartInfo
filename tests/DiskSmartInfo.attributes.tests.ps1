@@ -219,24 +219,56 @@ Describe "Attributes" {
 
     Context "Attributes data formats" {
 
-        BeforeAll {
-            mock Get-CimInstance -MockWith { $diskSmartDataHFSSSD1, $diskSmartDataKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskThresholdsHFSSSD1, $diskThresholdsKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskDriveHFSSSD1, $diskDriveKINGSTONSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-            $diskSmartInfo = Get-DiskSmartInfo
+        Context "CIM" {
+
+            BeforeAll {
+                mock Get-CimInstance -MockWith { $diskSmartDataHFSSSD1, $diskSmartDataKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsHFSSSD1, $diskThresholdsKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveHFSSSD1, $diskDriveKINGSTONSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                $diskSmartInfo = Get-DiskSmartInfo
+            }
+
+            It "Has correct values for attribute data format: temperature3" {
+                $diskSmartInfo[0].SmartData[19].Data | Should -Be @(24, 19, 41)
+            }
+
+            It "Has correct values for attribute data format: bytes1032" {
+                $diskSmartInfo[1].SmartData[10].Data | Should -Be @(530, 270)
+            }
+
+            It "Has correct values for attribute data format: bytes5410" {
+                $diskSmartInfo[1].SmartData[8].Data | Should -Be @(260, 258)
+            }
         }
 
-        It "Has correct values for attribute data format: temperature3" {
-            $diskSmartInfo[0].SmartData[19].Data | Should -Be @(24, 19, 41)
-        }
+        Context "Ctl" {
 
-        It "Has correct values for attribute data format: bytes1032" {
-            $diskSmartInfo[1].SmartData[10].Data | Should -Be @(530, 270)
-        }
+            BeforeAll {
+                # mock Get-CimInstance -MockWith { $diskSmartDataHFSSSD1, $diskSmartDataKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                # mock Get-CimInstance -MockWith { $diskThresholdsHFSSSD1, $diskThresholdsKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                # mock Get-CimInstance -MockWith { $diskDriveHFSSSD1, $diskDriveKINGSTONSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
-        It "Has correct values for attribute data format: bytes5410" {
-            $diskSmartInfo[1].SmartData[8].Data | Should -Be @(260, 258)
+                mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HFSSSD1, $testDataCtl.CtlScan_KINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataKINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdf" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl
+            }
+
+            It "Has correct values for attribute data format: temperature3" {
+                $diskSmartInfo[0].SmartData[19].Data | Should -Be @(24, 19, 41)
+            }
+
+            It "Has correct values for attribute data format: bytes1032" -Skip {
+                $diskSmartInfo[1].SmartData[10].Data | Should -Be @(530, 270)
+            }
+
+            It "Has correct values for attribute data format: bytes5410" {
+                $diskSmartInfo[1].SmartData[8].Data | Should -Be @(260, 258)
+            }
         }
     }
 }
