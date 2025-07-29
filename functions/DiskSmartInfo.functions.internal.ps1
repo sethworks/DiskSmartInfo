@@ -221,7 +221,6 @@ function inGetSourceSmartDataCtl
             $message = "ComputerName: ""$($ps.ComputerName)"". SmartCtl utility is not found."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
-            # $PSCmdlet.ThrowTerminatingError($errorRecord)
             $PSCmdlet.WriteError($errorRecord)
         }
     }
@@ -267,7 +266,6 @@ function inGetSourceSmartDataCtl
             $message = "SmartCtl utility is not found."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
-            # $PSCmdlet.ThrowTerminatingError($errorRecord)
             $PSCmdlet.WriteError($errorRecord)
         }
     }

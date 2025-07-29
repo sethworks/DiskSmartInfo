@@ -5,7 +5,6 @@
             <Name>DiskSmartAttribute</Name>
             <ViewSelectedBy>
                 <TypeName>DiskSmartAttribute</TypeName>
-                <!-- <TypeName>DiskSmartAttribute#Default</TypeName> -->
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -99,7 +98,6 @@
                                 <PropertyName>DataHistory</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <!-- <Alignment>Right</Alignment> -->
                                 <PropertyName>DataConverted</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>
@@ -204,7 +202,6 @@
                                 <PropertyName>Data</PropertyName>
                             </TableColumnItem>
                             <TableColumnItem>
-                                <!-- <Alignment>Right</Alignment> -->
                                 <PropertyName>DataConverted</PropertyName>
                             </TableColumnItem>
                         </TableColumnItems>

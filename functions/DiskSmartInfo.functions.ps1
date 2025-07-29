@@ -157,7 +157,6 @@ function Get-DiskSmartInfo
                 # CIMSession | Get-DiskSmartInfo -Source SmartCtl
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    # Write-Warning -Message "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
                     $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
                     $exception = [System.Exception]::new($message)
                     $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
@@ -235,7 +234,6 @@ function Get-DiskSmartInfo
                     # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        # Write-Warning -Message "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                         $message = "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                         $exception = [System.Exception]::new($message)
                         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
@@ -255,15 +253,10 @@ function Get-DiskSmartInfo
                         if ($Credential)
                         {
                             $ps = New-PSSession -ComputerName $cn -Credential $Credential @errorParameters
-                            # $ps = New-PSSession -ComputerName $cn -Credential $Credential -ErrorVariable sessionErrors
-                            # $ps = New-PSSession -ComputerName $cn -Credential $Credential -ErrorVariable sessionErrors -ErrorAction Stop
                         }
                         else
                         {
-                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors -ErrorAction SilentlyContinue 2>$null
                             $ps = New-PSSession -ComputerName $cn @errorParameters
-                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors
-                            # $ps = New-PSSession -ComputerName $cn -ErrorVariable sessionErrors -ErrorAction Stop
                         }
                     }
                     catch { }

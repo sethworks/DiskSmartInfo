@@ -7,6 +7,5 @@ $AttributePropertyFormat = @{
     Worst = '@{Name="Worst"; Expression={$PSItem.Worst}; Alignment="Left"}'
     Data = '@{Name="Data"; Expression={$PSItem.Data}; Alignment="Left"}'
     History = '@{Name="History"; Expression={$PSItem.DataHistory}; Alignment="Left"}'
-    # Converted = '@{Name="Converted"; Expression={$PSItem.DataConverted}; Alignment="Right"}'
     Converted = '@{Name="Converted"; Expression={$PSItem.DataConverted}; Alignment="Left"}'
 }
