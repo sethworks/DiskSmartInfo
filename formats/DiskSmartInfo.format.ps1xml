@@ -27,9 +27,6 @@
                     <CustomEntry>
                         <CustomItem>
                             <ExpressionBinding>
-                            <!-- <ItemSelectionCondition>
-                                <PropertyName>HistoryDate</PropertyName>
-                            </ItemSelectionCondition> -->
                                 <ScriptBlock>
                                     "$($PSStyle.Formatting.FormatAccent)HistoryDate:$($PSStyle.Reset)  $($PSItem.HistoryDate)"
                                 </ScriptBlock>
@@ -103,31 +100,6 @@
                 </CustomEntries>
             </CustomControl>
         </Control>
-        <!-- <Control>
-            <Name>SmartDataCustomControl</Name>
-            <CustomControl>
-                <CustomEntries>
-                    <CustomEntry>
-                        <CustomItem>
-                            <ExpressionBinding>
-                                <ItemSelectionCondition>
-                                    <PropertyName>SmartData</PropertyName>
-                                </ItemSelectionCondition>
-                                <ScriptBlock>
-                                    if ($PSStyle) { $t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi' }
-                                    $text = $PSItem.SmartData.FormatTable() | Out-String
-                                    if ($PSStyle) { $PSStyle.OutputRendering = $t }
-                                    $text.Substring(0,$text.Length-2).
-                                        Replace("`r`n", "`r`n              ").
-                                        Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
-                                        TrimEnd(' ')
-                                </ScriptBlock>
-                             </ExpressionBinding>
-                        </CustomItem>
-                    </CustomEntry>
-                </CustomEntries>
-            </CustomControl>
-        </Control> -->
     </Controls>
     <ViewDefinitions>
         <View>
@@ -179,31 +151,5 @@
                 </CustomEntries>
             </CustomControl>
         </View>
-        <!-- <View>
-            <Name>DiskSmartInfo#Custom</Name>
-            <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#Custom</TypeName>
-            </ViewSelectedBy>
-            <CustomControl>
-                <CustomEntries>
-                    <CustomEntry>
-                        <CustomItem>
-                            <ExpressionBinding>
-                                <CustomControlName>ComputerNameControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>DiskSmartInfoControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>HistoryDateControl</CustomControlName>
-                            </ExpressionBinding>
-                            <ExpressionBinding>
-                                <CustomControlName>SmartDataCustomControl</CustomControlName>
-                            </ExpressionBinding>
-                        </CustomItem>
-                    </CustomEntry>
-                </CustomEntries>
-            </CustomControl>
-        </View> -->
     </ViewDefinitions>
 </Configuration>

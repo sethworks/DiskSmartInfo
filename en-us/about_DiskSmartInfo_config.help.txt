@@ -46,6 +46,15 @@ For example, if Win32_DiskDrive Model property value is
 Default is $true.
 
 
+ReplaceSmartCtlAttributeNames
+
+This parameter specifies that when using SmartCtl as data source, returned
+attribute names should be replaced with names, specified in attribute
+description files: attributes/default.ps1 and attributes/proprietary.ps1.
+
+Default is $true.
+
+
 DataHistoryPath
 
 This parameter specifies folder, where saved attributes data values are stored.

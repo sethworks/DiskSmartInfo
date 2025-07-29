@@ -9,6 +9,10 @@
     # so that it corresponds to MSFT_Disk and MSFT_PhysicalDisk Model property.
     TrimDiskDriveModelSuffix = $true
 
+    # When using SmartCtl sourse, replace attribute names with those, specified in
+    # attributes/default.ps1 and attributes/proprietary.ps1 files
+    ReplaceSmartCtlAttributeNames = $true
+
     # Path to save attributes' historical data. If not absolute, it is relative to module folder.
     DataHistoryPath = 'history'
 

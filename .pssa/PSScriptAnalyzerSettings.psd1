@@ -7,6 +7,7 @@
         'PSPossibleIncorrectComparisonWithNull',
         'PSAvoidUsingComputerNameHardcoded',
         'PSAvoidUsingConvertToSecureStringWithPlainText',
-        'PSUseUsingScopeModifierInNewRunspaces'
+        'PSUseUsingScopeModifierInNewRunspaces',
+        'PSAvoidUsingEmptyCatchBlock'
     )
 }

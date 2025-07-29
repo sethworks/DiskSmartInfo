@@ -64,6 +64,7 @@ function inGetSourceSmartDataCIM
         }
     }
 
+    # Localhost
     if (-not $CimSession -and -not $PSSession)
     {
         if (($diskDrives = Get-CimInstance -ClassName $classDiskDrive @errorParameters) -and
@@ -162,6 +163,234 @@ function inGetSmartDataStructureCIM
 
             $hash.Add("SmartData", $attributes)
             $hash.Add("AuxiliaryData", @{BytesPerSector=$diskDrive.BytesPerSector})
+
+            $hostSmartData.DisksSmartData += $hash
+        }
+
+        $hostsSmartData += $hostSmartData
+    }
+
+    return $hostsSmartData
+}
+
+function inGetSourceSmartDataCtl
+{
+    Param (
+        [System.Management.Automation.Runspaces.PSSession[]]$PSSession
+    )
+
+    $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+
+    foreach ($ps in $PSSession)
+    {
+        $disksSmartData = @()
+
+        if (Invoke-Command -ScriptBlock { Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue } -Session $ps)
+        {
+            if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
+            {
+                $sbs = 'sudo smartctl --info --health --attributes'
+            }
+            else
+            {
+                $sbs = 'smartctl --info --health --attributes'
+            }
+
+            $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
+
+            foreach ($device in $devices)
+            {
+                if ($device -match '^(?<device>/dev/\w{3})')
+                {
+                    $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+                    $disksSmartData += @{
+                        device = $Matches.device
+                        diskSmartData = Invoke-Command -ScriptBlock $sb -Session $ps
+                    }
+                }
+            }
+
+            $HostsSmartData.Add(@{
+                computerName = $ps.ComputerName
+                disksSmartData = $disksSmartData
+            })
+        }
+        else
+        {
+            $message = "ComputerName: ""$($ps.ComputerName)"". SmartCtl utility is not found."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
+            $PSCmdlet.WriteError($errorRecord)
+        }
+    }
+
+    # Localhost
+    if (-not $PSSession)
+    {
+        $disksSmartData = @()
+
+        if (Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue)
+        {
+            if ($IsLinux)
+            {
+                $sbs = 'sudo smartctl --info --health --attributes'
+            }
+            else
+            {
+                $sbs = 'smartctl --info --health --attributes'
+            }
+
+            $devices = Invoke-Command -ScriptBlock { smartctl --scan }
+
+            foreach ($device in $devices)
+            {
+                if ($device -match '^(?<device>/dev/\w{3})')
+                {
+                    $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+                    $disksSmartData += @{
+                        device = $Matches.device
+                        diskSmartData = Invoke-Command -ScriptBlock $sb
+                    }
+                }
+            }
+
+            $HostsSmartData.Add(@{
+                computerName = $null
+                disksSmartData = $disksSmartData
+            })
+        }
+        else
+        {
+            $message = "SmartCtl utility is not found."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
+            $PSCmdlet.WriteError($errorRecord)
+        }
+    }
+
+    return $HostsSmartData
+}
+
+function inGetSmartDataStructureCtl
+{
+    Param (
+        $SourceSmartDataCtl
+    )
+
+    $hostsSmartData = @()
+
+    foreach ($sourceSmartData in $SourceSmartDataCtl)
+    {
+        $hostSmartData = [ordered]@{}
+
+        if ($sourceSmartData.ComputerName)
+        {
+            $hostSmartData.Add('ComputerName', $sourceSmartData.ComputerName)
+        }
+        else
+        {
+            $hostSmartData.Add('ComputerName', $null)
+        }
+
+        $hostSmartData.Add('DisksSmartData', @())
+
+        foreach ($diskSmartData in $sourceSmartData.disksSmartData)
+        {
+            $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
+
+            if ($diskSmartData.diskSmartData -match '^Device Model:' | ForEach-Object { $PSItem -match '^Device Model:\s+(?<model>.+)$' })
+            {
+                $model = $Matches.model
+            }
+            else
+            {
+                $model = $null
+            }
+
+            if ($diskSmartData.diskSmartData -match '^SMART overall-health self-assessment test result:' | ForEach-Object { $PSItem -match '^SMART overall-health self-assessment test result:\s+(?<failurePredictStatus>.+)$' })
+            {
+                $failurePredictStatus = $Matches.failurePredictStatus -ne 'PASSED'
+            }
+            else
+            {
+                $failurePredictStatus = $null
+            }
+
+            $hash = [ordered]@{}
+
+            $hash.Add('DiskNumber', [uint32]$diskNumber)
+            $hash.Add('DiskModel', [string]$model)
+            $hash.Add('PNPDeviceId', [string]$diskSmartData.device)
+            $hash.Add('PredictFailure', [bool]$failurePredictStatus)
+
+            $attributes = @()
+
+            $actualAttributesList = inUpdateActualAttributesList -model $model
+
+            $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
+
+            if ($headerIndex -ge 0)
+            {
+                $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
+
+                foreach ($entry in $table)
+                {
+                    $attribute = [ordered]@{}
+
+                    if ($entry -match '^\s*(?<id>\S+)\s+(?<name>\S+)\s+\S+\s+(?<value>\S+)\s+(?<worst>\S+)\s+(?<threshold>\S+)\s+\S+\s+\S+\s+\S+\s+(?<data>\S+.*)$')
+                    {
+                        $attribute.Add("ID", [byte]$Matches.id)
+                        $attribute.Add("IDHex", [string]($attribute.ID.ToString("X")))
+
+                        if ($Config.ReplaceSmartCtlAttributeNames)
+                        {
+                            $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
+                        }
+                        else
+                        {
+                            $attribute.Add("Name", [string]$Matches.name)
+                        }
+
+                        $attribute.Add("Threshold", [byte]$Matches.threshold)
+                        $attribute.Add("Value", [byte]$Matches.value)
+                        $attribute.Add("Worst", [byte]$Matches.worst)
+
+                        $sourcedata = $Matches.data
+
+                        # 32 (Min/Max 18/40)
+                        if ($sourcedata -match '^(?<data>\d+) \(Min/Max (?<min>\d+)/(?<max>\d+)\)$')
+                        {
+                            $attribute.Add("Data", @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
+                        }
+                        # 10/11
+                        elseif ($sourcedata -match '^(?<first>\d+)/(?<second>\d+)$')
+                        {
+                            $attribute.Add("Data", @([long]$Matches.first, [long]$Matches.second))
+                        }
+                        # 1
+                        else
+                        {
+                            $attribute.Add("Data", [long]$Matches.data)
+                        }
+                    }
+
+                    $attributes += $attribute
+                }
+            }
+
+            $hash.Add("SmartData", $attributes)
+
+            if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
+            {
+                $sectorSize = $Matches.sectorsize
+            }
+            else
+            {
+                $sectorSize = $null
+            }
+            $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
 
             $hostSmartData.DisksSmartData += $hash
         }
@@ -439,9 +668,9 @@ function inGetAttributeData
             return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 1
         }
 
-        $([AttributeDataFormat]::bytes1054.value__)
+        $([AttributeDataFormat]::bytes5410.value__)
         {
-            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 0, 2
+            return inExtractAttributeWords -smartData $smartData -startOffset ($attributeStart + 5) -words 2, 0
         }
 
         default
@@ -487,7 +716,20 @@ function inReportErrors
                 $message = $err.Exception.Message
             }
         }
-        # PSSession
+        # New-PSSession -ComputerName user@host
+        elseif ($err.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException')
+        {
+            $err = $err.ErrorRecord
+            if ($err.TargetObject)
+            {
+                $message = "ComputerName: ""$($err.TargetObject)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
+        }
+        # New-PSSession -ComputerName nonexistenthost
         elseif ($err.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
         {
             if ($err.ErrorDetails.Message -match '\[(?<ComputerName>\S+)]')
@@ -514,8 +756,10 @@ function inClearRemotingErrorRecords
         while ($true)
         {
             $value.ForEach{
-                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
-                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
+                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException' -or
+                    $PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.ArgumentException')
                 {
                     $value.Remove($PSItem)
                     continue

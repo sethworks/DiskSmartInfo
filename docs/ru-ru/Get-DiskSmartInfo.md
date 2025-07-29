@@ -14,18 +14,18 @@ schema: 2.0.0
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Convert] [-CriticalAttributesOnly]
-[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [-Archive] [-Credential <PSCredential>] [<CommonParameters>]
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>] [-Convert]
+[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>]
+[-AttributeIDHex <String[]>] [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>]
+[-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive] [-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
 ```
-Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Convert] [-CriticalAttributesOnly]
-[-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>]
-[-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory]
-[-UpdateHistory] [-Archive] [<CommonParameters>]
+Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>] [-Convert]
+[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>]
+[-AttributeIDHex <String[]>] [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>]
+[-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -105,6 +105,29 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Source
+Задает источник данных SMART.
+
+Может использоваться как локально, так и при удаленных подключениях.
+
+Могут быть заданы следующие значения:
+
+CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)
+
+SmartCtl - использование утилиты SmartCtl
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
@@ -638,7 +661,40 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта.
 
-### Example 9: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession
+### Example 9: Получение данных SMART с удаленных компьютеров с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных
+```powershell
+Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession -Source SmartCtl
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+PNPDeviceId:  Disk PNPDeviceId
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+```
+
+Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных.
+
+### Example 10: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
@@ -688,7 +744,7 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов CimSession.
 
-### Example 10: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession
+### Example 11: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession
 ```powershell
 $Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
@@ -736,7 +792,7 @@ SMARTData:
 
 Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов PSSession.
 
-### Example 11: Получение указанных атрибутов
+### Example 12: Получение указанных атрибутов
 ```powershell
 Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
@@ -755,7 +811,7 @@ SMARTData:
 
 Команда получает указанные SMART атрибуты
 
-### Example 12: Получение данных SMART для указанных дисков
+### Example 13: Получение данных SMART для указанных дисков
 ```powershell
 Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
 ```
@@ -797,7 +853,7 @@ SMARTData:
 
 Команда получает информацию SMART для указанных жестких дисков.
 
-### Example 13: Сохранение данных для последующего сравнения
+### Example 14: Сохранение данных для последующего сравнения
 ```powershell
 Get-DiskSmartInfo -UpdateHistory
 ```
@@ -829,7 +885,7 @@ SMARTData:
 
 Команда получает информацию SMART и сохраняет текущие значения свойства Data для всех атрибутов.
 
-### Example 14: Отображение ранее сохраненных данных
+### Example 15: Отображение ранее сохраненных данных
 ```powershell
 Get-DiskSmartInfo -ShowHistory
 ```
@@ -863,7 +919,7 @@ SMARTData:
 Команда получает информацию SMART и отображает ранее сохраненные значения свойства Data
 выводимых атрибутов.
 
-### Example 15: Получение указанных свойств атрибутов
+### Example 16: Получение указанных свойств атрибутов
 ```powershell
 Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
 ```
@@ -896,7 +952,7 @@ SMARTData:
 
 Команда получает указанные свойства атрибутов SMART.
 
-### Example 16: Использование конвейера
+### Example 17: Использование конвейера
 ```powershell
 $ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
