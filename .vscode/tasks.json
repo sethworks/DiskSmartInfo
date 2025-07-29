@@ -79,7 +79,7 @@
             "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
-                "isDefault": true
+                "isDefault": false
             },
             "problemMatcher": [
                 "$pester"

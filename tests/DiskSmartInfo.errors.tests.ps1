@@ -287,7 +287,7 @@ Describe "Errors" {
             }
 
             It "Should return error if nonexistent or untrusted host is specified" {
-                $e = { Get-DiskSmartInfo $nonexistentHost -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
+                $e = { Get-DiskSmartInfo -ComputerName $nonexistentHost -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
                 $e.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
                 # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
                 # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
@@ -301,6 +301,24 @@ Describe "Errors" {
                 # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
             }
         }
+
+        Context "PSSession" {
+
+            BeforeAll {
+                $nonexistentHost = 'nonexistent_host'
+                $wrongHost = 'wrong@host'
+            }
+
+            It "Should return error if nonexistent or untrusted host is specified" {
+                $e = { Get-DiskSmartInfo -ComputerName $nonexistentHost -Transport PSSession -ErrorAction Stop } | Should -Throw "ComputerName: `"$nonexistentHost`"*" -PassThru
+                $e.FullyQualifiedErrorId | Should -BeIn 'ComputerNotFound,PSSessionOpenFailed,Get-DiskSmartInfo', 'ServerNotTrusted,PSSessionOpenFailed,Get-DiskSmartInfo'
+            }
+
+            It "Should return error if wrong hostname is specified" {
+                $e = { Get-DiskSmartInfo -ComputerName $wrongHost -Transport PSSession -ErrorAction Stop } | Should -Throw "ComputerName: `"$wrongHost`"*" -PassThru
+                $e.FullyQualifiedErrorId | Should -Be 'PSSessionInvalidComputerName,Microsoft.PowerShell.Commands.NewPSSessionCommand,Get-DiskSmartInfo'
+            }
+        }
     }
 
     Context "Error variable" {
@@ -312,7 +330,7 @@ Describe "Errors" {
             }
 
             It "Should contain error if nonexistent or untrusted host is specified" {
-                Get-DiskSmartInfo $nonexistentHost -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+                Get-DiskSmartInfo -ComputerName $nonexistentHost -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
                 $ev | Should -HaveCount 1
                 $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.NewCimSessionCommand,Get-DiskSmartInfo'
                 # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
@@ -326,6 +344,26 @@ Describe "Errors" {
                 $ev.FullyQualifiedErrorId | Should -BeIn 'HRESULT 0x803380e4,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo', 'HRESULT 0x803381b9,Microsoft.Management.Infrastructure.CimCmdlets.GetCimInstanceCommand,Get-DiskSmartInfo'
                 # HRESULT 0x803380e4: ERROR_WSMAN_SERVER_NOT_TRUSTED
                 # HRESULT 0x803381b9: ERROR_WSMAN_NAME_NOT_RESOLVED
+            }
+        }
+
+        Context "PSSession" {
+
+            BeforeAll {
+                $nonexistentHost = 'nonexistent_host'
+                $wrongHost = 'wrong@host'
+            }
+
+            It "Should contain error if nonexistent or untrusted host is specified" {
+                Get-DiskSmartInfo -ComputerName $nonexistentHost -Transport PSSession -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+                $ev | Should -HaveCount 1
+                $ev.FullyQualifiedErrorId | Should -BeIn 'ComputerNotFound,PSSessionOpenFailed,Get-DiskSmartInfo', 'ServerNotTrusted,PSSessionOpenFailed,Get-DiskSmartInfo'
+            }
+
+            It "Should contain error if wrong hostname is specified" {
+                Get-DiskSmartInfo -ComputerName $wrongHost -Transport PSSession -ErrorVariable ev -ErrorAction SilentlyContinue | Out-Null
+                $ev | Should -HaveCount 1
+                $ev.FullyQualifiedErrorId | Should -Be 'PSSessionInvalidComputerName,Microsoft.PowerShell.Commands.NewPSSessionCommand,Get-DiskSmartInfo'
             }
         }
     }

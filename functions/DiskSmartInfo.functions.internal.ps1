@@ -758,8 +758,10 @@ function inClearRemotingErrorRecords
         while ($true)
         {
             $value.ForEach{
-                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
-                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
+                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException' -or
+                    $PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.ArgumentException')
                 {
                     $value.Remove($PSItem)
                     continue
