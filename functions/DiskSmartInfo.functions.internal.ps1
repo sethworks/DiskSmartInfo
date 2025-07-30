@@ -410,6 +410,7 @@ function inGetDiskSmartInfo
         [switch]$CriticalAttributesOnly,
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
+        [string[]]$Devices,
         [int[]]$AttributeIDs,
         [AttributeProperty[]]$AttributeProperties,
         [switch]$Quiet,
@@ -428,7 +429,10 @@ function inGetDiskSmartInfo
         foreach ($diskSmartData in $hostSmartData.DisksSmartData)
         {
             # Disk selection check
-            if ((-not $DiskNumbers.Count -and -not $DiskModels.Count) -or (isDiskNumberMatched -Index $diskSmartData.DiskNumber) -or (isDiskModelMatched -Model $diskSmartData.DiskModel))
+            if ((-not $DiskNumbers.Count -and -not $DiskModels.Count -and -not $Devices.Count) -or
+                (isDiskNumberMatched -Index $diskSmartData.DiskNumber) -or
+                (isDiskModelMatched -Model $diskSmartData.DiskModel) -or
+                (isDeviceMatched -Device $diskSmartData.PNPDeviceID))
             {
                 $hash = [ordered]@{}
 

@@ -111,3 +111,19 @@ function isDiskModelMatched
     }
     return $false
 }
+
+function isDeviceMatched
+{
+    Param (
+        [string]$Device
+    )
+
+    foreach ($de in $Devices)
+    {
+        if ($Device -like $de)
+        {
+            return $true
+        }
+    }
+    return $false
+}
