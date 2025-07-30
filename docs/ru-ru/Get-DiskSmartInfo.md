@@ -15,17 +15,19 @@ schema: 2.0.0
 ### ComputerName (Default)
 ```
 Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>]
-[-AttributeIDHex <String[]>] [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>]
-[-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive] [-Credential <PSCredential>] [<CommonParameters>]
+[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+[-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
+[-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
+[-Credential <PSCredential>] [<CommonParameters>]
 ```
 
 ### Session
 ```
 Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-AttributeID <Int32[]>]
-[-AttributeIDHex <String[]>] [-AttributeName <String[]>] [-AttributeProperty <AttributeProperty[]>]
-[-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive] [<CommonParameters>]
+[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+[-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
+[-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
+[<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -182,7 +184,7 @@ Accept wildcard characters: False
 свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk)
 и номеру диска в утилите diskpart.
 
-Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.
+Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.
 
 Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
 не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
@@ -217,7 +219,7 @@ Accept wildcard characters: False
 
 Больше информации в about_DiskSmartInfo_config.
 
-Результат включает в себя все диски, указанные в параметрах -DiskNumber и -DiskModel.
+Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.
 
 Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession
 не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано
@@ -235,6 +237,25 @@ Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: True
+```
+
+### -Device
+Задает устройства для запроса.
+
+Устройство соотвeтствует PNPDeviceId в Windows и файлу устройства в Linux.
+
+Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
 ```
 
 ### -AttributeID
@@ -813,7 +834,7 @@ SMARTData:
 
 ### Example 13: Получение данных SMART для указанных дисков
 ```powershell
-Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*"
+Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*" -Device *Specific Dev*
 ```
 
 ```
@@ -825,20 +846,7 @@ SMARTData:
               5   5     Reallocated Sectors Count          10        100   100   0
               9   9     Power-On Hours                     0         98    98    8397
               10  A     Spin Retry Count                   51        252   252   0
-              12  C     Power Cycle Count                  0         99    99    22
-              177 B1    Wear Leveling Count                0         98    98    33
-              179 B3    Used Reserved Block Count Total    10        100   100   0
-              181 B5    Program Fail Count Total           10        100   100   0
-              182 B6    Erase Fail Count Total             10        100   100   0
-              183 B7    Runtime Bad Block                  10        100   100   0
-              187 BB    Reported Uncorrectable Errors      0         100   100   0
-              190 BE    Airflow Temperature Celsius        0         53    48    47
-              195 C3    Hardware ECC Recovered             0         200   200   0
-              196 C4    Reallocation Event Count           0         252   252   0
-              197 C5    Current Pending Sector Count       0         252   252   0
-              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
-              199 C7    Ultra DMA CRC Error Count          0         100   100   0
-              241 F1    Total LBAs Written                 0         99    99    12720469069
+...
 
 Disk:         2: Some Specific Model
 PNPDeviceId:  Disk PNPDeviceId
@@ -847,6 +855,16 @@ SMARTData:
               --  ----- -------------                      --------- ----- ----- ----
               5   5     Reallocated Sectors Count          10        100   100   0
               9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...
+
+Disk:         3: Disk Model
+PNPDeviceId:  Some Specific Device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    4682
               10  A     Spin Retry Count                   51        252   252   0
 ...
 ```
