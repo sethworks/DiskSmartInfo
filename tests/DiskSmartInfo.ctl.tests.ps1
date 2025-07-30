@@ -475,10 +475,10 @@ Describe "Get-DiskSmartInfo" {
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
             }
         }
@@ -498,10 +498,10 @@ Describe "Get-DiskSmartInfo" {
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
             }
         }
@@ -521,10 +521,10 @@ Describe "Get-DiskSmartInfo" {
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
             }
         }
@@ -544,10 +544,10 @@ Describe "Get-DiskSmartInfo" {
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
             }
         }
@@ -561,17 +561,16 @@ Describe "Get-DiskSmartInfo" {
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
 
-
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -DiskModel "HDD*"
             }
 
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_HDD2
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD2
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
             }
         }
@@ -591,11 +590,61 @@ Describe "Get-DiskSmartInfo" {
             It "Has data for selected disks" {
                 $diskSmartInfo | Should -HaveCount 2
 
-                $diskSmartInfo[0].DiskNumber | Should -Be $testData.Index_HDD1
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
                 $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
 
-                $diskSmartInfo[1].DiskNumber | Should -Be $testData.Index_SSD1
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
                 $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+            }
+        }
+
+        Context "Device" {
+
+            BeforeAll {
+                mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Device "/dev/sda", "*sdb"
+            }
+
+            It "Has data for selected disks" {
+                $diskSmartInfo | Should -HaveCount 2
+
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
+                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD2
+                $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+            }
+        }
+
+        Context "DiskNumber, DiskModel, and Device" {
+
+            BeforeAll {
+                mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdd" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -DiskNumber 0 -DiskModel "SSD1" -Device "*sdd"
+            }
+
+            It "Has data for selected disks" {
+                $diskSmartInfo | Should -HaveCount 3
+
+                $diskSmartInfo[0].DiskNumber | Should -Be $testDataCtl.CtlIndex_HDD1
+                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+
+                $diskSmartInfo[1].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD1
+                $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+
+                $diskSmartInfo[2].DiskNumber | Should -Be $testDataCtl.CtlIndex_SSD2
+                $diskSmartInfo[2].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD2
             }
         }
     }

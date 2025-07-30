@@ -23,6 +23,7 @@ function Get-DiskSmartInfo
         [Alias('Model')]
         [ArgumentCompleter([DiskCompleter])]
         [string[]]$DiskModel,
+        [string[]]$Device,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
         [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
@@ -146,6 +147,7 @@ function Get-DiskSmartInfo
                         -CriticalAttributesOnly:$CriticalAttributesOnly `
                         -DiskNumbers $DiskNumber `
                         -DiskModels $DiskModel `
+                        -Devices $Device `
                         -AttributeIDs $attributeIDs `
                         -AttributeProperties $AttributeProperty `
                         -Quiet:$Quiet `
@@ -183,6 +185,7 @@ function Get-DiskSmartInfo
                     -CriticalAttributesOnly:$CriticalAttributesOnly `
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
+                    -Devices $Device `
                     -AttributeIDs $attributeIDs `
                     -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
@@ -218,6 +221,7 @@ function Get-DiskSmartInfo
                                 -CriticalAttributesOnly:$CriticalAttributesOnly `
                                 -DiskNumbers $DiskNumber `
                                 -DiskModels $DiskModel `
+                                -Devices $Device `
                                 -AttributeIDs $attributeIDs `
                                 -AttributeProperties $AttributeProperty `
                                 -Quiet:$Quiet `
@@ -286,6 +290,7 @@ function Get-DiskSmartInfo
                             -CriticalAttributesOnly:$CriticalAttributesOnly `
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
+                            -Devices $Device `
                             -AttributeIDs $attributeIDs `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
@@ -328,6 +333,7 @@ function Get-DiskSmartInfo
                             -CriticalAttributesOnly:$CriticalAttributesOnly `
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
+                            -Devices $Device `
                             -AttributeIDs $attributeIDs `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
@@ -362,6 +368,7 @@ function Get-DiskSmartInfo
                 -CriticalAttributesOnly:$CriticalAttributesOnly `
                 -DiskNumbers $DiskNumber `
                 -DiskModels $DiskModel `
+                -Devices $Device `
                 -AttributeIDs $attributeIDs `
                 -AttributeProperties $AttributeProperty `
                 -Quiet:$Quiet `
