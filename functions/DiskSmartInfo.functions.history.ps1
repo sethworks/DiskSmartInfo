@@ -9,7 +9,7 @@ function inUpdateHistoricalData
     foreach ($diskSmartData in $hostSmartData.DisksSmartData)
     {
         $hash = [ordered]@{}
-        $hash.Add('PNPDeviceId', $diskSmartData.PNPDeviceId)
+        $hash.Add('Device', $diskSmartData.Device)
 
         $attributes = @()
 
@@ -75,7 +75,7 @@ function inGetHistoricalData
             $hash = [ordered]@{}
             $attributes = @()
 
-            $hash.Add('PNPDeviceID', [string]$object.PNPDeviceID)
+            $hash.Add('Device', [string]$object.Device)
 
             foreach ($at in $object.SmartData)
             {

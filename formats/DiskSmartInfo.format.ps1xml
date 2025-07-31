@@ -51,7 +51,7 @@
                             <NewLine/>
                             <ExpressionBinding>
                                 <ScriptBlock>
-                                    "$($PSStyle.Formatting.FormatAccent)PNPDeviceId:$($PSStyle.Reset)  $($PSItem.PNPDeviceId)"
+                                    "$($PSStyle.Formatting.FormatAccent)Device:$($PSStyle.Reset)       $($PSItem.Device)"
                                 </ScriptBlock>
                             </ExpressionBinding>
                             <NewLine/>

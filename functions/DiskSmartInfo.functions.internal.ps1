@@ -134,7 +134,7 @@ function inGetSmartDataStructureCIM
             $hash = [ordered]@{}
             $hash.Add('DiskNumber', [uint32]$diskDrive.Index)
             $hash.Add('DiskModel', [string]$model)
-            $hash.Add('PNPDeviceId', [string]$pNPDeviceId)
+            $hash.Add('Device', [string]$pNPDeviceId)
             $hash.Add('PredictFailure', [bool]$failurePredictStatus)
 
             $attributes = @()
@@ -322,7 +322,7 @@ function inGetSmartDataStructureCtl
 
             $hash.Add('DiskNumber', [uint32]$diskNumber)
             $hash.Add('DiskModel', [string]$model)
-            $hash.Add('PNPDeviceId', [string]$diskSmartData.device)
+            $hash.Add('Device', [string]$diskSmartData.device)
             $hash.Add('PredictFailure', [bool]$failurePredictStatus)
 
             $attributes = @()
@@ -432,14 +432,14 @@ function inGetDiskSmartInfo
             if ((-not $DiskNumbers.Count -and -not $DiskModels.Count -and -not $Devices.Count) -or
                 (isDiskNumberMatched -Index $diskSmartData.DiskNumber) -or
                 (isDiskModelMatched -Model $diskSmartData.DiskModel) -or
-                (isDeviceMatched -Device $diskSmartData.PNPDeviceID))
+                (isDeviceMatched -Device $diskSmartData.Device))
             {
                 $hash = [ordered]@{}
 
                 $hash.Add('ComputerName', [string]$hostSmartData.ComputerName)
                 $hash.Add('DiskNumber', [uint32]$diskSmartData.DiskNumber)
                 $hash.Add('DiskModel', [string]$diskSmartData.DiskModel)
-                $hash.Add('PNPDeviceId', [string]$diskSmartData.PNPDeviceID)
+                $hash.Add('Device', [string]$diskSmartData.Device)
                 $hash.Add('PredictFailure', [bool]$diskSmartData.PredictFailure)
 
                 if ($ShowHistory)
@@ -460,7 +460,7 @@ function inGetDiskSmartInfo
 
                 if ($hostHistoricalData)
                 {
-                    $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.PNPDeviceID -eq $hash.PNPDeviceId}.SmartData
+                    $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.Device -eq $hash.Device}.SmartData
                 }
 
                 foreach ($attributeSmartData in $diskSmartData.SmartData)
