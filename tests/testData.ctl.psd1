@@ -96,7 +96,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_HDD1 = 0
     CtlModel_HDD1 = "HDD1"
-    CtlPNPDeviceID_HDD1 = '/dev/sda'
+    CtlDevice_HDD1 = '/dev/sda'
     CtlScan_HDD1 = '/dev/sda -d ata # /dev/sda, ATA device'
     CtlPredictFailure_HDD1 = $false
     CtlPredictFailureTrue_HDD1 = $true
@@ -147,7 +147,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_HDD2 = 1
     CtlModel_HDD2 = "HDD2"
-    CtlPNPDeviceID_HDD2 = '/dev/sdb'
+    CtlDevice_HDD2 = '/dev/sdb'
     CtlScan_HDD2 = '/dev/sdb -d ata # /dev/sdb, ATA device'
     CtlPredictFailure_HDD2 = $false
     CtlBytesPerSector_HDD2 = 512
@@ -196,7 +196,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_SSD1 = 2
     CtlModel_SSD1 = "SSD1"
-    CtlPNPDeviceID_SSD1 = '/dev/sdc'
+    CtlDevice_SSD1 = '/dev/sdc'
     CtlScan_SSD1 = '/dev/sdc -d ata # /dev/sdc, ATA device'
     CtlPredictFailure_SSD1 = $false
     CtlBytesPerSector_SSD1 = 512
@@ -246,7 +246,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_SSD2 = 3
     CtlModel_SSD2 = "SSD2"
-    CtlPNPDeviceID_SSD2 = '/dev/sdd'
+    CtlDevice_SSD2 = '/dev/sdd'
     CtlScan_SSD2 = '/dev/sdd -d ata # /dev/sdd, ATA device'
     CtlPredictFailure_SSD2 = $false
     CtlBytesPerSector_SSD2 = 512
@@ -309,7 +309,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_HFSSSD1 = 4
     CtlModel_HFSSSD1 = "HFS512G32TNF-N3A0A"
-    CtlPNPDeviceID_HFSSSD1 = '/dev/sde'
+    CtlDevice_HFSSSD1 = '/dev/sde'
     CtlScan_HFSSSD1 = '/dev/sde -d ata # /dev/sde, ATA device'
     CtlPredictFailure_HFSSSD1 = $false
     CtlBytesPerSector_HFSSSD1 = 512
@@ -368,7 +368,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
 
     CtlIndex_KINGSTONSSD1 = 5
     CtlModel_KINGSTONSSD1 = "KINGSTON SA400S37480G"
-    CtlPNPDeviceID_KINGSTONSSD1 = '/dev/sdf'
+    CtlDevice_KINGSTONSSD1 = '/dev/sdf'
     CtlScan_KINGSTONSSD1 = '/dev/sdf -d ata # /dev/sdf, ATA device'
     CtlPredictFailure_KINGSTONSSD1 = $false
     CtlBytesPerSector_KINGSTONSSD1 = 512

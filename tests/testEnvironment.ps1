@@ -47,14 +47,14 @@ $diskFailurePredictStatusTruePropertiesHDD1 = @{
 
 $diskDrivePropertiesHDD1 = @{
     Index = $testData.Index_HDD1
-    PNPDeviceID = $testData.PNPDeviceID_HDD1
+    PNPDeviceID = $testData.Device_HDD1
     Model = $testData.Model_HDD1
     BytesPerSector = $testData.BytesPerSector_HDD1
 }
 
 $diskDrivePropertiesATAHDD1 = @{
     Index = $testData.Index_HDD1
-    PNPDeviceID = $testData.PNPDeviceID_HDD1
+    PNPDeviceID = $testData.Device_HDD1
     Model = $testData.ModelATA_HDD1
     BytesPerSector = $testData.BytesPerSector_HDD1
 }
@@ -85,7 +85,7 @@ $diskFailurePredictStatusPropertiesHDD2 = @{
 
 $diskDrivePropertiesHDD2 = @{
     Index = $testData.Index_HDD2
-    PNPDeviceID = $testData.PNPDeviceID_HDD2
+    PNPDeviceID = $testData.Device_HDD2
     Model = $testData.Model_HDD2
     BytesPerSector = $testData.BytesPerSector_HDD2
 }
@@ -116,7 +116,7 @@ $diskFailurePredictStatusPropertiesSSD1 = @{
 
 $diskDrivePropertiesSSD1 = @{
     Index = $testData.Index_SSD1
-    PNPDeviceID = $testData.PNPDeviceID_SSD1
+    PNPDeviceID = $testData.Device_SSD1
     Model = $testData.Model_SSD1
     BytesPerSector = $testData.BytesPerSector_SSD1
 }
@@ -147,7 +147,7 @@ $diskFailurePredictStatusPropertiesSSD2 = @{
 
 $diskDrivePropertiesSSD2 = @{
     Index = $testData.Index_SSD2
-    PNPDeviceID = $testData.PNPDeviceID_SSD2
+    PNPDeviceID = $testData.Device_SSD2
     Model = $testData.Model_SSD2
     BytesPerSector = $testData.BytesPerSector_SSD2
 }
@@ -178,7 +178,7 @@ $diskFailurePredictStatusPropertiesHFSSSD1 = @{
 
 $diskDrivePropertiesHFSSSD1 = @{
     Index = $testDataProprietary.Index_HFSSSD1
-    PNPDeviceID = $testDataProprietary.PNPDeviceID_HFSSSD1
+    PNPDeviceID = $testDataProprietary.Device_HFSSSD1
     Model = $testDataProprietary.Model_HFSSSD1
     BytesPerSector = $testDataProprietary.BytesPerSector_HFSSSD1
 }
@@ -209,7 +209,7 @@ $diskFailurePredictStatusPropertiesKINGSTONSSD1 = @{
 
 $diskDrivePropertiesKINGSTONSSD1 = @{
     Index = $testDataProprietary.Index_KINGSTONSSD1
-    PNPDeviceID = $testDataProprietary.PNPDeviceID_KINGSTONSSD1
+    PNPDeviceID = $testDataProprietary.Device_KINGSTONSSD1
     Model = $testDataProprietary.Model_KINGSTONSSD1
     BytesPerSector = $testDataProprietary.BytesPerSector_KINGSTONSSD1
 }

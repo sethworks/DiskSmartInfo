@@ -13,7 +13,7 @@ function inUpdateArchive
         $hash.Add('ComputerName', [string]$hostSmartData.ComputerName)
         $hash.Add('DiskNumber', [uint32]$diskSmartData.DiskNumber)
         $hash.Add('DiskModel', [string]$diskSmartData.DiskModel)
-        $hash.Add('PNPDeviceId', [string]$diskSmartData.PNPDeviceID)
+        $hash.Add('Device', [string]$diskSmartData.Device)
         $hash.Add('PredictFailure', [bool]$diskSmartData.PredictFailure)
         $hash.Add('ArchiveDate', [datetime]$dateTime)
 

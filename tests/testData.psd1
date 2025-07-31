@@ -84,7 +84,7 @@
     Model_HDD1 = "HDD1"
     ModelATA_HDD1 = "HDD1 ATA Device"
     InstanceName_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
+    Device_HDD1 = 'IDE\HDD1_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_HDD1 = 512
 
     # HDD2
@@ -170,7 +170,7 @@
     Index_HDD2 = 1
     Model_HDD2 = "HDD2"
     InstanceName_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
+    Device_HDD2 = 'IDE\HDD2_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_HDD2 = 512
 
     # SSD1
@@ -256,7 +256,7 @@
     Index_SSD1 = 2
     Model_SSD1 = "SSD1"
     InstanceName_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+    Device_SSD1 = 'IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_SSD1 = 512
 
     # SSD2
@@ -342,6 +342,6 @@
     Index_SSD2 = 3
     Model_SSD2 = "SSD2"
     InstanceName_SSD2 = 'IDE\SSD2_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_SSD2 = 'IDE\SSD2_________________________12345678\1&12345000&0&1.0.0'
+    Device_SSD2 = 'IDE\SSD2_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_SSD2 = 512
 }
