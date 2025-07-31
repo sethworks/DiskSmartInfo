@@ -30,14 +30,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -69,8 +69,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].DiskNumber | Should -BeOfType 'System.UInt32'
 
-            $diskSmartInfo[0].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-            $diskSmartInfo[0].PNPDeviceId | Should -BeOfType 'System.String'
+            $diskSmartInfo[0].psobject.properties['Device'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].Device | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].PredictFailure | Should -BeOfType 'System.Boolean'
@@ -88,7 +88,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
 
             $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
             $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
-            $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  /dev/sda'
+            $propertyValues[2] | Should -BeExactly 'Device:       /dev/sda'
             $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
         }
     }
@@ -116,14 +116,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -167,14 +167,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -218,14 +218,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -269,14 +269,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -318,14 +318,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -367,14 +367,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $ipAddresses
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $ipAddresses.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -416,14 +416,14 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
 
             $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
             $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
-            $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
         }
 
         It "Has SmartData property with 22 DiskSmartAttribute objects" {
@@ -480,18 +480,18 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[0].Model | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
@@ -499,13 +499,13 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[1].Model | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
@@ -536,18 +536,18 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[0].Model | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[0].InstanceId | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
@@ -555,13 +555,13 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[1].Model | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
@@ -592,18 +592,18 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
         }
 
-        It "Has ComputerName, Model, and InstanceId properties" {
+        It "Has ComputerName, Model, and Device properties" {
             $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
             if ($diskSmartInfo[0].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[0].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[0].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[0].Model | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[0].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[0].SmartData | Should -HaveCount 15
             }
 
@@ -611,13 +611,13 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             if ($diskSmartInfo[1].ComputerName -eq $computerNames[0])
             {
                 $diskSmartInfo[1].Model | Should -BeExactly $testDataCtl.CtlModel_HDD2
-                $diskSmartInfo[1].InstanceId | Should -BeExactly $testDataCtl.CtlPNPDeviceID_HDD2
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD2
                 $diskSmartInfo[1].SmartData | Should -HaveCount 18
             }
             elseif ($diskSmartInfo[1].ComputerName -eq $computerNames[1])
             {
                 $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_SSD1
-                $diskSmartInfo[1].PNPDeviceID | Should -BeExactly $testDataCtl.CtlPNPDeviceID_SSD1
+                $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_SSD1
                 $diskSmartInfo[1].SmartData | Should -HaveCount 15
             }
         }
@@ -652,11 +652,11 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             It "Historical data file contains proper data" {
                 if ($IsCoreCLR)
                 {
-                    $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "/dev/sda"'))
+                    $filepath | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sda"'))
                 }
                 else
                 {
-                    $filepath | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "/dev/sda"'))
+                    $filepath | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sda"'))
                 }
             }
         }
@@ -703,8 +703,8 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
                 $diskSmartInfo.psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.DiskNumber | Should -BeOfType 'System.UInt32'
 
-                $diskSmartInfo.psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-                $diskSmartInfo.PNPDeviceId | Should -BeOfType 'System.String'
+                $diskSmartInfo.psobject.properties['Device'] | Should -Not -BeNullOrEmpty
+                $diskSmartInfo.Device | Should -BeOfType 'System.String'
 
                 $diskSmartInfo.psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.PredictFailure | Should -BeOfType 'System.Boolean'
@@ -725,7 +725,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
 
                 $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
                 $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
-                $propertyValues[2] | Should -BeExactly 'PNPDeviceId:  /dev/sda'
+                $propertyValues[2] | Should -BeExactly 'Device:       /dev/sda'
                 $propertyValues[3] | Should -BeLikeExactly 'HistoryDate:*'
                 $propertyValues[4] | Should -BeLikeExactly 'SMARTData:*'
             }

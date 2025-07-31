@@ -61,7 +61,7 @@ Describe "Config" {
                 It "Has 1 DiskSmartInfo object" {
                     $diskSmartInfo | Should -HaveCount 1
                     $diskSmartInfo.DiskNumber | Should -Be $testData.Index_HDD2
-                    $diskSmartInfo.PNPDeviceID | Should -BeExactly $testData.PNPDeviceID_HDD2
+                    $diskSmartInfo.Device | Should -BeExactly $testData.Device_HDD2
                     $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 }
 
@@ -137,8 +137,8 @@ Describe "Config" {
                     $diskSmartInfo[2].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].DiskNumber | Should -BeOfType 'System.UInt32'
 
-                    $diskSmartInfo[2].psobject.properties['PNPDeviceId'] | Should -Not -BeNullOrEmpty
-                    $diskSmartInfo[2].PNPDeviceId | Should -BeOfType 'System.String'
+                    $diskSmartInfo[2].psobject.properties['Device'] | Should -Not -BeNullOrEmpty
+                    $diskSmartInfo[2].Device | Should -BeOfType 'System.String'
 
                     $diskSmartInfo[2].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
                     $diskSmartInfo[2].PredictFailure | Should -BeOfType 'System.Boolean'
@@ -155,7 +155,7 @@ Describe "Config" {
                     $propertyValues | Should -HaveCount 2
 
                     $propertyValues[0] | Should -BeExactly 'Disk:         2: SSD1'
-                    $propertyValues[1] | Should -BeExactly 'PNPDeviceId:  IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
+                    $propertyValues[1] | Should -BeExactly 'Device:       IDE\SSD1_________________________12345678\1&12345000&0&1.0.0'
                 }
             }
 

@@ -82,7 +82,7 @@
     Index_HFSSSD1 = 4
     Model_HFSSSD1 = "HFS512G32TNF-N3A0A"
     InstanceName_HFSSSD1 = 'IDE\HFS_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_HFSSSD1 = 'IDE\HFS_________________________12345678\1&12345000&0&1.0.0'
+    Device_HFSSSD1 = 'IDE\HFS_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_HFSSSD1 = 512
 
     # KINGSTONSSD1
@@ -168,6 +168,6 @@
     Index_KINGSTONSSD1 = 5
     Model_KINGSTONSSD1 = "KINGSTON SA400S37480G"
     InstanceName_KINGSTONSSD1 = 'IDE\KINGSTON_________________________12345678\1&12345000&0&1.0.0_0'
-    PNPDeviceID_KINGSTONSSD1 = 'IDE\KINGSTON_________________________12345678\1&12345000&0&1.0.0'
+    Device_KINGSTONSSD1 = 'IDE\KINGSTON_________________________12345678\1&12345000&0&1.0.0'
     BytesPerSector_KINGSTONSSD1 = 512
 }

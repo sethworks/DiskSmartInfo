@@ -31,15 +31,15 @@ Describe "Archive" {
         It "Archive file contains proper devices" {
             if ($IsCoreCLR)
             {
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
             }
             else
             {
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                'TestDrive:/localhost/localhost_2025-07-17_12-34-56.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
             }
         }
 
@@ -99,23 +99,23 @@ Describe "Archive" {
         It "Archive files contains proper devices" {
             if ($IsCoreCLR)
             {
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
 
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD1_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\HDD2_________________________12345678\\1&12345000&0&1.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "IDE\\SSD1_________________________12345678\\1&12345000&0&1.0.0"'))
             }
             else
             {
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
 
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
-                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"PNPDeviceId":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\HDD2_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "IDE\\SSD1_________________________12345678\\1\u002612345000\u00260\u00261.0.0"'))
             }
         }
 
