@@ -457,7 +457,7 @@ Get-DiskSmartInfo
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -489,7 +489,7 @@ Get-DiskSmartInfo -Convert
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data        Converted
               --  ----- -------------                      --------- ----- ----- ----        ---------
@@ -521,7 +521,7 @@ Get-DiskSmartInfo -CriticalAttributesOnly
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -541,7 +541,7 @@ Get-DiskSmartInfo -Quiet
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -560,7 +560,7 @@ Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -578,7 +578,7 @@ Get-DiskSmartInfo -ComputerName SomeComputer
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -611,7 +611,7 @@ Get-DiskSmartInfo -ComputerName SomeComputer -Transport PSSession
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -644,7 +644,7 @@ Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -677,7 +677,7 @@ Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession -Sou
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -716,7 +716,7 @@ Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -740,7 +740,7 @@ SMARTData:
 
 ComputerName: SomeOtherComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -764,7 +764,7 @@ Get-DiskSmartInfo -PSSession $PSSession, $SSHSession
 ```
 ComputerName: SomeComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -788,7 +788,7 @@ SMARTData:
 
 ComputerName: SomeOtherComputer
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -807,7 +807,7 @@ Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware E
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                 Threshold Value Worst Data
               --  ----- -------------                 --------- ----- ----- ----
@@ -821,12 +821,12 @@ The command gets specified SMART attributes.
 
 ### Example 13: Get data for selected disks
 ```powershell
-Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific*" -Device *Specific Dev*
+Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific Mod*" -Device "*Specific Dev*"
 ```
 
 ```
 Disk:         1: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -836,7 +836,7 @@ SMARTData:
 ...
 
 Disk:         2: Some Specific Model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -846,7 +846,7 @@ SMARTData:
 ...
 
 Disk:         3: Disk Model
-PNPDeviceId:  Some Specific Device
+Device:       Some Specific Device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -865,7 +865,7 @@ Get-DiskSmartInfo -UpdateHistory
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -897,7 +897,7 @@ Get-DiskSmartInfo -ShowHistory
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 HistoryDate:  MM/dd/yyyy hh:mm:ss
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data        History
@@ -930,7 +930,7 @@ Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
 
 ```
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 HistoryDate:  MM/dd/yyyy hh:mm:ss
 SMARTData:
               ID  AttributeName                      Data        History     Converted
@@ -973,7 +973,7 @@ $ComputerName, $CimSession, $PSSession, $SSHSession, $DiskDrive, $Disk, $Physica
 ```
 ComputerName: Computer1
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
@@ -997,7 +997,7 @@ SMARTData:
 
 ComputerName: Computer2
 Disk:         0: Disk model
-PNPDeviceId:  Disk PNPDeviceId
+Device:       Disk device
 SMARTData:
               ID  IDHex AttributeName                      Threshold Value Worst Data
               --  ----- -------------                      --------- ----- ----- ----
