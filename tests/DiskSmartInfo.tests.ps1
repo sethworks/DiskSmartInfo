@@ -267,6 +267,45 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
+    Context "-Quiet with CriticalThreshold" {
+
+        BeforeAll {
+            mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+            mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
+            InModuleScope DiskSmartInfo {
+                $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 197}).CriticalThreshold = 18
+                $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 198}).CriticalThreshold = 20
+            }
+
+            $diskSmartInfo = Get-DiskSmartInfo -Quiet
+        }
+
+        AfterAll {
+            InModuleScope DiskSmartInfo {
+                $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 197}).CriticalThreshold = 0
+                $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 198}).CriticalThreshold = 0
+            }
+        }
+
+        It "Has 1 DiskSmartInfo object" {
+            $diskSmartInfo | Should -HaveCount 1
+            $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+        }
+
+        It "Has SmartData property with 2 DiskSmartAttribute objects" {
+            $diskSmartInfo.SmartData | Should -HaveCount 2
+            $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+        }
+
+        It "Consists of attributes in Warning or Critical state only" {
+            $diskSmartInfo.SmartData.Id | Should -Be @(3, 197)
+            $diskSmartInfo.SmartData.Data | Should -Be @(6825, 20)
+        }
+    }
+
     Context "Select attributes" {
 
         Context "AttributeID" {
