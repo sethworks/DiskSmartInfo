@@ -383,11 +383,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
-            <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
-            <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
+            <maml:para>Displays only those attributes, that are critical and their Data is greater than the CriticalThreshold property, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
+            <maml:para>If any of the attribute selection parameters are used, the result includes such attributes only from the specified ones.</maml:para>
+            <maml:para>If there are no such attributes for a disk, that disk is not shown.</maml:para>
             <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
-            <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+            <maml:para>For more information on CriticalThreshold attribute description property, see about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>For more information on SuppressResultsWithEmptySmartData config parameter, see about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -617,11 +618,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
-            <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
-            <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
+            <maml:para>Displays only those attributes, that are critical and their Data is greater than the CriticalThreshold property, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
+            <maml:para>If any of the attribute selection parameters are used, the result includes such attributes only from the specified ones.</maml:para>
+            <maml:para>If there are no such attributes for a disk, that disk is not shown.</maml:para>
             <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
-            <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+            <maml:para>For more information on CriticalThreshold attribute description property, see about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>For more information on SuppressResultsWithEmptySmartData config parameter, see about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -882,11 +884,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
         <maml:description>
-          <maml:para>Displays only those attributes, that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
-          <maml:para>If any of the attribute selection parameters are used, the result includes such an attributes only from specified.</maml:para>
-          <maml:para>If there are no such an attributes for a disk, that disk is not shown.</maml:para>
+          <maml:para>Displays only those attributes, that are critical and their Data is greater than the CriticalThreshold property, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
+          <maml:para>If any of the attribute selection parameters are used, the result includes such attributes only from the specified ones.</maml:para>
+          <maml:para>If there are no such attributes for a disk, that disk is not shown.</maml:para>
           <maml:para>This can be changed by SuppressResultsWithEmptySmartData config parameter.</maml:para>
-          <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+          <maml:para>For more information on CriticalThreshold attribute description property, see about_DiskSmartInfo_attributes.</maml:para>
+          <maml:para>For more information on SuppressResultsWithEmptySmartData config parameter, see about_DiskSmartInfo_config.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1080,7 +1083,7 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
-          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
+          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>

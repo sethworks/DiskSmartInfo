@@ -268,7 +268,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>CriticalAttributesOnly</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-            <maml:para>Критичность определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
             <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
           </maml:description>
@@ -383,11 +383,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>Параметр отображает только критичные атрибуты со значением свойства Data, превышающим 0, а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
-            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующе условиям атрибуты из указанных.</maml:para>
+            <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
             <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
             <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
-            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+            <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -502,7 +503,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>CriticalAttributesOnly</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-            <maml:para>Критичность определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
             <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
           </maml:description>
@@ -617,11 +618,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>Quiet</maml:name>
           <maml:description>
-            <maml:para>Параметр отображает только критичные атрибуты со значением свойства Data, превышающим 0, а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
-            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующе условиям атрибуты из указанных.</maml:para>
+            <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
             <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
             <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
-            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+            <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -766,7 +768,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:name>CriticalAttributesOnly</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-          <maml:para>Критичность определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+          <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
           <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
           <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
         </maml:description>
@@ -882,11 +884,12 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>Quiet</maml:name>
         <maml:description>
-          <maml:para>Параметр отображает только критичные атрибуты со значением свойства Data, превышающим 0, а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
-          <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующе условиям атрибуты из указанных.</maml:para>
+          <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+          <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
           <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
           <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
-          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+          <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
         </maml:description>
         <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
         <dev:type>
@@ -1080,7 +1083,7 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
-          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критичные атрибуты со значением свойства Data, превышающим 0, а также не критичные атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
+          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>

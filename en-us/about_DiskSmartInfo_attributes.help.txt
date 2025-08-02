@@ -22,6 +22,7 @@ The structure of default attribute definition is as follows:
     AttributeName
     DataFormat
     IsCritical
+    CriticalThreshold
     ConvertScriptBlock
 
 AttributeID is a numerical value, that defines attribute number.
@@ -32,8 +33,11 @@ DataFormat is an enum type value, that defines attribute data structure.
 
 IsCritical is a boolean, specifying whether an attribute is critical.
 
+CriticalThreshold is a value, that defines the critical threshold for the attribute,
+that is used by the Get-DiskSmartInfo command with the -Quiet parameter.
+
 ConvertScriptBlock is a ScriptBlock type value, that defines conversion process,
-that is used by the the Get-DiskSmartInfo command with the -Convert parameter.
+that is used by the Get-DiskSmartInfo command with the -Convert parameter.
 
 
 PROPRIETARY ATTRIBUTES
@@ -63,16 +67,17 @@ attribute definition:
     AttributeName
     DataFormat
     IsCritical
+    CriticalThreshold
     ConvertScriptBlock
 
-However for proprietary attribute definitions IsCritical and ConvertScriptBlock
-properties are not mandatory.
+However for proprietary attribute definitions IsCritical, CriticalThreshold,
+and ConvertScriptBlock properties are optional.
 
-If these two properties are defined, matched set proprietary attribute definition
-is fully replaces default one.
+If these three properties are defined, matched set proprietary attribute definition
+is fully replaces the default one.
 
-If any of these properties (or both of them) is not specified in the proprietary
-attribute definition, then resulting attribute definition will retain original
+If any of these properties (or all three of them) is not specified in the proprietary
+attribute definition, then the resulting attribute definition will retain original
 (default) value of this property.
 
 For example, if there is a default attribute with the following definition:
@@ -81,6 +86,7 @@ For example, if there is a default attribute with the following definition:
     AttributeName = 'Attribute Name'
     DataFormat = [AttributeDataFormat]::bits24
     IsCritical = $true
+    CriticalThreshold = 0
     ConvertScriptBlock = {$args[0] * 1000}
 
 and proprietary attribute with the following definition:
@@ -95,6 +101,7 @@ then resulting attribute definition will be:
     AttributeName = 'New Attribute Name'
     DataFormat = [AttributeDataFormat]::bits48
     IsCritical = $true
+    CriticalThreshold = 0
     ConvertScriptBlock = {$args[0] * 1000}
 
 

@@ -473,8 +473,8 @@ function inGetDiskSmartInfo
                         {
                             # Attribute quiet eligibility check
                             if ((-not $Quiet) -or
-                                (((isCritical -AttributeID $attributeSmartData.ID) -and $attributeSmartData.Data) -or
-                                (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
+                                ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
+                                 (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
                             {
                                 $attribute = [ordered]@{}
                                 $attribute.Add('ID', $attributeSmartData.ID)
@@ -609,12 +609,17 @@ function inUpdateActualAttributesList
                         AttributeName = $attribute.AttributeName
                         DataFormat = $attribute.DataFormat
                         IsCritical = $result[$index].IsCritical
+                        CriticalThreshold = $result[$index].CriticalThreshold
                         ConvertScriptBlock = $result[$index].ConvertScriptBlock
                     }
 
                     if ($attribute.Keys -contains 'IsCritical')
                     {
                         $newAttribute.IsCritical = $attribute.IsCritical
+                    }
+                    if ($attribute.Keys -contains 'CriticalThreshold')
+                    {
+                        $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
                     }
                     if ($attribute.Keys -contains 'ConvertScriptBlock')
                     {

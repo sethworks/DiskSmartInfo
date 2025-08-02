@@ -63,6 +63,24 @@ function isCritical
     }
 }
 
+function isCriticalThresholdExceeded
+{
+    Param (
+        [int]$AttributeID,
+        $AttributeData
+    )
+
+    if ((isCritical -AttributeID $AttributeID) -and
+        ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+}
+
 function isThresholdExceeded
 {
     Param (
