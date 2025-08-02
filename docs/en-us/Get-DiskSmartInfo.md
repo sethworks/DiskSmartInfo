@@ -332,16 +332,18 @@ Accept wildcard characters: False
 ```
 
 ### -Quiet
-Displays only those attributes, that are critical and their Data is greater than 0,
+Displays only those attributes, that are critical and their Data is greater than the CriticalThreshold property,
 or that are non-critical and their Value is less or equal to their Threshold.
 
-If any of the attribute selection parameters are used, the result includes such an attributes only from specified.
+If any of the attribute selection parameters are used, the result includes such attributes only from the specified ones.
 
-If there are no such an attributes for a disk, that disk is not shown.
+If there are no such attributes for a disk, that disk is not shown.
 
 This can be changed by SuppressResultsWithEmptySmartData config parameter.
 
-For more information, see about_DiskSmartInfo_config.
+For more information on CriticalThreshold attribute description property, see about_DiskSmartInfo_attributes.
+
+For more information on SuppressResultsWithEmptySmartData config parameter, see about_DiskSmartInfo_config.
 
 ```yaml
 Type: SwitchParameter

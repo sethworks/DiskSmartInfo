@@ -23,6 +23,7 @@ default.ps1 содержит определения атрибутов, испо
     AttributeName
     DataFormat
     IsCritical
+    CriticalThreshold
     ConvertScriptBlock
 
 AttributeID - это численное значение, задающее номер атрибута.
@@ -32,6 +33,9 @@ AttributeName - это строчное значение, определяюще
 DataFormat - это значение типа enum, указывающее структуру данных атрибута.
 
 IsCritical - это логическое значение, определяющее, является ли атрибут критическим.
+
+CriticalThreshold - это значение, задающее порог для критического атрибута,
+используемый параметром -Quiet команды Get-DiskSmartInfo.
 
 ConvertScriptBlock - это значение типа ScriptBlock, задающее механизм конвертации
 значения атрибута, используемый параметром -Convert команды Get-DiskSmartInfo.
@@ -65,16 +69,17 @@ ModelPatterns - это массив строк, каждая из которых
     AttributeName
     DataFormat
     IsCritical
+    CriticalThreshold
     ConvertScriptBlock
 
-Однако для определений собственных атрибутов производителей свойства IsCritical
-и ConvertScriptBlock не являются обязательными.
+Однако для определений собственных атрибутов производителей свойства IsCritical,
+CriticalThreshold и ConvertScriptBlock не являются обязательными.
 
-Если эти два свойства заданы в определении собственного атрибута производителя,
+Если эти три свойства заданы в определении собственного атрибута производителя,
 то при совпадении модели диска, определение атрибута по умолчанию полностью
 замещается определением собственного атрибута производителя.
 
-Если какое-либо из этих свойств (или они оба) не заданы в определении
+Если какое-либо из этих свойств (или все три) не задано в определении
 собственного атрибута производителя, то итоговое определение атрибута сохранит
 оригинальное значение этого свойства.
 
@@ -84,6 +89,7 @@ ModelPatterns - это массив строк, каждая из которых
     AttributeName = 'Attribute Name'
     DataFormat = [AttributeDataFormat]::bits24
     IsCritical = $true
+    CriticalThreshold = 0
     ConvertScriptBlock = {$args[0] * 1000}
 
 а также следующее определение собственного атрибута производителя:
@@ -98,6 +104,7 @@ ModelPatterns - это массив строк, каждая из которых
     AttributeName = 'New Attribute Name'
     DataFormat = [AttributeDataFormat]::bits48
     IsCritical = $true
+    CriticalThreshold = 0
     ConvertScriptBlock = {$args[0] * 1000}
 
 
