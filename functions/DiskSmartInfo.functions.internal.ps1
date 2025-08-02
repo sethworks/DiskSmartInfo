@@ -473,9 +473,8 @@ function inGetDiskSmartInfo
                         {
                             # Attribute quiet eligibility check
                             if ((-not $Quiet) -or
-                                # (((isCritical -AttributeID $attributeSmartData.ID) -and $attributeSmartData.Data) -or
                                 ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
-                                (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
+                                 (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
                             {
                                 $attribute = [ordered]@{}
                                 $attribute.Add('ID', $attributeSmartData.ID)
