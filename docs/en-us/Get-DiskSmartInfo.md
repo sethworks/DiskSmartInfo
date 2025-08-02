@@ -552,7 +552,7 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0,
+The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property,
 or that are non-critical and their Value is less or equal to their Threshold.
 
 ### Example 5: Using -CriticalAttributesOnly and -Quiet parameters

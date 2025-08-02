@@ -1083,7 +1083,7 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
-          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
+          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property, or that are non-critical and their Value is less or equal to their Threshold.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>
