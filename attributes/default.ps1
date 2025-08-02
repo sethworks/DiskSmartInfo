@@ -32,6 +32,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Reallocated Sectors Count'
         DataFormat = [AttributeDataFormat]::bits16
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -67,6 +68,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Spin Retry Count'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -158,6 +160,7 @@ $defaultAttributesHash = @(
         AttributeName = 'End-to-End Error'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -165,6 +168,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Reported Uncorrectable Errors'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -172,6 +176,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Command Timeout'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -228,6 +233,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Reallocation Event Count'
         DataFormat = [AttributeDataFormat]::bits16
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -235,6 +241,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Current Pending Sector Count'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -242,6 +249,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Offline Uncorrectable Sector Count'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
@@ -263,6 +271,7 @@ $defaultAttributesHash = @(
         AttributeName = 'Soft Read Error Rate'
         DataFormat = [AttributeDataFormat]::bits48
         IsCritical = $true
+        CriticalThreshold = 0
         ConvertScriptBlock = $null
     },
     [ordered]@{
