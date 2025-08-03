@@ -29,95 +29,6 @@ function inComposeAttributeIDs
     return $attributeIDs
 }
 
-function inTrimDiskDriveModel
-{
-    Param (
-        $Model
-    )
-
-    $trimStrings = @(' ATA Device', ' SCSI Disk Device')
-
-    if ($Script:Config.TrimDiskDriveModelSuffix)
-    {
-        foreach ($ts in $trimStrings)
-        {
-            if ($Model.EndsWith($ts))
-            {
-                return $Model.Remove($Model.LastIndexOf($ts))
-            }
-        }
-    }
-
-    return $Model
-}
-
-function inExtractAttributeData
-{
-    Param (
-        $smartData,
-        $startOffset,
-        $byteCount
-    )
-
-    [long]$result = 0
-
-    for ($offset = 0; $offset -lt $byteCount; $offset++)
-    {
-        $result += $smartData[$startOffset + $offset] * ( [math]::Pow(256, $offset) )
-    }
-
-    return $result
-}
-
-function inExtractAttributeTemps
-{
-    Param (
-        $smartData,
-        $startOffset
-    )
-
-    $temps = @([long]$smartData[$startOffset])
-
-    for ($offset = 1; $offset -le 5; $offset++)
-    {
-        if ($smartData[$startOffset + $offset] -ne 0 -and $smartData[$startOffset + $offset] -ne 255)
-        {
-            $temps += [long]$smartData[$startOffset + $offset]
-        }
-
-        if ($temps.Count -eq 3)
-        {
-            if ($temps[1] -gt $temps[2])
-            {
-                $t = $temps[1]
-                $temps[1] = $temps[2]
-                $temps[2] = $t
-            }
-            break
-        }
-    }
-
-    return $temps
-}
-
-function inExtractAttributeWords
-{
-    Param (
-        $smartData,
-        $startOffset,
-        $words
-    )
-
-    $result = @()
-
-    foreach ($word in $words)
-    {
-        $result += [long]($smartData[$startOffset + $word * 2] + $smartData[$startOffset + $word * 2 + 1] * 256)
-    }
-
-    return $result
-}
-
 function inSelectAttributeProperties
 {
     Param (
@@ -167,6 +78,28 @@ function inSelectAttributeProperties
     return $result
 }
 
+function inTrimDiskDriveModel
+{
+    Param (
+        $Model
+    )
+
+    $trimStrings = @(' ATA Device', ' SCSI Disk Device')
+
+    if ($Script:Config.TrimDiskDriveModelSuffix)
+    {
+        foreach ($ts in $trimStrings)
+        {
+            if ($Model.EndsWith($ts))
+            {
+                return $Model.Remove($Model.LastIndexOf($ts))
+            }
+        }
+    }
+
+    return $Model
+}
+
 function inEnsureFolderExists
 {
     Param (
@@ -176,5 +109,79 @@ function inEnsureFolderExists
     if (-not (Test-Path -Path $folder))
     {
         New-Item -ItemType Directory -Path $folder | Out-Null
+    }
+}
+
+function inReportErrors
+{
+    Param (
+        $Errors
+    )
+
+    foreach ($err in $Errors)
+    {
+        # CIMSession
+        if ($err.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord')
+        {
+            if ($err.OriginInfo.PSComputerName)
+            {
+                $message = "ComputerName: ""$($err.OriginInfo.PSComputerName)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
+        }
+        # New-PSSession -ComputerName user@host
+        elseif ($err.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException')
+        {
+            $err = $err.ErrorRecord
+            if ($err.TargetObject)
+            {
+                $message = "ComputerName: ""$($err.TargetObject)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
+        }
+        # New-PSSession -ComputerName nonexistenthost
+        elseif ($err.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException')
+        {
+            if ($err.ErrorDetails.Message -match '\[(?<ComputerName>\S+)]')
+            {
+                $message = "ComputerName: ""$($Matches.ComputerName)"". $($err.Exception.Message)"
+            }
+            else
+            {
+                $message = $err.Exception.Message
+            }
+        }
+
+        $exception = [System.Exception]::new($message, $err.Exception)
+        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $err.FullyQualifiedErrorId, $err.CategoryInfo.Category, $err.TargetObject)
+        $PSCmdlet.WriteError($errorRecord)
+    }
+}
+
+function inClearRemotingErrorRecords
+{
+    if ($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+    {
+        $value = $PSCmdlet.SessionState.PSVariable.GetValue($PSCmdlet.MyInvocation.BoundParameters.ErrorVariable)
+        while ($true)
+        {
+            $value.ForEach{
+                if ($PSItem.GetType().FullName -eq 'System.Management.Automation.CmdletInvocationException' -or
+                    $PSItem.GetType().FullName -eq 'System.Management.Automation.Runspaces.RemotingErrorRecord' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.Management.Automation.Remoting.PSRemotingTransportException' -or
+                    $PSItem.Exception.GetType().FullName -eq 'System.ArgumentException')
+                {
+                    $value.Remove($PSItem)
+                    continue
+                }
+            }
+            break
+        }
     }
 }

@@ -4,7 +4,7 @@
 RootModule = 'DiskSmartInfo.psm1'
 
 # Version number of this module.
-ModuleVersion = '2.6'
+ModuleVersion = '2.7'
 
 # Supported PSEditions
 CompatiblePSEditions = @('Core', 'Desktop')
@@ -65,6 +65,7 @@ NestedModules = @('types/DiskSmartInfo.types.ps1',
                   'functions/DiskSmartInfo.functions.ps1',
                   'functions/DiskSmartAttributeDescription.functions.ps1',
                   'functions/DiskSmartInfo.functions.internal.ps1',
+                  'functions/DiskSmartInfo.functions.attributes.ps1',
                   'functions/DiskSmartInfo.functions.utility.ps1',
                   'functions/DiskSmartInfo.functions.history.ps1',
                   'functions/DiskSmartInfo.functions.archive.ps1',
@@ -101,6 +102,7 @@ FileList = 'DiskSmartInfo.psd1',
            'functions/DiskSmartInfo.functions.ps1',
            'functions/DiskSmartAttributeDescription.functions.ps1',
            'functions/DiskSmartInfo.functions.internal.ps1',
+           'functions/DiskSmartInfo.functions.attributes.ps1',
            'functions/DiskSmartInfo.functions.utility.ps1',
            'functions/DiskSmartInfo.functions.history.ps1',
            'functions/DiskSmartInfo.functions.archive.ps1',
