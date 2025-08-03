@@ -200,7 +200,8 @@ function inGetSourceSmartDataCtl
 
             foreach ($device in $devices)
             {
-                if ($device -match '^(?<device>/dev/\w{3})')
+                # if ($device -match '^(?<device>/dev/\w{3})')
+                if ($device -match '^(?<device>/dev/\w+)')
                 {
                     $sb = [scriptblock]::Create("$sbs $($Matches.device)")
 
@@ -298,15 +299,36 @@ function inGetSmartDataStructureCtl
 
         foreach ($diskSmartData in $sourceSmartData.disksSmartData)
         {
-            $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
+            if ($diskSmartData.device[-1] -match '\d')
+            {
+                $diskNumber = [uint32]::Parse($diskSmartData.device[-1])
+            }
+            else
+            {
+                $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
+            }
 
-            if ($diskSmartData.diskSmartData -match '^Device Model:' | ForEach-Object { $PSItem -match '^Device Model:\s+(?<model>.+)$' })
+            if ($diskSmartData.diskSmartData -match '^(?:Device Model:|Model Number:)' | ForEach-Object { $PSItem -match '^(?:Device Model:|Model Number:)\s+(?<model>.+)$' })
             {
                 $model = $Matches.model
             }
             else
             {
                 $model = $null
+            }
+
+            # Because on Windows NVMe device can be /dev/sd_
+            if ($diskSmartData.diskSmartData -match '^S?ATA Version')
+            {
+                $diskType = 'ATA'
+            }
+            elseif ($diskSmartData.diskSmartData -match '^NVMe Version')
+            {
+                $diskType = 'NVMe'
+            }
+            else
+            {
+                $diskType = $null
             }
 
             if ($diskSmartData.diskSmartData -match '^SMART overall-health self-assessment test result:' | ForEach-Object { $PSItem -match '^SMART overall-health self-assessment test result:\s+(?<failurePredictStatus>.+)$' })
@@ -324,6 +346,7 @@ function inGetSmartDataStructureCtl
             $hash.Add('DiskModel', [string]$model)
             $hash.Add('Device', [string]$diskSmartData.device)
             $hash.Add('PredictFailure', [bool]$failurePredictStatus)
+            $hash.Add('DiskType', $diskType)
 
             $attributes = @()
 
