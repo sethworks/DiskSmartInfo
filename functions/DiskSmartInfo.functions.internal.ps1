@@ -350,70 +350,112 @@ function inGetSmartDataStructureCtl
 
             $attributes = @()
 
-            $actualAttributesList = inUpdateActualAttributesList -model $model
-
-            $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
-
-            if ($headerIndex -ge 0)
+            if ($hash.DiskType -eq 'ATA')
             {
-                $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
+                $actualAttributesList = inUpdateActualAttributesList -model $model
 
-                foreach ($entry in $table)
+                $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
+
+                if ($headerIndex -ge 0)
                 {
-                    $attribute = [ordered]@{}
+                    $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
 
-                    if ($entry -match '^\s*(?<id>\S+)\s+(?<name>\S+)\s+\S+\s+(?<value>\S+)\s+(?<worst>\S+)\s+(?<threshold>\S+)\s+\S+\s+\S+\s+\S+\s+(?<data>\S+.*)$')
+                    foreach ($entry in $table)
                     {
-                        $attribute.Add("ID", [byte]$Matches.id)
-                        $attribute.Add("IDHex", [string]($attribute.ID.ToString("X")))
+                        $attribute = [ordered]@{}
 
-                        if ($Config.ReplaceSmartCtlAttributeNames)
+                        if ($entry -match '^\s*(?<id>\S+)\s+(?<name>\S+)\s+\S+\s+(?<value>\S+)\s+(?<worst>\S+)\s+(?<threshold>\S+)\s+\S+\s+\S+\s+\S+\s+(?<data>\S+.*)$')
                         {
-                            $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
+                            $attribute.Add("ID", [byte]$Matches.id)
+                            $attribute.Add("IDHex", [string]($attribute.ID.ToString("X")))
+
+                            if ($Config.ReplaceSmartCtlAttributeNames)
+                            {
+                                $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
+                            }
+                            else
+                            {
+                                $attribute.Add("Name", [string]$Matches.name)
+                            }
+
+                            $attribute.Add("Threshold", [byte]$Matches.threshold)
+                            $attribute.Add("Value", [byte]$Matches.value)
+                            $attribute.Add("Worst", [byte]$Matches.worst)
+
+                            $sourcedata = $Matches.data
+
+                            # 32 (Min/Max 18/40)
+                            if ($sourcedata -match '^(?<data>\d+) \(Min/Max (?<min>\d+)/(?<max>\d+)\)$')
+                            {
+                                $attribute.Add("Data", @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
+                            }
+                            # 10/11
+                            elseif ($sourcedata -match '^(?<first>\d+)/(?<second>\d+)$')
+                            {
+                                $attribute.Add("Data", @([long]$Matches.first, [long]$Matches.second))
+                            }
+                            # 1
+                            else
+                            {
+                                $attribute.Add("Data", [long]$Matches.data)
+                            }
                         }
-                        else
+
+                        $attributes += $attribute
+                    }
+                }
+
+                $hash.Add("SmartData", $attributes)
+
+                if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
+                {
+                    $sectorSize = $Matches.sectorsize
+                }
+                else
+                {
+                    $sectorSize = $null
+                }
+                $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
+            }
+
+            elseif ($hash.DiskType -eq 'NVMe')
+            {
+                $header = $diskSmartData.diskSmartData -like "SMART/Health Information (NVMe Log*"
+                # $headerIndex = $diskSmartData.diskSmartData.IndexOf('SMART/Health Information (NVMe Log')
+                $headerIndex = $diskSmartData.diskSmartData.IndexOf($header)
+
+                if ($headerIndex -ge 0)
+                {
+                    $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
+
+                    foreach ($entry in $table)
+                    {
+                        $attribute = [ordered]@{}
+
+                        if ($entry -match '^\s*(?<name>.+):\s+(?<data>\S+.*)$')
                         {
                             $attribute.Add("Name", [string]$Matches.name)
+                            $attribute.Add("Data", [string]$Matches.data)
                         }
 
-                        $attribute.Add("Threshold", [byte]$Matches.threshold)
-                        $attribute.Add("Value", [byte]$Matches.value)
-                        $attribute.Add("Worst", [byte]$Matches.worst)
-
-                        $sourcedata = $Matches.data
-
-                        # 32 (Min/Max 18/40)
-                        if ($sourcedata -match '^(?<data>\d+) \(Min/Max (?<min>\d+)/(?<max>\d+)\)$')
-                        {
-                            $attribute.Add("Data", @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
-                        }
-                        # 10/11
-                        elseif ($sourcedata -match '^(?<first>\d+)/(?<second>\d+)$')
-                        {
-                            $attribute.Add("Data", @([long]$Matches.first, [long]$Matches.second))
-                        }
-                        # 1
-                        else
-                        {
-                            $attribute.Add("Data", [long]$Matches.data)
-                        }
+                        $attributes += $attribute
                     }
-
-                    $attributes += $attribute
                 }
+
+                $hash.Add("SmartData", $attributes)
             }
 
-            $hash.Add("SmartData", $attributes)
+            # $hash.Add("SmartData", $attributes)
 
-            if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
-            {
-                $sectorSize = $Matches.sectorsize
-            }
-            else
-            {
-                $sectorSize = $null
-            }
-            $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
+            # if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
+            # {
+            #     $sectorSize = $Matches.sectorsize
+            # }
+            # else
+            # {
+            #     $sectorSize = $null
+            # }
+            # $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
 
             $hostSmartData.DisksSmartData += $hash
         }
@@ -559,7 +601,12 @@ function inGetDiskSmartInfo
 
                 if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $hash.PredictFailure)
                 {
-                    if ($AttributeProperties)
+                    if (-not $AttributeProperties)
+                    {
+                        $hash.Add("SmartData", $attributes)
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
+                    }
+                    else
                     {
                         $formatProperties = $AttributeProperties.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
                         $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
@@ -569,11 +616,6 @@ function inGetDiskSmartInfo
 
                         Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
                         Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
-                    }
-                    else
-                    {
-                        $hash.Add("SmartData", $attributes)
-                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
                     }
 
                     $diskSmartInfo = [PSCustomObject]$hash
