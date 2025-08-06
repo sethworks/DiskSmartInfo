@@ -2,20 +2,20 @@ function isAttributeDataEqual
 {
     Param (
         $attributeData,
-        $historicalAttributeData
+        $attributeHistoricalData
     )
 
-    if ($attributeData.Count -eq $historicalAttributeData.Count)
+    if ($attributeData.Count -eq $attributeHistoricalData.Count)
     {
         if ($attributeData.Count -eq 1)
         {
-            return $attributeData -eq $historicalAttributeData
+            return $attributeData -eq $attributeHistoricalData
         }
         elseif ($attributeData.Count -gt 1)
         {
             for ($i = 0; $i -lt $attributeData.Count; $i++)
             {
-                if ($attributeData[$i] -ne $historicalAttributeData[$i])
+                if ($attributeData[$i] -ne $attributeHistoricalData[$i])
                 {
                     return $false
                 }

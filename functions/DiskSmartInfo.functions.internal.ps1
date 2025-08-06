@@ -512,7 +512,7 @@ function inGetDiskSmartInfo
 
                 if ($hostHistoricalData)
                 {
-                    $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.Device -eq $hash.Device}.SmartData
+                    $diskHistoricalData = $hostHistoricalData.HistoricalData.Where{$_.Device -eq $hash.Device}.SmartData
                 }
 
                 if ($diskSmartData.DiskType -eq 'ATA')
@@ -543,12 +543,12 @@ function inGetDiskSmartInfo
                                     {
                                         if ($hostHistoricalData)
                                         {
-                                            $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attribute.ID}.Data
+                                            $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
 
                                             if ($Config.ShowUnchangedDataHistory -or
-                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData)))
+                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
                                             {
-                                                $attribute.Add("DataHistory", $historicalAttributeData)
+                                                $attribute.Add("DataHistory", $attributeHistoricalData)
                                             }
                                             else
                                             {
@@ -615,12 +615,12 @@ function inGetDiskSmartInfo
                                     {
                                         if ($hostHistoricalData)
                                         {
-                                            $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attribute.ID}.Data
+                                            $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
 
                                             if ($Config.ShowUnchangedDataHistory -or
-                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData)))
+                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
                                             {
-                                                $attribute.Add("DataHistory", $historicalAttributeData)
+                                                $attribute.Add("DataHistory", $attributeHistoricalData)
                                             }
                                             else
                                             {
