@@ -12,13 +12,22 @@ function Get-DiskSmartAttributeDescription
         [string[]]$AttributeName
     )
 
-    $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
+    # $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
 
     foreach ($attribute in $descriptions)
     {
-        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attribute.AttributeID -AttributeIDHex $attribute.AttributeID.ToString('X') -AttributeName $attribute.AttributeName)
-        {
-            $attribute
-        }
+        # if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attribute.AttributeID -AttributeIDHex $attribute.AttributeID.ToString('X') -AttributeName $attribute.AttributeName)
+        # if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attribute.AttributeID -AttributeIDHex $attribute.AttributeID.ToString('X') -AttributeName $attribute.AttributeName)
+        # {
+        #     $attribute
+        # }
+
+        if ((-not ($AttributeID -or $AttributeIDHex -or $AttributeName)) -or
+            ($AttributeID -contains $attribute.AttributeID) -or
+            ($AttributeIDHex -contains $attribute.AttributeID.ToString('X')) -or
+            ($AttributeName.Where{$attribute.AttributeName -like $PSItem}))
+            {
+                $attribute
+            }
     }
 }

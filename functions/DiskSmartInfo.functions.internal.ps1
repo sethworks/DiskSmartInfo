@@ -520,7 +520,8 @@ function inGetDiskSmartInfo
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
-                        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
+                        # if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
+                        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
                             if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
@@ -593,7 +594,8 @@ function inGetDiskSmartInfo
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
-                        if (isAttributeRequestedNVMe -RequestedAttributes $RequestedAttributes -AttributeName $attributeSmartData.Name)
+                        # if (isAttributeRequestedNVMe -RequestedAttributes $RequestedAttributes -AttributeName $attributeSmartData.Name)
+                        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             $attribute = [ordered]@{}
                             $attribute.Add('Name', $attributeSmartData.Name)
