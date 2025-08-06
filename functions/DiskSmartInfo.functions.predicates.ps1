@@ -48,6 +48,24 @@ function isAttributeRequested
     }
 }
 
+function isAttributeRequestedNVMe
+{
+    Param (
+        [hashtable[]]$RequestedAttributes,
+        [string]$AttributeName
+    )
+
+    if ((-not $RequestedAttributes.AttributeNames) -or
+        ($RequestedAttributes.AttributeNames.Where{$AttributeName -like $PSItem}))
+    {
+        return $true
+    }
+    else
+    {
+        return $false
+    }
+}
+
 function isCritical
 {
     Param (
@@ -82,7 +100,7 @@ function isCriticalThresholdExceeded
     }
 }
 
-function isThresholdExceeded
+function isValueThresholdExceeded
 {
     Param (
         $Value,
