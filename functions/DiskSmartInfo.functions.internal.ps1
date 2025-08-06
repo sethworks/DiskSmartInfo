@@ -628,20 +628,24 @@ function inGetDiskSmartInfo
                             # }
 
                             $attributeObject = [PSCustomObject]$attribute
-                            $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+                            $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
 
-                            if ($ShowHistory -and $Convert)
+                            if ($ShowHistory)
                             {
-                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                                $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
                             }
-                            elseif ($ShowHistory)
-                            {
-                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
-                            }
-                            elseif ($Convert)
-                            {
-                                $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
-                            }
+                            # if ($ShowHistory -and $Convert)
+                            # {
+                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                            # }
+                            # elseif ($ShowHistory)
+                            # {
+                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
+                            # }
+                            # elseif ($Convert)
+                            # {
+                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
+                            # }
                             $attributes += $attributeObject
                         }
                     }
@@ -649,21 +653,29 @@ function inGetDiskSmartInfo
 
                 if ($attributes -or (-not $Config.SuppressResultsWithEmptySmartData -and -not $Quiet) -or $hash.PredictFailure)
                 {
-                    if (-not $AttributeProperties)
+                    if ($diskSmartData.DiskType -eq 'ATA')
+                    {
+                        if (-not $AttributeProperties)
+                        {
+                            $hash.Add("SmartData", $attributes)
+                            Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
+                        }
+                        else
+                        {
+                            $formatProperties = $AttributeProperties.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
+                            $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
+                            $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
+
+                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock))
+
+                            Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
+                            Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+                        }
+                    }
+                    elseif ($diskSmartData.DiskType -eq 'NVMe')
                     {
                         $hash.Add("SmartData", $attributes)
-                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
-                    }
-                    else
-                    {
-                        $formatProperties = $AttributeProperties.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
-                        $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
-                        $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
-
-                        $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock))
-
-                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
-                        Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMe[]'
                     }
 
                     $diskSmartInfo = [PSCustomObject]$hash
