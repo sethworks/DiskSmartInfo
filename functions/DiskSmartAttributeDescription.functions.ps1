@@ -13,11 +13,9 @@ function Get-DiskSmartAttributeDescription
     )
 
     $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
-    # $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName -IsDescription
 
     foreach ($attribute in $descriptions)
     {
-        # if (isAttributeRequested -attributeID $attribute.AttributeID -actualAttributesList $descriptions)
         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attribute.AttributeID -AttributeIDHex $attribute.AttributeID.ToString('X') -AttributeName $attribute.AttributeName)
         {
             $attribute

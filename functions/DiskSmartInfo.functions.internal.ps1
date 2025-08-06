@@ -200,7 +200,6 @@ function inGetSourceSmartDataCtl
 
             foreach ($device in $devices)
             {
-                # if ($device -match '^(?<device>/dev/\w{3})')
                 if ($device -match '^(?<device>/dev/\w+)')
                 {
                     $sb = [scriptblock]::Create("$sbs $($Matches.device)")
@@ -421,7 +420,6 @@ function inGetSmartDataStructureCtl
             elseif ($hash.DiskType -eq 'NVMe')
             {
                 $header = $diskSmartData.diskSmartData -like "SMART/Health Information (NVMe Log*"
-                # $headerIndex = $diskSmartData.diskSmartData.IndexOf('SMART/Health Information (NVMe Log')
                 $headerIndex = $diskSmartData.diskSmartData.IndexOf($header)
 
                 if ($headerIndex -ge 0)
@@ -444,18 +442,6 @@ function inGetSmartDataStructureCtl
 
                 $hash.Add("SmartData", $attributes)
             }
-
-            # $hash.Add("SmartData", $attributes)
-
-            # if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
-            # {
-            #     $sectorSize = $Matches.sectorsize
-            # }
-            # else
-            # {
-            #     $sectorSize = $null
-            # }
-            # $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
 
             $hostSmartData.DisksSmartData += $hash
         }
@@ -531,8 +517,6 @@ function inGetDiskSmartInfo
                 foreach ($attributeSmartData in $diskSmartData.SmartData)
                 {
                     # Attribute request check
-                    # if ((isAttributeRequested -attributeID $attributeSmartData.ID -actualAttributesList $actualAttributesList))
-                    # if ((isAttributeRequested -attributeID $attributeSmartData.ID -attributeIDHex $attributeSmartData.IDHex -attributeName $attributeSmartData.Name))
                     if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
                     {
                         # Attribute criticality check

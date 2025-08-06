@@ -124,11 +124,6 @@ function Get-DiskSmartInfo
         }
 
         $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
-
-        # $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
-
-        # $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
-        # $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     }
 
     process
