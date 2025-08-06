@@ -136,6 +136,7 @@ function inGetSmartDataStructureCIM
             $hash.Add('DiskModel', [string]$model)
             $hash.Add('Device', [string]$pNPDeviceId)
             $hash.Add('PredictFailure', [bool]$failurePredictStatus)
+            $hash.Add('DiskType', 'ATA')
 
             $attributes = @()
 
@@ -514,71 +515,146 @@ function inGetDiskSmartInfo
                     $historicalAttributes = $hostHistoricalData.HistoricalData.Where{$_.Device -eq $hash.Device}.SmartData
                 }
 
-                foreach ($attributeSmartData in $diskSmartData.SmartData)
+                if ($diskSmartData.DiskType -eq 'ATA')
                 {
-                    # Attribute request check
-                    if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
+                    foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
-                        # Attribute criticality check
-                        if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
+                        # Attribute request check
+                        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
                         {
-                            # Attribute quiet eligibility check
-                            if ((-not $Quiet) -or
-                                ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
-                                 (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
+                            # Attribute criticality check
+                            if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
                             {
-                                $attribute = [ordered]@{}
-                                $attribute.Add('ID', $attributeSmartData.ID)
-                                $attribute.Add('IDHex', $attributeSmartData.IDHex)
-                                $attribute.Add('Name', $attributeSmartData.Name)
-                                $attribute.Add('Threshold', $attributeSmartData.Threshold)
-                                $attribute.Add('Value', $attributeSmartData.Value)
-                                $attribute.Add('Worst', $attributeSmartData.Worst)
-                                $attribute.Add('Data', $attributeSmartData.Data)
-
-                                if ($ShowHistory)
+                                # Attribute quiet eligibility check
+                                if ((-not $Quiet) -or
+                                    ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
+                                    (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
                                 {
-                                    if ($hostHistoricalData)
-                                    {
-                                        $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attribute.ID}.Data
+                                    $attribute = [ordered]@{}
+                                    $attribute.Add('ID', $attributeSmartData.ID)
+                                    $attribute.Add('IDHex', $attributeSmartData.IDHex)
+                                    $attribute.Add('Name', $attributeSmartData.Name)
+                                    $attribute.Add('Threshold', $attributeSmartData.Threshold)
+                                    $attribute.Add('Value', $attributeSmartData.Value)
+                                    $attribute.Add('Worst', $attributeSmartData.Worst)
+                                    $attribute.Add('Data', $attributeSmartData.Data)
 
-                                        if ($Config.ShowUnchangedDataHistory -or
-                                            (-not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData)))
+                                    if ($ShowHistory)
+                                    {
+                                        if ($hostHistoricalData)
                                         {
-                                            $attribute.Add("DataHistory", $historicalAttributeData)
+                                            $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attribute.ID}.Data
+
+                                            if ($Config.ShowUnchangedDataHistory -or
+                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData)))
+                                            {
+                                                $attribute.Add("DataHistory", $historicalAttributeData)
+                                            }
+                                            else
+                                            {
+                                                $attribute.Add("DataHistory", $null)
+                                            }
                                         }
                                         else
                                         {
                                             $attribute.Add("DataHistory", $null)
                                         }
                                     }
-                                    else
+
+                                    if ($Convert)
                                     {
-                                        $attribute.Add("DataHistory", $null)
+                                        $attribute.Add("DataConverted", $(inConvertData -actualAttributesList $actualAttributesList -attribute $attribute))
                                     }
-                                }
 
-                                if ($Convert)
-                                {
-                                    $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
-                                }
+                                    $attributeObject = [PSCustomObject]$attribute
+                                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
 
-                                $attributeObject = [PSCustomObject]$attribute
-                                $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+                                    if ($ShowHistory -and $Convert)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                                    }
+                                    elseif ($ShowHistory)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
+                                    }
+                                    elseif ($Convert)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
+                                    }
+                                    $attributes += $attributeObject
+                                }
+                            }
+                        }
+                    }
+                }
+                elseif ($diskSmartData.DiskType -eq 'NVMe')
+                {
+                    foreach ($attributeSmartData in $diskSmartData.SmartData)
+                    {
+                        # Attribute request check
+                        if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
+                        {
+                            # Attribute criticality check
+                            if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
+                            {
+                                # Attribute quiet eligibility check
+                                if ((-not $Quiet) -or
+                                    ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
+                                    (isThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
+                                {
+                                    $attribute = [ordered]@{}
+                                    $attribute.Add('ID', $attributeSmartData.ID)
+                                    $attribute.Add('IDHex', $attributeSmartData.IDHex)
+                                    $attribute.Add('Name', $attributeSmartData.Name)
+                                    $attribute.Add('Threshold', $attributeSmartData.Threshold)
+                                    $attribute.Add('Value', $attributeSmartData.Value)
+                                    $attribute.Add('Worst', $attributeSmartData.Worst)
+                                    $attribute.Add('Data', $attributeSmartData.Data)
 
-                                if ($ShowHistory -and $Convert)
-                                {
-                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                                    if ($ShowHistory)
+                                    {
+                                        if ($hostHistoricalData)
+                                        {
+                                            $historicalAttributeData = $historicalAttributes.Where{$_.ID -eq $attribute.ID}.Data
+
+                                            if ($Config.ShowUnchangedDataHistory -or
+                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -historicalAttributeData $historicalAttributeData)))
+                                            {
+                                                $attribute.Add("DataHistory", $historicalAttributeData)
+                                            }
+                                            else
+                                            {
+                                                $attribute.Add("DataHistory", $null)
+                                            }
+                                        }
+                                        else
+                                        {
+                                            $attribute.Add("DataHistory", $null)
+                                        }
+                                    }
+
+                                    if ($Convert)
+                                    {
+                                        $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
+                                    }
+
+                                    $attributeObject = [PSCustomObject]$attribute
+                                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+
+                                    if ($ShowHistory -and $Convert)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                                    }
+                                    elseif ($ShowHistory)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
+                                    }
+                                    elseif ($Convert)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
+                                    }
+                                    $attributes += $attributeObject
                                 }
-                                elseif ($ShowHistory)
-                                {
-                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
-                                }
-                                elseif ($Convert)
-                                {
-                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
-                                }
-                                $attributes += $attributeObject
                             }
                         }
                     }
