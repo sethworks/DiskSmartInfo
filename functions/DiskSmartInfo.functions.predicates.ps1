@@ -32,9 +32,6 @@ function isAttributeRequested
         [hashtable[]]$RequestedAttributes,
         [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
         [string]$diskType
-        # [int]$AttributeID,
-        # [string]$AttributeIDHex,
-        # [string]$AttributeName
     )
 
     if ($diskType -eq 'ATA')
@@ -64,37 +61,7 @@ function isAttributeRequested
             return $false
         }
     }
-
-    # if ((-not ($RequestedAttributes.AttributeIDs -or $RequestedAttributes.AttributeIDHexes -or $RequestedAttributes.AttributeNames)) -or
-    #     ($RequestedAttributes.AttributeIDs -contains $AttributeID) -or
-    #     ($RequestedAttributes.AttributeIDHexes -contains $AttributeIDHex) -or
-    #     ($RequestedAttributes.AttributeNames.Where{$AttributeName -like $PSItem}))
-    # {
-    #     return $true
-    # }
-    # else
-    # {
-    #     return $false
-    # }
 }
-
-# function isAttributeRequestedNVMe
-# {
-#     Param (
-#         [hashtable[]]$RequestedAttributes,
-#         [string]$AttributeName
-#     )
-
-#     if ((-not $RequestedAttributes.AttributeNames) -or
-#         ($RequestedAttributes.AttributeNames.Where{$AttributeName -like $PSItem}))
-#     {
-#         return $true
-#     }
-#     else
-#     {
-#         return $false
-#     }
-# }
 
 function isCritical
 {

@@ -116,12 +116,10 @@ function inGetAttributeHistoricalData
         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
     {
         return $attributeHistoricalData
-        # $attribute.Add("DataHistory", $attributeHistoricalData)
     }
     else
     {
         return $null
-        # $attribute.Add("DataHistory", $null)
     }
 }
 

@@ -520,7 +520,6 @@ function inGetDiskSmartInfo
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
-                        # if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
@@ -543,24 +542,6 @@ function inGetDiskSmartInfo
                                     if ($ShowHistory)
                                     {
                                         $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
-                                        # if ($hostHistoricalData)
-                                        # {
-                                        #     $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
-
-                                        #     if ($Config.ShowUnchangedDataHistory -or
-                                        #         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
-                                        #     {
-                                        #         $attribute.Add("DataHistory", $attributeHistoricalData)
-                                        #     }
-                                        #     else
-                                        #     {
-                                        #         $attribute.Add("DataHistory", $null)
-                                        #     }
-                                        # }
-                                        # else
-                                        # {
-                                        #     $attribute.Add("DataHistory", $null)
-                                        # }
                                     }
 
                                     if ($Convert)
@@ -594,7 +575,6 @@ function inGetDiskSmartInfo
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
-                        # if (isAttributeRequestedNVMe -RequestedAttributes $RequestedAttributes -AttributeName $attributeSmartData.Name)
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             $attribute = [ordered]@{}
@@ -604,30 +584,7 @@ function inGetDiskSmartInfo
                             if ($ShowHistory)
                             {
                                 $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
-                                # if ($hostHistoricalData)
-                                # {
-                                #     $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
-
-                                #     if ($Config.ShowUnchangedDataHistory -or
-                                #         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
-                                #     {
-                                #         $attribute.Add("DataHistory", $attributeHistoricalData)
-                                #     }
-                                #     else
-                                #     {
-                                #         $attribute.Add("DataHistory", $null)
-                                #     }
-                                # }
-                                # else
-                                # {
-                                #     $attribute.Add("DataHistory", $null)
-                                # }
                             }
-
-                            # if ($Convert)
-                            # {
-                            #     $attribute.Add("DataConverted", $(inConvertData -actualAttributesList $actualAttributesList -attribute $attribute))
-                            # }
 
                             $attributeObject = [PSCustomObject]$attribute
                             $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
@@ -636,18 +593,6 @@ function inGetDiskSmartInfo
                             {
                                 $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
                             }
-                            # if ($ShowHistory -and $Convert)
-                            # {
-                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
-                            # }
-                            # elseif ($ShowHistory)
-                            # {
-                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
-                            # }
-                            # elseif ($Convert)
-                            # {
-                            #     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
-                            # }
                             $attributes += $attributeObject
                         }
                     }

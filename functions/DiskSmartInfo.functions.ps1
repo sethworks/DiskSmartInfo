@@ -135,7 +135,6 @@ function Get-DiskSmartInfo
                 if ($Source -eq 'CIM')
                 {
                     $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-
                     $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                     inGetDiskSmartInfo `
@@ -209,7 +208,6 @@ function Get-DiskSmartInfo
                         try
                         {
                             $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-
                             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                             inGetDiskSmartInfo `
