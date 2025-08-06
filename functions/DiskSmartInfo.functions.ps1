@@ -123,10 +123,12 @@ function Get-DiskSmartInfo
             ErrorAction = 'SilentlyContinue'
         }
 
-        $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
+        $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
 
-        $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
-        $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+        # $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
+
+        # $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+        # $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
     }
 
     process
@@ -148,7 +150,7 @@ function Get-DiskSmartInfo
                         -DiskNumbers $DiskNumber `
                         -DiskModels $DiskModel `
                         -Devices $Device `
-                        -AttributeIDs $attributeIDs `
+                        -RequestedAttributes $RequestedAttributes `
                         -AttributeProperties $AttributeProperty `
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
@@ -186,7 +188,7 @@ function Get-DiskSmartInfo
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -Devices $Device `
-                    -AttributeIDs $attributeIDs `
+                    -RequestedAttributes $RequestedAttributes `
                     -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
@@ -222,7 +224,7 @@ function Get-DiskSmartInfo
                                 -DiskNumbers $DiskNumber `
                                 -DiskModels $DiskModel `
                                 -Devices $Device `
-                                -AttributeIDs $attributeIDs `
+                                -RequestedAttributes $RequestedAttributes `
                                 -AttributeProperties $AttributeProperty `
                                 -Quiet:$Quiet `
                                 -ShowHistory:$ShowHistory `
@@ -291,7 +293,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
-                            -AttributeIDs $attributeIDs `
+                            -RequestedAttributes $RequestedAttributes `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
@@ -334,7 +336,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
-                            -AttributeIDs $attributeIDs `
+                            -RequestedAttributes $RequestedAttributes `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
@@ -369,7 +371,7 @@ function Get-DiskSmartInfo
                 -DiskNumbers $DiskNumber `
                 -DiskModels $DiskModel `
                 -Devices $Device `
-                -AttributeIDs $attributeIDs `
+                -RequestedAttributes $RequestedAttributes `
                 -AttributeProperties $AttributeProperty `
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `

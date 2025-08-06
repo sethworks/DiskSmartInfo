@@ -29,15 +29,42 @@ function isAttributeDataEqual
 function isAttributeRequested
 {
     Param (
-        [int]$attributeID,
-        [PSCustomObject[]]$actualAttributesList
+        [hashtable[]]$RequestedAttributes,
+        [int]$AttributeID,
+        [string]$AttributeIDHex,
+        [string]$AttributeName
+        # $Attribute
     )
 
-    $atName = $actualAttributesList.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
+    # if ((-not $attributeID -and -not $attributeIDHex -and -not $attributeName))
+    # if ((-not ($AttributeIDs -or $AttributeIDHexes -or $AttributeNames)) -or
+    #     ($AttributeIDs -contains $attributeID) -or
+    #     ($AttributeIDHexes -contains $attributeIDHex) -or
+    #     ($AttributeNames.Where{$attributeName -like $PSItem}))
+    # {
+    #     return $true
+    # }
+    # else
+    # {
+    #     return $false
+    # }
 
-    if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
-        ($attributeIDs -contains $attributeID) -or
-        ($AttributeName.Where{$atName -like $PSItem}))
+    # if ((-not ($RequestedAttributes.AttributeIDs -or $RequestedAttributes.AttributeIDHexes -or $RequestedAttributes.AttributeNames)) -or
+    #     ($RequestedAttributes.AttributeIDs -contains $Attribute.attributeID) -or
+    #     ($RequestedAttributes.AttributeIDHexes -contains $Attribute.attributeIDHex) -or
+    #     ($RequestedAttributes.AttributeNames.Where{$Attribute.attributeName -like $PSItem}))
+    # {
+    #     return $true
+    # }
+    # else
+    # {
+    #     return $false
+    # }
+
+    if ((-not ($RequestedAttributes.AttributeIDs -or $RequestedAttributes.AttributeIDHexes -or $RequestedAttributes.AttributeNames)) -or
+        ($RequestedAttributes.AttributeIDs -contains $AttributeID) -or
+        ($RequestedAttributes.AttributeIDHexes -contains $AttributeIDHex) -or
+        ($RequestedAttributes.AttributeNames.Where{$AttributeName -like $PSItem}))
     {
         return $true
     }
@@ -45,6 +72,24 @@ function isAttributeRequested
     {
         return $false
     }
+
+    # Param (
+    #     [int]$attributeID,
+    #     [PSCustomObject[]]$actualAttributesList
+    # )
+
+    # $atName = $actualAttributesList.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
+
+    # if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
+    #     ($attributeIDs -contains $attributeID) -or
+    #     ($AttributeName.Where{$atName -like $PSItem}))
+    # {
+    #     return $true
+    # }
+    # else
+    # {
+    #     return $false
+    # }
 }
 
 function isCritical

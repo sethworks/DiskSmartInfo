@@ -476,7 +476,7 @@ function inGetDiskSmartInfo
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [string[]]$Devices,
-        [int[]]$AttributeIDs,
+        [hashtable[]]$RequestedAttributes,
         [AttributeProperty[]]$AttributeProperties,
         [switch]$Quiet,
         [switch]$ShowHistory,
@@ -531,7 +531,9 @@ function inGetDiskSmartInfo
                 foreach ($attributeSmartData in $diskSmartData.SmartData)
                 {
                     # Attribute request check
-                    if ((isAttributeRequested -attributeID $attributeSmartData.ID -actualAttributesList $actualAttributesList))
+                    # if ((isAttributeRequested -attributeID $attributeSmartData.ID -actualAttributesList $actualAttributesList))
+                    # if ((isAttributeRequested -attributeID $attributeSmartData.ID -attributeIDHex $attributeSmartData.IDHex -attributeName $attributeSmartData.Name))
+                    if (isAttributeRequested -RequestedAttributes $RequestedAttributes -AttributeID $attributeSmartData.ID -AttributeIDHex $attributeSmartData.IDHex -AttributeName $attributeSmartData.Name)
                     {
                         # Attribute criticality check
                         if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
@@ -593,7 +595,6 @@ function inGetDiskSmartInfo
                                     $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
                                 }
                                 $attributes += $attributeObject
-
                             }
                         }
                     }

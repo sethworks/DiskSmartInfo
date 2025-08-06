@@ -1,33 +1,33 @@
-function inComposeAttributeIDs
-{
-    Param (
-        [int[]]$AttributeID,
-        [string[]]$AttributeIDHex,
-        [string[]]$AttributeName,
-        [switch]$IsDescription
-        )
+# function inComposeAttributeIDs
+# {
+#     Param (
+#         [int[]]$AttributeID,
+#         [string[]]$AttributeIDHex,
+#         [string[]]$AttributeName,
+#         [switch]$IsDescription
+#         )
 
-    $attributeIDs = [System.Collections.Generic.List[int]]::new()
+#     $attributeIDs = [System.Collections.Generic.List[int]]::new()
 
-    foreach ($at in $AttributeID)
-    {
-        if (-not $attributeIDs.Contains($at))
-        {
-            $attributeIDs.Add($at)
-        }
-    }
+#     foreach ($at in $AttributeID)
+#     {
+#         if (-not $attributeIDs.Contains($at))
+#         {
+#             $attributeIDs.Add($at)
+#         }
+#     }
 
-    foreach ($at in $AttributeIDHex)
-    {
-        $value = [convert]::ToInt32($at, 16)
-        if (-not $attributeIDs.Contains($value))
-        {
-            $attributeIDs.Add($value)
-        }
-    }
+#     foreach ($at in $AttributeIDHex)
+#     {
+#         $value = [convert]::ToInt32($at, 16)
+#         if (-not $attributeIDs.Contains($value))
+#         {
+#             $attributeIDs.Add($value)
+#         }
+#     }
 
-    return $attributeIDs
-}
+#     return $attributeIDs
+# }
 
 function inSelectAttributeProperties
 {
