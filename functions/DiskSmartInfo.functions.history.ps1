@@ -103,6 +103,28 @@ function inGetHistoricalData
     }
 }
 
+function inGetAttributeHistoricalData
+{
+    Param (
+        $diskHistoricalData,
+        $attribute
+    )
+
+    $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+
+    if ($Config.ShowUnchangedDataHistory -or
+        (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
+    {
+        return $attributeHistoricalData
+        # $attribute.Add("DataHistory", $attributeHistoricalData)
+    }
+    else
+    {
+        return $null
+        # $attribute.Add("DataHistory", $null)
+    }
+}
+
 function inComposeHistoricalDataFileName
 {
     Param (

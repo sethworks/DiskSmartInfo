@@ -541,24 +541,25 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        if ($hostHistoricalData)
-                                        {
-                                            $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
+                                        # if ($hostHistoricalData)
+                                        # {
+                                        #     $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
 
-                                            if ($Config.ShowUnchangedDataHistory -or
-                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
-                                            {
-                                                $attribute.Add("DataHistory", $attributeHistoricalData)
-                                            }
-                                            else
-                                            {
-                                                $attribute.Add("DataHistory", $null)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $attribute.Add("DataHistory", $null)
-                                        }
+                                        #     if ($Config.ShowUnchangedDataHistory -or
+                                        #         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
+                                        #     {
+                                        #         $attribute.Add("DataHistory", $attributeHistoricalData)
+                                        #     }
+                                        #     else
+                                        #     {
+                                        #         $attribute.Add("DataHistory", $null)
+                                        #     }
+                                        # }
+                                        # else
+                                        # {
+                                        #     $attribute.Add("DataHistory", $null)
+                                        # }
                                     }
 
                                     if ($Convert)
@@ -613,29 +614,30 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        if ($hostHistoricalData)
-                                        {
-                                            $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
+                                        # if ($hostHistoricalData)
+                                        # {
+                                        #     $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
 
-                                            if ($Config.ShowUnchangedDataHistory -or
-                                                (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
-                                            {
-                                                $attribute.Add("DataHistory", $attributeHistoricalData)
-                                            }
-                                            else
-                                            {
-                                                $attribute.Add("DataHistory", $null)
-                                            }
-                                        }
-                                        else
-                                        {
-                                            $attribute.Add("DataHistory", $null)
-                                        }
+                                        #     if ($Config.ShowUnchangedDataHistory -or
+                                        #         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
+                                        #     {
+                                        #         $attribute.Add("DataHistory", $attributeHistoricalData)
+                                        #     }
+                                        #     else
+                                        #     {
+                                        #         $attribute.Add("DataHistory", $null)
+                                        #     }
+                                        # }
+                                        # else
+                                        # {
+                                        #     $attribute.Add("DataHistory", $null)
+                                        # }
                                     }
 
                                     if ($Convert)
                                     {
-                                        $attribute.Add("DataConverted", $(inConvertData -attribute $attribute))
+                                        $attribute.Add("DataConverted", $(inConvertData -actualAttributesList $actualAttributesList -attribute $attribute))
                                     }
 
                                     $attributeObject = [PSCustomObject]$attribute
