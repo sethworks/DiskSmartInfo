@@ -44,7 +44,7 @@ function inUpdateHistoricalData
 
     if ($historicalData.Count)
     {
-        $fullname = inComposeHistoricalDataFileName -computerName $hostSmartData.computerName
+        $fullname = inGetHistoricalDataFileName -computerName $hostSmartData.computerName
 
         $hostHistoricalData = @{
             TimeStamp = Get-Date
@@ -63,20 +63,24 @@ function inGetHistoricalData
         $computerName
     )
 
-    $fullname = inComposeHistoricalDataFileName -computerName $computerName
+    $fullname = inGetHistoricalDataFileName -computerName $computerName
 
-    if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
+    # if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
+    if ($historicalDataFileContent = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
     {
-        $converted = ConvertFrom-Json -InputObject $content
+        # $converted = ConvertFrom-Json -InputObject $content
+        $sourceHostHistoricalData = ConvertFrom-Json -InputObject $historicalDataFileContent
 
         if ($IsCoreCLR)
         {
-            $timestamp = $converted.TimeStamp
+            # $timestamp = $converted.TimeStamp
+            $timestamp = $sourceHostHistoricalData.TimeStamp
         }
         # Windows PowerShell 5.1 ConvertTo-Json converts DateTime objects differently
         else
         {
-            $timestamp = $converted.TimeStamp.DateTime
+            # $timestamp = $converted.TimeStamp.DateTime
+            $timestamp = $sourceHostHistoricalData.TimeStamp.DateTime
         }
 
         $hostHistoricalData = @{
@@ -84,39 +88,51 @@ function inGetHistoricalData
             HistoricalData = @()
         }
 
-        foreach ($object in $converted.HistoricalData)
+        # foreach ($object in $converted.HistoricalData)
+        foreach ($sourceDiskHistoricalData in $sourceHostHistoricalData.HistoricalData)
         {
             $hash = [ordered]@{}
             $attributes = @()
 
-            $hash.Add('Device', [string]$object.Device)
+            # $hash.Add('Device', [string]$object.Device)
+            $hash.Add('Device', [string]$sourceDiskHistoricalData.Device)
 
-            if ($object.DiskType -eq 'ATA')
+            # if ($object.DiskType -eq 'ATA')
+            if ($sourceDiskHistoricalData.DiskType -eq 'ATA')
             {
-                foreach ($at in $object.SmartData)
+                # foreach ($at in $object.SmartData)
+                foreach ($sourceAttribute in $sourceDiskHistoricalData.SmartData)
                 {
                     $attribute = [ordered]@{}
-                    $attribute.Add('ID', [byte]$at.ID)
+                    # $attribute.Add('ID', [byte]$at.ID)
+                    $attribute.Add('ID', [byte]$sourceAttribute.ID)
 
-                    if ($at.Data.Count -gt 1)
+                    # if ($at.Data.Count -gt 1)
+                    if ($sourceAttribute.Data.Count -gt 1)
                     {
-                        $attribute.Add('Data', [long[]]$at.Data)
+                        # $attribute.Add('Data', [long[]]$at.Data)
+                        $attribute.Add('Data', [long[]]$sourceAttribute.Data)
                     }
                     else
                     {
-                        $attribute.Add('Data', [long]$at.Data)
+                        # $attribute.Add('Data', [long]$at.Data)
+                        $attribute.Add('Data', [long]$sourceAttribute.Data)
                     }
 
                     $attributes += [PSCustomObject]$attribute
                 }
             }
-            elseif ($object.DiskType -eq 'NVMe')
+            # elseif ($object.DiskType -eq 'NVMe')
+            elseif ($sourceDiskHistoricalData.DiskType -eq 'NVMe')
             {
-                foreach ($at in $object.SmartData)
+                # foreach ($at in $object.SmartData)
+                foreach ($sourceAttribute in $sourceDiskHistoricalData.SmartData)
                 {
                     $attribute = [ordered]@{}
-                    $attribute.Add('Name', [string]$at.Name)
-                    $attribute.Add('Data', [string]$at.Data)
+                    # $attribute.Add('Name', [string]$at.Name)
+                    $attribute.Add('Name', [string]$sourceAttribute.Name)
+                    # $attribute.Add('Data', [string]$at.Data)
+                    $attribute.Add('Data', [string]$sourceAttribute.Data)
                     $attributes += [PSCustomObject]$attribute
                 }
             }
@@ -157,7 +173,7 @@ function inGetAttributeHistoricalData
     }
 }
 
-function inComposeHistoricalDataFileName
+function inGetHistoricalDataFileName
 {
     Param (
         [string]$computerName
