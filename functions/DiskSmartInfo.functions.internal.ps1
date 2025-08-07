@@ -399,9 +399,9 @@ function inGetSmartDataStructureCtl
                             {
                                 $attribute.Add("Data", [long]$Matches.data)
                             }
-                        }
 
-                        $attributes += $attribute
+                            $attributes += $attribute
+                        }
                     }
                 }
 
@@ -435,9 +435,9 @@ function inGetSmartDataStructureCtl
                         {
                             $attribute.Add("Name", [string]$Matches.name)
                             $attribute.Add("Data", [string]$Matches.data)
-                        }
 
-                        $attributes += $attribute
+                            $attributes += $attribute
+                        }
                     }
                 }
 
@@ -541,7 +541,7 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
+                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
                                     }
 
                                     if ($Convert)
@@ -583,7 +583,7 @@ function inGetDiskSmartInfo
 
                             if ($ShowHistory)
                             {
-                                $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute))
+                                $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
                             }
 
                             $attributeObject = [PSCustomObject]$attribute

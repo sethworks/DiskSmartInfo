@@ -10,15 +10,29 @@ function inUpdateHistoricalData
     {
         $hash = [ordered]@{}
         $hash.Add('Device', $diskSmartData.Device)
+        $hash.Add('DiskType', $diskSmartData.DiskType)
 
         $attributes = @()
 
-        foreach ($attributeSmartData in $diskSmartData.SmartData)
+        if ($hash.DiskType -eq 'ATA')
         {
-            $attribute = [ordered]@{}
-            $attribute.Add('ID', $attributeSmartData.ID)
-            $attribute.Add('Data', $attributeSmartData.Data)
-            $attributes += [PSCustomObject]$attribute
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('ID', $attributeSmartData.ID)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
+        }
+        elseif ($hash.DiskType -eq 'NVMe')
+        {
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('Name', $attributeSmartData.Name)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
         }
 
         if ($attributes)
@@ -77,22 +91,34 @@ function inGetHistoricalData
 
             $hash.Add('Device', [string]$object.Device)
 
-            foreach ($at in $object.SmartData)
+            if ($object.DiskType -eq 'ATA')
             {
-                $attribute = [ordered]@{}
-
-                $attribute.Add('ID', [byte]$at.ID)
-
-                if ($at.Data.Count -gt 1)
+                foreach ($at in $object.SmartData)
                 {
-                    $attribute.Add('Data', [long[]]$at.Data)
-                }
-                else
-                {
-                    $attribute.Add('Data', [long]$at.Data)
-                }
+                    $attribute = [ordered]@{}
+                    $attribute.Add('ID', [byte]$at.ID)
 
-                $attributes += [PSCustomObject]$attribute
+                    if ($at.Data.Count -gt 1)
+                    {
+                        $attribute.Add('Data', [long[]]$at.Data)
+                    }
+                    else
+                    {
+                        $attribute.Add('Data', [long]$at.Data)
+                    }
+
+                    $attributes += [PSCustomObject]$attribute
+                }
+            }
+            elseif ($object.DiskType -eq 'NVMe')
+            {
+                foreach ($at in $object.SmartData)
+                {
+                    $attribute = [ordered]@{}
+                    $attribute.Add('Name', [string]$at.Name)
+                    $attribute.Add('Data', [string]$at.Data)
+                    $attributes += [PSCustomObject]$attribute
+                }
             }
 
             $hash.Add('SmartData', $attributes)
@@ -107,10 +133,18 @@ function inGetAttributeHistoricalData
 {
     Param (
         $diskHistoricalData,
-        $attribute
+        $attribute,
+        $diskType
     )
 
-    $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+    if ($diskType -eq 'ATA')
+    {
+        $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+    }
+    elseif ($diskType -eq 'NVMe')
+    {
+        $attributeHistoricalData = $diskHistoricalData.Where{$_.Name -eq $attribute.Name}.Data
+    }
 
     if ($Config.ShowUnchangedDataHistory -or
         (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
