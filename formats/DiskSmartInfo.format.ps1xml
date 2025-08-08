@@ -84,7 +84,7 @@
                                     {
                                         $text = $PSItem.SmartData | Format-Table | Out-String
                                     }
-                                    elseif ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeCustom[]')
+                                    elseif ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeCustom[]' -or $PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeNVMeCustom[]')
                                     {
                                         $text = $PSItem.SmartData.FormatTable() | Out-String
                                     }

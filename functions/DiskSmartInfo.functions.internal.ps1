@@ -623,7 +623,7 @@ function inGetDiskSmartInfo
                             $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
                             $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
 
-                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock))
+                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
 
                             Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
                             Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
@@ -631,8 +631,23 @@ function inGetDiskSmartInfo
                     }
                     elseif ($diskSmartData.DiskType -eq 'NVMe')
                     {
-                        $hash.Add("SmartData", $attributes)
-                        Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMe[]'
+                        if (-not $AttributeProperties)
+                        {
+                            $hash.Add("SmartData", $attributes)
+                            Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMe[]'
+                        }
+                        else
+                        {
+                            $formatProperties = $AttributeProperties.Where{$PSItem.ToString() -in 'AttributeName', 'Data', 'History'}.ForEach{$AttributePropertyFormat.($PSItem.ToString())} -join ', '
+                            $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
+                            $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
+
+                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties.Where{$PSItem.ToString() -in 'AttributeName', 'Data', 'History'} -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
+
+                            Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMeCustom[]'
+                            Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
+
+                        }
                     }
 
                     $diskSmartInfo = [PSCustomObject]$hash

@@ -3,7 +3,8 @@ function inSelectAttributeProperties
     Param (
         $attributes,
         [AttributeProperty[]]$properties,
-        $formatScriptBlock
+        $formatScriptBlock,
+        $diskType
     )
 
     $result = @()
@@ -38,7 +39,16 @@ function inSelectAttributeProperties
         }
 
         $attributeObject = [PSCustomObject]$attributeSelected
-        $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+
+        if ($diskType -eq 'ATA')
+        {
+            $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+        }
+        elseif ($diskType -eq 'NVMe')
+        {
+            $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMeCustom"
+        }
+
         $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
 
         $result += $attributeObject
