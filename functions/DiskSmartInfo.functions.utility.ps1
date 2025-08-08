@@ -3,8 +3,8 @@ function inSelectAttributeProperties
     Param (
         $attributes,
         [AttributeProperty[]]$properties,
-        $formatScriptBlock,
-        $diskType
+        [scriptblock]$formatScriptBlock,
+        [string]$diskType
     )
 
     $result = @()
