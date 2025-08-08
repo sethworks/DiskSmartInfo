@@ -1,83 +1,107 @@
 function inUpdateActualAttributesList
 {
     Param (
-        [string]$model
+        [string]$model,
+        [string]$diskType
     )
 
-    $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
-
-    foreach ($proprietaryAttributeSet in $proprietaryAttributes)
+    if ($diskType -eq 'ATA')
     {
-        foreach ($modelPattern in $proprietaryAttributeSet.ModelPatterns)
+        $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
+
+        foreach ($proprietaryAttributeSet in $proprietaryAttributes)
         {
-            if ($model -match $modelPattern)
+            foreach ($modelPattern in $proprietaryAttributeSet.ModelPatterns)
             {
-                foreach ($attribute in $proprietaryAttributeSet.Attributes)
+                if ($model -match $modelPattern)
                 {
-                    if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
+                    foreach ($attribute in $proprietaryAttributeSet.Attributes)
                     {
-                        $newAttribute = [ordered]@{
-                            AttributeID = $attribute.AttributeID
-                            AttributeName = $attribute.AttributeName
-                            DataFormat = $attribute.DataFormat
-                            IsCritical = $result[$index].IsCritical
-                            CriticalThreshold = $result[$index].CriticalThreshold
-                            ConvertScriptBlock = $result[$index].ConvertScriptBlock
-                        }
+                        if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
+                        {
+                            $newAttribute = [ordered]@{
+                                AttributeID = $attribute.AttributeID
+                                AttributeName = $attribute.AttributeName
+                                DataFormat = $attribute.DataFormat
+                                IsCritical = $result[$index].IsCritical
+                                CriticalThreshold = $result[$index].CriticalThreshold
+                                ConvertScriptBlock = $result[$index].ConvertScriptBlock
+                            }
 
-                        if ($attribute.Keys -contains 'IsCritical')
-                        {
-                            $newAttribute.IsCritical = $attribute.IsCritical
-                        }
-                        if ($attribute.Keys -contains 'CriticalThreshold')
-                        {
-                            $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
-                        }
-                        if ($attribute.Keys -contains 'ConvertScriptBlock')
-                        {
-                            $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
-                        }
+                            if ($attribute.Keys -contains 'IsCritical')
+                            {
+                                $newAttribute.IsCritical = $attribute.IsCritical
+                            }
+                            if ($attribute.Keys -contains 'CriticalThreshold')
+                            {
+                                $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
+                            }
+                            if ($attribute.Keys -contains 'ConvertScriptBlock')
+                            {
+                                $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
+                            }
 
-                        $result[$index] = [PSCustomObject]$newAttribute
+                            $result[$index] = [PSCustomObject]$newAttribute
+                        }
+                        else
+                        {
+                            $result.Add([PSCustomObject]$attribute)
+                        }
                     }
-                    else
+                    return $result
+                }
+            }
+        }
+        return $result
+    }
+    elseif ($diskType -eq 'NVMe')
+    {
+        $result = [System.Collections.Generic.List[PSCustomObject]]::new()
+
+        foreach ($nvmeAttributeSet in $nvmeAttributes)
+        {
+            $patternMatched = $false
+            foreach ($modelPattern in $nvmeAttributeSet.ModelPatterns)
+            {
+                if ($model -match $modelPattern)
+                {
+                    foreach ($attribute in $nvmeAttributeSet.Attributes)
                     {
                         $result.Add([PSCustomObject]$attribute)
                     }
+                    return $result
                 }
-                return $result
             }
         }
+        return $result
     }
-
-    return $result
 }
 
-function inUpdateActualAttributesListNVMe
-{
-    Param (
-        [string]$model
-    )
+# function inUpdateActualAttributesListNVMe
+# {
+#     Param (
+#         [string]$model
+#     )
 
-    $result = [System.Collections.Generic.List[PSCustomObject]]::new()
+#     $result = [System.Collections.Generic.List[PSCustomObject]]::new()
 
-    foreach ($nvmeAttributeSet in $nvmeAttributes)
-    {
-        $patternMatched = $false
-        foreach ($modelPattern in $nvmeAttributeSet.ModelPatterns)
-        {
-            if ($model -match $modelPattern)
-            {
-                foreach ($attribute in $nvmeAttributeSet.Attributes)
-                {
-                    $result.Add([PSCustomObject]$attribute)
-                }
-                return $result
-            }
-        }
-    }
-    return $result
-}
+#     foreach ($nvmeAttributeSet in $nvmeAttributes)
+#     {
+#         $patternMatched = $false
+#         foreach ($modelPattern in $nvmeAttributeSet.ModelPatterns)
+#         {
+#             if ($model -match $modelPattern)
+#             {
+#                 foreach ($attribute in $nvmeAttributeSet.Attributes)
+#                 {
+#                     $result.Add([PSCustomObject]$attribute)
+#                 }
+#                 return $result
+#             }
+#         }
+#     }
+#     return $result
+# }
 
 function inGetAttributeData
 {

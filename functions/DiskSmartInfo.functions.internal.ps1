@@ -140,7 +140,7 @@ function inGetSmartDataStructureCIM
 
             $attributes = @()
 
-            $actualAttributesList = inUpdateActualAttributesList -model $model
+            $actualAttributesList = inUpdateActualAttributesList -model $model -diskType $hash.DiskType
 
             for ($attributeStart = $initialOffset; $attributeStart -lt $smartData.Count; $attributeStart += $attributeLength)
             {
@@ -352,7 +352,7 @@ function inGetSmartDataStructureCtl
 
             if ($hash.DiskType -eq 'ATA')
             {
-                $actualAttributesList = inUpdateActualAttributesList -model $model
+                $actualAttributesList = inUpdateActualAttributesList -model $model -diskType $hash.DiskType
 
                 $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
 
@@ -515,7 +515,7 @@ function inGetDiskSmartInfo
 
                 if ($diskSmartData.DiskType -eq 'ATA')
                 {
-                    $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel
+                    $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel -diskType $diskSmartData.DiskType
 
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
@@ -572,7 +572,7 @@ function inGetDiskSmartInfo
                 }
                 elseif ($diskSmartData.DiskType -eq 'NVMe')
                 {
-                    $actualAttributesList = inUpdateActualAttributesListNVMe -model $hash.DiskModel
+                    $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel -diskType $diskSmartData.DiskType
 
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
