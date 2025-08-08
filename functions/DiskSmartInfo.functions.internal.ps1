@@ -456,8 +456,7 @@ function inGetSmartDataStructureCtl
 function inGetDiskSmartInfo
 {
         Param (
-        # [System.Collections.Generic.List[System.Collections.Hashtable]]$HostsSmartData,
-        $HostsSmartData,
+        [System.Collections.Specialized.OrderedDictionary[]]$HostsSmartData,
         [switch]$Convert,
         [switch]$CriticalAttributesOnly,
         [int[]]$DiskNumbers,

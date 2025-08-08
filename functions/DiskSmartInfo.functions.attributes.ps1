@@ -77,32 +77,6 @@ function inUpdateActualAttributesList
     }
 }
 
-# function inUpdateActualAttributesListNVMe
-# {
-#     Param (
-#         [string]$model
-#     )
-
-#     $result = [System.Collections.Generic.List[PSCustomObject]]::new()
-
-#     foreach ($nvmeAttributeSet in $nvmeAttributes)
-#     {
-#         $patternMatched = $false
-#         foreach ($modelPattern in $nvmeAttributeSet.ModelPatterns)
-#         {
-#             if ($model -match $modelPattern)
-#             {
-#                 foreach ($attribute in $nvmeAttributeSet.Attributes)
-#                 {
-#                     $result.Add([PSCustomObject]$attribute)
-#                 }
-#                 return $result
-#             }
-#         }
-#     }
-#     return $result
-# }
-
 function inGetAttributeData
 {
     Param(
