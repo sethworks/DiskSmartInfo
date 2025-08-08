@@ -8,12 +8,10 @@ function inUpdateActualAttributesList
 
     foreach ($proprietaryAttributeSet in $proprietaryAttributes)
     {
-        # $patternMatched = $false
         foreach ($modelPattern in $proprietaryAttributeSet.ModelPatterns)
         {
             if ($model -match $modelPattern)
             {
-                # $patternMatched = $true
                 foreach ($attribute in $proprietaryAttributeSet.Attributes)
                 {
                     if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
@@ -50,48 +48,9 @@ function inUpdateActualAttributesList
                 return $result
             }
         }
-
-        # if ($patternMatched)
-        # {
-            # foreach ($attribute in $proprietaryAttributeSet.Attributes)
-            # {
-            #     if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
-            #     {
-            #         $newAttribute = [ordered]@{
-            #             AttributeID = $attribute.AttributeID
-            #             AttributeName = $attribute.AttributeName
-            #             DataFormat = $attribute.DataFormat
-            #             IsCritical = $result[$index].IsCritical
-            #             CriticalThreshold = $result[$index].CriticalThreshold
-            #             ConvertScriptBlock = $result[$index].ConvertScriptBlock
-            #         }
-
-            #         if ($attribute.Keys -contains 'IsCritical')
-            #         {
-            #             $newAttribute.IsCritical = $attribute.IsCritical
-            #         }
-            #         if ($attribute.Keys -contains 'CriticalThreshold')
-            #         {
-            #             $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
-            #         }
-            #         if ($attribute.Keys -contains 'ConvertScriptBlock')
-            #         {
-            #             $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
-            #         }
-
-            #         $result[$index] = [PSCustomObject]$newAttribute
-            #     }
-            #     else
-            #     {
-            #         $result.Add([PSCustomObject]$attribute)
-            #     }
-            # }
-            # break
-            # }
     }
 
     return $result
-    # return $null
 }
 
 function inUpdateActualAttributesListNVMe
@@ -100,7 +59,6 @@ function inUpdateActualAttributesListNVMe
         [string]$model
     )
 
-    # $result = [System.Collections.Generic.List[PSCustomObject]]::new($defaultAttributes)
     $result = [System.Collections.Generic.List[PSCustomObject]]::new()
 
     foreach ($nvmeAttributeSet in $nvmeAttributes)
@@ -110,93 +68,14 @@ function inUpdateActualAttributesListNVMe
         {
             if ($model -match $modelPattern)
             {
-                # return $nvmeAttributeSet
-                # $patternMatched = $true
-                # break
-                # if ($patternMatched)
-                # {
                 foreach ($attribute in $nvmeAttributeSet.Attributes)
                 {
-                    # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
-                    # {
-                        # $newAttribute = [ordered]@{
-                            # AttributeID = $attribute.AttributeID
-                            # AttributeName = $attribute.AttributeName
-                            # DataFormat = $attribute.DataFormat
-                            # IsCritical = $result[$index].IsCritical
-                            # IsCritical = $attribute.IsCritical
-                            # CriticalThreshold = $result[$index].CriticalThreshold
-                            # ConvertScriptBlock = $result[$index].ConvertScriptBlock
-                        # }
-
-                        # if ($attribute.Keys -contains 'IsCritical')
-                        # {
-                        #     $newAttribute.IsCritical = $attribute.IsCritical
-                        # }
-                        # if ($attribute.Keys -contains 'CriticalThreshold')
-                        # {
-                        #     $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
-                        # }
-                        # if ($attribute.Keys -contains 'ConvertScriptBlock')
-                        # {
-                        #     $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
-                        # }
-
-                        # $result[$index] = [PSCustomObject]$newAttribute
-                    # }
-                    # else
-                    # {
-                        $result.Add([PSCustomObject]$attribute)
-                    # }
+                    $result.Add([PSCustomObject]$attribute)
                 }
-                # break
                 return $result
-                # }
             }
         }
     }
-
-    #     if ($patternMatched)
-    #     {
-    #         foreach ($attribute in $nvmeAttributeSet.Attributes)
-    #         {
-    #             # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
-    #             # {
-    #                 # $newAttribute = [ordered]@{
-    #                     # AttributeID = $attribute.AttributeID
-    #                     # AttributeName = $attribute.AttributeName
-    #                     # DataFormat = $attribute.DataFormat
-    #                     # IsCritical = $result[$index].IsCritical
-    #                     # IsCritical = $attribute.IsCritical
-    #                     # CriticalThreshold = $result[$index].CriticalThreshold
-    #                     # ConvertScriptBlock = $result[$index].ConvertScriptBlock
-    #                 # }
-
-    #                 # if ($attribute.Keys -contains 'IsCritical')
-    #                 # {
-    #                 #     $newAttribute.IsCritical = $attribute.IsCritical
-    #                 # }
-    #                 # if ($attribute.Keys -contains 'CriticalThreshold')
-    #                 # {
-    #                 #     $newAttribute.CriticalThreshold = $attribute.CriticalThreshold
-    #                 # }
-    #                 # if ($attribute.Keys -contains 'ConvertScriptBlock')
-    #                 # {
-    #                 #     $newAttribute.ConvertScriptBlock = $attribute.ConvertScriptBlock
-    #                 # }
-
-    #                 # $result[$index] = [PSCustomObject]$newAttribute
-    #             # }
-    #             # else
-    #             # {
-    #                 $result.Add([PSCustomObject]$attribute)
-    #             # }
-    #         }
-    #         break
-    #     }
-    # }
-
-    # return $null
     return $result
 }
 

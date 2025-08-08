@@ -508,8 +508,6 @@ function inGetDiskSmartInfo
 
                 $attributes = @()
 
-                # $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel
-
                 if ($hostHistoricalData)
                 {
                     $diskHistoricalData = $hostHistoricalData.HistoricalData.Where{$_.Device -eq $hash.Device}.SmartData
@@ -525,12 +523,10 @@ function inGetDiskSmartInfo
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
-                            # if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
                             if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
                                 # Attribute quiet eligibility check
                                 if ((-not $Quiet) -or
-                                    # ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
                                     (isCriticalThresholdExceeded -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType) -or
                                     (isValueThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold))
                                 {
