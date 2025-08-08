@@ -508,7 +508,7 @@ function inGetDiskSmartInfo
 
                 $attributes = @()
 
-                $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel
+                # $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel
 
                 if ($hostHistoricalData)
                 {
@@ -517,17 +517,21 @@ function inGetDiskSmartInfo
 
                 if ($diskSmartData.DiskType -eq 'ATA')
                 {
+                    $actualAttributesList = inUpdateActualAttributesList -model $hash.DiskModel
+
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
-                            if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
+                            # if ((-not $CriticalAttributesOnly) -or (isCritical -AttributeID $attributeSmartData.ID))
+                            if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
                                 # Attribute quiet eligibility check
                                 if ((-not $Quiet) -or
-                                    ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
+                                    # ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
+                                    ((isCriticalThresholdExceeded -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType) -or
                                     (isValueThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
                                 {
                                     $attribute = [ordered]@{}
@@ -572,28 +576,33 @@ function inGetDiskSmartInfo
                 }
                 elseif ($diskSmartData.DiskType -eq 'NVMe')
                 {
+                    $actualAttributesList = inUpdateActualAttributesListNVMe -model $hash.DiskModel
+
                     foreach ($attributeSmartData in $diskSmartData.SmartData)
                     {
                         # Attribute request check
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
-                            $attribute = [ordered]@{}
-                            $attribute.Add('Name', $attributeSmartData.Name)
-                            $attribute.Add('Data', $attributeSmartData.Data)
-
-                            if ($ShowHistory)
+                            if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
-                                $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
-                            }
+                                $attribute = [ordered]@{}
+                                $attribute.Add('Name', $attributeSmartData.Name)
+                                $attribute.Add('Data', $attributeSmartData.Data)
 
-                            $attributeObject = [PSCustomObject]$attribute
-                            $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
+                                if ($ShowHistory)
+                                {
+                                    $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
+                                }
 
-                            if ($ShowHistory)
-                            {
-                                $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
+                                $attributeObject = [PSCustomObject]$attribute
+                                $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
+
+                                if ($ShowHistory)
+                                {
+                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
+                                }
+                                $attributes += $attributeObject
                             }
-                            $attributes += $attributeObject
                         }
                     }
                 }

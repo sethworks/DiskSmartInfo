@@ -66,28 +66,60 @@ function isAttributeRequested
 function isCritical
 {
     Param (
-        [int]$AttributeID
+        # [int]$AttributeID
+        [PSCustomObject[]]$actualAttributesList,
+        [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
+        [string]$diskType
     )
 
-    if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
+    if ($diskType -eq 'ATA')
     {
-        return $true
+        # if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID.ID}.IsCritical)
+        if ($actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.IsCritical)
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
-    else
+    elseif ($diskType -eq 'NVMe')
     {
-        return $false
+        if ($actualAttributesList.Where{$_.AttributeName -eq $attributeSmartData.Name}.IsCritical)
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
+
+    # if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
+    # {
+    #     return $true
+    # }
+    # else
+    # {
+    #     return $false
+    # }
 }
 
 function isCriticalThresholdExceeded
 {
     Param (
-        [int]$AttributeID,
-        $AttributeData
+        # [int]$AttributeID,
+        # $AttributeData
+        [PSCustomObject[]]$actualAttributesList,
+        [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
+        [string]$diskType
     )
 
-    if ((isCritical -AttributeID $AttributeID) -and
-        ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+    # if ((isCritical -AttributeID $AttributeID) -and
+    if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
+        # ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+        ($attributeSmartData.Data -gt $actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.CriticalThreshold))
     {
         return $true
     }
