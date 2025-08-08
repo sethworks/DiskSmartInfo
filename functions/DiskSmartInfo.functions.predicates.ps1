@@ -116,16 +116,34 @@ function isCriticalThresholdExceeded
         [string]$diskType
     )
 
-    # if ((isCritical -AttributeID $AttributeID) -and
-    if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
-        # ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
-        ($attributeSmartData.Data -gt $actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.CriticalThreshold))
+    if ($diskType -eq 'ATA')
     {
-        return $true
+        # if ((isCritical -AttributeID $AttributeID) -and
+        if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
+            # ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+            ($attributeSmartData.Data -gt $actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.CriticalThreshold))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
-    else
+    elseif ($diskType -eq 'NVMe')
     {
-        return $false
+        if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
+            # ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+            # ($attributeSmartData.Data -gt $actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.CriticalThreshold))
+            # (& $actualAttributesList.Where{$_.AttributeName -eq $attributeSmartData.Name}.IsCritical))
+            ($actualAttributesList.Where{$_.AttributeName -eq $attributeSmartData.Name}.IsCritical.Invoke($attributeSmartData.Data)))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
 }
 

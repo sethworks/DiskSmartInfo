@@ -88,15 +88,15 @@ function inUpdateActualAttributesListNVMe
             {
                 # if (($index = $result.FindIndex([Predicate[PSCustomObject]]{$args[0].AttributeID -eq $attribute.AttributeID})) -ge 0)
                 # {
-                    $newAttribute = [ordered]@{
+                    # $newAttribute = [ordered]@{
                         # AttributeID = $attribute.AttributeID
-                        AttributeName = $attribute.AttributeName
+                        # AttributeName = $attribute.AttributeName
                         # DataFormat = $attribute.DataFormat
                         # IsCritical = $result[$index].IsCritical
-                        IsCritical = $attribute.IsCritical
+                        # IsCritical = $attribute.IsCritical
                         # CriticalThreshold = $result[$index].CriticalThreshold
                         # ConvertScriptBlock = $result[$index].ConvertScriptBlock
-                    }
+                    # }
 
                     # if ($attribute.Keys -contains 'IsCritical')
                     # {

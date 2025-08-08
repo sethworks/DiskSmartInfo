@@ -531,8 +531,8 @@ function inGetDiskSmartInfo
                                 # Attribute quiet eligibility check
                                 if ((-not $Quiet) -or
                                     # ((isCriticalThresholdExceeded -AttributeID $attributeSmartData.ID -AttributeData $attributeSmartData.Data) -or
-                                    ((isCriticalThresholdExceeded -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType) -or
-                                    (isValueThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold)))
+                                    (isCriticalThresholdExceeded -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType) -or
+                                    (isValueThresholdExceeded -Value $attributeSmartData.Value -Threshold $attributeSmartData.Threshold))
                                 {
                                     $attribute = [ordered]@{}
                                     $attribute.Add('ID', $attributeSmartData.ID)
@@ -583,25 +583,31 @@ function inGetDiskSmartInfo
                         # Attribute request check
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
+                            # Attribute criticality check
                             if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
-                                $attribute = [ordered]@{}
-                                $attribute.Add('Name', $attributeSmartData.Name)
-                                $attribute.Add('Data', $attributeSmartData.Data)
-
-                                if ($ShowHistory)
+                                # Attribute quiet eligibility check
+                                if ((-not $Quiet) -or
+                                    (isCriticalThresholdExceeded -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                                 {
-                                    $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
-                                }
+                                    $attribute = [ordered]@{}
+                                    $attribute.Add('Name', $attributeSmartData.Name)
+                                    $attribute.Add('Data', $attributeSmartData.Data)
 
-                                $attributeObject = [PSCustomObject]$attribute
-                                $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
+                                    if ($ShowHistory)
+                                    {
+                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
+                                    }
 
-                                if ($ShowHistory)
-                                {
-                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
+                                    $attributeObject = [PSCustomObject]$attribute
+                                    $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
+
+                                    if ($ShowHistory)
+                                    {
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
+                                    }
+                                    $attributes += $attributeObject
                                 }
-                                $attributes += $attributeObject
                             }
                         }
                     }
