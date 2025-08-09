@@ -11,8 +11,6 @@ Describe "Get-DiskSmartInfo" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
@@ -36,14 +34,8 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Has correct DiskSmartAttribute objects" {
-            # $diskSmartInfo.SmartData[0].ID | Should -Be 1
-            # $diskSmartInfo.SmartData[12].IDHex | Should -BeExactly 'C0'
             $diskSmartInfo.SmartData[2].Name | Should -BeExactly 'Available Spare'
-            # $diskSmartInfo.SmartData[2].Threshold | Should -Be 25
             $diskSmartInfo.SmartData[2].Data | Should -BeExactly '100%'
-            # $diskSmartInfo.SmartData[2].Worst | Should -Be 69
-            # $diskSmartInfo.SmartData[3].Data | Should -Be '10%'
-            # $diskSmartInfo.SmartData[13].Data | Should -HaveCount 3
             $diskSmartInfo.SmartData[12].Name | Should -BeExactly 'Unsafe Shutdowns'
             $diskSmartInfo.SmartData[12].Data | Should -BeExactly '45'
         }
@@ -87,31 +79,13 @@ Describe "Get-DiskSmartInfo" {
 
             $diskSmartInfo.SmartData[0].psobject.properties | Should -HaveCount 2
 
-            # $diskSmartInfo.SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
-
             $diskSmartInfo.SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Name | Should -BeOfType 'System.String'
 
-            # $diskSmartInfo.SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
             $diskSmartInfo.SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.Int64'
             $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.String'
 
             $diskSmartInfo.SmartData[12].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[12].Data | Should -HaveCount 3
-            # $diskSmartInfo.SmartData[12].Data[0] | Should -BeOfType 'System.Int64'
             $diskSmartInfo.SmartData[12].Data | Should -BeOfType 'System.String'
         }
 
@@ -128,114 +102,30 @@ Describe "Get-DiskSmartInfo" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-
 
             $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Convert
         }
 
-        # It "Converts Spin-Up Time" {
-        #     $diskSmartInfo[0].SmartData[2].DataConverted | Should -BeExactly '9.059 Sec'
-        # }
-
-        # It "Converts Power-On Hours" {
-        #     $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeExactly '3060.25 Days'
-        # }
-
-        # It "Converts Airflow Temperature Celsius" {
-        #     $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "40 $([char]0xB0)C"
-        # }
-
-        # It "Converts Total LBAs Written" {
-        #     $diskSmartInfo[1].SmartData[13].DataConverted | Should -BeExactly '5.933 TB'
-        # }
-
-        # It "Converts Total LBAs Read" {
-        #     $diskSmartInfo[1].SmartData[14].DataConverted | Should -BeExactly '4.450 TB'
-        # }
-
         It "DiskSmartAttribute object has correct types and properties" {
-            # $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataConverted'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
-
-            # $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].DataConverted | Should -BeNullOrEmpty
-
-            # $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
-
             $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttributeNVMe'
 
             $diskSmartInfo.SmartData[0].psobject.properties | Should -HaveCount 2
 
-            # $diskSmartInfo.SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
-
             $diskSmartInfo.SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo.SmartData[0].Name | Should -BeOfType 'System.String'
 
-            # $diskSmartInfo.SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo.SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
             $diskSmartInfo.SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.Int64'
             $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.String'
 
             $diskSmartInfo.SmartData[12].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo.SmartData[12].Data | Should -HaveCount 3
-            # $diskSmartInfo.SmartData[12].Data[0] | Should -BeOfType 'System.Int64'
             $diskSmartInfo.SmartData[12].Data | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].SmartData[12].psobject.properties['DataConverted'] | Should -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
         }
 
         It "DiskSmartAttribute object is formatted correctly" {
-            # $format = $diskSmartInfo[0].SmartData | Format-Table
-
-            # $labels = $format.shapeInfo.tableColumnInfoList.Label
-
-            # $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'Converted')
-
             $format = $diskSmartInfo.SmartData | Format-Table
 
             $labels = $format.shapeInfo.tableColumnInfoList.Label
@@ -248,8 +138,6 @@ Describe "Get-DiskSmartInfo" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
@@ -262,7 +150,6 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Has critical attributes only" {
-            # $diskSmartInfo.SmartData.Id | Should -Be @(5, 10, 196, 197, 198)
             $diskSmartInfo.SmartData[0].Name | Should -BeExactly 'Critical Warning'
         }
     }
@@ -271,11 +158,7 @@ Describe "Get-DiskSmartInfo" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -294,9 +177,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Consists of attributes in Warning or Critical state only" {
-            # $diskSmartInfo.SmartData.Id | Should -Be @(3, 197, 198)
             $diskSmartInfo.SmartData.Name | Should -BeExactly 'Critical Warning'
-            # $diskSmartInfo.SmartData.Data | Should -Be @(6825, 20, 20)
             $diskSmartInfo.SmartData.Data | Should -BeExactly '0x01'
         }
     }
@@ -305,12 +186,7 @@ Describe "Get-DiskSmartInfo" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataCriticalTrueNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -329,9 +205,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "Has only critical attributes that are in Warning or Critical state" {
-            # $diskSmartInfo.SmartData.Id | Should -Be @(197, 198)
             $diskSmartInfo.SmartData.Name | Should -BeExactly 'Critical Warning'
-            # $diskSmartInfo.SmartData.Data | Should -Be @(20, 20)
             $diskSmartInfo.SmartData.Data | Should -BeExactly '0x01'
         }
     }
@@ -342,9 +216,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID (1..10)
@@ -352,9 +224,7 @@ Describe "Get-DiskSmartInfo" {
 
             It "Has requested attributes" {
                 $diskSmartInfo.SmartData | Should -HaveCount 19
-                # $diskSmartInfo.SmartData[0].ID | Should -Be 1
                 $diskSmartInfo.SmartData[0].Name | Should -BeExactly 'Critical Warning'
-                # $diskSmartInfo.SmartData[8].ID | Should -Be 10
                 $diskSmartInfo.SmartData[9].Name | Should -BeExactly 'Controller Busy Time'
             }
         }
@@ -363,9 +233,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeIDHex df, e1, e3
@@ -373,9 +241,7 @@ Describe "Get-DiskSmartInfo" {
 
             It "Has requested attributes" {
                 $diskSmartInfo.SmartData | Should -HaveCount 19
-                # $diskSmartInfo.SmartData[0].ID | Should -Be 223
                 $diskSmartInfo.SmartData[0].Name | Should -BeExactly 'Critical Warning'
-                # $diskSmartInfo.SmartData[1].ID | Should -Be 225
                 $diskSmartInfo.SmartData[9].Name | Should -BeExactly 'Controller Busy Time'
             }
         }
@@ -384,9 +250,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeName 'Available Spare', 'Power-off Retract Count', 'Controller Busy Time'
@@ -403,9 +267,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             }
 
@@ -440,9 +302,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeName '*SomeNonexistentAttribute*'
@@ -464,9 +324,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID 1 -AttributeIDHex A -AttributeName 'Available Spare', 'Controller Busy Time'
@@ -486,9 +344,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -511,9 +367,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -536,9 +390,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -561,9 +413,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -586,9 +436,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -611,9 +459,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -636,9 +482,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -661,10 +505,8 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdd" } -ModuleName DiskSmartInfo
@@ -693,9 +535,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl
@@ -753,9 +593,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeName 'Nonexistent Attribute'
@@ -812,9 +650,7 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
@@ -848,13 +684,9 @@ Describe "Get-DiskSmartInfo" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataPredictFailureTrueNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
 
                 $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -CriticalAttributesOnly -Quiet

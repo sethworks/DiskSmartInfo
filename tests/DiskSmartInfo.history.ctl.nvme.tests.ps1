@@ -15,12 +15,6 @@ Describe "History" {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-            # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
             InModuleScope DiskSmartInfo {
                 $Config.DataHistoryPath = $TestDrive
@@ -80,30 +74,13 @@ Describe "History" {
 
             $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 3
 
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
             $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-            # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-            # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-            # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
             $diskSmartInfo[0].SmartData[13].Data | Should -BeOfType 'System.String'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
@@ -131,17 +108,6 @@ Describe "History" {
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
 
-            # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-            # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-            # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-            # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-
             InModuleScope DiskSmartInfo {
                 $Config.DataHistoryPath = $TestDrive
             }
@@ -157,13 +123,11 @@ Describe "History" {
             {
                 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme0"'))
                 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme1"'))
-                # 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sdc"'))
             }
             else
             {
                 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme0"'))
                 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme1"'))
-                # 'TestDrive:/localhost.json' | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sdc"'))
             }
         }
     }
@@ -178,17 +142,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -262,40 +215,19 @@ Describe "History" {
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 3
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeOfType 'System.String'
             }
 
@@ -316,17 +248,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -387,17 +308,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -438,96 +348,27 @@ Describe "History" {
             }
 
             It "DiskSmartAttribute object has correct types and properties" {
-                # $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistoryDataConverted'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 9
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
-
-                # $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.Int64'
-
-                # $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].DataConverted | Should -BeNullOrEmpty
-
-                # $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
-
                 $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttributeNVMe#DataHistory'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 3
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeOfType 'System.String'
             }
 
             It "DiskSmartAttribute object is formatted correctly" {
-                # $format = $diskSmartInfo[0].SmartData | Format-Table
-
-                # $labels = $format.shapeInfo.tableColumnInfoList.Label
-
-                # $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'History', 'Converted')
-
                 $format = $diskSmartInfo[0].SmartData | Format-Table
 
                 $labels = $format.shapeInfo.tableColumnInfoList.Label
@@ -548,17 +389,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -632,38 +462,19 @@ Describe "History" {
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 3
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeOfType 'System.String'
             }
 
@@ -684,17 +495,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -755,17 +555,6 @@ Describe "History" {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-                # mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-
-                # mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                # mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
@@ -810,47 +599,23 @@ Describe "History" {
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 3
 
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
-
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
-
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].Data | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].SmartData[0].DataHistory | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[13].psobject.properties['DataHistory'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[13].DataHistory | Should -HaveCount 3
-                # $diskSmartInfo[0].SmartData[13].DataHistory[0] | Should -BeOfType 'System.Int64'
                 $diskSmartInfo[0].SmartData[13].DataHistory | Should -BeOfType 'System.String'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[0].DataConverted | Should -BeNullOrEmpty
-
                 $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
-                # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
             }
 
             It "DiskSmartAttribute object is formatted correctly" {
