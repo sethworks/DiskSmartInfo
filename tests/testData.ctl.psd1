@@ -372,4 +372,147 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
     CtlScan_KINGSTONSSD1 = '/dev/sdf -d ata # /dev/sdf, ATA device'
     CtlPredictFailure_KINGSTONSSD1 = $false
     CtlBytesPerSector_KINGSTONSSD1 = 512
+
+    # NVMe1
+    CtlData_NVMe1 = '
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 500GB
+Serial Number:                      1234567890
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 500,107,862,016 [500 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          500,107,862,016 [500 GB]
+Namespace 1 Utilization:            230,019,338,240 [230 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 5331b1efaf
+Local Time is:                      Sun Jul 27 18:17:16 2025 RTZST
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART/Health Information (NVMe Log 0x02, NSID 0xffffffff)
+Critical Warning:                   0x00
+Temperature:                        48 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    16,268,207 [8.32 TB]
+Data Units Written:                 11,254,942 [5.76 TB]
+Host Read Commands:                 415,389,104
+Host Write Commands:                159,821,425
+Controller Busy Time:               715
+Power Cycles:                       600
+Power On Hours:                     512
+Unsafe Shutdowns:                   45
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      1,470
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               48 Celsius
+Temperature Sensor 2:               71 Celsius'
+
+    CtlDataPredictFailureTrue_NVMe1 = '
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 500GB
+Serial Number:                      1234567890
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 500,107,862,016 [500 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          500,107,862,016 [500 GB]
+Namespace 1 Utilization:            230,019,338,240 [230 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 5331b1efaf
+Local Time is:                      Sun Jul 27 18:17:16 2025 RTZST
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: FAILED
+
+SMART/Health Information (NVMe Log 0x02, NSID 0xffffffff)
+Critical Warning:                   0x00
+Temperature:                        48 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    16,268,207 [8.32 TB]
+Data Units Written:                 11,254,942 [5.76 TB]
+Host Read Commands:                 415,389,104
+Host Write Commands:                159,821,425
+Controller Busy Time:               715
+Power Cycles:                       600
+Power On Hours:                     512
+Unsafe Shutdowns:                   45
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      1,470
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               48 Celsius
+Temperature Sensor 2:               71 Celsius'
+
+    CtlIndex_NVMe1 = 0
+    CtlModel_NVMe1 = "Samsung SSD 970 EVO Plus 500GB"
+    CtlDevice_NVMe1 = '/dev/nvme0'
+    CtlScan_NVMe1 = '/dev/nvme0 -d nvme # /dev/nvme0, NVMe device'
+    CtlPredictFailure_NVMe1 = $false
+    CtlPredictFailureTrue_NVMe1 = $true
+    CtlBytesPerSector_NVMe1 = 512
+
+    # CtlData_NVMe2
+    CtlData_NVMe2 = '
+=== START OF INFORMATION SECTION ===
+Model Number:                       Samsung SSD 970 EVO Plus 500GB
+Serial Number:                      1234567890
+Firmware Version:                   2B2QEXM7
+PCI Vendor/Subsystem ID:            0x144d
+IEEE OUI Identifier:                0x002538
+Total NVM Capacity:                 500,107,862,016 [500 GB]
+Unallocated NVM Capacity:           0
+Controller ID:                      4
+NVMe Version:                       1.3
+Number of Namespaces:               1
+Namespace 1 Size/Capacity:          500,107,862,016 [500 GB]
+Namespace 1 Utilization:            230,019,338,240 [230 GB]
+Namespace 1 Formatted LBA Size:     512
+Namespace 1 IEEE EUI-64:            002538 5331b1efaf
+Local Time is:                      Sun Jul 27 18:17:16 2025 RTZST
+
+=== START OF SMART DATA SECTION ===
+SMART overall-health self-assessment test result: PASSED
+
+SMART/Health Information (NVMe Log 0x02, NSID 0xffffffff)
+Critical Warning:                   0x01
+Temperature:                        48 Celsius
+Available Spare:                    100%
+Available Spare Threshold:          10%
+Percentage Used:                    0%
+Data Units Read:                    16,268,207 [8.32 TB]
+Data Units Written:                 11,254,942 [5.76 TB]
+Host Read Commands:                 415,389,104
+Host Write Commands:                159,821,425
+Controller Busy Time:               715
+Power Cycles:                       600
+Power On Hours:                     512
+Unsafe Shutdowns:                   45
+Media and Data Integrity Errors:    0
+Error Information Log Entries:      1,470
+Warning  Comp. Temperature Time:    0
+Critical Comp. Temperature Time:    0
+Temperature Sensor 1:               48 Celsius
+Temperature Sensor 2:               71 Celsius'
+
+    CtlIndex_NVMe2 = 1
+    CtlModel_NVMe2 = "Samsung SSD 970 EVO Plus 500GB"
+    CtlDevice_NVMe2 = '/dev/nvme1'
+    CtlScan_NVMe2 = '/dev/nvme1 -d nvme # /dev/nvme1, NVMe device'
+    CtlPredictFailure_NVMe2 = $false
+    CtlBytesPerSector_NVMe2 = 512
 }

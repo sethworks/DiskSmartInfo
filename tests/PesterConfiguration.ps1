@@ -3,6 +3,7 @@ $PesterConfiguration = New-PesterConfiguration
 $PesterConfiguration.Run.Path = '.\tests\DiskSmartInfo.completers.tests.ps1',
                                 '.\tests\DiskSmartInfo.tests.ps1',
                                 '.\tests\DiskSmartInfo.ctl.tests.ps1',
+                                '.\tests\DiskSmartInfo.ctl.nvme.tests.ps1',
                                 '.\tests\DiskSmartInfo.attributes.tests.ps1',
                                 '.\tests\DiskSmartInfo.attributeproperties.tests.ps1',
                                 '.\tests\DiskSmartInfo.history.tests.ps1',

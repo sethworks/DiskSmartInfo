@@ -246,7 +246,7 @@ function inGetSourceSmartDataCtl
 
             foreach ($device in $devices)
             {
-                if ($device -match '^(?<device>/dev/\w{3})')
+                if ($device -match '^(?<device>/dev/\w+)')
                 {
                     $sb = [scriptblock]::Create("$sbs $($Matches.device)")
 
@@ -421,7 +421,8 @@ function inGetSmartDataStructureCtl
             elseif ($hash.DiskType -eq 'NVMe')
             {
                 $header = $diskSmartData.diskSmartData -like "SMART/Health Information (NVMe Log*"
-                $headerIndex = $diskSmartData.diskSmartData.IndexOf($header)
+                # Because result of the -like operator is an array
+                $headerIndex = $diskSmartData.diskSmartData.IndexOf($header[0])
 
                 if ($headerIndex -ge 0)
                 {
