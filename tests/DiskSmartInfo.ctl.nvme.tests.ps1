@@ -124,6 +124,126 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
+    Context "-Convert" {
+
+        BeforeAll {
+            mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+            # mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+            # mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+            # mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+
+
+            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Convert
+        }
+
+        # It "Converts Spin-Up Time" {
+        #     $diskSmartInfo[0].SmartData[2].DataConverted | Should -BeExactly '9.059 Sec'
+        # }
+
+        # It "Converts Power-On Hours" {
+        #     $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeExactly '3060.25 Days'
+        # }
+
+        # It "Converts Airflow Temperature Celsius" {
+        #     $diskSmartInfo[1].SmartData[9].DataConverted | Should -BeExactly "40 $([char]0xB0)C"
+        # }
+
+        # It "Converts Total LBAs Written" {
+        #     $diskSmartInfo[1].SmartData[13].DataConverted | Should -BeExactly '5.933 TB'
+        # }
+
+        # It "Converts Total LBAs Read" {
+        #     $diskSmartInfo[1].SmartData[14].DataConverted | Should -BeExactly '4.450 TB'
+        # }
+
+        It "DiskSmartAttribute object has correct types and properties" {
+            # $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataConverted'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].ID | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].IDHex | Should -BeOfType 'System.String'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].Name | Should -BeOfType 'System.String'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].Threshold | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].Value | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].Worst | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].Data | Should -BeOfType 'System.Int64'
+
+            # $diskSmartInfo[0].SmartData[13].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
+            # $diskSmartInfo[0].SmartData[13].Data[0] | Should -BeOfType 'System.Int64'
+
+            # $diskSmartInfo[0].SmartData[0].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[0].DataConverted | Should -BeNullOrEmpty
+
+            # $diskSmartInfo[0].SmartData[7].psobject.properties['DataConverted'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
+
+            $diskSmartInfo.SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttributeNVMe'
+
+            $diskSmartInfo.SmartData[0].psobject.properties | Should -HaveCount 2
+
+            # $diskSmartInfo.SmartData[0].psobject.properties['ID'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].ID | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo.SmartData[0].psobject.properties['IDHex'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].IDHex | Should -BeOfType 'System.String'
+
+            $diskSmartInfo.SmartData[0].psobject.properties['Name'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo.SmartData[0].Name | Should -BeOfType 'System.String'
+
+            # $diskSmartInfo.SmartData[0].psobject.properties['Threshold'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].Threshold | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo.SmartData[0].psobject.properties['Value'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].Value | Should -BeOfType 'System.Byte'
+
+            # $diskSmartInfo.SmartData[0].psobject.properties['Worst'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].Worst | Should -BeOfType 'System.Byte'
+
+            $diskSmartInfo.SmartData[0].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.Int64'
+            $diskSmartInfo.SmartData[0].Data | Should -BeOfType 'System.String'
+
+            $diskSmartInfo.SmartData[12].psobject.properties['Data'] | Should -Not -BeNullOrEmpty
+            # $diskSmartInfo.SmartData[12].Data | Should -HaveCount 3
+            # $diskSmartInfo.SmartData[12].Data[0] | Should -BeOfType 'System.Int64'
+            $diskSmartInfo.SmartData[12].Data | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].SmartData[12].psobject.properties['DataConverted'] | Should -BeNullOrEmpty
+            # $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeOfType 'System.String'
+        }
+
+        It "DiskSmartAttribute object is formatted correctly" {
+            # $format = $diskSmartInfo[0].SmartData | Format-Table
+
+            # $labels = $format.shapeInfo.tableColumnInfoList.Label
+
+            # $labels | Should -BeExactly @('ID', 'IDHex', 'AttributeName', 'Threshold', 'Value', 'Worst', 'Data', 'Converted')
+
+            $format = $diskSmartInfo.SmartData | Format-Table
+
+            $labels = $format.shapeInfo.tableColumnInfoList.Label
+
+            $labels | Should -BeExactly @('AttributeName', 'Data')
+        }
+    }
+
     Context "-CriticalAttributesOnly" {
 
         BeforeAll {
