@@ -1,40 +1,10 @@
-function inComposeAttributeIDs
-{
-    Param (
-        [int[]]$AttributeID,
-        [string[]]$AttributeIDHex,
-        [string[]]$AttributeName,
-        [switch]$IsDescription
-        )
-
-    $attributeIDs = [System.Collections.Generic.List[int]]::new()
-
-    foreach ($at in $AttributeID)
-    {
-        if (-not $attributeIDs.Contains($at))
-        {
-            $attributeIDs.Add($at)
-        }
-    }
-
-    foreach ($at in $AttributeIDHex)
-    {
-        $value = [convert]::ToInt32($at, 16)
-        if (-not $attributeIDs.Contains($value))
-        {
-            $attributeIDs.Add($value)
-        }
-    }
-
-    return $attributeIDs
-}
-
 function inSelectAttributeProperties
 {
     Param (
         $attributes,
         [AttributeProperty[]]$properties,
-        $formatScriptBlock
+        [scriptblock]$formatScriptBlock,
+        [string]$diskType
     )
 
     $result = @()
@@ -69,7 +39,16 @@ function inSelectAttributeProperties
         }
 
         $attributeObject = [PSCustomObject]$attributeSelected
-        $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+
+        if ($diskType -eq 'ATA')
+        {
+            $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+        }
+        elseif ($diskType -eq 'NVMe')
+        {
+            $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMeCustom"
+        }
+
         $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
 
         $result += $attributeObject

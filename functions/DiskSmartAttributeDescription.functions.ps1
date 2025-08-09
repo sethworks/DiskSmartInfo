@@ -12,11 +12,12 @@ function Get-DiskSmartAttributeDescription
         [string[]]$AttributeName
     )
 
-    $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName -IsDescription
-
     foreach ($attribute in $descriptions)
     {
-        if (isAttributeRequested -attributeID $attribute.AttributeID -actualAttributesList $descriptions)
+        if ((-not ($AttributeID -or $AttributeIDHex -or $AttributeName)) -or
+            ($AttributeID -contains $attribute.AttributeID) -or
+            ($AttributeIDHex -contains $attribute.AttributeID.ToString('X')) -or
+            ($AttributeName.Where{$attribute.AttributeName -like $PSItem}))
         {
             $attribute
         }

@@ -123,10 +123,7 @@ function Get-DiskSmartInfo
             ErrorAction = 'SilentlyContinue'
         }
 
-        $attributeIDs = inComposeAttributeIDs -AttributeID $AttributeID -AttributeIDHex $AttributeIDHex -AttributeName $AttributeName
-
-        $sessionsComputersDisks = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
-        $PSSessionQueries = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+        $RequestedAttributes = @{AttributeIDs=$AttributeID; AttributeIDHexes=$AttributeIDHex; AttributeNames=$AttributeName}
     }
 
     process
@@ -138,7 +135,6 @@ function Get-DiskSmartInfo
                 if ($Source -eq 'CIM')
                 {
                     $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-
                     $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                     inGetDiskSmartInfo `
@@ -148,7 +144,7 @@ function Get-DiskSmartInfo
                         -DiskNumbers $DiskNumber `
                         -DiskModels $DiskModel `
                         -Devices $Device `
-                        -AttributeIDs $attributeIDs `
+                        -RequestedAttributes $RequestedAttributes `
                         -AttributeProperties $AttributeProperty `
                         -Quiet:$Quiet `
                         -ShowHistory:$ShowHistory `
@@ -186,7 +182,7 @@ function Get-DiskSmartInfo
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -Devices $Device `
-                    -AttributeIDs $attributeIDs `
+                    -RequestedAttributes $RequestedAttributes `
                     -AttributeProperties $AttributeProperty `
                     -Quiet:$Quiet `
                     -ShowHistory:$ShowHistory `
@@ -212,7 +208,6 @@ function Get-DiskSmartInfo
                         try
                         {
                             $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-
                             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
 
                             inGetDiskSmartInfo `
@@ -222,7 +217,7 @@ function Get-DiskSmartInfo
                                 -DiskNumbers $DiskNumber `
                                 -DiskModels $DiskModel `
                                 -Devices $Device `
-                                -AttributeIDs $attributeIDs `
+                                -RequestedAttributes $RequestedAttributes `
                                 -AttributeProperties $AttributeProperty `
                                 -Quiet:$Quiet `
                                 -ShowHistory:$ShowHistory `
@@ -291,7 +286,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
-                            -AttributeIDs $attributeIDs `
+                            -RequestedAttributes $RequestedAttributes `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
@@ -334,7 +329,7 @@ function Get-DiskSmartInfo
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
-                            -AttributeIDs $attributeIDs `
+                            -RequestedAttributes $RequestedAttributes `
                             -AttributeProperties $AttributeProperty `
                             -Quiet:$Quiet `
                             -ShowHistory:$ShowHistory `
@@ -369,7 +364,7 @@ function Get-DiskSmartInfo
                 -DiskNumbers $DiskNumber `
                 -DiskModels $DiskModel `
                 -Devices $Device `
-                -AttributeIDs $attributeIDs `
+                -RequestedAttributes $RequestedAttributes `
                 -AttributeProperties $AttributeProperty `
                 -Quiet:$Quiet `
                 -ShowHistory:$ShowHistory `

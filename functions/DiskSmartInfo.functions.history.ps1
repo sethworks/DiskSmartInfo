@@ -10,15 +10,29 @@ function inUpdateHistoricalData
     {
         $hash = [ordered]@{}
         $hash.Add('Device', $diskSmartData.Device)
+        $hash.Add('DiskType', $diskSmartData.DiskType)
 
         $attributes = @()
 
-        foreach ($attributeSmartData in $diskSmartData.SmartData)
+        if ($hash.DiskType -eq 'ATA')
         {
-            $attribute = [ordered]@{}
-            $attribute.Add('ID', $attributeSmartData.ID)
-            $attribute.Add('Data', $attributeSmartData.Data)
-            $attributes += [PSCustomObject]$attribute
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('ID', $attributeSmartData.ID)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
+        }
+        elseif ($hash.DiskType -eq 'NVMe')
+        {
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('Name', $attributeSmartData.Name)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
         }
 
         if ($attributes)
@@ -30,7 +44,7 @@ function inUpdateHistoricalData
 
     if ($historicalData.Count)
     {
-        $fullname = inComposeHistoricalDataFileName -computerName $hostSmartData.computerName
+        $fullname = inGetHistoricalDataFileName -computerName $hostSmartData.computerName
 
         $hostHistoricalData = @{
             TimeStamp = Get-Date
@@ -49,20 +63,20 @@ function inGetHistoricalData
         $computerName
     )
 
-    $fullname = inComposeHistoricalDataFileName -computerName $computerName
+    $fullname = inGetHistoricalDataFileName -computerName $computerName
 
-    if ($content = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
+    if ($historicalDataFileContent = Get-Content -Path $fullname -Raw -ErrorAction SilentlyContinue)
     {
-        $converted = ConvertFrom-Json -InputObject $content
+        $sourceHostHistoricalData = ConvertFrom-Json -InputObject $historicalDataFileContent
 
         if ($IsCoreCLR)
         {
-            $timestamp = $converted.TimeStamp
+            $timestamp = $sourceHostHistoricalData.TimeStamp
         }
         # Windows PowerShell 5.1 ConvertTo-Json converts DateTime objects differently
         else
         {
-            $timestamp = $converted.TimeStamp.DateTime
+            $timestamp = $sourceHostHistoricalData.TimeStamp.DateTime
         }
 
         $hostHistoricalData = @{
@@ -70,29 +84,41 @@ function inGetHistoricalData
             HistoricalData = @()
         }
 
-        foreach ($object in $converted.HistoricalData)
+        foreach ($sourceDiskHistoricalData in $sourceHostHistoricalData.HistoricalData)
         {
             $hash = [ordered]@{}
             $attributes = @()
 
-            $hash.Add('Device', [string]$object.Device)
+            $hash.Add('Device', [string]$sourceDiskHistoricalData.Device)
 
-            foreach ($at in $object.SmartData)
+            if ($sourceDiskHistoricalData.DiskType -eq 'ATA')
             {
-                $attribute = [ordered]@{}
-
-                $attribute.Add('ID', [byte]$at.ID)
-
-                if ($at.Data.Count -gt 1)
+                foreach ($sourceAttribute in $sourceDiskHistoricalData.SmartData)
                 {
-                    $attribute.Add('Data', [long[]]$at.Data)
-                }
-                else
-                {
-                    $attribute.Add('Data', [long]$at.Data)
-                }
+                    $attribute = [ordered]@{}
+                    $attribute.Add('ID', [byte]$sourceAttribute.ID)
 
-                $attributes += [PSCustomObject]$attribute
+                    if ($sourceAttribute.Data.Count -gt 1)
+                    {
+                        $attribute.Add('Data', [long[]]$sourceAttribute.Data)
+                    }
+                    else
+                    {
+                        $attribute.Add('Data', [long]$sourceAttribute.Data)
+                    }
+
+                    $attributes += [PSCustomObject]$attribute
+                }
+            }
+            elseif ($sourceDiskHistoricalData.DiskType -eq 'NVMe')
+            {
+                foreach ($sourceAttribute in $sourceDiskHistoricalData.SmartData)
+                {
+                    $attribute = [ordered]@{}
+                    $attribute.Add('Name', [string]$sourceAttribute.Name)
+                    $attribute.Add('Data', [string]$sourceAttribute.Data)
+                    $attributes += [PSCustomObject]$attribute
+                }
             }
 
             $hash.Add('SmartData', $attributes)
@@ -103,7 +129,35 @@ function inGetHistoricalData
     }
 }
 
-function inComposeHistoricalDataFileName
+function inGetAttributeHistoricalData
+{
+    Param (
+        $diskHistoricalData,
+        $attribute,
+        $diskType
+    )
+
+    if ($diskType -eq 'ATA')
+    {
+        $attributeHistoricalData = $diskHistoricalData.Where{$_.ID -eq $attribute.ID}.Data
+    }
+    elseif ($diskType -eq 'NVMe')
+    {
+        $attributeHistoricalData = $diskHistoricalData.Where{$_.Name -eq $attribute.Name}.Data
+    }
+
+    if ($Config.ShowUnchangedDataHistory -or
+        (-not (isAttributeDataEqual -attributeData $attribute.Data -attributeHistoricalData $attributeHistoricalData)))
+    {
+        return $attributeHistoricalData
+    }
+    else
+    {
+        return $null
+    }
+}
+
+function inGetHistoricalDataFileName
 {
     Param (
         [string]$computerName

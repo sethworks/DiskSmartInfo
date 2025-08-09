@@ -80,11 +80,11 @@
                                 </ItemSelectionCondition>
                                 <ScriptBlock>
                                     if ($PSStyle) { $t = $PSStyle.OutputRendering; $PSStyle.OutputRendering = 'ansi' }
-                                    if ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttribute[]')
+                                    if ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttribute[]' -or $PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeNVMe[]')
                                     {
                                         $text = $PSItem.SmartData | Format-Table | Out-String
                                     }
-                                    elseif ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeCustom[]')
+                                    elseif ($PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeCustom[]' -or $PSItem.SmartData.pstypenames[0] -eq 'DiskSmartAttributeNVMeCustom[]')
                                     {
                                         $text = $PSItem.SmartData.FormatTable() | Out-String
                                     }

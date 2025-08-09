@@ -15,21 +15,35 @@ function inUpdateArchive
         $hash.Add('DiskModel', [string]$diskSmartData.DiskModel)
         $hash.Add('Device', [string]$diskSmartData.Device)
         $hash.Add('PredictFailure', [bool]$diskSmartData.PredictFailure)
+        $hash.Add('DiskType', [string]$diskSmartData.DiskType)
         $hash.Add('ArchiveDate', [datetime]$dateTime)
 
         $attributes = @()
 
-        foreach ($attributeSmartData in $diskSmartData.SmartData)
+        if ($hash.DiskType -eq 'ATA')
         {
-            $attribute = [ordered]@{}
-            $attribute.Add('ID', $attributeSmartData.ID)
-            $attribute.Add('IDHex', $attributeSmartData.IDHex)
-            $attribute.Add('Name', $attributeSmartData.Name)
-            $attribute.Add('Threshold', $attributeSmartData.Threshold)
-            $attribute.Add('Value', $attributeSmartData.Value)
-            $attribute.Add('Worst', $attributeSmartData.Worst)
-            $attribute.Add('Data', $attributeSmartData.Data)
-            $attributes += [PSCustomObject]$attribute
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('ID', $attributeSmartData.ID)
+                $attribute.Add('IDHex', $attributeSmartData.IDHex)
+                $attribute.Add('Name', $attributeSmartData.Name)
+                $attribute.Add('Threshold', $attributeSmartData.Threshold)
+                $attribute.Add('Value', $attributeSmartData.Value)
+                $attribute.Add('Worst', $attributeSmartData.Worst)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
+        }
+        elseif ($hash.DiskType -eq 'NVMe')
+        {
+            foreach ($attributeSmartData in $diskSmartData.SmartData)
+            {
+                $attribute = [ordered]@{}
+                $attribute.Add('Name', $attributeSmartData.Name)
+                $attribute.Add('Data', $attributeSmartData.Data)
+                $attributes += [PSCustomObject]$attribute
+            }
         }
 
         if ($attributes)
@@ -41,7 +55,7 @@ function inUpdateArchive
 
     if ($archiveData.Count)
     {
-        $fullname = inComposeArchiveDataFileName -computerName $hostSmartData.computerName -dateTime $dateTime
+        $fullname = inGetArchiveDataFileName -computerName $hostSmartData.computerName -dateTime $dateTime
 
         inEnsureFolderExists -folder (Split-Path -Path $fullname -Parent)
 
@@ -49,7 +63,7 @@ function inUpdateArchive
     }
 }
 
-function inComposeArchiveDataFileName
+function inGetArchiveDataFileName
 {
     Param (
         [string]$computerName,

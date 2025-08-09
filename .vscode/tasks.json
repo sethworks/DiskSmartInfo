@@ -6,7 +6,7 @@
         {
             "label": "DeployModule",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; .\\.helpers\\deployModule.ps1",
+            "command": "Set-Location ${workspaceFolder}; ./.helpers/deployModule.ps1",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -24,7 +24,7 @@
         {
             "label": "InvokePester: PowerShell 7.6",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
                 "isDefault": false
@@ -50,7 +50,7 @@
         {
             "label": "InvokePester: PowerShell 7.5",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -76,7 +76,7 @@
         {
             "label": "InvokePester: PowerShell 7.4",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
                 "isDefault": false
@@ -102,7 +102,7 @@
         {
             "label": "InvokePester: Windows PowerShell 5.1",
             "type": "shell",
-            "command": "Set-Location ${workspaceFolder}; . .\\tests\\PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
             "group": {
                 "kind": "test",
                 "isDefault": false
@@ -151,7 +151,33 @@
                 "showReuseMessage": false,
                 "clear": true
             }
-        }
+        },
+        {
+            "label": "InvokePester: PowerShell 7.5 with Code Coverage",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; . ./tests/PesterConfiguration.CodeCoverage.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/7/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
     ],
     "inputs": [
         {
@@ -166,7 +192,7 @@
                 },
                 {
                     "label": "With code coverage",
-                    "value": ". .\\tests\\PesterConfiguration.CodeCoverage.ps1;"
+                    "value": ". ./tests/PesterConfiguration.CodeCoverage.ps1;"
                 }
             ]
         }

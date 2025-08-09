@@ -2,20 +2,20 @@ function isAttributeDataEqual
 {
     Param (
         $attributeData,
-        $historicalAttributeData
+        $attributeHistoricalData
     )
 
-    if ($attributeData.Count -eq $historicalAttributeData.Count)
+    if ($attributeData.Count -eq $attributeHistoricalData.Count)
     {
         if ($attributeData.Count -eq 1)
         {
-            return $attributeData -eq $historicalAttributeData
+            return $attributeData -eq $attributeHistoricalData
         }
         elseif ($attributeData.Count -gt 1)
         {
             for ($i = 0; $i -lt $attributeData.Count; $i++)
             {
-                if ($attributeData[$i] -ne $historicalAttributeData[$i])
+                if ($attributeData[$i] -ne $attributeHistoricalData[$i])
                 {
                     return $false
                 }
@@ -29,59 +29,107 @@ function isAttributeDataEqual
 function isAttributeRequested
 {
     Param (
-        [int]$attributeID,
-        [PSCustomObject[]]$actualAttributesList
+        [hashtable[]]$RequestedAttributes,
+        [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
+        [string]$diskType
     )
 
-    $atName = $actualAttributesList.Where{$PSItem.AttributeID -eq $attributeID}.AttributeName
-
-    if ((-not $attributeIDs.Count -and -not $AttributeName.Count) -or
-        ($attributeIDs -contains $attributeID) -or
-        ($AttributeName.Where{$atName -like $PSItem}))
+    if ($diskType -eq 'ATA')
     {
-        return $true
+        if ((-not ($RequestedAttributes.AttributeIDs -or $RequestedAttributes.AttributeIDHexes -or $RequestedAttributes.AttributeNames)) -or
+            ($RequestedAttributes.AttributeIDs -contains $attributeSmartData.ID) -or
+            ($RequestedAttributes.AttributeIDHexes -contains $attributeSmartData.IDHex) -or
+            ($RequestedAttributes.AttributeNames.Where{$attributeSmartData.Name -like $PSItem}))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
-    else
+
+    elseif ($diskType -eq 'NVMe')
     {
-        return $false
+        if ((-not $RequestedAttributes.AttributeNames) -or
+            ($RequestedAttributes.AttributeNames.Where{$attributeSmartData.Name -like $PSItem}))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
 }
 
 function isCritical
 {
     Param (
-        [int]$AttributeID
+        [PSCustomObject[]]$actualAttributesList,
+        [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
+        [string]$diskType
     )
 
-    if ($actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.IsCritical)
+    if ($diskType -eq 'ATA')
     {
-        return $true
+        if ($actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.IsCritical)
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
-    else
+    elseif ($diskType -eq 'NVMe')
     {
-        return $false
+        if ($actualAttributesList.Where{$_.AttributeName -eq $attributeSmartData.Name}.IsCritical)
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
 }
 
 function isCriticalThresholdExceeded
 {
     Param (
-        [int]$AttributeID,
-        $AttributeData
+        [PSCustomObject[]]$actualAttributesList,
+        [System.Collections.Specialized.OrderedDictionary]$attributeSmartData,
+        [string]$diskType
     )
 
-    if ((isCritical -AttributeID $AttributeID) -and
-        ($AttributeData -gt $actualAttributesList.Where{$_.AttributeID -eq $AttributeID}.CriticalThreshold))
+    if ($diskType -eq 'ATA')
     {
-        return $true
+        if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
+            ($attributeSmartData.Data -gt $actualAttributesList.Where{$_.AttributeID -eq $attributeSmartData.ID}.CriticalThreshold))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
-    else
+    elseif ($diskType -eq 'NVMe')
     {
-        return $false
+        if ((isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskType) -and
+            ($actualAttributesList.Where{$_.AttributeName -eq $attributeSmartData.Name}.IsCritical.Invoke($attributeSmartData.Data)))
+        {
+            return $true
+        }
+        else
+        {
+            return $false
+        }
     }
 }
 
-function isThresholdExceeded
+function isValueThresholdExceeded
 {
     Param (
         $Value,
