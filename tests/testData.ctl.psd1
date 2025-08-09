@@ -34,7 +34,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
   9 Power_On_Hours          0x0032   100   100   000    Old_age   Always       -       73446
  10 Spin_Retry_Count        0x0032   252   252   051    Old_age   Always       -       0
  11 Calibration_Retry_Count 0x0032   100   100   000    Old_age   Always       -       702
- 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       258
+ 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       358
 191 G-Sense_Error_Rate      0x0022   100   100   000    Old_age   Always       -       26
 192 Power-Off_Retract_Count 0x0022   252   252   000    Old_age   Always       -       0
 194 Temperature_Celsius     0x0002   061   053   000    Old_age   Always       -       39 (Min/Max 14/47)
@@ -81,7 +81,7 @@ ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_
   9 Power_On_Hours          0x0032   100   100   000    Old_age   Always       -       73446
  10 Spin_Retry_Count        0x0032   252   252   051    Old_age   Always       -       0
  11 Calibration_Retry_Count 0x0032   100   100   000    Old_age   Always       -       702
- 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       258
+ 12 Power_Cycle_Count       0x0032   100   100   000    Old_age   Always       -       358
 191 G-Sense_Error_Rate      0x0022   100   100   000    Old_age   Always       -       26
 192 Power-Off_Retract_Count 0x0022   252   252   000    Old_age   Always       -       0
 194 Temperature_Celsius     0x0002   061   053   000    Old_age   Always       -       39 (Min/Max 14/47)
