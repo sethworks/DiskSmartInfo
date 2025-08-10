@@ -6,7 +6,7 @@ function Get-DiskSmartInfo
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
         [Parameter(ParameterSetName='ComputerName')]
-        [ValidateSet('CimSession','PSSession','SSHSession')]
+        [ValidateSet('CimSession','PSSession','SSHSession','SSHClient')]
         [string]$Transport,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
@@ -37,7 +37,8 @@ function Get-DiskSmartInfo
         [switch]$UpdateHistory,
         [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
-        [pscredential]$Credential
+        [pscredential]$Credential,
+        [switch]$SSHClientSudo
     )
 
     begin
@@ -340,6 +341,50 @@ function Get-DiskSmartInfo
                     finally
                     {
                         Remove-PSSession -Session $ps
+                    }
+                }
+            }
+            elseif ($Transport -eq 'SSHClient')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    # if (-not ($ps = New-PSSession -HostName $cn @errorParameters))
+                    # {
+                    #     inReportErrors -Errors $sessionErrors
+                    #     continue
+                    # }
+
+                    try
+                    {
+                        if ($Source -eq 'CIM')
+                        {
+                            # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                            # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                        }
+                        elseif ($Source -eq 'SmartCtl')
+                        {
+                            # $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -Sudo:$SSHClientSudo
+                            $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
+                        }
+
+                        inGetDiskSmartInfo `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -Critical:$Critical `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -Devices $Device `
+                            -RequestedAttributes $RequestedAttributes `
+                            -AttributeProperties $AttributeProperty `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory `
+                            -Archive:$Archive
+                    }
+                    finally
+                    {
+                        # Remove-PSSession -Session $ps
                     }
                 }
             }

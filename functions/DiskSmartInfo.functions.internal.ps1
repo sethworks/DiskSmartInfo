@@ -274,6 +274,154 @@ function inGetSourceSmartDataCtl
     return $HostsSmartData
 }
 
+function inGetSourceSmartDataSSHClientCtl
+{
+    Param (
+        # [System.Management.Automation.Runspaces.PSSession[]]$PSSession
+        [string[]]$ComputerName,
+        [switch]$Sudo
+    )
+
+    $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+
+    foreach ($cn in $ComputerName)
+    {
+        $disksSmartData = @()
+
+        # if (Invoke-Command -ScriptBlock { Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue } -Session $ps)
+        # {
+            if ($Sudo)
+            {
+                $sbs = "ssh $cn sudo smartctl --info --health --attributes"
+            }
+            else
+            {
+                $sbs = "ssh $cn smartctl --info --health --attributes"
+            }
+
+            $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
+
+            foreach ($device in $devices)
+            {
+                if ($device -match '^(?<device>/dev/\w+)')
+                {
+                    $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+                    $disksSmartData += @{
+                        device = $Matches.device
+                        diskSmartData = Invoke-Command -ScriptBlock $sb
+                    }
+                }
+            }
+
+            $HostsSmartData.Add(@{
+                computerName = $cn
+                disksSmartData = $disksSmartData
+            })
+        # }
+        # else
+        # {
+        #     $message = "ComputerName: ""$($ps.ComputerName)"". SmartCtl utility is not found."
+        #     $exception = [System.Exception]::new($message)
+        #     $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
+        #     $PSCmdlet.WriteError($errorRecord)
+        # }
+    }
+
+    # $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+
+    # foreach ($ps in $PSSession)
+    # {
+    #     $disksSmartData = @()
+
+    #     if (Invoke-Command -ScriptBlock { Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue } -Session $ps)
+    #     {
+    #         if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
+    #         {
+    #             $sbs = 'sudo smartctl --info --health --attributes'
+    #         }
+    #         else
+    #         {
+    #             $sbs = 'smartctl --info --health --attributes'
+    #         }
+
+    #         $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
+
+    #         foreach ($device in $devices)
+    #         {
+    #             if ($device -match '^(?<device>/dev/\w+)')
+    #             {
+    #                 $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+    #                 $disksSmartData += @{
+    #                     device = $Matches.device
+    #                     diskSmartData = Invoke-Command -ScriptBlock $sb -Session $ps
+    #                 }
+    #             }
+    #         }
+
+    #         $HostsSmartData.Add(@{
+    #             computerName = $ps.ComputerName
+    #             disksSmartData = $disksSmartData
+    #         })
+    #     }
+    #     else
+    #     {
+    #         $message = "ComputerName: ""$($ps.ComputerName)"". SmartCtl utility is not found."
+    #         $exception = [System.Exception]::new($message)
+    #         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
+    #         $PSCmdlet.WriteError($errorRecord)
+    #     }
+    # }
+
+    # Localhost
+    # if (-not $PSSession)
+    # {
+    #     $disksSmartData = @()
+
+    #     if (Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue)
+    #     {
+    #         if ($IsLinux)
+    #         {
+    #             $sbs = 'sudo smartctl --info --health --attributes'
+    #         }
+    #         else
+    #         {
+    #             $sbs = 'smartctl --info --health --attributes'
+    #         }
+
+    #         $devices = Invoke-Command -ScriptBlock { smartctl --scan }
+
+    #         foreach ($device in $devices)
+    #         {
+    #             if ($device -match '^(?<device>/dev/\w+)')
+    #             {
+    #                 $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+    #                 $disksSmartData += @{
+    #                     device = $Matches.device
+    #                     diskSmartData = Invoke-Command -ScriptBlock $sb
+    #                 }
+    #             }
+    #         }
+
+    #         $HostsSmartData.Add(@{
+    #             computerName = $null
+    #             disksSmartData = $disksSmartData
+    #         })
+    #     }
+    #     else
+    #     {
+    #         $message = "SmartCtl utility is not found."
+    #         $exception = [System.Exception]::new($message)
+    #         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
+    #         $PSCmdlet.WriteError($errorRecord)
+    #     }
+    # }
+
+    return $HostsSmartData
+}
+
 function inGetSmartDataStructureCtl
 {
     Param (
@@ -354,7 +502,11 @@ function inGetSmartDataStructureCtl
             {
                 $actualAttributesList = inUpdateActualAttributesList -model $model -diskType $hash.DiskType
 
-                $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
+                $header = $diskSmartData.diskSmartData -like "ID# *ATTRIBUTE_NAME *FLAG *VALUE *WORST *THRESH *TYPE *UPDATED *WHEN_FAILED *RAW_VALUE"
+                # Because result of the -like operator is an array
+                $headerIndex = $diskSmartData.diskSmartData.IndexOf($header[0])
+
+                # $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
 
                 if ($headerIndex -ge 0)
                 {
