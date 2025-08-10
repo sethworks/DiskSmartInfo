@@ -374,38 +374,47 @@ function Get-DiskSmartInfo
                     #     continue
                     # }
 
-                    try
-                    {
-                        if ($Source -eq 'CIM')
-                        {
-                            # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-                            # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
-                        }
-                        elseif ($Source -eq 'SmartCtl')
-                        {
-                            # $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
-                            $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -Sudo:$SSHClientSudo
-                            $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
-                        }
+                    # try
+                    # {
 
-                        inGetDiskSmartInfo `
-                            -HostsSmartData $HostsSmartData `
-                            -Convert:$Convert `
-                            -Critical:$Critical `
-                            -DiskNumbers $DiskNumber `
-                            -DiskModels $DiskModel `
-                            -Devices $Device `
-                            -RequestedAttributes $RequestedAttributes `
-                            -AttributeProperties $AttributeProperty `
-                            -Quiet:$Quiet `
-                            -ShowHistory:$ShowHistory `
-                            -UpdateHistory:$UpdateHistory `
-                            -Archive:$Archive
-                    }
-                    finally
+                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient
+                    # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
+                    if ($Source -eq 'CIM')
                     {
-                        # Remove-PSSession -Session $ps
+                        $message = "ComputerName: ""$cn"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                        $exception = [System.Exception]::new($message)
+                        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                        $PSCmdlet.WriteError($errorRecord)
+
+                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
                     }
+                    elseif ($Source -eq 'SmartCtl')
+                    {
+                        # $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -Sudo:$SSHClientSudo
+                        $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
+                    }
+
+                    inGetDiskSmartInfo `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -Critical:$Critical `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -Devices $Device `
+                        -RequestedAttributes $RequestedAttributes `
+                        -AttributeProperties $AttributeProperty `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory `
+                        -Archive:$Archive
+
+                    # }
+                    # finally
+                    # {
+                        # Remove-PSSession -Session $ps
+                    # }
                 }
             }
         }
