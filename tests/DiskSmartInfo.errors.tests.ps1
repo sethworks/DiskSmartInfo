@@ -87,6 +87,40 @@ Describe "Errors" {
                 }
             }
         }
+
+        Context "SSHClient with CIM" {
+
+            Context "-Transport SSHClient -Source CIM" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -Source CIM" {
+
+                It "Should throw an error" {
+                    { $computerNames[0], $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
+
+        Context "SSHClient with ComputerName" {
+
+            Context "-Transport SSHClient -ComputerName" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames } | Should -Throw 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.' -ErrorId 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -ComputerName" {
+
+                It "Should throw an error" {
+                    { $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames } | Should -Throw 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.' -ErrorId 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
     }
 
     Context "Process block restrictions" {
