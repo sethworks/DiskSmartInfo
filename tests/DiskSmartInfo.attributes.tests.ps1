@@ -123,7 +123,7 @@ Describe "Attributes" {
                     mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                     mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                     mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                    $diskSmartInfo = Get-DiskSmartInfo -Critical
                 }
 
                 It "Retains IsCritical property value during attribute overwriting" {
@@ -145,7 +145,7 @@ Describe "Attributes" {
                         $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $false)
                     }
 
-                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                    $diskSmartInfo = Get-DiskSmartInfo -Critical
                 }
 
                 AfterAll {
@@ -176,7 +176,7 @@ Describe "Attributes" {
                         $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $true)
                     }
 
-                    $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+                    $diskSmartInfo = Get-DiskSmartInfo -Critical
                 }
 
                 AfterAll {

@@ -459,7 +459,7 @@ function inGetDiskSmartInfo
         Param (
         [System.Collections.Specialized.OrderedDictionary[]]$HostsSmartData,
         [switch]$Convert,
-        [switch]$CriticalAttributesOnly,
+        [switch]$Critical,
         [int[]]$DiskNumbers,
         [string[]]$DiskModels,
         [string[]]$Devices,
@@ -523,7 +523,7 @@ function inGetDiskSmartInfo
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
-                            if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
+                            if ((-not $Critical) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
                                 # Attribute quiet eligibility check
                                 if ((-not $Quiet) -or
@@ -580,7 +580,7 @@ function inGetDiskSmartInfo
                         if (isAttributeRequested -RequestedAttributes $RequestedAttributes -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType)
                         {
                             # Attribute criticality check
-                            if ((-not $CriticalAttributesOnly) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
+                            if ((-not $Critical) -or (isCritical -actualAttributesList $actualAttributesList -attributeSmartData $attributeSmartData -diskType $diskSmartData.DiskType))
                             {
                                 # Attribute quiet eligibility check
                                 if ((-not $Quiet) -or

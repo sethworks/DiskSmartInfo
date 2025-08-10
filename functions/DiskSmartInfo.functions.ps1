@@ -15,7 +15,8 @@ function Get-DiskSmartInfo
         [ValidateSet('CIM','SmartCtl')]
         [string]$Source,
         [switch]$Convert,
-        [switch]$CriticalAttributesOnly,
+        [Alias('CriticalAttributesOnly')]
+        [switch]$Critical,
         [Alias('Index','Number','DeviceId')]
         [Parameter(ValueFromPipelineByPropertyName)]
         [ArgumentCompleter([DiskCompleter])]
@@ -72,7 +73,7 @@ function Get-DiskSmartInfo
         }
 
         # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-        # Win32_DiskDrive, MSFT_DIsk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
         if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
         {
             $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
@@ -140,7 +141,7 @@ function Get-DiskSmartInfo
                     inGetDiskSmartInfo `
                         -HostsSmartData $HostsSmartData `
                         -Convert:$Convert `
-                        -CriticalAttributesOnly:$CriticalAttributesOnly `
+                        -Critical:$Critical `
                         -DiskNumbers $DiskNumber `
                         -DiskModels $DiskModel `
                         -Devices $Device `
@@ -178,7 +179,7 @@ function Get-DiskSmartInfo
                 inGetDiskSmartInfo `
                     -HostsSmartData $HostsSmartData `
                     -Convert:$Convert `
-                    -CriticalAttributesOnly:$CriticalAttributesOnly `
+                    -Critical:$Critical `
                     -DiskNumbers $DiskNumber `
                     -DiskModels $DiskModel `
                     -Devices $Device `
@@ -213,7 +214,7 @@ function Get-DiskSmartInfo
                             inGetDiskSmartInfo `
                                 -HostsSmartData $HostsSmartData `
                                 -Convert:$Convert `
-                                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                                -Critical:$Critical `
                                 -DiskNumbers $DiskNumber `
                                 -DiskModels $DiskModel `
                                 -Devices $Device `
@@ -282,7 +283,7 @@ function Get-DiskSmartInfo
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
                             -Convert:$Convert `
-                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -Critical:$Critical `
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
@@ -325,7 +326,7 @@ function Get-DiskSmartInfo
                         inGetDiskSmartInfo `
                             -HostsSmartData $HostsSmartData `
                             -Convert:$Convert `
-                            -CriticalAttributesOnly:$CriticalAttributesOnly `
+                            -Critical:$Critical `
                             -DiskNumbers $DiskNumber `
                             -DiskModels $DiskModel `
                             -Devices $Device `
@@ -360,7 +361,7 @@ function Get-DiskSmartInfo
             inGetDiskSmartInfo `
                 -HostsSmartData $HostsSmartData `
                 -Convert:$Convert `
-                -CriticalAttributesOnly:$CriticalAttributesOnly `
+                -Critical:$Critical `
                 -DiskNumbers $DiskNumber `
                 -DiskModels $DiskModel `
                 -Devices $Device `

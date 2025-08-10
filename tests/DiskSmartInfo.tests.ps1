@@ -195,14 +195,14 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
-    Context "-CriticalAttributesOnly" {
+    Context "-Critical" {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-            $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly
+            $diskSmartInfo = Get-DiskSmartInfo -Critical
         }
 
         It "Has SmartData property with 5 DiskSmartAttribute objects" {
@@ -241,14 +241,14 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
-    Context "-CriticalAttributesOnly -Quiet" {
+    Context "-Critical -Quiet" {
 
         BeforeAll {
             mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2, $diskThresholdsSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
             mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
-            $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+            $diskSmartInfo = Get-DiskSmartInfo -Critical -Quiet
         }
 
         It "Has 1 DiskSmartInfo object" {
@@ -778,7 +778,7 @@ Describe "Get-DiskSmartInfo" {
             }
         }
 
-        Context "-CriticalAttributesOnly -Quiet" {
+        Context "-Critical -Quiet" {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2, $diskSmartDataSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
@@ -786,7 +786,7 @@ Describe "Get-DiskSmartInfo" {
                 mock Get-CimInstance -MockWith { $diskFailurePredictStatusTrueHDD1, $diskFailurePredictStatusHDD2, $diskFailurePredictStatusSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHDD1, $diskDriveHDD2, $diskDriveSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
 
-                $diskSmartInfo = Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+                $diskSmartInfo = Get-DiskSmartInfo -Critical -Quiet
             }
 
             It "Returns DiskSmartInfo objects" {
