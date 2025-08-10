@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "Get-DiskSmartInfo" {
+Describe "Get-DiskSmartInfo NVMe" {
 
     Context "Without parameters" {
 
@@ -134,14 +134,14 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
-    Context "-CriticalAttributesOnly" {
+    Context "-Critical" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -CriticalAttributesOnly
+            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Critical
         }
 
         It "Has SmartData property with 5 DiskSmartAttribute objects" {
@@ -182,7 +182,7 @@ Describe "Get-DiskSmartInfo" {
         }
     }
 
-    Context "-CriticalAttributesOnly -Quiet" {
+    Context "-Critical -Quiet" {
 
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
@@ -191,7 +191,7 @@ Describe "Get-DiskSmartInfo" {
             mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -CriticalAttributesOnly -Quiet
+            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Critical -Quiet
         }
 
         It "Has 1 DiskSmartInfo object" {
@@ -680,7 +680,7 @@ Describe "Get-DiskSmartInfo" {
             }
         }
 
-        Context "-CriticalAttributesOnly -Quiet" {
+        Context "-Critical -Quiet" {
 
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
@@ -689,7 +689,7 @@ Describe "Get-DiskSmartInfo" {
                 mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
 
-                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -CriticalAttributesOnly -Quiet
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Critical -Quiet
             }
 
             It "Returns DiskSmartInfo objects" {

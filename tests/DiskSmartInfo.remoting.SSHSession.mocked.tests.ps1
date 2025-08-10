@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting SSHSession mocked tests" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
 
     Context "ComputerName" {
 
@@ -712,7 +712,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked tests" -Skip:(-not ($IsCoreCL
             }
 
             It "DiskSmartInfo object has correct types and properties" {
-                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
                 $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.ComputerName | Should -BeOfType 'System.String'

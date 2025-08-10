@@ -11,7 +11,7 @@ $skipRemoting = -not (Test-WSMan -ComputerName localhost -ErrorAction SilentlyCo
 # Skip if WSMan TrustedHosts is not '*'
 $skipIPAddresses = -not ((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
 
-Describe "DiskSmartInfo remoting CIMSession tests" -Skip:$skipRemoting {
+Describe "DiskSmartInfo remoting CIMSession" -Skip:$skipRemoting {
 
     Context "ComputerName" {
 
@@ -657,7 +657,7 @@ Describe "DiskSmartInfo remoting CIMSession tests" -Skip:$skipRemoting {
             }
 
             It "DiskSmartInfo object has correct types and properties" {
-                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
                 $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.ComputerName | Should -BeOfType 'System.String'

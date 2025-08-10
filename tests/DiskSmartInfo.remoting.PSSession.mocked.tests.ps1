@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting PSSession mocked tests" {
+Describe "DiskSmartInfo remoting PSSession mocked" {
 
     Context "ComputerName" {
 
@@ -712,7 +712,7 @@ Describe "DiskSmartInfo remoting PSSession mocked tests" {
             }
 
             It "DiskSmartInfo object has correct types and properties" {
-                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
                 $diskSmartInfo.psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo.ComputerName | Should -BeOfType 'System.String'

@@ -265,7 +265,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CriticalAttributesOnly</maml:name>
+          <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Displays only critical attributes.</maml:para>
             <maml:para>This is defined by IsCritical property of attributes, listed in attributes/default.ps1 and attributes/proprietary.ps1 files.</maml:para>
@@ -371,7 +371,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:description>
             <maml:para>Specifies which properties of the attributes should be displayed.</maml:para>
             <maml:para>If you specify History or Converted among the properties, the -ShowHistory and -Convert parameters respectively are set automatically.</maml:para>
-            <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom.</maml:para>
+            <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom or DiskSmartAttributeNVMeCustom.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
           <dev:type>
@@ -500,7 +500,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CriticalAttributesOnly</maml:name>
+          <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Displays only critical attributes.</maml:para>
             <maml:para>This is defined by IsCritical property of attributes, listed in attributes/default.ps1 and attributes/proprietary.ps1 files.</maml:para>
@@ -606,7 +606,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:description>
             <maml:para>Specifies which properties of the attributes should be displayed.</maml:para>
             <maml:para>If you specify History or Converted among the properties, the -ShowHistory and -Convert parameters respectively are set automatically.</maml:para>
-            <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom.</maml:para>
+            <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom or DiskSmartAttributeNVMeCustom.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
           <dev:type>
@@ -765,7 +765,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CriticalAttributesOnly</maml:name>
+        <maml:name>Critical</maml:name>
         <maml:description>
           <maml:para>Displays only critical attributes.</maml:para>
           <maml:para>This is defined by IsCritical property of attributes, listed in attributes/default.ps1 and attributes/proprietary.ps1 files.</maml:para>
@@ -872,7 +872,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:description>
           <maml:para>Specifies which properties of the attributes should be displayed.</maml:para>
           <maml:para>If you specify History or Converted among the properties, the -ShowHistory and -Convert parameters respectively are set automatically.</maml:para>
-          <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom.</maml:para>
+          <maml:para>Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom or DiskSmartAttributeNVMeCustom.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
         <dev:type>
@@ -1052,7 +1052,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>------------- Example 3: Critical attributes only -------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly
+        <dev:code>Get-DiskSmartInfo -Critical
 
 Disk:         0: Disk model
 Device:       Disk device
@@ -1089,8 +1089,8 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 5: Using -CriticalAttributesOnly and -Quiet parameters</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+        <maml:title>------- Example 5: Using -Critical and -Quiet parameters -------</maml:title>
+        <dev:code>Get-DiskSmartInfo -Critical -Quiet
 
 Disk:         0: Disk model
 Device:       Disk device
@@ -1100,7 +1100,7 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
-          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0.</maml:para>
+          <maml:para>The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>

@@ -14,8 +14,8 @@ Gets disk SMART information
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>]
+[-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
 [-Credential <PSCredential>] [<CommonParameters>]
@@ -23,8 +23,8 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <S
 
 ### Session
 ```
-Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>]
+[-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
 [<CommonParameters>]
@@ -153,7 +153,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CriticalAttributesOnly
+### -Critical
 Displays only critical attributes.
 
 This is defined by IsCritical property of attributes, listed in
@@ -317,7 +317,7 @@ Specifies which properties of the attributes should be displayed.
 If you specify History or Converted among the properties, the -ShowHistory
 and -Convert parameters respectively are set automatically.
 
-Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom.
+Specifying this parameter results in attribute objects of type DiskSmartAttributeCustom or DiskSmartAttributeNVMeCustom.
 
 ```yaml
 Type: AttributeProperty[]
@@ -518,7 +518,7 @@ The command gets disk SMART information and adds converted data for applicable a
 
 ### Example 3: Critical attributes only
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly
+Get-DiskSmartInfo -Critical
 ```
 
 ```
@@ -555,9 +555,9 @@ SMARTData:
 The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property,
 or that are non-critical and their Value is less or equal to their Threshold.
 
-### Example 5: Using -CriticalAttributesOnly and -Quiet parameters
+### Example 5: Using -Critical and -Quiet parameters
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+Get-DiskSmartInfo -Critical -Quiet
 ```
 
 ```
@@ -570,7 +570,7 @@ SMARTData:
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20
 ```
 
-The command gets disk SMART information and displays only attributes that are critical and their Data is greater than 0.
+The command gets disk SMART information and displays only attributes that are critical and their Data is greater than the CriticalThreshold property.
 
 ### Example 6: Get disk SMART info from remote computers
 ```powershell
