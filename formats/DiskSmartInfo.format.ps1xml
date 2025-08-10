@@ -126,9 +126,9 @@
             </CustomControl>
         </View>
         <View>
-            <Name>DiskSmartInfo#DataHistory</Name>
+            <Name>DiskSmartInfo#History</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartInfo#DataHistory</TypeName>
+                <TypeName>DiskSmartInfo#History</TypeName>
             </ViewSelectedBy>
             <CustomControl>
                 <CustomEntries>

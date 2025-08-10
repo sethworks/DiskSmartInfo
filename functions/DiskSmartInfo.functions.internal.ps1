@@ -554,15 +554,15 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory -and $Convert)
                                     {
-                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistoryDataConverted'
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#HistoryConverted'
                                     }
                                     elseif ($ShowHistory)
                                     {
-                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataHistory'
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#History'
                                     }
                                     elseif ($Convert)
                                     {
-                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#DataConverted'
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttribute#Converted'
                                     }
                                     $attributes += $attributeObject
                                 }
@@ -600,7 +600,7 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#DataHistory'
+                                        $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe#History'
                                     }
                                     $attributes += $attributeObject
                                 }
@@ -656,7 +656,7 @@ function inGetDiskSmartInfo
 
                     if ($ShowHistory)
                     {
-                        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#DataHistory"
+                        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#History"
                     }
 
                     $diskSmartInfo

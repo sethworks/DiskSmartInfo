@@ -48,9 +48,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#DataHistoryDataConverted</Name>
+            <Name>DiskSmartAttribute#HistoryConverted</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#DataHistoryDataConverted</TypeName>
+                <TypeName>DiskSmartAttribute#HistoryConverted</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -106,9 +106,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#DataHistory</Name>
+            <Name>DiskSmartAttribute#History</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#DataHistory</TypeName>
+                <TypeName>DiskSmartAttribute#History</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -158,9 +158,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttribute#DataConverted</Name>
+            <Name>DiskSmartAttribute#Converted</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttribute#DataConverted</TypeName>
+                <TypeName>DiskSmartAttribute#Converted</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>
@@ -236,9 +236,9 @@
             </TableControl>
         </View>
         <View>
-            <Name>DiskSmartAttributeNVMe#DataHistory</Name>
+            <Name>DiskSmartAttributeNVMe#History</Name>
             <ViewSelectedBy>
-                <TypeName>DiskSmartAttributeNVMe#DataHistory</TypeName>
+                <TypeName>DiskSmartAttributeNVMe#History</TypeName>
             </ViewSelectedBy>
             <TableControl>
                 <TableHeaders>

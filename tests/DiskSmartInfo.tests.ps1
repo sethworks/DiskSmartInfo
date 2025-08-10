@@ -150,7 +150,7 @@ Describe "Get-DiskSmartInfo" {
         }
 
         It "DiskSmartAttribute object has correct types and properties" {
-            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataConverted'
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#Converted'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
 

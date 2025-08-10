@@ -31,7 +31,7 @@ Describe "History" {
         }
 
         It "DiskSmartInfo object has correct types and properties" {
-            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
             $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
             $diskSmartInfo[0].ComputerName | Should -BeNullOrEmpty
@@ -69,7 +69,7 @@ Describe "History" {
         }
 
         It "DiskSmartAttribute object has correct types and properties" {
-            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#History'
 
             $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
 
@@ -188,7 +188,7 @@ Describe "History" {
             }
 
             It "DiskSmartInfo object has correct types and properties" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
                 $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].ComputerName | Should -BeNullOrEmpty
@@ -226,7 +226,7 @@ Describe "History" {
             }
 
             It "DiskSmartAttribute object has correct types and properties" {
-                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
+                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#History'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 8
 
@@ -306,7 +306,7 @@ Describe "History" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
             }
 
             It "HistoricalDate property exists" {
@@ -315,7 +315,7 @@ Describe "History" {
             }
 
             It "Attribute object is of proper type" {
-                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistory'
+                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#History'
             }
 
             It "Changed attribute data" {
@@ -359,7 +359,7 @@ Describe "History" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
             }
 
             It "HistoricalDate property exists" {
@@ -378,7 +378,7 @@ Describe "History" {
             }
 
             It "DiskSmartAttribute object has correct types and properties" {
-                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#DataHistoryDataConverted'
+                $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute#HistoryConverted'
 
                 $diskSmartInfo[0].SmartData[0].psobject.properties | Should -HaveCount 9
 
@@ -471,7 +471,7 @@ Describe "History" {
             }
 
             It "DiskSmartInfo object has correct types and properties" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
 
                 $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
                 $diskSmartInfo[0].ComputerName | Should -BeNullOrEmpty
@@ -589,7 +589,7 @@ Describe "History" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
             }
 
             It "HistoricalDate property exists" {
@@ -642,7 +642,7 @@ Describe "History" {
             }
 
             It "Object is of proper type" {
-                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#DataHistory'
+                $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo#History'
             }
 
             It "HistoricalDate property exists" {
