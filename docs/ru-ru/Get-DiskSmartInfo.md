@@ -14,8 +14,8 @@ schema: 2.0.0
 
 ### ComputerName (Default)
 ```
-Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <String>]
+[-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
 [-Credential <PSCredential>] [<CommonParameters>]
@@ -23,8 +23,8 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <S
 
 ### Session
 ```
-Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>] [-Convert]
-[-CriticalAttributesOnly] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
+Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Source <String>]
+[-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
 [<CommonParameters>]
@@ -153,7 +153,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -CriticalAttributesOnly
+### -Critical
 Параметр отображает только критические атрибуты.
 
 Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных 
@@ -323,7 +323,7 @@ Accept wildcard characters: True
 -ShowHistory и -Convert, соответственно, будут установлены автоматически.
 
 Результатом применения данного параметра будут объекты атрибутов типа
-DiskSmartAttributeCustom.
+DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.
 
 ```yaml
 Type: AttributeProperty[]
@@ -528,7 +528,7 @@ SMARTData:
 
 ### Example 3: Только критические атрибуты
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly
+Get-DiskSmartInfo -Critical
 ```
 
 ```
@@ -567,9 +567,9 @@ SMARTData:
 а также не критические атрибуты, в том случае, если значение их свойства Value
 меньше или равно значению свойства Threshold.
 
-### Example 5: Использование параметров -CriticalAttributesOnly и -Quiet
+### Example 5: Использование параметров -Critical и -Quiet
 ```powershell
-Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+Get-DiskSmartInfo -Critical -Quiet
 ```
 
 ```
@@ -583,7 +583,7 @@ SMARTData:
 ```
 
 Команда получает информацию SMART жестких дисков и отображает только критические атрибуты
-со значением свойства Data, превышающим 0.
+со значением свойства Data, превышающим значение свойства CriticalThreshold.
 
 ### Example 6: Получение данных SMART с удаленных компьютеров
 ```powershell

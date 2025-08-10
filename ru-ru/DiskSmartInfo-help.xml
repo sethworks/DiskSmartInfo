@@ -265,7 +265,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CriticalAttributesOnly</maml:name>
+          <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
             <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -371,7 +371,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:description>
             <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
             <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
-            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom.</maml:para>
+            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
           <dev:type>
@@ -500,7 +500,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <dev:defaultValue>False</dev:defaultValue>
         </command:parameter>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-          <maml:name>CriticalAttributesOnly</maml:name>
+          <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
             <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -606,7 +606,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:description>
             <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
             <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
-            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom.</maml:para>
+            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
           <dev:type>
@@ -765,7 +765,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
       <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
-        <maml:name>CriticalAttributesOnly</maml:name>
+        <maml:name>Critical</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только критические атрибуты.</maml:para>
           <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
@@ -872,7 +872,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:description>
           <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
           <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
-          <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom.</maml:para>
+          <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
         <dev:type>
@@ -1052,7 +1052,7 @@ SMARTData:
       </command:example>
       <command:example>
         <maml:title>------------ Example 3: Только критические атрибуты ------------</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly
+        <dev:code>Get-DiskSmartInfo -Critical
 
 Disk:         0: Disk model
 Device:       Disk device
@@ -1089,8 +1089,8 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 5: Использование параметров -CriticalAttributesOnly и -Quiet</maml:title>
-        <dev:code>Get-DiskSmartInfo -CriticalAttributesOnly -Quiet
+        <maml:title>---- Example 5: Использование параметров -Critical и -Quiet ----</maml:title>
+        <dev:code>Get-DiskSmartInfo -Critical -Quiet
 
 Disk:         0: Disk model
 Device:       Disk device
@@ -1100,7 +1100,7 @@ SMARTData:
               197 C5    Current Pending Sector Count       0         200   200   20
               198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
         <dev:remarks>
-          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критические атрибуты со значением свойства Data, превышающим 0.</maml:para>
+          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold.</maml:para>
           <maml:para/>
           <maml:para/>
         </dev:remarks>
