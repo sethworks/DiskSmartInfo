@@ -114,6 +114,11 @@ function Get-DiskSmartInfo
             Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
         }
 
+        if ($Credential -and $Transport -eq 'SSHClient')
+        {
+            Write-Warning -Message "The -Credential parameter is not used with SSHClient transport."
+        }
+
         # Defaults
         if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
         {
@@ -368,15 +373,6 @@ function Get-DiskSmartInfo
             {
                 foreach ($cn in $ComputerName)
                 {
-                    # if (-not ($ps = New-PSSession -HostName $cn @errorParameters))
-                    # {
-                    #     inReportErrors -Errors $sessionErrors
-                    #     continue
-                    # }
-
-                    # try
-                    # {
-
                     # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient
                     # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
                     if ($Source -eq 'CIM')
@@ -385,13 +381,9 @@ function Get-DiskSmartInfo
                         $exception = [System.Exception]::new($message)
                         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                         $PSCmdlet.WriteError($errorRecord)
-
-                        # $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-                        # $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
                     }
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        # $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
                         $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -Sudo:$SSHClientSudo
                         $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                     }
@@ -409,12 +401,6 @@ function Get-DiskSmartInfo
                         -ShowHistory:$ShowHistory `
                         -UpdateHistory:$UpdateHistory `
                         -Archive:$Archive
-
-                    # }
-                    # finally
-                    # {
-                        # Remove-PSSession -Session $ps
-                    # }
                 }
             }
         }

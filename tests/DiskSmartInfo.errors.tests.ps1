@@ -336,6 +336,32 @@ Describe "Errors" {
                 $w | Should -BeExactly 'The -Credential parameter is not used with SSHSession transport.'
             }
         }
+
+        # Context "Credential with SSHClient transport" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+        Context "Credential with SSHClient transport" -Skip {
+
+            BeforeAll {
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
+
+                $Credential = [PSCredential]::new('UserName', (ConvertTo-SecureString -String 'Password' -AsPlainText -Force))
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -Credential $Credential -WarningVariable w -WarningAction SilentlyContinue
+            }
+
+            It "Should issue a warning" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                $w | Should -BeExactly 'The -Credential parameter is not used with SSHClient transport.'
+            }
+        }
     }
 
     Context "Nonexistent host" {
