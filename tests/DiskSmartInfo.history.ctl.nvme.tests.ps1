@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "History" {
+Describe "History NVMe" {
 
     Context "-ShowHistory before updating" {
 

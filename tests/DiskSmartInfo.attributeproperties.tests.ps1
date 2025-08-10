@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "Get-DiskSmartInfo" {
+Describe "AttributeProperty" {
 
     Context "Default properties" {
 

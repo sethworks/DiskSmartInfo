@@ -11,7 +11,7 @@ $skipRemoting = -not (Test-WSMan -ComputerName localhost -ErrorAction SilentlyCo
 # Skip if WSMan TrustedHosts is not '*'
 $skipIPAddresses = -not ((Get-Item WSMan:\localhost\Client\TrustedHosts).Value -eq '*')
 
-Describe "DiskSmartInfo remoting CIMSession tests" -Skip:$skipRemoting {
+Describe "DiskSmartInfo remoting CIMSession" -Skip:$skipRemoting {
 
     Context "ComputerName" {
 

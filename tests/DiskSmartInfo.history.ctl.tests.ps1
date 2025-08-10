@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "History" {
+Describe "History Ctl" {
 
     Context "-ShowHistory before updating" {
 

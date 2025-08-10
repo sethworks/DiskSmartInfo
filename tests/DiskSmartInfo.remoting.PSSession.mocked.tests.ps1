@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting PSSession mocked tests" {
+Describe "DiskSmartInfo remoting PSSession mocked" {
 
     Context "ComputerName" {
 

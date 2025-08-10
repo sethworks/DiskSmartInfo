@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting SSHSession mocked tests" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
 
     Context "ComputerName" {
 

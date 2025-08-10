@@ -4,7 +4,7 @@ on: push
 jobs:
   PowerShellTest:
     name: PowerShell
-    runs-on: windows-2025
+    runs-on: windows-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -16,7 +16,7 @@ jobs:
 
   WindowsPowerShellTest:
     name: Windows PowerShell
-    runs-on: windows-2025
+    runs-on: windows-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v4
