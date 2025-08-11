@@ -38,6 +38,7 @@ function Get-DiskSmartInfo
         [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
         [pscredential]$Credential,
+        [Parameter(ParameterSetName='ComputerName')]
         [switch]$SSHClientSudo
     )
 
