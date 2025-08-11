@@ -404,8 +404,6 @@ function inGetSmartDataStructureCtl
                 # Because result of the -like operator is an array
                 $headerIndex = $diskSmartData.diskSmartData.IndexOf($header[0])
 
-                # $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
-
                 if ($headerIndex -ge 0)
                 {
                     $table = $diskSmartData.diskSmartData | Select-Object -Skip ($headerIndex + 1)
