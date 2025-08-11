@@ -6,9 +6,10 @@ Describes SMART attribute definitions used by commands of DiskSmartInfo module.
 
 LONG DESCRIPTION
 
-SMART attributes are defined in three files, located in the attributes folder:
+SMART attributes are defined in four files, located in the attributes folder:
     default.ps1
     proprietary.ps1
+    nvme.ps1
     descriptions.ps1
 
 
@@ -106,6 +107,41 @@ then resulting attribute definition will be:
 
 
 New disk models and proprietary definitions should be added to this file.
+
+
+NVME ATTRIBUTES
+
+nvme.ps1 contains data structure, that consists of different device families.
+
+Each device family object has three properties:
+    Family
+    ModelPatterns
+    Attributes
+
+Family property is a string, used as a custom name for the device family.
+This property is not used by the commands.
+
+ModelPatterns is an array of strings. Each of them represents regular expression,
+used by the Get-DiskSmartInfo command to compare with the model of the processed
+disks. When there is a match, attributes from that family are added to actual
+attribute set.
+
+Attributes property is an array of attribute definitions. The structure of the
+nvme attribute definition is as follows:
+    AttributeName
+    IsCritical
+
+AttributeName is a string value, that specifies the name of an attribute.
+
+AttributeName property can be specified using wildcards.
+
+IsCritical is a ScriptBlock, specifying whether an attribute is in critical state.
+
+If IsCritical property is present for an attribute, this attribute is considered critical.
+If this property (or the whole attribute definition) is not present,
+this attribute is considered not critical.
+
+New nvme disk models and their attribute definitions should be added to this file.
 
 
 DESCRIPTIONS
