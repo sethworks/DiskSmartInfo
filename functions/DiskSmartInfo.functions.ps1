@@ -119,6 +119,11 @@ function Get-DiskSmartInfo
             Write-Warning -Message "The -Credential parameter is not used with SSHClient transport."
         }
 
+        if ($SSHClientSudo -and $Transport -ne 'SSHClient')
+        {
+            Write-Warning -Message "The -SSHClientSudo parameter only used with SSHClient transport."
+        }
+
         # Defaults
         if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
         {
