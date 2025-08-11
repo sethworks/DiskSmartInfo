@@ -466,7 +466,7 @@ Temperature Sensor 2:               71 Celsius'
     CtlPredictFailureTrue_NVMe1 = $true
     CtlBytesPerSector_NVMe1 = 512
 
-    # CtlData_NVMe2
+    # NVMe2
     CtlData_NVMe2 = '
 === START OF INFORMATION SECTION ===
 Model Number:                       Samsung SSD 970 EVO Plus 500GB

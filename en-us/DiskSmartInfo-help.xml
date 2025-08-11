@@ -227,6 +227,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
             <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
             <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
+            <maml:para>SSHClient - use external ssh client</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -434,6 +435,17 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Archive by default is located in the archive folder of the module directory.</maml:para>
             <maml:para>This can be changed by ArchivePath config parameter.</maml:para>
             <maml:para>For more information, see about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SSHClientSudo</maml:name>
+          <maml:description>
+            <maml:para>When using SSHClient transport, use sudo on remote host.</maml:para>
           </maml:description>
           <dev:type>
             <maml:name>SwitchParameter</maml:name>
@@ -700,6 +712,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
           <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
           <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
+          <maml:para>SSHClient - use external ssh client</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
@@ -958,6 +971,18 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:uri />
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SSHClientSudo</maml:name>
+        <maml:description>
+          <maml:para>When using SSHClient transport, use sudo on remote host.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes>
@@ -1238,7 +1263,40 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 10: Get disk SMART info from remote computers using specified CimSessions</maml:title>
+        <maml:title>Example 10: Get disk SMART info from remote computers using external SSH client and SmartCtl as data source</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHClient -Source SmartCtl
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>The command gets disk SMART information from remote computer using external SSH client and SmartCtl as data source.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 11: Get disk SMART info from remote computers using specified CimSessions</maml:title>
         <dev:code>$Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
 
@@ -1288,7 +1346,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>Example 11: Get disk SMART info from remote computers using specified PSSession</maml:title>
+        <maml:title>Example 12: Get disk SMART info from remote computers using specified PSSession</maml:title>
         <dev:code>$Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
 $SSHSession = New-PSSession -HostName SomeOtherComputer
@@ -1336,7 +1394,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------------- Example 12: Get selected attributes -------------</maml:title>
+        <maml:title>------------- Example 13: Get selected attributes -------------</maml:title>
         <dev:code>Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 
 Disk:         0: Disk model
@@ -1355,7 +1413,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>----------- Example 13: Get data for selected disks -----------</maml:title>
+        <maml:title>----------- Example 14: Get data for selected disks -----------</maml:title>
         <dev:code>Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific Mod*" -Device "*Specific Dev*"
 
 Disk:         1: Disk model
@@ -1394,7 +1452,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>---------------- Example 14: Save history data ----------------</maml:title>
+        <maml:title>---------------- Example 15: Save history data ----------------</maml:title>
         <dev:code>Get-DiskSmartInfo -UpdateHistory
 
 Disk:         0: Disk model
@@ -1426,7 +1484,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>---------------- Example 15: Show history data ----------------</maml:title>
+        <maml:title>---------------- Example 16: Show history data ----------------</maml:title>
         <dev:code>Get-DiskSmartInfo -ShowHistory
 
 Disk:         0: Disk model
@@ -1459,7 +1517,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>-------- Example 16: Get selected attribute properties --------</maml:title>
+        <maml:title>-------- Example 17: Get selected attribute properties --------</maml:title>
         <dev:code>Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
 
 Disk:         0: Disk model
@@ -1492,7 +1550,7 @@ SMARTData:
         </dev:remarks>
       </command:example>
       <command:example>
-        <maml:title>------------------ Example 17: Using pipeline ------------------</maml:title>
+        <maml:title>------------------ Example 18: Using pipeline ------------------</maml:title>
         <dev:code>$ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
 $PSSession = New-PSSession -ComputerName 'Computer3'
