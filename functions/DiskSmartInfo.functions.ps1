@@ -157,15 +157,6 @@ function Get-DiskSmartInfo
             }
         }
 
-        # if ($SSHClientSudo)
-        # {
-        #     $Sudo = 'sudo'
-        # }
-        # else
-        # {
-        #     $Sudo = ''
-        # }
-
         $errorParameters = @{
             ErrorVariable = 'sessionErrors'
             ErrorAction = 'SilentlyContinue'

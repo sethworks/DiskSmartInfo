@@ -192,21 +192,6 @@ function inGetSourceSmartDataCtl
             $IsLinux_ = Invoke-Command -ScriptBlock { $IsLinux } -Session $ps
 
             $sbs = inGetSmartCtlCommand -Sudo $IsLinux_ -SmartCtlOptions $SmartCtlOptions
-<#
-            if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
-            {
-                # $sbs = 'sudo smartctl --info --health --attributes'
-                # $Sudo = 'sudo'
-                $sbs = "sudo smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
-            }
-            else
-            {
-                # $sbs = 'smartctl --info --health --attributes'
-                # $Sudo = ''
-                $sbs = "smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
-            }
-#>
-            # $sbs = "$Sudo smartctl $SmartCtlOptions --info --health --attributes".Trim() -replace '\s+', ' '
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
 
@@ -246,23 +231,6 @@ function inGetSourceSmartDataCtl
         {
 
             $sbs = inGetSmartCtlCommand -Sudo $IsLinux -SmartCtlOptions $SmartCtlOptions
-<#
-            if ($IsLinux)
-            {
-                # $sbs = 'sudo smartctl --info --health --attributes'
-                # $Sudo = 'sudo'
-                $sbs = "sudo smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
-
-            }
-            else
-            {
-                # $sbs = 'smartctl --info --health --attributes'
-                # $Sudo = ''
-                $sbs = "smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
-
-            }
-#>
-            # $sbs = "$Sudo smartctl $SmartCtlOptions --info --health --attributes".Trim() -replace '\s+', ' '
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan }
 
@@ -311,33 +279,6 @@ function inGetSourceSmartDataSSHClientCtl
         $disksSmartData = @()
 
         $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions
-
-        # $sbs = "ssh $cn $Sudo smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
-
-        # $sbs = "ssh $cn "
-
-        # if ($Sudo)
-        # {
-        #     $sns += "sudo "
-        # }
-
-        # $sbs += "smartctl "
-
-        # if ($SmartCtlOptions)
-        # {
-        #     $sbs += "$SmartCtlOptions "
-        # }
-
-        # $sbs += "--info --health --attributes"
-
-        # if ($Sudo)
-        # {
-        #     $sbs = "ssh $cn sudo smartctl --info --health --attributes"
-        # }
-        # else
-        # {
-        #     $sbs = "ssh $cn smartctl --info --health --attributes"
-        # }
 
         $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
 

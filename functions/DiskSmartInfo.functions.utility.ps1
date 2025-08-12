@@ -122,7 +122,6 @@ function inGetSmartCtlCommand
     $command += '--info --health --attributes'
 
     return $command
-    # $sbs = "sudo smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
 }
 
 function inReportErrors
