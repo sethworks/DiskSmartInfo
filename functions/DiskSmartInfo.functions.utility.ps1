@@ -95,7 +95,8 @@ function inGetSmartCtlCommand
 {
     Param (
         [string]$SSHHostName,
-        [bool]$Sudo,
+        # Can not use [bool]$Sudo here, because Windows PowerShell can not convert $null to [bool]
+        $Sudo,
         [string]$SmartCtlOptions
     )
 
