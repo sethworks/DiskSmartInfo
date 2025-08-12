@@ -731,4 +731,90 @@ Describe "DiskSmartInfo remoting PSSession mocked Ctl" {
             }
         }
     }
+
+    Context "SmartCtlOption" {
+
+        BeforeAll {
+            $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+            $psSessionHost2 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[1]}
+            mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+            mock New-PSSession -MockWith { $psSessionHost2 } -ParameterFilter {$ComputerName -eq $computerNames[1]} -ModuleName DiskSmartInfo
+            mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+            mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport PSSession -Source SmartCtl -SmartCtlOption '-d ata'
+        }
+
+        It "Returns DiskSmartInfo object" {
+            $diskSmartInfo | Should -HaveCount 2
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+            $diskSmartInfo[1].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+        }
+
+        It "Has ComputerName, Model, and Device properties" {
+            $diskSmartInfo[0].ComputerName | Should -BeIn $computerNames
+            $diskSmartInfo[0].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
+            $diskSmartInfo[0].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
+
+            $diskSmartInfo[1].ComputerName | Should -BeExactly $computerNames.Where{$_ -notlike $diskSmartInfo[0].ComputerName}
+            $diskSmartInfo[1].DiskModel | Should -BeExactly $testDataCtl.CtlModel_HDD1
+            $diskSmartInfo[1].Device | Should -BeExactly $testDataCtl.CtlDevice_HDD1
+        }
+
+        It "Has SmartData property with 22 DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData | Should -HaveCount 22
+            $diskSmartInfo[0].SmartData[0].pstypenames[0] | Should -BeExactly 'DiskSmartAttribute'
+        }
+
+        It "Has correct DiskSmartAttribute objects" {
+            $diskSmartInfo[0].SmartData[0].ID | Should -Be 1
+            $diskSmartInfo[0].SmartData[12].IDHex | Should -BeExactly 'C0'
+            $diskSmartInfo[0].SmartData[2].Name | Should -BeExactly 'Spin-Up Time'
+            $diskSmartInfo[0].SmartData[2].Threshold | Should -Be 25
+            $diskSmartInfo[0].SmartData[2].Value | Should -Be 71
+            $diskSmartInfo[0].SmartData[2].Worst | Should -Be 69
+            $diskSmartInfo[0].SmartData[3].Data | Should -Be 25733
+            $diskSmartInfo[0].SmartData[13].Data | Should -HaveCount 3
+            $diskSmartInfo[0].SmartData[13].Data | Should -Be @(39, 14, 47)
+        }
+
+        It "DiskSmartInfo object has correct types and properties" {
+            $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+
+            $diskSmartInfo[0].psobject.properties['ComputerName'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].ComputerName | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskModel'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskModel | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['DiskNumber'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].DiskNumber | Should -BeOfType 'System.UInt32'
+
+            $diskSmartInfo[0].psobject.properties['Device'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].Device | Should -BeOfType 'System.String'
+
+            $diskSmartInfo[0].psobject.properties['PredictFailure'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].PredictFailure | Should -BeOfType 'System.Boolean'
+
+            $diskSmartInfo[0].psobject.properties['SmartData'] | Should -Not -BeNullOrEmpty
+            $diskSmartInfo[0].SmartData | Should -Not -BeNullOrEmpty
+        }
+
+        It "DiskSmartInfo object is formatted correctly" {
+            $format = $diskSmartInfo[0] | Format-Custom
+
+            $propertyValues = $format.formatEntryInfo.formatValueList.formatValueList.formatValuelist.propertyValue -replace '\e\[[0-9]+(;[0-9]+)*m', ''
+
+            $propertyValues | Should -HaveCount 4
+
+            $propertyValues[0] | Should -BeLikeExactly 'ComputerName:*'
+            $propertyValues[1] | Should -BeExactly 'Disk:         0: HDD1'
+            $propertyValues[2] | Should -BeExactly 'Device:       /dev/sda'
+            $propertyValues[3] | Should -BeLikeExactly 'SMARTData:*'
+        }
+    }
 }
