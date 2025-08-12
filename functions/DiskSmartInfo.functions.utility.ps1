@@ -91,6 +91,39 @@ function inEnsureFolderExists
     }
 }
 
+function inGetSmartCtlCommand
+{
+    Param (
+        [string]$SSHHostName,
+        [bool]$Sudo,
+        [string]$SmartCtlOptions
+    )
+
+    $command = ''
+
+    if ($SSHHostName)
+    {
+        $command += "ssh $SSHHostName "
+    }
+
+    if ($Sudo)
+    {
+        $command += 'sudo '
+    }
+
+    $command += 'smartctl '
+
+    if ($SmartCtlOptions)
+    {
+        $command += "$SmartCtlOptions "
+    }
+
+    $command += '--info --health --attributes'
+
+    return $command
+    # $sbs = "sudo smartctl $SmartCtlOptions --info --health --attributes" -replace '\s+', ' '
+}
+
 function inReportErrors
 {
     Param (

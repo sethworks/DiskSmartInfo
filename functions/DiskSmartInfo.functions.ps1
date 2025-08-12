@@ -38,6 +38,7 @@ function Get-DiskSmartInfo
         [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
         [pscredential]$Credential,
+        [string]$SmartCtlOption,
         [Parameter(ParameterSetName='ComputerName')]
         [switch]$SSHClientSudo
     )
@@ -122,7 +123,12 @@ function Get-DiskSmartInfo
 
         if ($SSHClientSudo -and $Transport -ne 'SSHClient')
         {
-            Write-Warning -Message "The -SSHClientSudo parameter only used with SSHClient transport."
+            Write-Warning -Message "The -SSHClientSudo parameter is only used with SSHClient transport."
+        }
+
+        if ($SmartCtlOption -and $Source -ne 'SmartCtl')
+        {
+            Write-Warning -Message "The -SmartCtlOption parameter is only used with SmartCtl source."
         }
 
         # Defaults
@@ -150,6 +156,15 @@ function Get-DiskSmartInfo
                 $Convert = $true
             }
         }
+
+        # if ($SSHClientSudo)
+        # {
+        #     $Sudo = 'sudo'
+        # }
+        # else
+        # {
+        #     $Sudo = ''
+        # }
 
         $errorParameters = @{
             ErrorVariable = 'sessionErrors'
@@ -204,7 +219,7 @@ function Get-DiskSmartInfo
                 }
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                     $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                 }
 
@@ -308,7 +323,7 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
@@ -351,7 +366,7 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
@@ -390,7 +405,7 @@ function Get-DiskSmartInfo
                     }
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -Sudo:$SSHClientSudo
+                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -SmartCtlOptions $SmartCtlOption -Sudo $SSHClientSudo
                         $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                     }
 
@@ -420,7 +435,7 @@ function Get-DiskSmartInfo
             }
             elseif ($Source -eq 'SmartCtl')
             {
-                $SourceSmartDataCtl = inGetSourceSmartDataCtl
+                $SourceSmartDataCtl = inGetSourceSmartDataCtl -SmartCtlOptions $SmartCtlOption
                 $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
             }
 
