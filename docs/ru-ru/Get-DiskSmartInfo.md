@@ -18,7 +18,8 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <S
 [-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
-[-Credential <PSCredential>] [-SmartCtlOption <String>] [-SSHClientSudo] [<CommonParameters>]
+[-Credential <PSCredential>] [-SmartCtlOption <String>] [-SSHClientSudo] [-SSHClientOption <String>]
+[<CommonParameters>]
 ```
 
 ### Session
@@ -486,6 +487,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SSHClientOption
+Задает дополнительные параметры для внешнего клиента ssh.
+
+```yaml
+Type: String
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
