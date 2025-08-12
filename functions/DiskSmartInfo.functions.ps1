@@ -40,7 +40,9 @@ function Get-DiskSmartInfo
         [pscredential]$Credential,
         [string]$SmartCtlOption,
         [Parameter(ParameterSetName='ComputerName')]
-        [switch]$SSHClientSudo
+        [switch]$SSHClientSudo,
+        [Parameter(ParameterSetName='ComputerName')]
+        [string]$SSHClientOption
     )
 
     begin
@@ -124,6 +126,11 @@ function Get-DiskSmartInfo
         if ($SSHClientSudo -and $Transport -ne 'SSHClient')
         {
             Write-Warning -Message "The -SSHClientSudo parameter is only used with SSHClient transport."
+        }
+
+        if ($SSHClientOption -and $Transport -ne 'SSHClient')
+        {
+            Write-Warning -Message "The -SSHClientOption parameter is only used with SSHClient transport."
         }
 
         if ($SmartCtlOption -and $Source -ne 'SmartCtl')
@@ -396,7 +403,7 @@ function Get-DiskSmartInfo
                     }
                     elseif ($Source -eq 'SmartCtl')
                     {
-                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -SmartCtlOptions $SmartCtlOption -Sudo $SSHClientSudo
+                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -SmartCtlOptions $SmartCtlOption -Sudo $SSHClientSudo -SSHClientOptions $SSHClientOption
                         $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                     }
 

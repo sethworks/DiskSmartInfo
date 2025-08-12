@@ -97,14 +97,22 @@ function inGetSmartCtlCommand
         [string]$SSHHostName,
         # Can not use [bool]$Sudo here, because Windows PowerShell can not convert $null to [bool]
         $Sudo,
-        [string]$SmartCtlOptions
+        [string]$SmartCtlOptions,
+        [string]$SSHClientOptions
     )
 
     $command = ''
 
     if ($SSHHostName)
     {
-        $command += "ssh $SSHHostName "
+        $command += 'ssh '
+
+        if ($SSHClientOptions)
+        {
+            $command += "$SSHClientOptions "
+        }
+
+        $command += "$SSHHostName "
     }
 
     if ($Sudo)

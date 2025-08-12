@@ -269,7 +269,8 @@ function inGetSourceSmartDataSSHClientCtl
     Param (
         [string[]]$ComputerName,
         [string]$SmartCtlOptions,
-        [bool]$Sudo
+        [bool]$Sudo,
+        [string]$SSHClientOptions
     )
 
     $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
@@ -278,7 +279,7 @@ function inGetSourceSmartDataSSHClientCtl
     {
         $disksSmartData = @()
 
-        $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions
+        $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions -SSHClientOptions $SSHClientOptions
 
         $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
 
