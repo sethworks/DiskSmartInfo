@@ -87,6 +87,40 @@ Describe "Errors" {
                 }
             }
         }
+
+        Context "SSHClient with CIM" {
+
+            Context "-Transport SSHClient -Source CIM" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -Source CIM" {
+
+                It "Should throw an error" {
+                    { $computerNames[0], $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
+
+        Context "SSHClient with ComputerName" {
+
+            Context "-Transport SSHClient -ComputerName" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames } | Should -Throw 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.' -ErrorId 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -ComputerName" {
+
+                It "Should throw an error" {
+                    { $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames } | Should -Throw 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.' -ErrorId 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                }
+            }
+        }
     }
 
     Context "Process block restrictions" {
@@ -186,6 +220,33 @@ Describe "Errors" {
                 $ev[5].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": CIMSession only supports CIM source.,Get-DiskSmartInfo"
             }
         }
+
+        Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient" {
+
+            BeforeAll {
+                $diskSmartInfo = $computerNames, $diskDriveHost1, $diskHost1, $physicalDiskHost1 | Get-DiskSmartInfo -Transport SSHClient -ErrorVariable ev -ErrorAction SilentlyContinue
+            }
+
+            It "Should return error on ComputerName use" {
+                $diskSmartInfo | Should -BeNullOrEmpty
+                $ev | Should -HaveCount 5
+
+                $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+
+                $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+
+                $ev[2].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $ev[2].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+
+                $ev[3].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $ev[3].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+
+                $ev[4].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $ev[4].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+            }
+        }
     }
 
     Context "SmartCtl utility existence" {
@@ -273,6 +334,89 @@ Describe "Errors" {
                 $diskSmartInfo | Should -HaveCount 1
                 $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
                 $w | Should -BeExactly 'The -Credential parameter is not used with SSHSession transport.'
+            }
+        }
+
+        Context "Credential with SSHClient transport" {
+
+            BeforeAll {
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $Credential = [PSCredential]::new('UserName', (ConvertTo-SecureString -String 'Password' -AsPlainText -Force))
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -Credential $Credential -WarningVariable w -WarningAction SilentlyContinue
+            }
+
+            It "Should issue a warning" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                $w | Should -BeExactly 'The -Credential parameter is not used with SSHClient transport.'
+            }
+        }
+
+        Context "SSHClientSudo with any other but SSHClient transport" {
+
+            BeforeAll {
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -Source SmartCtl -SSHClientSudo -WarningVariable w -WarningAction SilentlyContinue
+            }
+
+            It "Should issue a warning" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                $w | Should -BeExactly 'The -SSHClientSudo parameter is only used with SSHClient transport.'
+            }
+        }
+
+        Context "SSHClientOption with any other but SSHClient transport" {
+
+            BeforeAll {
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -Source SmartCtl -SSHClientOption '-o AddressFamily=inet' -WarningVariable w -WarningAction SilentlyContinue
+            }
+
+            It "Should issue a warning" {
+                $diskSmartInfo | Should -HaveCount 1
+                $diskSmartInfo.pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                $w | Should -BeExactly 'The -SSHClientOption parameter is only used with SSHClient transport.'
+            }
+        }
+
+        Context "SmartCtlOption with any other but SmartCtl source" {
+
+            BeforeAll {
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$ComputerName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskSmartDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport PSSession -Source CIM -SmartCtlOption '-d ata' -WarningVariable w -WarningAction SilentlyContinue
+            }
+
+            It "Should issue a warning" {
+                $w | Should -BeExactly 'The -SmartCtlOption parameter is only used with SmartCtl source.'
             }
         }
     }

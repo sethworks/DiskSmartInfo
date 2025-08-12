@@ -177,7 +177,8 @@ function inGetSmartDataStructureCIM
 function inGetSourceSmartDataCtl
 {
     Param (
-        [System.Management.Automation.Runspaces.PSSession[]]$PSSession
+        [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
+        [string]$SmartCtlOptions
     )
 
     $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
@@ -188,14 +189,9 @@ function inGetSourceSmartDataCtl
 
         if (Invoke-Command -ScriptBlock { Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue } -Session $ps)
         {
-            if (Invoke-Command -ScriptBlock { $IsLinux } -Session $ps)
-            {
-                $sbs = 'sudo smartctl --info --health --attributes'
-            }
-            else
-            {
-                $sbs = 'smartctl --info --health --attributes'
-            }
+            $IsLinux_ = Invoke-Command -ScriptBlock { $IsLinux } -Session $ps
+
+            $sbs = inGetSmartCtlCommand -Sudo $IsLinux_ -SmartCtlOptions $SmartCtlOptions
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
 
@@ -233,14 +229,8 @@ function inGetSourceSmartDataCtl
 
         if (Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue)
         {
-            if ($IsLinux)
-            {
-                $sbs = 'sudo smartctl --info --health --attributes'
-            }
-            else
-            {
-                $sbs = 'smartctl --info --health --attributes'
-            }
+
+            $sbs = inGetSmartCtlCommand -Sudo $IsLinux -SmartCtlOptions $SmartCtlOptions
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan }
 
@@ -269,6 +259,47 @@ function inGetSourceSmartDataCtl
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
             $PSCmdlet.WriteError($errorRecord)
         }
+    }
+
+    return $HostsSmartData
+}
+
+function inGetSourceSmartDataSSHClientCtl
+{
+    Param (
+        [string[]]$ComputerName,
+        [string]$SmartCtlOptions,
+        [bool]$Sudo,
+        [string]$SSHClientOptions
+    )
+
+    $HostsSmartData = [System.Collections.Generic.List[System.Collections.Hashtable]]::new()
+
+    foreach ($cn in $ComputerName)
+    {
+        $disksSmartData = @()
+
+        $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions -SSHClientOptions $SSHClientOptions
+
+        $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
+
+        foreach ($device in $devices)
+        {
+            if ($device -match '^(?<device>/dev/\w+)')
+            {
+                $sb = [scriptblock]::Create("$sbs $($Matches.device)")
+
+                $disksSmartData += @{
+                    device = $Matches.device
+                    diskSmartData = Invoke-Command -ScriptBlock $sb
+                }
+            }
+        }
+
+        $HostsSmartData.Add(@{
+            computerName = $cn
+            disksSmartData = $disksSmartData
+        })
     }
 
     return $HostsSmartData
@@ -354,7 +385,9 @@ function inGetSmartDataStructureCtl
             {
                 $actualAttributesList = inUpdateActualAttributesList -model $model -diskType $hash.DiskType
 
-                $headerIndex = $diskSmartData.diskSmartData.IndexOf('ID# ATTRIBUTE_NAME          FLAG     VALUE WORST THRESH TYPE      UPDATED  WHEN_FAILED RAW_VALUE')
+                $header = $diskSmartData.diskSmartData -like "ID# *ATTRIBUTE_NAME *FLAG *VALUE *WORST *THRESH *TYPE *UPDATED *WHEN_FAILED *RAW_VALUE"
+                # Because result of the -like operator is an array
+                $headerIndex = $diskSmartData.diskSmartData.IndexOf($header[0])
 
                 if ($headerIndex -ge 0)
                 {

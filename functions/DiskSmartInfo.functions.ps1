@@ -6,7 +6,7 @@ function Get-DiskSmartInfo
         [Parameter(Position=0,ValueFromPipeline,ValueFromPipelineByPropertyName,ParameterSetName='ComputerName')]
         [string[]]$ComputerName,
         [Parameter(ParameterSetName='ComputerName')]
-        [ValidateSet('CimSession','PSSession','SSHSession')]
+        [ValidateSet('CimSession','PSSession','SSHSession','SSHClient')]
         [string]$Transport,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [CimSession[]]$CimSession,
@@ -37,7 +37,12 @@ function Get-DiskSmartInfo
         [switch]$UpdateHistory,
         [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
-        [pscredential]$Credential
+        [pscredential]$Credential,
+        [string]$SmartCtlOption,
+        [Parameter(ParameterSetName='ComputerName')]
+        [switch]$SSHClientSudo,
+        [Parameter(ParameterSetName='ComputerName')]
+        [string]$SSHClientOption
     )
 
     begin
@@ -60,7 +65,7 @@ function Get-DiskSmartInfo
         }
 
         # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
-        # Win32_DiskDrive, MSFT_DIsk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
 
         # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
         # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
@@ -82,6 +87,26 @@ function Get-DiskSmartInfo
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
+        # Get-DiskSmartInfo -Transport SSHClient -Source CIM
+        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
+        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'SSHClient' -and $Source -eq 'CIM')
+        {
+            $message = "SSHClient transport does not support CIM source."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+
+        # Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
+        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
+        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
+        {
+            $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+            $exception = [System.Exception]::new($message)
+            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+            $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
+
         # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
@@ -91,6 +116,26 @@ function Get-DiskSmartInfo
         if ($Credential -and $Transport -eq 'SSHSession')
         {
             Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
+        }
+
+        if ($Credential -and $Transport -eq 'SSHClient')
+        {
+            Write-Warning -Message "The -Credential parameter is not used with SSHClient transport."
+        }
+
+        if ($SSHClientSudo -and $Transport -ne 'SSHClient')
+        {
+            Write-Warning -Message "The -SSHClientSudo parameter is only used with SSHClient transport."
+        }
+
+        if ($SSHClientOption -and $Transport -ne 'SSHClient')
+        {
+            Write-Warning -Message "The -SSHClientOption parameter is only used with SSHClient transport."
+        }
+
+        if ($SmartCtlOption -and $Source -ne 'SmartCtl')
+        {
+            Write-Warning -Message "The -SmartCtlOption parameter is only used with SmartCtl source."
         }
 
         # Defaults
@@ -172,7 +217,7 @@ function Get-DiskSmartInfo
                 }
                 elseif ($Source -eq 'SmartCtl')
                 {
-                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                     $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                 }
 
@@ -276,7 +321,7 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
@@ -319,7 +364,7 @@ function Get-DiskSmartInfo
                         }
                         elseif ($Source -eq 'SmartCtl')
                         {
-                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps
+                            $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
                         }
 
@@ -343,6 +388,40 @@ function Get-DiskSmartInfo
                     }
                 }
             }
+            elseif ($Transport -eq 'SSHClient')
+            {
+                foreach ($cn in $ComputerName)
+                {
+                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient
+                    # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
+                    if ($Source -eq 'CIM')
+                    {
+                        $message = "ComputerName: ""$cn"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                        $exception = [System.Exception]::new($message)
+                        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                        $PSCmdlet.WriteError($errorRecord)
+                    }
+                    elseif ($Source -eq 'SmartCtl')
+                    {
+                        $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -SmartCtlOptions $SmartCtlOption -Sudo $SSHClientSudo -SSHClientOptions $SSHClientOption
+                        $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
+                    }
+
+                    inGetDiskSmartInfo `
+                        -HostsSmartData $HostsSmartData `
+                        -Convert:$Convert `
+                        -Critical:$Critical `
+                        -DiskNumbers $DiskNumber `
+                        -DiskModels $DiskModel `
+                        -Devices $Device `
+                        -RequestedAttributes $RequestedAttributes `
+                        -AttributeProperties $AttributeProperty `
+                        -Quiet:$Quiet `
+                        -ShowHistory:$ShowHistory `
+                        -UpdateHistory:$UpdateHistory `
+                        -Archive:$Archive
+                }
+            }
         }
         # Localhost
         else
@@ -354,7 +433,7 @@ function Get-DiskSmartInfo
             }
             elseif ($Source -eq 'SmartCtl')
             {
-                $SourceSmartDataCtl = inGetSourceSmartDataCtl
+                $SourceSmartDataCtl = inGetSourceSmartDataCtl -SmartCtlOptions $SmartCtlOption
                 $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
             }
 

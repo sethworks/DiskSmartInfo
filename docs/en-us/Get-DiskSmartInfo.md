@@ -18,7 +18,8 @@ Get-DiskSmartInfo [[-ComputerName] <String[]>] [-Transport <String>] [-Source <S
 [-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
-[-Credential <PSCredential>] [<CommonParameters>]
+[-Credential <PSCredential>] [-SmartCtlOption <String>] [-SSHClientSudo] [-SSHClientOption <String>]
+[<CommonParameters>]
 ```
 
 ### Session
@@ -27,7 +28,7 @@ Get-DiskSmartInfo [-CimSession <CimSession[]>] [-PSSession <PSSession[]>] [-Sour
 [-Convert] [-Critical] [-DiskNumber <Int32[]>] [-DiskModel <String[]>] [-Device <String[]>]
 [-AttributeID <Int32[]>] [-AttributeIDHex <String[]>] [-AttributeName <String[]>]
 [-AttributeProperty <AttributeProperty[]>] [-Quiet] [-ShowHistory] [-UpdateHistory] [-Archive]
-[<CommonParameters>]
+[-SmartCtlOption <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -63,6 +64,8 @@ CIMSession (default) - use CIMSession for remote connection
 PSSession - use PSSession with WSMan transport
 
 SSHSession - use PSSession with SSH transport
+
+SSHClient - use external ssh client
 
 ```yaml
 Type: String
@@ -447,6 +450,51 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -SmartCtlOption
+Specifies additional options for smartctl command.
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SSHClientSudo
+When using SSHClient transport, use sudo on remote host.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SSHClientOption
+Specifies additional options for external ssh client.
+
+```yaml
+Type: String
+Parameter Sets: ComputerName
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -704,7 +752,40 @@ SMARTData:
 
 The command gets disk SMART information from remote computer using PSSession with SSH transport and SmartCtl as data source.
 
-### Example 10: Get disk SMART info from remote computers using specified CimSessions
+### Example 10: Get disk SMART info from remote computers using external SSH client and SmartCtl as data source
+```powershell
+Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHClient -Source SmartCtl
+```
+
+```
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+```
+
+The command gets disk SMART information from remote computer using external SSH client and SmartCtl as data source.
+
+### Example 11: Get disk SMART info from remote computers using specified CimSessions
 ```powershell
 $Credential = Get-Credential
 $CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
@@ -754,7 +835,7 @@ SMARTData:
 
 The command gets disk SMART information from remote computers using specified CimSessions.
 
-### Example 11: Get disk SMART info from remote computers using specified PSSession
+### Example 12: Get disk SMART info from remote computers using specified PSSession
 ```powershell
 $Credential = Get-Credential
 $PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
@@ -802,7 +883,7 @@ SMARTData:
 
 The command gets disk SMART information from remote computers using specified PSSession.
 
-### Example 12: Get selected attributes
+### Example 13: Get selected attributes
 ```powershell
 Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
 ```
@@ -821,7 +902,7 @@ SMARTData:
 
 The command gets specified SMART attributes.
 
-### Example 13: Get data for selected disks
+### Example 14: Get data for selected disks
 ```powershell
 Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific Mod*" -Device "*Specific Dev*"
 ```
@@ -860,7 +941,7 @@ SMARTData:
 
 The command gets SMART information for specified disks.
 
-### Example 14: Save history data
+### Example 15: Save history data
 ```powershell
 Get-DiskSmartInfo -UpdateHistory
 ```
@@ -892,7 +973,7 @@ SMARTData:
 
 The command gets SMART information and saves current Data.
 
-### Example 15: Show history data
+### Example 16: Show history data
 ```powershell
 Get-DiskSmartInfo -ShowHistory
 ```
@@ -925,7 +1006,7 @@ SMARTData:
 
 The command gets SMART information and displays history Data.
 
-### Example 16: Get selected attribute properties
+### Example 17: Get selected attribute properties
 ```powershell
 Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
 ```
@@ -958,7 +1039,7 @@ SMARTData:
 
 The command gets specified properties of SMART attributes.
 
-### Example 17: Using pipeline
+### Example 18: Using pipeline
 ```powershell
 $ComputerName = 'Computer1'
 $CimSession = New-CimSession -ComputerName 'Computer2'
