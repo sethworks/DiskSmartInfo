@@ -23,9 +23,18 @@ function Deploy-sthModule
 }
 
 $ModuleName = Split-Path -Path $PSScriptRoot\.. -Leaf
-$ModulePath = 'C:\Program Files\WindowsPowerShell\Modules'
 
-Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+if ($IsWindows)
+{
+    $ModulePath = 'C:\Program Files\WindowsPowerShell\Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+    
+    $ModulePath = 'C:\Program Files\PowerShell\Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+}
 
-$ModulePath = 'C:\Program Files\PowerShell\Modules'
-Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+elseif ($IsLinux)
+{
+    $ModulePath = '~/.local/share/powershell/Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+}

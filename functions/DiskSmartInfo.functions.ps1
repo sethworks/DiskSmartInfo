@@ -48,7 +48,7 @@ function Get-DiskSmartInfo
     begin
     {
         # Restrictions
-        if ($IsLinux -or $IsMacOS)
+        if ($IsMacOS)
         {
             $message = "Platform is not supported."
             $exception = [System.Exception]::new($message)
@@ -64,12 +64,14 @@ function Get-DiskSmartInfo
             $PSCmdlet.ThrowTerminatingError($errorRecord)
         }
 
+        if (-not $IsLinux)
+        {
         # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
         # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
 
         # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
         # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
-        if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
+            if ($Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
         {
             $message = "CIMSession transport only supports CIM source."
             $exception = [System.Exception]::new($message)
@@ -79,7 +81,7 @@ function Get-DiskSmartInfo
 
         # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
         # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-        if (-not $IsLinux -and -not $IsMacOS -and $Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
+            if ($Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
         {
             $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
             $exception = [System.Exception]::new($message)
@@ -89,7 +91,7 @@ function Get-DiskSmartInfo
 
         # Get-DiskSmartInfo -Transport SSHClient -Source CIM
         # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
-        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'SSHClient' -and $Source -eq 'CIM')
+            if ($Transport -eq 'SSHClient' -and $Source -eq 'CIM')
         {
             $message = "SSHClient transport does not support CIM source."
             $exception = [System.Exception]::new($message)
@@ -99,12 +101,13 @@ function Get-DiskSmartInfo
 
         # Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
         # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
-        if (-not $IsLinux -and -not $IsMacOS -and $Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
+            if ($Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
         {
             $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
+        }
         }
 
         # Notifications
