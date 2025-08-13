@@ -89,10 +89,20 @@
                                         $text = $PSItem.SmartData.FormatTable() | Out-String
                                     }
                                     if ($PSStyle) { $PSStyle.OutputRendering = $t }
-                                    $text.Substring(0,$text.Length-2).
-                                        Replace("`r`n", "`r`n              ").
-                                        Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
-                                        TrimEnd(' ')
+                                    if (-not $IsLinux)
+                                    {
+                                        $text.Substring(0,$text.Length-2).
+                                            Replace("`r`n", "`r`n              ").
+                                            Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
+                                            TrimEnd(' ')
+                                    }
+                                    elseif ($IsLinux)
+                                    {
+                                        $text.Substring(0,$text.Length-2).
+                                            Replace("`n", "`n              ").
+                                            Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
+                                            TrimEnd(' ') + "`n"                   
+                                    }
                                 </ScriptBlock>
                              </ExpressionBinding>
                         </CustomItem>

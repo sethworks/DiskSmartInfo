@@ -1,5 +1,5 @@
 $docspath = './docs/en-us'
-$helppath = './en-us'
+$helppath = './en-US'
 
 # Generate xml
 New-ExternalHelp -Path $docspath -OutputPath $helppath -Force
@@ -14,7 +14,7 @@ foreach ($file in (Get-ChildItem -Path $helppath -Filter *.xml).FullName)
 }
 
 $docspath = './docs/ru-ru'
-$helppath = './ru-ru'
+$helppath = './ru-RU'
 
 # Generate xml
 New-ExternalHelp -Path $docspath -OutputPath $helppath -Force

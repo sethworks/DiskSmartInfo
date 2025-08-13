@@ -18,14 +18,23 @@ function Deploy-sthModule
     Copy-Item -Path .\formats -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\types -Destination $Path -Exclude __* -Recurse
     Copy-Item -Path .\tests -Destination $Path -Exclude __* -Recurse
-    Copy-Item -Path .\en-us -Destination $Path -Exclude __* -Recurse
-    Copy-Item -Path .\ru-ru -Destination $Path -Exclude __* -Recurse
+    Copy-Item -Path .\en-US -Destination $Path -Exclude __* -Recurse
+    Copy-Item -Path .\ru-RU -Destination $Path -Exclude __* -Recurse
 }
 
 $ModuleName = Split-Path -Path $PSScriptRoot\.. -Leaf
-$ModulePath = 'C:\Program Files\WindowsPowerShell\Modules'
 
-Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+if ($IsWindows)
+{
+    $ModulePath = 'C:\Program Files\WindowsPowerShell\Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
 
-$ModulePath = 'C:\Program Files\PowerShell\Modules'
-Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+    $ModulePath = 'C:\Program Files\PowerShell\Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+}
+
+elseif ($IsLinux)
+{
+    $ModulePath = '~/.local/share/powershell/Modules'
+    Deploy-sthModule -ModuleName $ModuleName -ModulePath $ModulePath
+}

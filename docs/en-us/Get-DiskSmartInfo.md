@@ -59,11 +59,11 @@ It is not used locally or with -CimSession or -PSSession parameters.
 
 The following values can be specified:
 
-CIMSession (default) - use CIMSession for remote connection
+CIMSession (default on Windows) - use CIMSession for remote connection
 
 PSSession - use PSSession with WSMan transport
 
-SSHSession - use PSSession with SSH transport
+SSHSession (default on Linux) - use PSSession with SSH transport
 
 SSHClient - use external ssh client
 
@@ -120,9 +120,9 @@ It can be used locally and remotely.
 
 The following values can be specified:
 
-CIM (default) - use Common Information Model (Windows Management Instrumentation)
+CIM (default on Windows) - use Common Information Model (Windows Management Instrumentation)
 
-SmartCtl - use SmartCtl utility
+SmartCtl (default on Linux) - use SmartCtl utility
 
 ```yaml
 Type: String
