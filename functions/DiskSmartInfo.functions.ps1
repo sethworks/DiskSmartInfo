@@ -154,7 +154,7 @@ function Get-DiskSmartInfo
             Write-Warning -Message "The -SSHClientOption parameter is only used with SSHClient transport."
         }
 
-        if ($SmartCtlOption -and $Source -ne 'SmartCtl')
+        if ($SmartCtlOption -and ((-not $IsLinux -and $Source -ne 'SmartCtl') -or ($IsLinux -and $Source -eq 'CIM')))
         {
             Write-Warning -Message "The -SmartCtlOption parameter is only used with SmartCtl source."
         }
