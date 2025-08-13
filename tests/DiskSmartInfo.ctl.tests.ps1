@@ -226,7 +226,7 @@ Describe "Get-DiskSmartInfo Ctl" {
 
         It "Converts Power-On Hours" {
             # '3060.25 Days' on Windows, '3060.250 Days' on Linux
-            $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeLikeExactly "3060.25? Days"
+            $diskSmartInfo[0].SmartData[7].DataConverted | Should -MatchExactly "3060.250? Days"
         }
 
         It "Converts Airflow Temperature Celsius" {
