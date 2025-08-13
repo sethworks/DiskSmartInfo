@@ -66,48 +66,66 @@ function Get-DiskSmartInfo
 
         if (-not $IsLinux)
         {
-        # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
-        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+            # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
 
-        # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
-        # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
+            # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
+            # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
             if ($Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
-        {
-            $message = "CIMSession transport only supports CIM source."
-            $exception = [System.Exception]::new($message)
-            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
-            $PSCmdlet.ThrowTerminatingError($errorRecord)
-        }
+            {
+                $message = "CIMSession transport only supports CIM source."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
 
-        # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+            # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
             if ($Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
-        {
-            $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
-            $exception = [System.Exception]::new($message)
-            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
-            $PSCmdlet.ThrowTerminatingError($errorRecord)
-        }
+            {
+                $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
 
-        # Get-DiskSmartInfo -Transport SSHClient -Source CIM
-        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
+            # Get-DiskSmartInfo -Transport SSHClient -Source CIM
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
             if ($Transport -eq 'SSHClient' -and $Source -eq 'CIM')
-        {
-            $message = "SSHClient transport does not support CIM source."
-            $exception = [System.Exception]::new($message)
-            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
-            $PSCmdlet.ThrowTerminatingError($errorRecord)
+            {
+                $message = "SSHClient transport does not support CIM source."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
+
+            # Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
+            if ($Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
+            {
+                $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
         }
 
-        # Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
-        # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
-            if ($Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
+        if ($IsLinux)
         {
-            $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-            $exception = [System.Exception]::new($message)
-            $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
-            $PSCmdlet.ThrowTerminatingError($errorRecord)
-        }
+            if ($Transport -eq 'CIMSession')
+            {
+                $message = "CIMSession transport is not supported on this platform."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
+            elseif ($Transport -eq 'PSSession')
+            {
+                $message = "PSSession transport is not supported on this platform."
+                $exception = [System.Exception]::new($message)
+                $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                $PSCmdlet.ThrowTerminatingError($errorRecord)
+            }
         }
 
         # Notifications
@@ -142,14 +160,28 @@ function Get-DiskSmartInfo
         }
 
         # Defaults
-        if (-not $IsLinux -and -not $IsMacOS -and $PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
+        if ($PSCmdlet.ParameterSetName -eq 'ComputerName' -and -not $Transport)
         {
-            $Transport = 'CimSession'
+            if (-not $IsLinux)
+            {
+                $Transport = 'CimSession'
+            }
+            elseif ($IsLinux)
+            {
+                $Transport = 'SSHSession'
+            }
         }
 
-        if (-not $IsLinux -and -not $IsMacOS -and -not $Source)
+        if (-not $Source)
         {
-            $Source = 'CIM'
+            if (-not $IsLinux)
+            {
+                $Source = 'CIM'
+            }
+            elseif ($IsLinux)
+            {
+                $Source = 'SmartCtl'
+            }
         }
 
         if ($AttributeProperty)
@@ -181,10 +213,60 @@ function Get-DiskSmartInfo
         {
             foreach ($cs in $CimSession)
             {
-                if ($Source -eq 'CIM')
+                if (-not $IsLinux)
                 {
-                    $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
-                    $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                    if ($Source -eq 'CIM')
+                    {
+                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -CimSession $cs
+                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+
+                        inGetDiskSmartInfo `
+                            -HostsSmartData $HostsSmartData `
+                            -Convert:$Convert `
+                            -Critical:$Critical `
+                            -DiskNumbers $DiskNumber `
+                            -DiskModels $DiskModel `
+                            -Devices $Device `
+                            -RequestedAttributes $RequestedAttributes `
+                            -AttributeProperties $AttributeProperty `
+                            -Quiet:$Quiet `
+                            -ShowHistory:$ShowHistory `
+                            -UpdateHistory:$UpdateHistory `
+                            -Archive:$Archive
+                    }
+
+                    # CIMSession | Get-DiskSmartInfo -Source SmartCtl
+                    elseif ($Source -eq 'SmartCtl')
+                    {
+                        $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                        $exception = [System.Exception]::new($message)
+                        $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                        $PSCmdlet.WriteError($errorRecord)
+                    }
+                }
+                elseif ($IsLinux)
+                {
+                    $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession transport is not supported on this platform."
+                    $exception = [System.Exception]::new($message)
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                    $PSCmdlet.WriteError($errorRecord)
+                }
+            }
+
+            foreach ($ps in $PSSession)
+            {
+                if (-not $IsLinux)
+                {
+                    if ($Source -eq 'CIM')
+                    {
+                        $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
+                        $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                    }
+                    elseif ($Source -eq 'SmartCtl')
+                    {
+                        $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
+                        $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
+                    }
 
                     inGetDiskSmartInfo `
                         -HostsSmartData $HostsSmartData `
@@ -200,43 +282,13 @@ function Get-DiskSmartInfo
                         -UpdateHistory:$UpdateHistory `
                         -Archive:$Archive
                 }
-
-                # CIMSession | Get-DiskSmartInfo -Source SmartCtl
-                elseif ($Source -eq 'SmartCtl')
+                elseif ($IsLinux)
                 {
-                    $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
+                    $message = "ComputerName: ""$($cs.ComputerName)"": PSSession transport is not supported on this platform."
                     $exception = [System.Exception]::new($message)
                     $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                     $PSCmdlet.WriteError($errorRecord)
                 }
-            }
-
-            foreach ($ps in $PSSession)
-            {
-                if ($Source -eq 'CIM')
-                {
-                    $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
-                    $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
-                }
-                elseif ($Source -eq 'SmartCtl')
-                {
-                    $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
-                    $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
-                }
-
-                inGetDiskSmartInfo `
-                    -HostsSmartData $HostsSmartData `
-                    -Convert:$Convert `
-                    -Critical:$Critical `
-                    -DiskNumbers $DiskNumber `
-                    -DiskModels $DiskModel `
-                    -Devices $Device `
-                    -RequestedAttributes $RequestedAttributes `
-                    -AttributeProperties $AttributeProperty `
-                    -Quiet:$Quiet `
-                    -ShowHistory:$ShowHistory `
-                    -UpdateHistory:$UpdateHistory `
-                    -Archive:$Archive
             }
         }
 
@@ -429,10 +481,21 @@ function Get-DiskSmartInfo
         # Localhost
         else
         {
+
             if ($Source -eq 'CIM')
             {
-                $SourceSmartDataCIM = inGetSourceSmartDataCIM
-                $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                if (-not $IsLinux)
+                {
+                    $SourceSmartDataCIM = inGetSourceSmartDataCIM
+                    $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
+                }
+                elseif ($IsLinux)
+                {
+                    $message = "CIM source is not supported on this platform."
+                    $exception = [System.Exception]::new($message)
+                    $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
+                    $PSCmdlet.WriteError($errorRecord)
+                }
             }
             elseif ($Source -eq 'SmartCtl')
             {
