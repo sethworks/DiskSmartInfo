@@ -1,0 +1,1666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DiskSmartAttributeDescription</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DiskSmartAttributeDescription</command:noun>
+      <maml:description>
+        <maml:para>Командлет отображает описание общих атрибутов SMART</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Командлет отображает описание общих атрибутов SMART (Self-Monitoring, Analysis and Reporting Technology)</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DiskSmartAttributeDescription</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+          <maml:name>AttributeID</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeIDHex</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута в шестнадцатеричном формате.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeName</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает имя атрибута.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+            <maml:para>Этот параметр поддерживает автоматическое завершение значений.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="0" aliases="none">
+        <maml:name>AttributeID</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает идентификатор атрибута.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeIDHex</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает идентификатор атрибута в шестнадцатеричном формате.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeName</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает имя атрибута.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          <maml:para>Этот параметр поддерживает автоматическое завершение значений.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>----------- Example 1: Получение описания атрибутов -----------</maml:title>
+        <dev:code>Get-DiskSmartAttributeDescription
+
+AttributeID    : 1
+AttributeIDHex : 1
+AttributeName  : Read Error Rate
+Description    : (Vendor specific raw value.) Stores data related to the rate of hardware read errors that occurred
+                 when reading data from a disk surface. The raw value has different structure for different vendors
+                 and is often not meaningful as a decimal number.
+
+AttributeID    : 2
+AttributeIDHex : 2
+AttributeName  : Throughput Performance
+Description    : Overall (general) throughput performance of a hard disk drive. If the value of this attribute is
+                 decreasing there is a high probability that there is a problem with the disk.
+
+...</dev:code>
+        <dev:remarks>
+          <maml:para>Команда отображает описание атрибутов SMART.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------ Example 2: Получение описания указанных атрибутов ------</maml:title>
+        <dev:code>Get-DiskSmartAttributeDescription -AttributeID 5 -AttributeIDHex BB -AttributeName "*ECC*"
+
+AttributeID    : 5
+AttributeIDHex : 5
+AttributeName  : Reallocated Sectors Count
+Description    : Count of reallocated sectors. The raw value represents a count of the bad sectors that have been
+                 found and remapped. Thus, the higher the attribute value, the more sectors the drive has had to
+                 reallocate. This value is primarily used as a metric of the life expectancy of the drive; a drive
+                 which has had any reallocations at all is significantly more likely to fail in the immediate months.
+
+AttributeID    : 187
+AttributeIDHex : BB
+AttributeName  : Reported Uncorrectable Errors
+Description    : The count of errors that could not be recovered using hardware ECC (see attribute 195).
+
+AttributeID    : 195
+AttributeIDHex : C3
+AttributeName  : Hardware ECC Recovered
+Description    : (Vendor-specific raw value.) The raw value has different structure for different vendors and is often
+                 not meaningful as a decimal number.</dev:code>
+        <dev:remarks>
+          <maml:para>Команда отображает описание указанных атрибутов.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-DiskSmartInfo</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>DiskSmartInfo</command:noun>
+      <maml:description>
+        <maml:para>Командлет получает информацию SMART жестких дисков</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Командлет получает информацию SMART (Self-Monitoring, Analysis and Reporting Technology) жестких дисков</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-DiskSmartInfo</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="PSComputerName">
+          <maml:name>ComputerName</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Credential</maml:name>
+          <maml:description>
+            <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+            <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+          <dev:type>
+            <maml:name>PSCredential</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Transport</maml:name>
+          <maml:description>
+            <maml:para>Задает тип сессии для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+            <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
+            <maml:para>Могут быть заданы следующие значения:</maml:para>
+            <maml:para>CIMSession (по умолчанию на Windows) - использование CIMSession для удаленных подключений</maml:para>
+            <maml:para>PSSession - использование PSSession с WSMan в качестве транспортного механизма</maml:para>
+            <maml:para>SSHSession (по умолчанию на Linux) - использование PSSession с SSH в качестве транспортного механизма</maml:para>
+            <maml:para>SSHClient - использование внешнего клиента SSH в качестве транспортного механизма</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Source</maml:name>
+          <maml:description>
+            <maml:para>Задает источник данных SMART.</maml:para>
+            <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+            <maml:para>Могут быть заданы следующие значения:</maml:para>
+            <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Convert</maml:name>
+          <maml:description>
+            <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
+            <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Critical</maml:name>
+          <maml:description>
+            <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Index, Number, DeviceId">
+          <maml:name>DiskNumber</maml:name>
+          <maml:description>
+            <maml:para>Задает номера дисков для запроса.</maml:para>
+            <maml:para>Номер диска соответствует свойству Index класса WMI Win32_DiskDrive, свойству Number класса MSFT_Disk (результата командлета Get-Disk), свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk) и номеру диска в утилите diskpart.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+            <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает номера дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="Model">
+          <maml:name>DiskModel</maml:name>
+          <maml:description>
+            <maml:para>Задает модели дисков для запроса.</maml:para>
+            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+            <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
+            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+            <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Device</maml:name>
+          <maml:description>
+            <maml:para>Задает устройства для запроса.</maml:para>
+            <maml:para>Устройство соотвeтствует PNPDeviceId в Windows и файлу устройства в Linux.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeID</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeIDHex</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута в шестнадцатеричном формате.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeName</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает имя атрибута.</maml:para>
+            <maml:para>Параметр принимает только имена атрибутов по умолчанию (и не включает проприетарные), затем преобразовывает их числовые идентификаторы атрибутов, которые и используются для запроса.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+            <maml:para>Этот параметр поддерживает автоматическое завершение значений. Механизм автозавершения предлагает только значения по умолчанию и не включает проприетарные.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeProperty</maml:name>
+          <maml:description>
+            <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
+            <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
+            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
+          <dev:type>
+            <maml:name>AttributeProperty[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
+            <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
+            <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
+            <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ShowHistory</maml:name>
+          <maml:description>
+            <maml:para>Отображает ранее сохраненное значение свойства Data рядом с его текущим значением.</maml:para>
+            <maml:para>По умолчанию отображается сохраненное значение для всех атрибутов, даже если текущее значение не изменилось.</maml:para>
+            <maml:para>Это можно изменить конфигурационным параметром ShowUnchangedDataHistory.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UpdateHistory</maml:name>
+          <maml:description>
+            <maml:para>Сохраняет текущие значения свойства Data для всех дисков указанных компьютеров для последующего сравнения.</maml:para>
+            <maml:para>Если для определенного компьютера уже существуют сохраненные данные, они перезаписываются. То есть сохраняется только один экземпляр данных.</maml:para>
+            <maml:para>Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром DataHistoryPath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+            <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SmartCtlOption</maml:name>
+          <maml:description>
+            <maml:para>Задает дополнительные параметры для команды smartctl.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SSHClientSudo</maml:name>
+          <maml:description>
+            <maml:para>Задает, что при использовании SSHClient в качестве транспорта, на удаленном компьютере должна использоваться команда sudo.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SSHClientOption</maml:name>
+          <maml:description>
+            <maml:para>Задает дополнительные параметры для внешнего клиента ssh.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Get-DiskSmartInfo</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>CimSession</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает объекты CimSession для получения информации.</maml:para>
+            <maml:para>Возможно использование как WSMAN, так и DCOM типов сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">CimSession[]</command:parameterValue>
+          <dev:type>
+            <maml:name>CimSession[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+          <maml:name>PSSession</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает объекты PSSession для удаленного подключения.</maml:para>
+            <maml:para>Возможно использование как WSMAN, так и SSH сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">PSSession[]</command:parameterValue>
+          <dev:type>
+            <maml:name>PSSession[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Source</maml:name>
+          <maml:description>
+            <maml:para>Задает источник данных SMART.</maml:para>
+            <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+            <maml:para>Могут быть заданы следующие значения:</maml:para>
+            <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Convert</maml:name>
+          <maml:description>
+            <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
+            <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Critical</maml:name>
+          <maml:description>
+            <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Index, Number, DeviceId">
+          <maml:name>DiskNumber</maml:name>
+          <maml:description>
+            <maml:para>Задает номера дисков для запроса.</maml:para>
+            <maml:para>Номер диска соответствует свойству Index класса WMI Win32_DiskDrive, свойству Number класса MSFT_Disk (результата командлета Get-Disk), свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk) и номеру диска в утилите diskpart.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+            <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает номера дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="Model">
+          <maml:name>DiskModel</maml:name>
+          <maml:description>
+            <maml:para>Задает модели дисков для запроса.</maml:para>
+            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+            <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
+            <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+            <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Device</maml:name>
+          <maml:description>
+            <maml:para>Задает устройства для запроса.</maml:para>
+            <maml:para>Устройство соотвeтствует PNPDeviceId в Windows и файлу устройства в Linux.</maml:para>
+            <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeID</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeIDHex</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает идентификатор атрибута в шестнадцатеричном формате.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeName</maml:name>
+          <maml:description>
+            <maml:para>Параметр указывает имя атрибута.</maml:para>
+            <maml:para>Параметр принимает только имена атрибутов по умолчанию (и не включает проприетарные), затем преобразовывает их числовые идентификаторы атрибутов, которые и используются для запроса.</maml:para>
+            <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+            <maml:para>Этот параметр поддерживает автоматическое завершение значений. Механизм автозавершения предлагает только значения по умолчанию и не включает проприетарные.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+          <dev:type>
+            <maml:name>String[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>AttributeProperty</maml:name>
+          <maml:description>
+            <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
+            <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
+            <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
+          <dev:type>
+            <maml:name>AttributeProperty[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Quiet</maml:name>
+          <maml:description>
+            <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+            <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
+            <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
+            <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
+            <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+            <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ShowHistory</maml:name>
+          <maml:description>
+            <maml:para>Отображает ранее сохраненное значение свойства Data рядом с его текущим значением.</maml:para>
+            <maml:para>По умолчанию отображается сохраненное значение для всех атрибутов, даже если текущее значение не изменилось.</maml:para>
+            <maml:para>Это можно изменить конфигурационным параметром ShowUnchangedDataHistory.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>UpdateHistory</maml:name>
+          <maml:description>
+            <maml:para>Сохраняет текущие значения свойства Data для всех дисков указанных компьютеров для последующего сравнения.</maml:para>
+            <maml:para>Если для определенного компьютера уже существуют сохраненные данные, они перезаписываются. То есть сохраняется только один экземпляр данных.</maml:para>
+            <maml:para>Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром DataHistoryPath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Archive</maml:name>
+          <maml:description>
+            <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+            <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+            <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+            <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
+            <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          </maml:description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>SmartCtlOption</maml:name>
+          <maml:description>
+            <maml:para>Задает дополнительные параметры для команды smartctl.</maml:para>
+          </maml:description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName, ByValue)" position="0" aliases="PSComputerName">
+        <maml:name>ComputerName</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает имена компьютеров для получения информации.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Transport</maml:name>
+        <maml:description>
+          <maml:para>Задает тип сессии для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+          <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
+          <maml:para>Могут быть заданы следующие значения:</maml:para>
+          <maml:para>CIMSession (по умолчанию на Windows) - использование CIMSession для удаленных подключений</maml:para>
+          <maml:para>PSSession - использование PSSession с WSMan в качестве транспортного механизма</maml:para>
+          <maml:para>SSHSession (по умолчанию на Linux) - использование PSSession с SSH в качестве транспортного механизма</maml:para>
+          <maml:para>SSHClient - использование внешнего клиента SSH в качестве транспортного механизма</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>CimSession</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает объекты CimSession для получения информации.</maml:para>
+          <maml:para>Возможно использование как WSMAN, так и DCOM типов сессий.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">CimSession[]</command:parameterValue>
+        <dev:type>
+          <maml:name>CimSession[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none">
+        <maml:name>PSSession</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает объекты PSSession для удаленного подключения.</maml:para>
+          <maml:para>Возможно использование как WSMAN, так и SSH сессий.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSSession[]</command:parameterValue>
+        <dev:type>
+          <maml:name>PSSession[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Source</maml:name>
+        <maml:description>
+          <maml:para>Задает источник данных SMART.</maml:para>
+          <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
+          <maml:para>Могут быть заданы следующие значения:</maml:para>
+          <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+          <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Convert</maml:name>
+        <maml:description>
+          <maml:para>Параметр добавляет ковертированные данные для определенных атрибутов.</maml:para>
+          <maml:para>Механизмы конвертации заданы в качестве свойства ConvertScriptBlock атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Critical</maml:name>
+        <maml:description>
+          <maml:para>Параметр отображает только критические атрибуты.</maml:para>
+          <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
+          <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByPropertyName)" position="named" aliases="Index, Number, DeviceId">
+        <maml:name>DiskNumber</maml:name>
+        <maml:description>
+          <maml:para>Задает номера дисков для запроса.</maml:para>
+          <maml:para>Номер диска соответствует свойству Index класса WMI Win32_DiskDrive, свойству Number класса MSFT_Disk (результата командлета Get-Disk), свойству DeviceId класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk) и номеру диска в утилите diskpart.</maml:para>
+          <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+          <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает номера дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="Model">
+        <maml:name>DiskModel</maml:name>
+        <maml:description>
+          <maml:para>Задает модели дисков для запроса.</maml:para>
+          <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+          <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
+          <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+          <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+          <maml:para>Параметр поддерживает автоматическое завершение значений. Если параметры -ComputerName или -CimSession не заданы, механизм автоматического завершения предлагает диски локального компьютера, если задано имя единственного компьютера или единственная cim-сессия, механизм автозавершения предлагает диски с указанного удаленного компьютера. Механизм автозавершения не предлагает модели дисков в случае, если указаны имена нескольких компьютеров или несколько cim-сессий.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Device</maml:name>
+        <maml:description>
+          <maml:para>Задает устройства для запроса.</maml:para>
+          <maml:para>Устройство соотвeтствует PNPDeviceId в Windows и файлу устройства в Linux.</maml:para>
+          <maml:para>Результат включает в себя все диски, указанные в параметрах -DiskNumber, -DiskModel и -Device.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeID</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает идентификатор атрибута.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">Int32[]</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeIDHex</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает идентификатор атрибута в шестнадцатеричном формате.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="true" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeName</maml:name>
+        <maml:description>
+          <maml:para>Параметр указывает имя атрибута.</maml:para>
+          <maml:para>Параметр принимает только имена атрибутов по умолчанию (и не включает проприетарные), затем преобразовывает их числовые идентификаторы атрибутов, которые и используются для запроса.</maml:para>
+          <maml:para>Результат включает в себя все атрибуты, указанные в параметрах -AttributeID, -AttributeIDHex и -AttributeName.</maml:para>
+          <maml:para>Этот параметр поддерживает автоматическое завершение значений. Механизм автозавершения предлагает только значения по умолчанию и не включает проприетарные.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+        <dev:type>
+          <maml:name>String[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>AttributeProperty</maml:name>
+        <maml:description>
+          <maml:para>Параметр задает, какие свойства атрибутов должны быть выведены.</maml:para>
+          <maml:para>Если среди свойств атрибутов указаны History или Converted, то параметры -ShowHistory и -Convert, соответственно, будут установлены автоматически.</maml:para>
+          <maml:para>Результатом применения данного параметра будут объекты атрибутов типа DiskSmartAttributeCustom или DiskSmartAttributeNVMeCustom.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">AttributeProperty[]</command:parameterValue>
+        <dev:type>
+          <maml:name>AttributeProperty[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Quiet</maml:name>
+        <maml:description>
+          <maml:para>Параметр отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению их свойства Threshold.</maml:para>
+          <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только соответствующие условиям атрибуты из указанных.</maml:para>
+          <maml:para>Если диск не содержит удовлетворяющих условиям атрибутов, этот диск не отображается.</maml:para>
+          <maml:para>Это можно изменить конфигурационным параметром SuppressResultsWithEmptySmartData.</maml:para>
+          <maml:para>Больше информации о свойстве определения атрибутов CriticalThreshold в about_DiskSmartInfo_attributes.</maml:para>
+          <maml:para>Больше информации о конфигурационном параметре SuppressResultsWithEmptySmartData в about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ShowHistory</maml:name>
+        <maml:description>
+          <maml:para>Отображает ранее сохраненное значение свойства Data рядом с его текущим значением.</maml:para>
+          <maml:para>По умолчанию отображается сохраненное значение для всех атрибутов, даже если текущее значение не изменилось.</maml:para>
+          <maml:para>Это можно изменить конфигурационным параметром ShowUnchangedDataHistory.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>UpdateHistory</maml:name>
+        <maml:description>
+          <maml:para>Сохраняет текущие значения свойства Data для всех дисков указанных компьютеров для последующего сравнения.</maml:para>
+          <maml:para>Если для определенного компьютера уже существуют сохраненные данные, они перезаписываются. То есть сохраняется только один экземпляр данных.</maml:para>
+          <maml:para>Команда сохраняет значения свойства Data для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+          <maml:para>По умолчанию данные сохраняются в папке history, расположенной в каталоге модуля.</maml:para>
+          <maml:para>Это расположение может быть изменено конфигурационным параметром DataHistoryPath.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Archive</maml:name>
+        <maml:description>
+          <maml:para>Указывает, что данные SMART должны быть сохранены в каталоге архива.</maml:para>
+          <maml:para>Команда сохраняет данные SMART для всех дисков и атрибутов указанных компьютеров, даже если использовались параметры выбора дисков и атрибутов.</maml:para>
+          <maml:para>По умолчанию данные сохраняются в папке archive, расположенной в каталоге модуля.</maml:para>
+          <maml:para>Это расположение может быть изменено конфигурационным параметром ArchivePath.</maml:para>
+          <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Credential</maml:name>
+        <maml:description>
+          <maml:para>Задает учетные данные для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
+          <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">PSCredential</command:parameterValue>
+        <dev:type>
+          <maml:name>PSCredential</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SmartCtlOption</maml:name>
+        <maml:description>
+          <maml:para>Задает дополнительные параметры для команды smartctl.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SSHClientSudo</maml:name>
+        <maml:description>
+          <maml:para>Задает, что при использовании SSHClient в качестве транспорта, на удаленном компьютере должна использоваться команда sudo.</maml:para>
+        </maml:description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>SSHClientOption</maml:name>
+        <maml:description>
+          <maml:para>Задает дополнительные параметры для внешнего клиента ssh.</maml:para>
+        </maml:description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------- Example 1: Получение данных SMART --------------</maml:title>
+        <dev:code>Get-DiskSmartInfo
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------- Example 2: Конвертированные данные --------------</maml:title>
+        <dev:code>Get-DiskSmartInfo -Convert
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data        Converted
+              --  ----- -------------                      --------- ----- ----- ----        ---------
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397        349.88 Days
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47          53 C
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069 5.923 Tb</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков и добавляет конвертированные данные для определенных атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------------ Example 3: Только критические атрибуты ------------</maml:title>
+        <dev:code>Get-DiskSmartInfo -Critical
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        252   252   0
+              10  A     Spin Retry Count                   51        252   252   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков и выводит данные только критических атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>---------- Example 4: Использование параметра -Quiet ----------</maml:title>
+        <dev:code>Get-DiskSmartInfo -Quiet
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              3   3     Spin-Up Time                       21        20    20    6825
+              197 C5    Current Pending Sector Count       0         200   200   20
+              198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold, а также не критические атрибуты, в том случае, если значение их свойства Value меньше или равно значению свойства Threshold.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>---- Example 5: Использование параметров -Critical и -Quiet ----</maml:title>
+        <dev:code>Get-DiskSmartInfo -Critical -Quiet
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              197 C5    Current Pending Sector Count       0         200   200   20
+              198 C6    Offline Uncorrectable Sector Count 0         200   200   20</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков и отображает только критические атрибуты со значением свойства Data, превышающим значение свойства CriticalThreshold.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-- Example 6: Получение данных SMART с удаленных компьютеров --</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeComputer
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 7: Получение данных SMART с удаленных компьютеров с использованием PSSession и WSMan в качестве транспорта</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeComputer -Transport PSSession
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и WSMan в качестве транспорта.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 8: Получение данных SMART с удаленных компьютеров с использованием PSSession и SSH в качестве транспорта</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 9: Получение данных SMART с удаленных компьютеров с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHSession -Source SmartCtl
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием PSSession и SSH в качестве транспорта, а также SmartCtl в качестве источника данных.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 10: Получение данных SMART с удаленных компьютеров с использованием внешнего клиента SSH в качестве транспорта, а также SmartCtl в качестве источника данных</maml:title>
+        <dev:code>Get-DiskSmartInfo -ComputerName SomeUser@SomeComputer -Transport SSHClient -Source SmartCtl
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием внешнего клиента SSH в качестве транспорта, а также SmartCtl в качестве источника данных.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 11: Получение данных SMART с удаленных компьютеров с использованием указанных объектов CimSession</maml:title>
+        <dev:code>$Credential = Get-Credential
+$CimSession_WSMAN = New-CimSession -ComputerName SomeComputer -Credential $Credential
+
+$SessionOption = New-CimSessionOption -Protocol Dcom
+$CimSession_DCOM = New-CimSession -ComputerName SomeOtherComputer -SessionOption $SessionOption -Credential $Credential
+
+Get-DiskSmartInfo -CimSession $CimSession_WSMAN, $CimSession_DCOM
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: SomeOtherComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов CimSession.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 12: Получение данных SMART с удаленных компьютеров с использованием указанных объектов PSSession</maml:title>
+        <dev:code>$Credential = Get-Credential
+$PSSession = New-PSSession -ComputerName SomeComputer -Credential $Credential
+$SSHSession = New-PSSession -HostName SomeOtherComputer
+
+Get-DiskSmartInfo -PSSession $PSSession, $SSHSession
+
+ComputerName: SomeComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: SomeOtherComputer
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART жестких дисков с удаленного компьютера с использованием указанных объектов PSSession.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>---------- Example 13: Получение указанных атрибутов ----------</maml:title>
+        <dev:code>Get-DiskSmartInfo -AttributeID 5,9 -AttributeIDHex BB -AttributeName 'Hardware ECC Recovered'
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                 Threshold Value Worst Data
+              --  ----- -------------                 --------- ----- ----- ----
+              5   5     Reallocated Sectors Count     10        100   100   0
+              9   9     Power-On Hours                0         98    98    8397
+              187 BB    Reported Uncorrectable Errors 0         100   100   0
+              195 C3    Hardware ECC Recovered        0         200   200   0</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает указанные SMART атрибуты</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>--- Example 14: Получение данных SMART для указанных дисков ---</maml:title>
+        <dev:code>Get-DiskSmartInfo -DiskNumber 1 -DiskModel "Some Specific Mod*" -Device "*Specific Dev*"
+
+Disk:         1: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+...
+
+Disk:         2: Some Specific Model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...
+
+Disk:         3: Disk Model
+Device:       Some Specific Device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    4682
+              10  A     Spin Retry Count                   51        252   252   0
+...</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART для указанных жестких дисков.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>--- Example 15: Сохранение данных для последующего сравнения ---</maml:title>
+        <dev:code>Get-DiskSmartInfo -UpdateHistory
+
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART и сохраняет текущие значения свойства Data для всех атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------- Example 16: Отображение ранее сохраненных данных -------</maml:title>
+        <dev:code>Get-DiskSmartInfo -ShowHistory
+
+Disk:         0: Disk model
+Device:       Disk device
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data        History
+              --  ----- -------------                      --------- ----- ----- ----        -------
+              5   5     Reallocated Sectors Count          10        100   100   0           0
+              9   9     Power-On Hours                     0         98    98    8398        8397
+              10  A     Spin Retry Count                   51        252   252   0           0
+              12  C     Power Cycle Count                  0         99    99    22          22
+              177 B1    Wear Leveling Count                0         98    98    33          33
+              179 B3    Used Reserved Block Count Total    10        100   100   0           0
+              181 B5    Program Fail Count Total           10        100   100   0           0
+              182 B6    Erase Fail Count Total             10        100   100   0           0
+              183 B7    Runtime Bad Block                  10        100   100   0           0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0           0
+              190 BE    Airflow Temperature Celsius        0         53    48    47          47
+              195 C3    Hardware ECC Recovered             0         200   200   0           0
+              196 C4    Reallocation Event Count           0         252   252   0           0
+              197 C5    Current Pending Sector Count       0         252   252   0           0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0           0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0           0
+              241 F1    Total LBAs Written                 0         99    99    12720469270 12720469069</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART и отображает ранее сохраненные значения свойства Data выводимых атрибутов.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------ Example 17: Получение указанных свойств атрибутов ------</maml:title>
+        <dev:code>Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, History, Converted
+
+Disk:         0: Disk model
+Device:       Disk device
+HistoryDate:  MM/dd/yyyy hh:mm:ss
+SMARTData:
+              ID  AttributeName                      Data        History     Converted
+              --  -------------                      ----        -------     ---------
+              5   Reallocated Sectors Count          0           0
+              9   Power-On Hours                     8398        8397        349.88 Days
+              10  Spin Retry Count                   0           0
+              12  Power Cycle Count                  22          22
+              177 Wear Leveling Count                33          33
+              179 Used Reserved Block Count Total    0           0
+              181 Program Fail Count Total           0           0
+              182 Erase Fail Count Total             0           0
+              183 Runtime Bad Block                  0           0
+              187 Reported Uncorrectable Errors      0           0
+              190 Airflow Temperature Celsius        47          47          53 C
+              195 Hardware ECC Recovered             0           0
+              196 Reallocation Event Count           0           0
+              197 Current Pending Sector Count       0           0
+              198 Offline Uncorrectable Sector Count 0           0
+              199 Ultra DMA CRC Error Count          0           0
+              241 Total LBAs Written                 12720469270 12720469069 5.923 Tb</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает указанные свойства атрибутов SMART.</maml:para>
+          <maml:para/>
+          <maml:para/>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>------------- Example 18: Использование конвейера -------------</maml:title>
+        <dev:code>$ComputerName = 'Computer1'
+$CimSession = New-CimSession -ComputerName 'Computer2'
+$PSSession = New-PSSession -ComputerName 'Computer3'
+$SSHSession = New-PSSession -HostName 'Computer4'
+
+$DiskDrive = Get-CimInstance -ClassName Win32_DiskDrive -Filter 'Index=0' -ComputerName 'Computer5'
+$Disk = Get-Disk -Number 1 -CimSession 'Computer6'
+$PhysicalDisk = Get-PhysicalDisk -DeviceNumber 2 -CimSession 'Computer7'
+
+$ComputerName, $CimSession, $PSSession, $SSHSession, $DiskDrive, $Disk, $PhysicalDisk | Get-DiskSmartInfo
+
+ComputerName: Computer1
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    8397
+              10  A     Spin Retry Count                   51        252   252   0
+              12  C     Power Cycle Count                  0         99    99    22
+              177 B1    Wear Leveling Count                0         98    98    33
+              179 B3    Used Reserved Block Count Total    10        100   100   0
+              181 B5    Program Fail Count Total           10        100   100   0
+              182 B6    Erase Fail Count Total             10        100   100   0
+              183 B7    Runtime Bad Block                  10        100   100   0
+              187 BB    Reported Uncorrectable Errors      0         100   100   0
+              190 BE    Airflow Temperature Celsius        0         53    48    47
+              195 C3    Hardware ECC Recovered             0         200   200   0
+              196 C4    Reallocation Event Count           0         252   252   0
+              197 C5    Current Pending Sector Count       0         252   252   0
+              198 C6    Offline Uncorrectable Sector Count 0         252   252   0
+              199 C7    Ultra DMA CRC Error Count          0         100   100   0
+              241 F1    Total LBAs Written                 0         99    99    12720469069
+
+ComputerName: Computer2
+Disk:         0: Disk model
+Device:       Disk device
+SMARTData:
+              ID  IDHex AttributeName                      Threshold Value Worst Data
+              --  ----- -------------                      --------- ----- ----- ----
+              5   5     Reallocated Sectors Count          10        100   100   0
+              9   9     Power-On Hours                     0         98    98    7395
+              10  A     Spin Retry Count                   51        252   252   0
+...</dev:code>
+        <dev:remarks>
+          <maml:para>Команда получает информацию SMART для всех дисков компьютеров Computer1, Computer2, Computer3 и Computer4, и для указанных дисков компьютеров Computer5, Computer6 и Computer7.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+</helpItems>
