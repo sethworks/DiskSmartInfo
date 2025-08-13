@@ -224,9 +224,9 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Задает тип сессии для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
             <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
             <maml:para>Могут быть заданы следующие значения:</maml:para>
-            <maml:para>CIMSession (по умолчанию) - использование CIMSession для удаленных подключений</maml:para>
+            <maml:para>CIMSession (по умолчанию на Windows) - использование CIMSession для удаленных подключений</maml:para>
             <maml:para>PSSession - использование PSSession с WSMan в качестве транспортного механизма</maml:para>
-            <maml:para>SSHSession - использование PSSession с SSH в качестве транспортного механизма</maml:para>
+            <maml:para>SSHSession (по умолчанию на Linux) - использование PSSession с SSH в качестве транспортного механизма</maml:para>
             <maml:para>SSHClient - использование внешнего клиента SSH в качестве транспортного механизма</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -242,8 +242,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Задает источник данных SMART.</maml:para>
             <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
             <maml:para>Могут быть заданы следующие значения:</maml:para>
-            <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
-            <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+            <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -512,8 +512,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Задает источник данных SMART.</maml:para>
             <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
             <maml:para>Могут быть заданы следующие значения:</maml:para>
-            <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
-            <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+            <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -745,9 +745,9 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>Задает тип сессии для подключения к компьютерам, указанным или сопоставленным параметру -ComputerName.</maml:para>
           <maml:para>Не используется при локальных запросах, а также с параметрами -CimSession и -PSSession.</maml:para>
           <maml:para>Могут быть заданы следующие значения:</maml:para>
-          <maml:para>CIMSession (по умолчанию) - использование CIMSession для удаленных подключений</maml:para>
+          <maml:para>CIMSession (по умолчанию на Windows) - использование CIMSession для удаленных подключений</maml:para>
           <maml:para>PSSession - использование PSSession с WSMan в качестве транспортного механизма</maml:para>
-          <maml:para>SSHSession - использование PSSession с SSH в качестве транспортного механизма</maml:para>
+          <maml:para>SSHSession (по умолчанию на Linux) - использование PSSession с SSH в качестве транспортного механизма</maml:para>
           <maml:para>SSHClient - использование внешнего клиента SSH в качестве транспортного механизма</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -789,8 +789,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>Задает источник данных SMART.</maml:para>
           <maml:para>Может использоваться как локально, так и при удаленных подключениях.</maml:para>
           <maml:para>Могут быть заданы следующие значения:</maml:para>
-          <maml:para>CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
-          <maml:para>SmartCtl - использование утилиты SmartCtl</maml:para>
+          <maml:para>CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)</maml:para>
+          <maml:para>SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>

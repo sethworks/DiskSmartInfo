@@ -59,11 +59,11 @@ Accept wildcard characters: False
 
 Могут быть заданы следующие значения:
 
-CIMSession (по умолчанию) - использование CIMSession для удаленных подключений
+CIMSession (по умолчанию на Windows) - использование CIMSession для удаленных подключений
 
 PSSession - использование PSSession с WSMan в качестве транспортного механизма
 
-SSHSession - использование PSSession с SSH в качестве транспортного механизма
+SSHSession (по умолчанию на Linux) - использование PSSession с SSH в качестве транспортного механизма
 
 SSHClient - использование внешнего клиента SSH в качестве транспортного механизма
 
@@ -120,9 +120,9 @@ Accept wildcard characters: False
 
 Могут быть заданы следующие значения:
 
-CIM (по умолчанию) - использование Common Information Model (Windows Management Instrumentation)
+CIM (по умолчанию на Windows) - использование Common Information Model (Windows Management Instrumentation)
 
-SmartCtl - использование утилиты SmartCtl
+SmartCtl (по умолчанию на Linux) - использование утилиты SmartCtl
 
 ```yaml
 Type: String

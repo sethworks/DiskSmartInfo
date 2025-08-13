@@ -224,9 +224,9 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Specifies type of session used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
             <maml:para>It is not used locally or with -CimSession or -PSSession parameters.</maml:para>
             <maml:para>The following values can be specified:</maml:para>
-            <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
+            <maml:para>CIMSession (default on Windows) - use CIMSession for remote connection</maml:para>
             <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
-            <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
+            <maml:para>SSHSession (default on Linux) - use PSSession with SSH transport</maml:para>
             <maml:para>SSHClient - use external ssh client</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -242,8 +242,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Specifies the source of SMART data.</maml:para>
             <maml:para>It can be used locally and remotely.</maml:para>
             <maml:para>The following values can be specified:</maml:para>
-            <maml:para>CIM (default) - use Common Information Model (Windows Management Instrumentation)</maml:para>
-            <maml:para>SmartCtl - use SmartCtl utility</maml:para>
+            <maml:para>CIM (default on Windows) - use Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (default on Linux) - use SmartCtl utility</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -512,8 +512,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
             <maml:para>Specifies the source of SMART data.</maml:para>
             <maml:para>It can be used locally and remotely.</maml:para>
             <maml:para>The following values can be specified:</maml:para>
-            <maml:para>CIM (default) - use Common Information Model (Windows Management Instrumentation)</maml:para>
-            <maml:para>SmartCtl - use SmartCtl utility</maml:para>
+            <maml:para>CIM (default on Windows) - use Common Information Model (Windows Management Instrumentation)</maml:para>
+            <maml:para>SmartCtl (default on Linux) - use SmartCtl utility</maml:para>
           </maml:description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -745,9 +745,9 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>Specifies type of session used for connecting to computers, listed or bound to the -ComputerName parameter.</maml:para>
           <maml:para>It is not used locally or with -CimSession or -PSSession parameters.</maml:para>
           <maml:para>The following values can be specified:</maml:para>
-          <maml:para>CIMSession (default) - use CIMSession for remote connection</maml:para>
+          <maml:para>CIMSession (default on Windows) - use CIMSession for remote connection</maml:para>
           <maml:para>PSSession - use PSSession with WSMan transport</maml:para>
-          <maml:para>SSHSession - use PSSession with SSH transport</maml:para>
+          <maml:para>SSHSession (default on Linux) - use PSSession with SSH transport</maml:para>
           <maml:para>SSHClient - use external ssh client</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
@@ -789,8 +789,8 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:para>Specifies the source of SMART data.</maml:para>
           <maml:para>It can be used locally and remotely.</maml:para>
           <maml:para>The following values can be specified:</maml:para>
-          <maml:para>CIM (default) - use Common Information Model (Windows Management Instrumentation)</maml:para>
-          <maml:para>SmartCtl - use SmartCtl utility</maml:para>
+          <maml:para>CIM (default on Windows) - use Common Information Model (Windows Management Instrumentation)</maml:para>
+          <maml:para>SmartCtl (default on Linux) - use SmartCtl utility</maml:para>
         </maml:description>
         <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
         <dev:type>
