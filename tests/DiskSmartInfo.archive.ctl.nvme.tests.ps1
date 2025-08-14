@@ -193,4 +193,69 @@ Describe "Archive NVMe" {
             }
         }
     }
+
+    Context "SSHClient" {
+
+        BeforeAll {
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
+
+            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+
+            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+
+            $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
+            mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
+
+            InModuleScope DiskSmartInfo {
+                $Config.ArchivePath = $TestDrive
+            }
+            Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+        }
+
+        It "Archive file exists" {
+            "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -Exist
+            "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -Exist
+        }
+
+        It "Archive files contains proper devices" {
+            if ($IsCoreCLR)
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme1"'))
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/nvme1"'))
+            }
+            else
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme0"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme1"'))
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme0"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/nvme1"'))
+            }
+        }
+
+        It "Archive files contains proper data" {
+            if ($IsCoreCLR)
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name": "Controller Busy Time",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data": "715"')
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name": "Power On Hours",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data": "45"')
+            }
+            else
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name":  "Controller Busy Time",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data":  "715"')
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name":  "Power On Hours",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data":  "45"')
+            }
+        }
+    }
 }
