@@ -19,11 +19,12 @@ if (-not $IsLinux)
                                     './tests/DiskSmartInfo.remoting.CIMSession.tests.ps1',
                                     './tests/DiskSmartInfo.remoting.CIMSession.mocked.tests.ps1',
                                     './tests/DiskSmartInfo.remoting.PSSession.cim.mocked.tests.ps1',
-                                    './tests/DiskSmartInfo.remoting.SSHSession.cim.mocked.tests.ps1',
                                     './tests/DiskSmartInfo.remoting.PSSession.ctl.mocked.tests.ps1',
+                                    './tests/DiskSmartInfo.remoting.SSHSession.cim.mocked.tests.ps1',
                                     './tests/DiskSmartInfo.remoting.SSHSession.ctl.mocked.tests.ps1',
                                     './tests/DiskSmartInfo.remoting.SSHClient.ctl.mocked.tests.ps1',
-                                    './tests/DiskSmartInfo.config.tests.ps1',
+                                    './tests/DiskSmartInfo.config.cim.tests.ps1',
+                                    './tests/DiskSmartInfo.config.ctl.tests.ps1',
                                     './tests/DiskSmartInfo.errors.tests.ps1',
                                     './tests/DiskSmartAttributeDescription.tests.ps1'
 }
