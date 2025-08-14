@@ -331,7 +331,14 @@ $ctlDataPredictFailureTrueNVMe1 = $testDataCtl.CtlDataPredictFailureTrue_NVMe1.R
 $ctlDataNVMe2 = $testDataCtl.CtlData_NVMe2.Replace("`r`n","`n").Split("`n")
 
 # Remoting
-$computerNames = $env:computername, 'localhost'
+if (-not $IsLinux)
+{
+    $computerNames = $env:computername, 'localhost'
+}
+elseif ($IsLinux)
+{
+    $computerNames = (hostname), 'localhost'
+}
 $ipAddresses = '127.0.0.1', '127.0.0.2'
 
 if (-not $IsLinux)
