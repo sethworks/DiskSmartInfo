@@ -32,7 +32,8 @@ elseif ($IsLinux)
 {
     $PesterConfiguration.Run.Path = './tests/DiskSmartInfo.ctl.tests.ps1',
                                     './tests/DiskSmartInfo.ctl.nvme.tests.ps1',
-                                    './tests/DiskSmartInfo.attributes.tests.ps1'
+                                    './tests/DiskSmartInfo.attributes.tests.ps1',
+                                    './tests/DiskSmartInfo.attributeproperties.ctl.tests.ps1'
 }
 
 $PesterConfiguration.Output.Verbosity = 'Detailed'
