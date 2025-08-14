@@ -336,6 +336,12 @@ $diskSmartDataJsonHDD1 = $testDataJson.diskSmartDataJson_HDD1
 $diskThresholdsJsonHDD1 = $testDataJson.diskThresholdsJson_HDD1
 $diskFailurePredictStatusJsonHDD1 = $testDataJson.diskFailurePredictStatusJson_HDD1
 $diskDriveJsonHDD1 = $testDataJson.diskDriveJson_HDD1
+$diskDriveATAJsonHDD1 = $testDataJson.diskDriveATAJson_HDD1
+
+$diskSmartDataJsonHDD2 = $testDataJson.diskSmartDataJson_HDD2
+$diskThresholdsJsonHDD2 = $testDataJson.diskThresholdsJson_HDD2
+$diskFailurePredictStatusJsonHDD2 = $testDataJson.diskFailurePredictStatusJson_HDD2
+$diskDriveJsonHDD2 = $testDataJson.diskDriveJson_HDD2
 
 # Remoting
 if (-not $IsLinux)
