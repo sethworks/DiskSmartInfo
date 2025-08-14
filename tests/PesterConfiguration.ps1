@@ -39,7 +39,8 @@ elseif ($IsLinux)
                                     './tests/DiskSmartInfo.history.ctl.nvme.tests.ps1',
                                     './tests/DiskSmartInfo.archive.ctl.tests.ps1',
                                     './tests/DiskSmartInfo.archive.ctl.nvme.tests.ps1',
-                                    './tests/DiskSmartInfo.remoting.SSHSession.cim.mocked.tests.ps1'
+                                    './tests/DiskSmartInfo.remoting.SSHSession.cim.mocked.tests.ps1',
+                                    './tests/DiskSmartInfo.remoting.SSHSession.ctl.mocked.tests.ps1'
 }
 
 $PesterConfiguration.Output.Verbosity = 'Detailed'
