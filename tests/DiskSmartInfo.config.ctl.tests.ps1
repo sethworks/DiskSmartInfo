@@ -15,9 +15,19 @@ Describe "Config" {
 
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.SuppressResultsWithEmptySmartData = $true
@@ -27,7 +37,14 @@ Describe "Config" {
             Context "AttributeID parameter results depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID 4, 6, 8
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID 4, 6, 8
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
+                    }
                 }
 
                 It "Has 2 DiskSmartInfo object" {
@@ -57,7 +74,14 @@ Describe "Config" {
             Context "Quiet parameter results do not depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Quiet
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Quiet
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Quiet
+                    }
                 }
 
                 It "Has 1 DiskSmartInfo object" {
@@ -84,9 +108,19 @@ Describe "Config" {
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.SuppressResultsWithEmptySmartData = $false
@@ -102,7 +136,14 @@ Describe "Config" {
             Context "AttributeID parameter results depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID 4, 6, 8
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeID 4, 6, 8
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -AttributeID 4, 6, 8
+                    }
                 }
 
                 It "Has 3 DiskSmartInfo object" {
@@ -165,7 +206,14 @@ Describe "Config" {
             Context "Quiet parameter results not depend on SuppressResultsWithEmptySmartData" {
 
                 BeforeAll {
-                    $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Quiet
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -Quiet
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -Quiet
+                    }
                 }
 
                 It "Has 1 DiskSmartInfo object" {
