@@ -34,7 +34,8 @@ elseif ($IsLinux)
                                     './tests/DiskSmartInfo.ctl.nvme.tests.ps1',
                                     './tests/DiskSmartInfo.attributes.tests.ps1',
                                     './tests/DiskSmartInfo.attributeproperties.ctl.tests.ps1',
-                                    './tests/DiskSmartInfo.attributeproperties.ctl.nvme.tests.ps1'
+                                    './tests/DiskSmartInfo.attributeproperties.ctl.nvme.tests.ps1',
+                                    './tests/DiskSmartInfo.history.ctl.tests.ps1'
 }
 
 $PesterConfiguration.Output.Verbosity = 'Detailed'
