@@ -255,7 +255,7 @@ function Get-DiskSmartInfo
 
             foreach ($ps in $PSSession)
             {
-                if (-not $IsLinux)
+                if (-not ($IsLinux -and $ps.Transport -ne 'SSH'))
                 {
                     if ($Source -eq 'CIM')
                     {
@@ -282,9 +282,9 @@ function Get-DiskSmartInfo
                         -UpdateHistory:$UpdateHistory `
                         -Archive:$Archive
                 }
-                elseif ($IsLinux)
+                else
                 {
-                    $message = "ComputerName: ""$($cs.ComputerName)"": PSSession transport is not supported on this platform."
+                    $message = "ComputerName: ""$($ps.ComputerName)"": PSSession transport is not supported on this platform."
                     $exception = [System.Exception]::new($message)
                     $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                     $PSCmdlet.WriteError($errorRecord)
