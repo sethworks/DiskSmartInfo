@@ -13,8 +13,17 @@ Describe "Archive NVMe" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
 
             $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
             mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
@@ -22,7 +31,15 @@ Describe "Archive NVMe" {
             InModuleScope DiskSmartInfo {
                 $Config.ArchivePath = $TestDrive
             }
-            Get-DiskSmartInfo -Source SmartCtl -Archive | Out-Null
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Source SmartCtl -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -Archive | Out-Null
+            }
         }
 
         It "Archive file exists" {
@@ -56,7 +73,7 @@ Describe "Archive NVMe" {
         }
     }
 
-    Context "PSSession" {
+    Context "PSSession" -Skip:$IsLinux {
 
         BeforeAll {
 
@@ -125,7 +142,7 @@ Describe "Archive NVMe" {
         }
     }
 
-    Context "SSHSession" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+    Context "SSHSession" -Skip:(-not $IsCoreCLR) {
 
         BeforeAll {
 
@@ -136,10 +153,20 @@ Describe "Archive NVMe" {
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
 
             $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
             mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
@@ -147,7 +174,15 @@ Describe "Archive NVMe" {
             InModuleScope DiskSmartInfo {
                 $Config.ArchivePath = $TestDrive
             }
-            Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -ComputerName $computerNames -Archive | Out-Null
+            }
         }
 
         It "Archive file exists" {
@@ -200,11 +235,22 @@ Describe "Archive NVMe" {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
 
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
-
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+    
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+    
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+            }
 
             $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
             mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
@@ -212,7 +258,15 @@ Describe "Archive NVMe" {
             InModuleScope DiskSmartInfo {
                 $Config.ArchivePath = $TestDrive
             }
-            Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames -SSHClientSudo -Archive | Out-Null
+            }
         }
 
         It "Archive file exists" {
