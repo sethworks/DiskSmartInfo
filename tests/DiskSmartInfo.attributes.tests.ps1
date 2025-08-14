@@ -12,10 +12,22 @@ Describe "Attributes" {
         Context "Attribute names for overwritten attributes" {
 
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1, $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1, $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                if (-not $IsLinux)
+                {
+                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1, $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1, $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_HFSSSD1, $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdd" } -ModuleName DiskSmartInfo
+                }
+
                 $diskSmartInfo = Get-DiskSmartInfo
             }
 
@@ -58,10 +70,22 @@ Describe "Attributes" {
         Context "Converted data for overwritten attributes" {
 
             BeforeAll {
-                mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1, $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1, $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                if (-not $IsLinux)
+                {
+                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1, $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1, $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1, $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_HFSSSD1, $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataSSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdd" } -ModuleName DiskSmartInfo
+                }
+
                 $diskSmartInfo = Get-DiskSmartInfo -Convert
             }
 
@@ -119,10 +143,21 @@ Describe "Attributes" {
             Context "Default attributes" {
 
                 BeforeAll {
-                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    if (-not $IsLinux)
+                    {
+                        mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    }
+                    elseif ($IsLinux)
+                    {
+                        mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_HFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    }
+
                     $diskSmartInfo = Get-DiskSmartInfo -Critical
                 }
 
@@ -136,10 +171,20 @@ Describe "Attributes" {
             Context "Overwrite attributes IsCritical = `$false" {
 
                 BeforeAll {
-                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    if (-not $IsLinux)
+                    {
+                        mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    }
+                    elseif ($IsLinux)
+                    {
+                        mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_HFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    }
 
                     InModuleScope DiskSmartInfo {
                         $proprietaryAttributes.Where{$_.Family -eq "SK hynix SATA SSDs"}.Attributes.Where{$_.AttributeID -eq 5}[0].Add("IsCritical", $false)
@@ -166,10 +211,20 @@ Describe "Attributes" {
             Context "Overwrite attributes IsCritical = `$true" {
 
                 BeforeAll {
-                    mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-                    mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    if (-not $IsLinux)
+                    {
+                        mock Get-CimInstance -MockWith { $diskSmartDataSSD1, $diskSmartDataHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskThresholdsSSD1, $diskThresholdsHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD1, $diskFailurePredictStatusHFSSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                        mock Get-CimInstance -MockWith { $diskDriveSSD1, $diskDriveHFSSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+                    }
+                    elseif ($IsLinux)
+                    {
+                        mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD1, $testDataCtl.CtlScan_HFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+                        mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    }
 
                     InModuleScope DiskSmartInfo {
                         $defaultAttributes.Find([Predicate[PSCustomObject]]{$args[0].AttributeID -eq 5}).IsCritical = $false
@@ -198,10 +253,20 @@ Describe "Attributes" {
     Context "Unknown attributes" {
 
         BeforeAll {
-            mock Get-CimInstance -MockWith { $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
-            mock Get-CimInstance -MockWith { $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            if (-not $IsLinux)
+            {
+                mock Get-CimInstance -MockWith { $diskSmartDataSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskThresholdsSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskFailurePredictStatusSSD2 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
+                mock Get-CimInstance -MockWith { $diskDriveSSD2 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $testDataCtl.CtlScan_SSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdd" } -ModuleName DiskSmartInfo
+            }
+
             $diskSmartInfo = Get-DiskSmartInfo
         }
 
@@ -219,13 +284,14 @@ Describe "Attributes" {
 
     Context "Attributes data formats" {
 
-        Context "CIM" {
+        Context "CIM" -Skip:$IsLinux {
 
             BeforeAll {
                 mock Get-CimInstance -MockWith { $diskSmartDataHFSSSD1, $diskSmartDataKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classSmartData } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskThresholdsHFSSSD1, $diskThresholdsKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classThresholds } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskFailurePredictStatusHFSSSD1, $diskFailurePredictStatusKINGSTONSSD1 } -ParameterFilter { $Namespace -eq $namespaceWMI -and $ClassName -eq $classFailurePredictStatus } -ModuleName DiskSmartInfo
                 mock Get-CimInstance -MockWith { $diskDriveHFSSSD1, $diskDriveKINGSTONSSD1 } -ParameterFilter { $ClassName -eq $classDiskDrive } -ModuleName DiskSmartInfo
+
                 $diskSmartInfo = Get-DiskSmartInfo
             }
 
@@ -247,10 +313,21 @@ Describe "Attributes" {
             BeforeAll {
                 mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HFSSSD1, $testDataCtl.CtlScan_KINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataKINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdf" } -ModuleName DiskSmartInfo
 
-                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataKINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdf" } -ModuleName DiskSmartInfo
+
+                    $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataKINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdf" } -ModuleName DiskSmartInfo
+    
+                    $diskSmartInfo = Get-DiskSmartInfo
+                }
             }
 
             It "Has correct values for attribute data format: temperature3" {
