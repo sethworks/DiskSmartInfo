@@ -13,9 +13,19 @@ Describe "AttributeProperty NVMe" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -104,10 +114,21 @@ Describe "AttributeProperty NVMe" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1, $testDataCtl.CtlScan_NVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+    
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataNVMe2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme1" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            }
         }
 
         It "DiskSmartAttribute object has correct types and properties" {
@@ -143,9 +164,19 @@ Describe "AttributeProperty NVMe" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_NVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty Data, ID, AttributeName, Value, Threshold
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty Data, ID, AttributeName, Value, Threshold
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataNVMe1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/nvme0" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty Data, ID, AttributeName, Value, Threshold
+            }
         }
 
         It "Returns DiskSmartInfo object" {
