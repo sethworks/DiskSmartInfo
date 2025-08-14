@@ -1,7 +1,8 @@
 # Do not use -SkipLimitCheck because there are no such a parameter in Windows PowerShell 5.1
-$testData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.psd1
-$testDataProprietary = Import-PowerShellDataFile -Path $PSScriptRoot\testData.proprietary.psd1
+$testData = Import-PowerShellDataFile -Path $PSScriptRoot\testData.cim.psd1
+$testDataProprietary = Import-PowerShellDataFile -Path $PSScriptRoot\testData.cim.proprietary.psd1
 $testDataCtl = Import-PowerShellDataFile -Path $PSScriptRoot\testData.ctl.psd1
+$testDataJson = Import-PowerShellDataFile -Path $PSScriptRoot\testData.cim.json.psd1
 
 # Class names
 $namespaceWMI = 'root/WMI'
@@ -329,6 +330,12 @@ $ctlDataKINGSTONSSD1 = $testDataCtl.CtlData_KINGSTONSSD1.Replace("`r`n","`n").Sp
 $ctlDataNVMe1 = $testDataCtl.CtlData_NVMe1.Replace("`r`n","`n").Split("`n")
 $ctlDataPredictFailureTrueNVMe1 = $testDataCtl.CtlDataPredictFailureTrue_NVMe1.Replace("`r`n","`n").Split("`n")
 $ctlDataNVMe2 = $testDataCtl.CtlData_NVMe2.Replace("`r`n","`n").Split("`n")
+
+# Json
+$diskSmartDataJsonHDD1 = $testDataJson.diskSmartDataJson_HDD1
+$diskThresholdsJsonHDD1 = $testDataJson.diskThresholdsJson_HDD1
+$diskFailurePredictStatusJsonHDD1 = $testDataJson.diskFailurePredictStatusJson_HDD1
+$diskDriveJsonHDD1 = $testDataJson.diskDriveJson_HDD1
 
 # Remoting
 if (-not $IsLinux)
