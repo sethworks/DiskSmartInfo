@@ -269,7 +269,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
             <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
           </maml:description>
@@ -298,7 +298,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>DiskModel</maml:name>
           <maml:description>
             <maml:para>Задает модели дисков для запроса.</maml:para>
-            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk), и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
             <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
             <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
@@ -539,7 +539,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>Critical</maml:name>
           <maml:description>
             <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+            <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
             <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
           </maml:description>
@@ -568,7 +568,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
           <maml:name>DiskModel</maml:name>
           <maml:description>
             <maml:para>Задает модели дисков для запроса.</maml:para>
-            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+            <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk), и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
             <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
             <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
             <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
@@ -817,7 +817,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:name>Critical</maml:name>
         <maml:description>
           <maml:para>Параметр отображает только критические атрибуты.</maml:para>
-          <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных  в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
+          <maml:para>Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных в файлах attributes/default.ps1 и attributes/proprietary.ps1.</maml:para>
           <maml:para>Больше информации в about_DiskSmartInfo_attributes.</maml:para>
           <maml:para>Если заданы любые из параметров выбора атрибутов, результат включает в себя только критические атрибуты из указанных.</maml:para>
         </maml:description>
@@ -847,7 +847,7 @@ Description    : (Vendor-specific raw value.) The raw value has different struct
         <maml:name>DiskModel</maml:name>
         <maml:description>
           <maml:para>Задает модели дисков для запроса.</maml:para>
-          <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),  и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
+          <maml:para>Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk), и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).</maml:para>
           <maml:para>На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive после удаления суффикса, указывающего тип диска. Например, свойство Model класса WMI Win32_DiskDrive может быть следующим: "Disk Model 2 TB ATA Device". По умолчанию команда удаляет суффикс " ATA Device" для того, чтобы данное значение соответствовало свойствам Model классов MSFT_Disk и MSFT_PhysicalDisk.</maml:para>
           <maml:para>Это может быть изменено конфигурационным параметром TrimDiskDriveModelSuffix.</maml:para>
           <maml:para>Больше информации в about_DiskSmartInfo_config.</maml:para>
