@@ -133,8 +133,7 @@ function Get-DiskSmartInfo
         {
             Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
         }
-
-        if ($Credential -and $Transport -eq 'SSHSession')
+        elseif ($Credential -and (($Transport -eq 'SSHSession') -or ($IsLinux -and -not $Transport)))
         {
             Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
         }
