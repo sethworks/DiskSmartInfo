@@ -32,7 +32,7 @@ Describe "Errors" {
             }
         }
 
-        Context "SmartCtl with CIMSession" {
+        Context "SmartCtl with CIMSession on Windows" -Skip:$IsLinux {
 
             Context "-Source SmartCtl -CIMSession" {
 
@@ -71,7 +71,7 @@ Describe "Errors" {
             }
         }
 
-        Context "SmartCtl with ComputerName" {
+        Context "SmartCtl with ComputerName on Windows" -Skip:$IsLinux {
 
             Context "-Source SmartCtl -ComputerName" {
 
@@ -88,7 +88,7 @@ Describe "Errors" {
             }
         }
 
-        Context "SSHClient with CIM" {
+        Context "SSHClient with CIM on Windows" -Skip:$IsLinux {
 
             Context "-Transport SSHClient -Source CIM" {
 
@@ -105,7 +105,7 @@ Describe "Errors" {
             }
         }
 
-        Context "SSHClient with ComputerName" {
+        Context "SSHClient with ComputerName" -Skip:$IsLinux{
 
             Context "-Transport SSHClient -ComputerName" {
 
@@ -121,9 +121,66 @@ Describe "Errors" {
                 }
             }
         }
+
+        Context "CIMSession on Linux" -Skip:(-not $IsLinux) {
+
+            Context "-Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Transport CimSession } | Should -Throw 'CIMSession transport is not supported on this platform.' -ErrorId 'CIMSession transport is not supported on this platform.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "-Source SmartCtl -Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { Get-DiskSmartInfo -Source SmartCtl -Transport CimSession } | Should -Throw 'CIMSession transport is not supported on this platform.' -ErrorId 'CIMSession transport is not supported on this platform.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "ComputerName | -Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { $computerNames | Get-DiskSmartInfo -Transport CimSession } | Should -Throw 'CIMSession transport is not supported on this platform.' -ErrorId 'CIMSession transport is not supported on this platform.,Get-DiskSmartInfo'
+                }
+            }
+
+            Context "ComputerName | -Source SmartCtl -Transport CIMSession" {
+
+                It "Should throw an error" {
+                    { $computerNames | Get-DiskSmartInfo -Source SmartCtl -Transport CimSession } | Should -Throw 'CIMSession transport is not supported on this platform.' -ErrorId 'CIMSession transport is not supported on this platform.,Get-DiskSmartInfo'
+                }
+            }
+        }
+
+        Context "SSHClient with CIM on Linux" -Skip:(-not $IsLinux) {
+
+            Context "-Transport SSHClient -Source CIM" {
+
+                It "Should return an error" {
+                    $diskSmartInfo = Get-DiskSmartInfo -Transport SSHClient -Source CIM -ErrorVariable ev -ErrorAction SilentlyContinue
+
+                    $ev[0].Exception.Message | Should -BeExactly "CIM source is not supported on this platform."
+                    $ev[0].FullyQualifiedErrorId | Should -BeExactly "CIM source is not supported on this platform.,Get-DiskSmartInfo"
+                }
+            }
+
+            Context "ComputerName | -Transport SSHClient -Source CIM" {
+
+                It "Should return an error" {
+                    $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHClient -Source CIM -ErrorVariable ev -ErrorAction SilentlyContinue
+
+                    $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source."
+                    $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+
+                    $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": SSHClient transport does not support CIM source."
+                    $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                }
+            }
+        }
     }
 
-    Context "Process block restrictions" {
+    Context "Process block restrictions" -Skip:$IsLinux {
 
         Context "CIMSession, PSSession, SSHSession | -Source SmartCtl" {
 
@@ -249,7 +306,7 @@ Describe "Errors" {
         }
     }
 
-    Context "SmartCtl utility existence" {
+    Context "SmartCtl utility existence" -Skip:$IsLinux {
 
         Context "Local query" {
 
@@ -293,7 +350,7 @@ Describe "Errors" {
         }
     }
 
-    Context "Notifications" {
+    Context "Notifications" -Skip:$IsLinux {
 
         Context "Credential without ComputerName" {
 
@@ -421,7 +478,7 @@ Describe "Errors" {
         }
     }
 
-    Context "Nonexistent host" {
+    Context "Nonexistent host" -Skip:$IsLinux {
 
         Context "CIM" {
 
@@ -464,7 +521,7 @@ Describe "Errors" {
         }
     }
 
-    Context "Error variable" {
+    Context "Error variable" -Skip:$IsLinux {
 
         Context "CIM" {
 
