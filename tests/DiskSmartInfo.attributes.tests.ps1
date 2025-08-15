@@ -325,7 +325,7 @@ Describe "Attributes" {
                 {
                     mock Invoke-Command -MockWith { $ctlDataHFSSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sde" } -ModuleName DiskSmartInfo
                     mock Invoke-Command -MockWith { $ctlDataKINGSTONSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdf" } -ModuleName DiskSmartInfo
-    
+
                     $diskSmartInfo = Get-DiskSmartInfo
                 }
             }

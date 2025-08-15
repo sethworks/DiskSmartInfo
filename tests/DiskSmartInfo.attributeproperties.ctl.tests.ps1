@@ -147,7 +147,7 @@ Describe "AttributeProperty Ctl" {
             {
                 mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
             }
         }
@@ -234,7 +234,7 @@ Describe "AttributeProperty Ctl" {
             elseif ($IsLinux)
             {
                 mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, Value, Threshold
             }
         }

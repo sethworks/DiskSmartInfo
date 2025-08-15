@@ -136,7 +136,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not $IsCoreCLR) {
                 mock Invoke-Command -MockWith { $diskThresholdsJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskFailurePredictStatusJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskDriveJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Source CIM
             }
 
@@ -194,7 +194,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not $IsCoreCLR) {
                 mock Invoke-Command -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHSession
             }
             elseif ($IsLinux)
@@ -203,7 +203,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not $IsCoreCLR) {
                 mock Invoke-Command -MockWith { $diskThresholdsJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskFailurePredictStatusJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskDriveJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo $computerNames -Source CIM
             }
         }
@@ -260,7 +260,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not $IsCoreCLR) {
                 mock Invoke-Command -MockWith { $diskThresholdsHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskDriveHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
-                
+
                 $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHSession
             }
             elseif ($IsLinux)
@@ -463,7 +463,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked" -Skip:(-not $IsCoreCLR) {
                 mock Invoke-Command -MockWith { $diskThresholdsJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskFailurePredictStatusJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $diskDriveJsonHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost3, $psSessionHost4 -Source CIM
             }
         }

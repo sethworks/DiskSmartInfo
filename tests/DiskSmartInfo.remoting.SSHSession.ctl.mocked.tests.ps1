@@ -30,7 +30,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not $IsCoreCLR) 
             {
                 mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-    
+
                 $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames
             }
         }
