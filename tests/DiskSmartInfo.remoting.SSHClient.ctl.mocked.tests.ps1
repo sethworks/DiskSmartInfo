@@ -12,10 +12,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -92,10 +103,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHClient -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHClient -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -137,10 +159,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHClient -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHClient -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -182,10 +215,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHClient -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHClient -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($ipAddresses[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -227,10 +271,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -272,10 +327,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientSudo
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientSudo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -SSHClientSudo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -352,10 +418,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientOption '-o AddressFamily=inet'
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientOption '-o AddressFamily=inet'
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -SSHClientOption '-o AddressFamily=inet'
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -432,10 +509,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientSudo -SSHClientOption '-o AddressFamily=inet'
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SSHClientSudo -SSHClientOption '-o AddressFamily=inet'
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh -o AddressFamily=inet $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -SSHClientSudo -SSHClientOption '-o AddressFamily=inet'
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -507,7 +595,7 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         }
     }
 
-    Context "Win32_DiskDrive pipeline" {
+    Context "Win32_DiskDrive pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
@@ -559,7 +647,7 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         }
     }
 
-    Context "MSFT_Disk pipeline" {
+    Context "MSFT_Disk pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
@@ -611,7 +699,7 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         }
     }
 
-    Context "MSFT_PhysicalDisk pipeline" {
+    Context "MSFT_PhysicalDisk pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
@@ -670,14 +758,31 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
             BeforeAll {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -UpdateHistory | Out-Null
+                if (-not $IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -UpdateHistory | Out-Null
+                }
+                elseif ($IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -SSHClientSudo -UpdateHistory | Out-Null
+                }
+
                 $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).json"
             }
 
@@ -702,16 +807,33 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
             BeforeAll {
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
                     $Config.ShowUnchangedDataHistory = $true
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -UpdateHistory | Out-Null
-                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -ShowHistory
+                if (-not $IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -UpdateHistory | Out-Null
+                    $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -Source SmartCtl -ShowHistory
+                }
+                elseif ($IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -SSHClientSudo -UpdateHistory | Out-Null
+                    $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHClient -SSHClientSudo -ShowHistory
+                }
             }
 
             It "HistoricalDate property exists" {
@@ -769,10 +891,21 @@ Describe "DiskSmartInfo remoting SSHClient mocked Ctl" {
         BeforeAll {
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SmartCtlOption '-d ata'
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -Source SmartCtl -SmartCtlOption '-d ata'
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHClient -SSHClientSudo -SmartCtlOption '-d ata'
+            }
         }
 
         It "Returns DiskSmartInfo object" {

@@ -159,7 +159,7 @@ Accept wildcard characters: False
 ### -Critical
 Параметр отображает только критические атрибуты.
 
-Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных 
+Является ли атрибут критическим определяется свойством IsCritical атрибутов, перечисленных
 в файлах attributes/default.ps1 и attributes/proprietary.ps1.
 
 Больше информации в about_DiskSmartInfo_attributes.
@@ -210,7 +210,7 @@ Accept wildcard characters: False
 ### -DiskModel
 Задает модели дисков для запроса.
 
-Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk), 
+Модель диска соответствует свойствам Model класса WMI MSFT_Disk (результата командлета Get-Disk),
 и класса MSFT_PhysicalDisk (результата командлета Get-PhysicalDisk).
 
 На самом деле, эта команда сравнивает указанное знечение со свойством Model класса WMI Win32_DiskDrive

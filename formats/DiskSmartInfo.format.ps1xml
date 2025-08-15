@@ -101,7 +101,7 @@
                                         $text.Substring(0,$text.Length-2).
                                             Replace("`n", "`n              ").
                                             Insert(0, "$($PSStyle.Formatting.FormatAccent)SMARTData:$($PSStyle.Reset)").
-                                            TrimEnd(' ') + "`n"                   
+                                            TrimEnd(' ') + "`n"
                                     }
                                 </ScriptBlock>
                              </ExpressionBinding>

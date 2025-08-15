@@ -25,3 +25,15 @@ jobs:
         run: |
           . .\tests\PesterConfiguration.ps1
           Invoke-Pester -Configuration $PesterConfiguration
+
+  LinuxPowerShellTest:
+    name: Linux PowerShell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Run Pester tests
+        shell: pwsh
+        run: |
+          . ./tests/PesterConfiguration.ps1
+          Invoke-Pester -Configuration $PesterConfiguration

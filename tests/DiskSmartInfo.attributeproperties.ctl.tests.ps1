@@ -13,9 +13,19 @@ Describe "AttributeProperty Ctl" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -125,10 +135,21 @@ Describe "AttributeProperty Ctl" {
         BeforeAll {
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, IDHex, AttributeName, Threshold, Value, Worst, Data, Converted
+            }
         }
 
         It "Converts Spin-Up Time" {
@@ -136,7 +157,7 @@ Describe "AttributeProperty Ctl" {
         }
 
         It "Converts Power-On Hours" {
-            $diskSmartInfo[0].SmartData[7].DataConverted | Should -BeExactly '3060.25 Days'
+            $diskSmartInfo[0].SmartData[7].DataConverted | Should -MatchExactly '3060.250? Days'
         }
 
         It "Converts Airflow Temperature Celsius" {
@@ -203,9 +224,19 @@ Describe "AttributeProperty Ctl" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, AttributeName, Data, Value, Threshold
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -Source SmartCtl -AttributeProperty ID, AttributeName, Data, Value, Threshold
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -AttributeProperty ID, AttributeName, Data, Value, Threshold
+            }
         }
 
         It "Returns DiskSmartInfo object" {

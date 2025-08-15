@@ -53,10 +53,10 @@ function inGetSourceSmartDataCIM
         elseif ($IsLinux)
         {
             Invoke-Command -Session $ps -ScriptBlock { $errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } }
-            $diskDrives = ConvertFrom-Json (Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 })
-            $disksSmartData = ConvertFrom-Json (Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters | ConvertTo-Json -Depth 20 })
-            $disksThresholds = ConvertFrom-Json (Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 })
-            $disksFailurePredictStatus = ConvertFrom-Json (Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 })
+            $diskDrives = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 } | ConvertFrom-Json
+            $disksSmartData = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters | ConvertTo-Json -Depth 20 } | ConvertFrom-Json
+            $disksThresholds = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 } | ConvertFrom-Json
+            $disksFailurePredictStatus = Invoke-Command -Session $ps -ScriptBlock { Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 } | ConvertFrom-Json
             $instanceErrors = Invoke-Command -Session $ps -ScriptBlock { $instanceErrors }
         }
 

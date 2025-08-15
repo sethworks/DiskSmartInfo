@@ -13,9 +13,19 @@ Describe "Archive Ctl" {
 
             mock Get-Command -MockWith { $true } -ParameterFilter { $Name -eq 'smartctl' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
 
             $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
             mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
@@ -23,7 +33,15 @@ Describe "Archive Ctl" {
             InModuleScope DiskSmartInfo {
                 $Config.ArchivePath = $TestDrive
             }
-            Get-DiskSmartInfo -Source SmartCtl -Archive | Out-Null
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Source SmartCtl -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -Archive | Out-Null
+            }
         }
 
         It "Archive file exists" {
@@ -69,7 +87,7 @@ Describe "Archive Ctl" {
         }
     }
 
-    Context "PSSession" {
+    Context "PSSession" -Skip:$IsLinux {
 
         BeforeAll {
 
@@ -163,7 +181,7 @@ Describe "Archive Ctl" {
         }
     }
 
-    Context "SSHSession" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+    Context "SSHSession" -Skip:(-not $IsCoreCLR) {
 
         BeforeAll {
 
@@ -174,11 +192,22 @@ Describe "Archive Ctl" {
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
 
             $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
             mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
@@ -186,7 +215,128 @@ Describe "Archive Ctl" {
             InModuleScope DiskSmartInfo {
                 $Config.ArchivePath = $TestDrive
             }
-            Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -ComputerName $computerNames -Archive | Out-Null
+            }
+        }
+
+        It "Archive file exists" {
+            "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -Exist
+            "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -Exist
+        }
+
+        It "Archive files contains proper devices" {
+            if ($IsCoreCLR)
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sda"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sdb"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sdc"'))
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sda"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sdb"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device": "/dev/sdc"'))
+            }
+            else
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sda"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sdb"'))
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sdc"'))
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sda"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sdb"'))
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ([regex]::Escape('"Device":  "/dev/sdc"'))
+            }
+        }
+
+        It "Archive files contains proper data" {
+            if ($IsCoreCLR)
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"ID": 3,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"IDHex": "4",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name": "Seek Error Rate",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Threshold": 140,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Value": 39,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Worst": 200,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data": 73551')
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"ID": 5,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"IDHex": "9",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name": "Power Cycle Count",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Threshold": 10,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Value": 60,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Worst": 99,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data": 12740846422')
+            }
+            else
+            {
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"ID":  3,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"IDHex":  "4",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name":  "Seek Error Rate",')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Threshold":  140,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Value":  39,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Worst":  200,')
+                "TestDrive:/$($computerNames[0])/$($computerNames[0])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data":  73551')
+
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"ID":  5,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"IDHex":  "9",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Name":  "Power Cycle Count",')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Threshold":  10,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Value":  60,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Worst":  99,')
+                "TestDrive:/$($computerNames[1])/$($computerNames[1])_2025-07-17_12-34-56.json" | Should -FileContentMatch ('"Data":  12740846422')
+            }
+        }
+    }
+
+    Context "SSHClient" {
+
+        BeforeAll {
+
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --scan" } -ModuleName DiskSmartInfo
+            mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1, $testDataCtl.CtlScan_HDD2, $testDataCtl.CtlScan_SSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --scan" } -ModuleName DiskSmartInfo
+
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[0]) sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sdb" } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataSSD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "ssh $($computerNames[1]) sudo smartctl --info --health --attributes /dev/sdc" } -ModuleName DiskSmartInfo
+            }
+
+            $dt = New-MockObject -Type 'System.DateTime' -Properties @{Year=2025;Month=7;Day=17;Hour=12;Minute=34;Second=56} -Methods @{ToString={'_2025-07-17_12-34-56'}}
+            mock Get-Date -MockWith { $dt } -ModuleName DiskSmartInfo
+
+            InModuleScope DiskSmartInfo {
+                $Config.ArchivePath = $TestDrive
+            }
+
+            if (-not $IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHClient -Source SmartCtl -ComputerName $computerNames -Archive | Out-Null
+            }
+            elseif ($IsLinux)
+            {
+                Get-DiskSmartInfo -Transport SSHClient -ComputerName $computerNames -SSHClientSudo -Archive | Out-Null
+            }
         }
 
         It "Archive file exists" {

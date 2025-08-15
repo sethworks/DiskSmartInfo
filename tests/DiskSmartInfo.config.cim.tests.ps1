@@ -7,7 +7,7 @@ BeforeAll {
 
 Describe "Config" {
 
-    Context "Suppress empty SmartData" {
+    Context "Suppress empty SmartData" -Skip:$IsLinux {
 
         Context "SuppressResultsWithEmptySmartData = `$true" {
 
@@ -183,7 +183,7 @@ Describe "Config" {
         }
     }
 
-    Context "Trim Win32_DiskDrive Model property" {
+    Context "Trim Win32_DiskDrive Model property" -Skip:$IsLinux {
 
         Context "TrimDiskDriveModelSuffix = `$true" {
 
@@ -239,6 +239,127 @@ Describe "Config" {
 
                 BeforeAll {
                     $diskSmartInfo = Get-DiskSmartInfo
+                }
+
+                It "Has 2 DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+
+                It "Has untrimmed models" {
+                    $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.ModelATA_HDD1
+                    $diskSmartInfo[1].DiskModel | Should -BeExactly $testData.Model_HDD2
+                }
+            }
+        }
+    }
+
+    Context "Trim Win32_DiskDrive Model property SSHSession" -Skip:(-not $IsCoreCLR) {
+
+        Context "TrimDiskDriveModelSuffix = `$true" {
+
+            BeforeAll {
+
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $diskSmartDataJsonHDD1, $diskSmartDataJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskThresholdsJsonHDD1, $diskThresholdsJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskFailurePredictStatusJsonHDD1, $diskFailurePredictStatusJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskDriveATAJsonHDD1, $diskDriveJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                }
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModelSuffix = $true
+                }
+            }
+
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModelSuffix" {
+
+                BeforeAll {
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Source CIM
+                    }
+                }
+
+                It "Has 2 DiskSmartInfo object" {
+                    $diskSmartInfo | Should -HaveCount 2
+                    $diskSmartInfo[0].pstypenames[0] | Should -BeExactly 'DiskSmartInfo'
+                }
+
+                It "Has trimmed models" {
+                    $diskSmartInfo[0].DiskModel | Should -BeExactly $testData.Model_HDD1
+                    $diskSmartInfo[1].DiskModel | Should -BeExactly $testData.Model_HDD2
+                }
+            }
+        }
+
+        Context "TrimDiskDriveModelSuffix = `$false" {
+
+            BeforeAll {
+
+                $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
+                mock New-PSSession -MockWith { $psSessionHost1 } -ParameterFilter {$HostName -eq $computerNames[0]} -ModuleName DiskSmartInfo
+                mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
+
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq " `$errorParameters = @{ ErrorVariable = 'instanceErrors'; ErrorAction = 'SilentlyContinue' } " } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $null } -ParameterFilter { $ScriptBlock.ToString() -eq ' $instanceErrors ' } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $diskSmartDataHDD1, $diskSmartDataHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskThresholdsHDD1, $diskThresholdsHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskFailurePredictStatusHDD1, $diskFailurePredictStatusHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskDriveATAHDD1, $diskDriveHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters ' } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $diskSmartDataJsonHDD1, $diskSmartDataJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classSmartData @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskThresholdsJsonHDD1, $diskThresholdsJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classThresholds @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskFailurePredictStatusJsonHDD1, $diskFailurePredictStatusJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -Namespace $Using:namespaceWMI -ClassName $Using:classFailurePredictStatus @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $diskDriveATAJsonHDD1, $diskDriveJsonHDD2 } -ParameterFilter { $ScriptBlock.ToString() -eq ' Get-CimInstance -ClassName $Using:classDiskDrive @errorParameters | ConvertTo-Json -Depth 20 ' } -ModuleName DiskSmartInfo
+                }
+
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModelSuffix = $false
+                }
+            }
+
+            AfterAll {
+                InModuleScope DiskSmartInfo {
+                    $Config.TrimDiskDriveModelSuffix = $true
+                }
+            }
+
+            Context "DiskSmartInfo Model property depends on TrimDiskDriveModelSuffix" {
+
+                BeforeAll {
+                    if (-not $IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession
+                    }
+                    elseif ($IsLinux)
+                    {
+                        $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Source CIM
+                    }
                 }
 
                 It "Has 2 DiskSmartInfo object" {

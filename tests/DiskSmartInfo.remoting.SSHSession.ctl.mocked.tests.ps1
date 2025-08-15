@@ -5,7 +5,7 @@ BeforeAll {
     . $PSScriptRoot\testEnvironment.ps1
 }
 
-Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR -and $IsWindows)) {
+Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not $IsCoreCLR) {
 
     Context "ComputerName" {
 
@@ -17,11 +17,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHSession -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHSession -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -103,11 +114,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHSession -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses -Transport SSHSession -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $ipAddresses
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -154,11 +176,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHSession -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $computerNames -Transport SSHSession -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $computerNames
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -205,11 +238,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHSession -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $ipAddresses -Transport SSHSession -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo $ipAddresses
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -256,11 +300,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $computerNames | Get-DiskSmartInfo -Transport SSHSession -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $computerNames | Get-DiskSmartInfo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -305,11 +360,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost1, $psSessionHost2 -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost1, $psSessionHost2 -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost1, $psSessionHost2
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -354,11 +420,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost3, $psSessionHost4 -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost3, $psSessionHost4 -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -PSSession $psSessionHost3, $psSessionHost4
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -403,11 +480,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = $psSessionHost1, $psSessionHost2 | Get-DiskSmartInfo -Source SmartCtl
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $psSessionHost1, $psSessionHost2 | Get-DiskSmartInfo -Source SmartCtl
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = $psSessionHost1, $psSessionHost2 | Get-DiskSmartInfo
+            }
         }
 
         It "Returns DiskSmartInfo object" {
@@ -455,7 +543,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
         }
     }
 
-    Context "Win32_DiskDrive pipeline" {
+    Context "Win32_DiskDrive pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
@@ -511,7 +599,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
         }
     }
 
-    Context "MSFT_Disk pipeline" {
+    Context "MSFT_Disk pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
@@ -567,7 +655,7 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
         }
     }
 
-    Context "MSFT_PhysicalDisk pipeline" {
+    Context "MSFT_PhysicalDisk pipeline" -Skip:$IsLinux {
 
         BeforeAll {
             $psSessionHost1 = New-MockObject -Type 'System.Management.Automation.Runspaces.PSSession' -Properties @{ComputerName = $computerNames[0]; Transport = 'SSH'}
@@ -633,15 +721,32 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
                 mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -UpdateHistory | Out-Null
+                if (-not $IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -UpdateHistory | Out-Null
+                }
+                elseif ($IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
+                }
+
                 $filepath = Join-Path -Path $TestDrive -ChildPath "$($computerNames[0]).json"
             }
 
@@ -669,17 +774,34 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
                 mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
                 mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
                 mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                if (-not $IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
+                elseif ($IsLinux)
+                {
+                    mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                    mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+                }
 
                 InModuleScope DiskSmartInfo {
                     $Config.DataHistoryPath = $TestDrive
                     $Config.ShowUnchangedDataHistory = $true
                 }
 
-                Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -UpdateHistory | Out-Null
-                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -ShowHistory
+                if (-not $IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -UpdateHistory | Out-Null
+                    $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -Transport SSHSession -Source SmartCtl -ShowHistory
+                }
+                elseif ($IsLinux)
+                {
+                    Get-DiskSmartInfo -ComputerName $computerNames[0] -UpdateHistory | Out-Null
+                    $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames[0] -ShowHistory
+                }
             }
 
             It "HistoricalDate property exists" {
@@ -742,11 +864,22 @@ Describe "DiskSmartInfo remoting SSHSession mocked Ctl" -Skip:(-not ($IsCoreCLR 
             mock Remove-PSSession -MockWith { } -ModuleName DiskSmartInfo
 
             mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq " Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue "} -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
             mock Invoke-Command -MockWith { $testDataCtl.CtlScan_HDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq " smartctl --scan " } -ModuleName DiskSmartInfo
-            mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
 
-            $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHSession -Source SmartCtl -SmartCtlOption '-d ata'
+            if (-not $IsLinux)
+            {
+                mock Invoke-Command -MockWith { $false } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -Transport SSHSession -Source SmartCtl -SmartCtlOption '-d ata'
+            }
+            elseif ($IsLinux)
+            {
+                mock Invoke-Command -MockWith { $true } -ParameterFilter { $ScriptBlock.ToString() -eq ' $IsLinux ' } -ModuleName DiskSmartInfo
+                mock Invoke-Command -MockWith { $ctlDataHDD1 } -ParameterFilter { $ScriptBlock.ToString() -eq "sudo smartctl -d ata --info --health --attributes /dev/sda" } -ModuleName DiskSmartInfo
+
+                $diskSmartInfo = Get-DiskSmartInfo -ComputerName $computerNames -SmartCtlOption '-d ata'
+            }
         }
 
         It "Returns DiskSmartInfo object" {
