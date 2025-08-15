@@ -81,7 +81,7 @@ function Get-DiskSmartInfo
 
             # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
             # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-            if ($Source -eq 'SmartCtl' -and $ComputerName -and -not $Transport)
+            if ($Source -eq 'SmartCtl' -and -not $Transport -and $ComputerName)
             {
                 $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                 $exception = [System.Exception]::new($message)
@@ -89,9 +89,9 @@ function Get-DiskSmartInfo
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
             }
 
-            # Get-DiskSmartInfo -Transport SSHClient -Source CIM
-            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
-            if ($Transport -eq 'SSHClient' -and $Source -eq 'CIM')
+            # Get-DiskSmartInfo -Transport SSHClient -Source CIM -ComputerName $cn
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM -ComputerName $cn
+            if ($Transport -eq 'SSHClient' -and $Source -eq 'CIM' -and $ComputerName)
             {
                 $message = "SSHClient transport does not support CIM source."
                 $exception = [System.Exception]::new($message)
@@ -101,7 +101,7 @@ function Get-DiskSmartInfo
 
             # Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
             # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
-            if ($Transport -eq 'SSHClient' -and $ComputerName -and -not $Source)
+            if ($Transport -eq 'SSHClient' -and -not $Source -and $ComputerName)
             {
                 $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
                 $exception = [System.Exception]::new($message)
@@ -448,21 +448,15 @@ function Get-DiskSmartInfo
                 foreach ($cn in $ComputerName)
                 {
                     # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient
+                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM
                     # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
 
                     # Need this check, because for local queries the -Transport parameter is not used and do not throws an error.
-                    # e.g. `Get-DiskSmartInfo -Transport SSHClient` or any other transport value.
+                    # e.g. `Get-DiskSmartInfo -Transport SSHClient` or `Get-DiskSmartInfo -Transport SSHClient -Source`
                     # This is for conveniency reasons.
                     if ($Source -eq 'CIM')
                     {
-                        if (-not $IsLinux)
-                        {
-                            $message = "ComputerName: ""$cn"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                        }
-                        elseif ($IsLinux)
-                        {
-                            $message = "ComputerName: ""$cn"": SSHClient transport does not support CIM source."
-                        }
+                        $message = "ComputerName: ""$cn"": SSHClient transport does not support CIM source."
                         $exception = [System.Exception]::new($message)
                         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                         $PSCmdlet.WriteError($errorRecord)

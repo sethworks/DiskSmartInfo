@@ -88,19 +88,19 @@ Describe "Errors" {
             }
         }
 
-        Context "SSHClient with CIM on Windows" -Skip:$IsLinux {
+        Context "SSHClient with CIM and ComputerName on Windows" -Skip:$IsLinux {
 
-            Context "-Transport SSHClient -Source CIM" {
+            Context "-Transport SSHClient -Source CIM -ComputerName" {
 
                 It "Should throw an error" {
-                    { Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                    { Get-DiskSmartInfo -Transport SSHClient -Source CIM -ComputerName $computerNames[0]} | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
                 }
             }
 
-            Context "ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -Source CIM" {
+            Context "Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | -Transport SSHClient -Source CIM -ComputerName" {
 
                 It "Should throw an error" {
-                    { $computerNames[0], $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -Source CIM } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
+                    { $diskDriveHDD1, $diskHDD2, $physicalDiskSSD1 | Get-DiskSmartInfo -Transport SSHClient -Source CIM -ComputerName $computerNames[0] } | Should -Throw 'SSHClient transport does not support CIM source.' -ErrorId 'SSHClient transport does not support CIM source.,Get-DiskSmartInfo'
                 }
             }
         }
@@ -288,20 +288,20 @@ Describe "Errors" {
                 $diskSmartInfo | Should -BeNullOrEmpty
                 $ev | Should -HaveCount 5
 
-                $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                $ev[0].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source."
+                $ev[0].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
 
-                $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                $ev[1].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[1])"": SSHClient transport does not support CIM source."
+                $ev[1].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[1])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
 
-                $ev[2].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                $ev[2].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                $ev[2].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source."
+                $ev[2].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
 
-                $ev[3].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                $ev[3].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                $ev[3].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source."
+                $ev[3].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
 
-                $ev[4].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
-                $ev[4].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
+                $ev[4].Exception.Message | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source."
+                $ev[4].FullyQualifiedErrorId | Should -BeExactly "ComputerName: ""$($computerNames[0])"": SSHClient transport does not support CIM source.,Get-DiskSmartInfo"
             }
         }
     }
