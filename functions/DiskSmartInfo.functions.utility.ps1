@@ -105,7 +105,7 @@ function inGetSmartCtlCommand
 
     if ($SSHHostName)
     {
-        $command += 'ssh '
+        $command += 'plink -batch '
 
         if ($SSHClientOptions)
         {

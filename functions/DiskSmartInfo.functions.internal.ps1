@@ -293,7 +293,7 @@ function inGetSourceSmartDataSSHClientCtl
 
         $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions -SSHClientOptions $SSHClientOptions
 
-        $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
+        $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("plink -batch $cn smartctl --scan"))
 
         foreach ($device in $devices)
         {
