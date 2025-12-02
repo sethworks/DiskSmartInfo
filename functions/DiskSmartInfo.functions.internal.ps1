@@ -199,13 +199,20 @@ function inGetSourceSmartDataCtl
     {
         $disksSmartData = @()
 
-        if (Invoke-Command -ScriptBlock { Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue } -Session $ps)
+        if (Invoke-Command -ScriptBlock { Get-Command -Name 'nvme' -ErrorAction SilentlyContinue } -Session $ps)
         {
             $IsLinux_ = Invoke-Command -ScriptBlock { $IsLinux } -Session $ps
 
             $sbs = inGetSmartCtlCommand -Sudo $IsLinux_ -SmartCtlOptions $SmartCtlOptions
 
-            $devices = Invoke-Command -ScriptBlock { smartctl --scan } -Session $ps
+            $devices = Invoke-Command -ScriptBlock { sudo nvme list } -Session $ps
+
+            if ($dheader = $devices -match 'Node\s+Generic\s+SN\s+Model\s+Namespace\s+Usage\s+Format\s+FW Rev')
+            {
+                $nvmecli = $true
+                $modelStart = $dheader[0].IndexOf("Model")
+                $modelEnd = $dheader[0].IndexOf("Namespace")
+            }
 
             foreach ($device in $devices)
             {
@@ -213,10 +220,15 @@ function inGetSourceSmartDataCtl
                 {
                     $sb = [scriptblock]::Create("$sbs $($Matches.device)")
 
-                    $disksSmartData += @{
+                    $diskSmartData += @{
                         device = $Matches.device
                         diskSmartData = Invoke-Command -ScriptBlock $sb -Session $ps
                     }
+                    if ($nvmecli)
+                    {
+                        $diskSmartData.Add('deviceModel', $device.Substring($ModelStart, $modelEnd - $modelStart).Trim())
+                    }
+                    $disksSmartData += $diskSmartData
                 }
             }
 
@@ -239,12 +251,19 @@ function inGetSourceSmartDataCtl
     {
         $disksSmartData = @()
 
-        if (Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue)
+        if (Get-Command -Name 'nvme' -ErrorAction SilentlyContinue)
         {
 
             $sbs = inGetSmartCtlCommand -Sudo $IsLinux -SmartCtlOptions $SmartCtlOptions
 
-            $devices = Invoke-Command -ScriptBlock { smartctl --scan }
+            $devices = Invoke-Command -ScriptBlock { sudo nvme list }
+
+            if ($dheader = $devices -match 'Node\s+Generic\s+SN\s+Model\s+Namespace\s+Usage\s+Format\s+FW Rev')
+            {
+                $nvmecli = $true
+                $modelStart = $dheader[0].IndexOf("Model")
+                $modelEnd = $dheader[0].IndexOf("Namespace")
+            }
 
             foreach ($device in $devices)
             {
@@ -252,10 +271,15 @@ function inGetSourceSmartDataCtl
                 {
                     $sb = [scriptblock]::Create("$sbs $($Matches.device)")
 
-                    $disksSmartData += @{
+                    $diskSmartData += @{
                         device = $Matches.device
                         diskSmartData = Invoke-Command -ScriptBlock $sb
                     }
+                    if ($nvmecli)
+                    {
+                        $diskSmartData.Add('deviceModel', $device.Substring($ModelStart, $modelEnd - $modelStart).Trim())
+                    }
+                    $disksSmartData += $diskSmartData
                 }
             }
 
@@ -293,7 +317,14 @@ function inGetSourceSmartDataSSHClientCtl
 
         $sbs = inGetSmartCtlCommand -SSHHostName $cn -Sudo $Sudo -SmartCtlOptions $SmartCtlOptions -SSHClientOptions $SSHClientOptions
 
-        $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn smartctl --scan"))
+        $devices = Invoke-Command -ScriptBlock ([scriptblock]::Create("ssh $cn sudo nvme list"))
+
+        if ($dheader = $devices -match 'Node\s+Generic\s+SN\s+Model\s+Namespace\s+Usage\s+Format\s+FW Rev')
+        {
+            $nvmecli = $true
+            $modelStart = $dheader[0].IndexOf("Model")
+            $modelEnd = $dheader[0].IndexOf("Namespace")
+        }
 
         foreach ($device in $devices)
         {
@@ -301,10 +332,15 @@ function inGetSourceSmartDataSSHClientCtl
             {
                 $sb = [scriptblock]::Create("$sbs $($Matches.device)")
 
-                $disksSmartData += @{
+                $diskSmartData = @{
                     device = $Matches.device
                     diskSmartData = Invoke-Command -ScriptBlock $sb
                 }
+                if ($nvmecli)
+                {
+                    $diskSmartData.Add('deviceModel', $device.Substring($ModelStart, $modelEnd - $modelStart).Trim())
+                }
+                $disksSmartData += $diskSmartData
             }
         }
 
@@ -342,7 +378,11 @@ function inGetSmartDataStructureCtl
 
         foreach ($diskSmartData in $sourceSmartData.disksSmartData)
         {
-            if ($diskSmartData.device[-1] -match '\d')
+            if ($diskSmartData.device -match '(?<deviceNumber>\d)n\d+')
+            {
+                $diskNumber = [uint32]::Parse($Matches.deviceNumber)
+            }
+            elseif ($diskSmartData.device[-1] -match '\d')
             {
                 $diskNumber = [uint32]::Parse($diskSmartData.device[-1])
             }
@@ -351,7 +391,11 @@ function inGetSmartDataStructureCtl
                 $diskNumber = [uint32]$diskSmartData.device[-1] - [uint32][char]'a'
             }
 
-            if ($diskSmartData.diskSmartData -match '^(?:Device Model:|Model Number:)' | ForEach-Object { $PSItem -match '^(?:Device Model:|Model Number:)\s+(?<model>.+)$' })
+            if ($diskSmartData.deviceModel)
+            {
+                $model = $diskSmartData.deviceModel
+            }
+            elseif ($diskSmartData.diskSmartData -match '^(?:Device Model:|Model Number:)' | ForEach-Object { $PSItem -match '^(?:Device Model:|Model Number:)\s+(?<model>.+)$' })
             {
                 $model = $Matches.model
             }
@@ -365,7 +409,7 @@ function inGetSmartDataStructureCtl
             {
                 $diskType = 'ATA'
             }
-            elseif ($diskSmartData.diskSmartData -match '^NVMe Version')
+            elseif ($diskSmartData.diskSmartData -match 'NVME')
             {
                 $diskType = 'NVMe'
             }
@@ -465,7 +509,7 @@ function inGetSmartDataStructureCtl
 
             elseif ($hash.DiskType -eq 'NVMe')
             {
-                $header = $diskSmartData.diskSmartData -like "SMART/Health Information (NVMe Log*"
+                $header = $diskSmartData.diskSmartData -like "Smart Log for NVME device:*"
                 # Because result of the -like operator is an array
                 $headerIndex = $diskSmartData.diskSmartData.IndexOf($header[0])
 
@@ -477,7 +521,7 @@ function inGetSmartDataStructureCtl
                     {
                         $attribute = [ordered]@{}
 
-                        if ($entry -match '^\s*(?<name>.+):\s+(?<data>\S+.*)$')
+                        if ($entry -match '^\s*(?<name>.+\S)\s+:\s(?<data>\S+.*)$')
                         {
                             $attribute.Add("Name", [string]$Matches.name)
                             $attribute.Add("Data", [string]$Matches.data)

@@ -12,7 +12,7 @@ function Get-DiskSmartInfo
         [CimSession[]]$CimSession,
         [Parameter(ValueFromPipeline,ParameterSetName='Session')]
         [System.Management.Automation.Runspaces.PSSession[]]$PSSession,
-        [ValidateSet('CIM','SmartCtl')]
+        [ValidateSet('CIM','NVMe')]
         [string]$Source,
         [switch]$Convert,
         [Alias('CriticalAttributesOnly')]
@@ -38,7 +38,7 @@ function Get-DiskSmartInfo
         [switch]$Archive,
         [Parameter(Position=1,ParameterSetName='ComputerName')]
         [pscredential]$Credential,
-        [string]$SmartCtlOption,
+        [string]$NVMeOption,
         [Parameter(ParameterSetName='ComputerName')]
         [switch]$SSHClientSudo,
         [Parameter(ParameterSetName='ComputerName')]
@@ -47,6 +47,8 @@ function Get-DiskSmartInfo
 
     begin
     {
+        [string]$SmartCtlOption = $NVMeOption
+
         # Restrictions
         if ($IsMacOS)
         {
@@ -66,12 +68,12 @@ function Get-DiskSmartInfo
 
         if (-not $IsLinux)
         {
-            # Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
-            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -CimSession $cs
+            # Get-DiskSmartInfo -Source NVMe -CimSession $cs
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source NVMe -CimSession $cs
 
-            # Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
-            # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
-            if ($Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
+            # Get-DiskSmartInfo -Source NVMe -Transport CIMSession
+            # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source NVMe -Transport CIMSession
+            if ($Source -eq 'NVMe' -and ($CimSession -or $Transport -eq 'CIMSession'))
             {
                 $message = "CIMSession transport only supports CIM source."
                 $exception = [System.Exception]::new($message)
@@ -79,9 +81,9 @@ function Get-DiskSmartInfo
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
             }
 
-            # Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
-            if ($Source -eq 'SmartCtl' -and -not $Transport -and $ComputerName)
+            # Get-DiskSmartInfo -Source NVMe -ComputerName $cn
+            # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source NVMe -ComputerName $cn
+            if ($Source -eq 'NVMe' -and -not $Transport -and $ComputerName)
             {
                 $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                 $exception = [System.Exception]::new($message)
@@ -153,9 +155,9 @@ function Get-DiskSmartInfo
             Write-Warning -Message "The -SSHClientOption parameter is only used with SSHClient transport."
         }
 
-        if ($SmartCtlOption -and ((-not $IsLinux -and $Source -ne 'SmartCtl') -or ($IsLinux -and $Source -eq 'CIM')))
+        if ($SmartCtlOption -and ((-not $IsLinux -and $Source -ne 'NVMe') -or ($IsLinux -and $Source -eq 'CIM')))
         {
-            Write-Warning -Message "The -SmartCtlOption parameter is only used with SmartCtl source."
+            Write-Warning -Message "The -NVMeOption parameter is only used with NVMe source."
         }
 
         # Defaults
@@ -179,7 +181,7 @@ function Get-DiskSmartInfo
             }
             elseif ($IsLinux)
             {
-                $Source = 'SmartCtl'
+                $Source = 'NVMe'
             }
         }
 
@@ -234,8 +236,8 @@ function Get-DiskSmartInfo
                             -Archive:$Archive
                     }
 
-                    # CIMSession | Get-DiskSmartInfo -Source SmartCtl
-                    elseif ($Source -eq 'SmartCtl')
+                    # CIMSession | Get-DiskSmartInfo -Source NVMe
+                    elseif ($Source -eq 'NVMe')
                     {
                         $message = "ComputerName: ""$($cs.ComputerName)"": CIMSession only supports CIM source."
                         $exception = [System.Exception]::new($message)
@@ -261,7 +263,7 @@ function Get-DiskSmartInfo
                         $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
                         $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
                     }
-                    elseif ($Source -eq 'SmartCtl')
+                    elseif ($Source -eq 'NVMe')
                     {
                         $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                         $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
@@ -329,9 +331,9 @@ function Get-DiskSmartInfo
                             Remove-CimSession -CimSession $cs
                         }
                     }
-                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl
+                    # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source NVMe
                     # (Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk are all from remote computers)
-                    elseif ($Source -eq 'SmartCtl')
+                    elseif ($Source -eq 'NVMe')
                     {
                         $message = "ComputerName: ""$cn"": Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
                         $exception = [System.Exception]::new($message)
@@ -373,7 +375,7 @@ function Get-DiskSmartInfo
                             $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
                             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
                         }
-                        elseif ($Source -eq 'SmartCtl')
+                        elseif ($Source -eq 'NVMe')
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
@@ -416,7 +418,7 @@ function Get-DiskSmartInfo
                             $SourceSmartDataCIM = inGetSourceSmartDataCIM -PSSession $ps
                             $HostsSmartData = inGetSmartDataStructureCIM -SourceSmartDataCIM $SourceSmartDataCIM
                         }
-                        elseif ($Source -eq 'SmartCtl')
+                        elseif ($Source -eq 'NVMe')
                         {
                             $SourceSmartDataCtl = inGetSourceSmartDataCtl -PSSession $ps -SmartCtlOptions $SmartCtlOption
                             $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
@@ -460,7 +462,7 @@ function Get-DiskSmartInfo
                         $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                         $PSCmdlet.WriteError($errorRecord)
                     }
-                    elseif ($Source -eq 'SmartCtl')
+                    elseif ($Source -eq 'NVMe')
                     {
                         $SourceSmartDataCtl = inGetSourceSmartDataSSHClientCtl -ComputerName $cn -SmartCtlOptions $SmartCtlOption -Sudo $SSHClientSudo -SSHClientOptions $SSHClientOption
                         $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl
@@ -500,7 +502,7 @@ function Get-DiskSmartInfo
                     $PSCmdlet.WriteError($errorRecord)
                 }
             }
-            elseif ($Source -eq 'SmartCtl')
+            elseif ($Source -eq 'NVMe')
             {
                 $SourceSmartDataCtl = inGetSourceSmartDataCtl -SmartCtlOptions $SmartCtlOption
                 $HostsSmartData = inGetSmartDataStructureCtl -SourceSmartDataCtl $SourceSmartDataCtl

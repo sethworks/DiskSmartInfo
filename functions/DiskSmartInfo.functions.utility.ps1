@@ -120,14 +120,14 @@ function inGetSmartCtlCommand
         $command += 'sudo '
     }
 
-    $command += 'smartctl '
+    $command += 'nvme '
+
+    $command += 'smart-log'
 
     if ($SmartCtlOptions)
     {
-        $command += "$SmartCtlOptions "
+        $command += " $SmartCtlOptions"
     }
-
-    $command += '--info --health --attributes'
 
     return $command
 }
