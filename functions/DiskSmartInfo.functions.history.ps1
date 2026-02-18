@@ -69,11 +69,11 @@ function inGetHistoricalData
     {
         $sourceHostHistoricalData = ConvertFrom-Json -InputObject $historicalDataFileContent
 
-        if ($IsCoreCLR)
+        if ($IsCoreCLR -and (($PSVersionTable.PSVersion.Major -eq 7 -and $PSVersionTable.PSVersion.Minor -ge 2) -or $PSVersionTable.PSVersion.Major -gt 7))
         {
             $timestamp = $sourceHostHistoricalData.TimeStamp
         }
-        # Windows PowerShell 5.1 ConvertTo-Json converts DateTime objects differently
+        # Windows PowerShell 5.1 and PowerShell < 7.2 ConvertTo-Json converts DateTime objects differently
         else
         {
             $timestamp = $sourceHostHistoricalData.TimeStamp.DateTime
@@ -172,7 +172,7 @@ function inGetHistoricalDataFileName
         $filename = 'localhost.json'
     }
 
-    if ($IsCoreCLR)
+    if ($IsCoreCLR -and ($PSVersionTable.PSVersion.Major -ge 7 -or $PSVersionTable.PSVersion.Minor -ge 1))
     {
         if ([System.IO.Path]::IsPathFullyQualified($Config.DataHistoryPath))
         {
@@ -183,7 +183,7 @@ function inGetHistoricalDataFileName
             $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.DataHistoryPath
         }
     }
-    # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
+    # .NET Framework 4 (Windows PowerShell 5.1) and .NET Core 2.0 (PowerShell 6.0) and lower do not have [System.IO.Path]::IsPathFullyQualified method
     else
     {
         $pathroot = [System.IO.Path]::GetPathRoot($Config.DataHistoryPath)
