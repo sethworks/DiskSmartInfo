@@ -100,6 +100,188 @@
             }
         },
         {
+            "label": "InvokePester: PowerShell 7.3",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/7.3/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 7.2",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/7.2/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 7.1",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/7.1/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 7.0",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/7.0/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 6.2",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/6.2/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 6.1",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/6.1/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
+            "label": "InvokePester: PowerShell 6.0",
+            "type": "shell",
+            "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": [
+                "$pester"
+            ],
+            "presentation": {
+                "echo": false,
+                "reveal": "always",
+                "focus": true,
+                "panel": "dedicated",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "options": {
+                "shell": {
+                    "executable": "C:/Program Files/PowerShell/6.0/pwsh.exe",
+                    "args": ["-Command"]
+                }
+            }
+        },
+        {
             "label": "InvokePester: Windows PowerShell 5.1",
             "type": "shell",
             "command": "Set-Location ${workspaceFolder}; . ./tests/PesterConfiguration.ps1; Invoke-Pester -Configuration $PesterConfiguration",
@@ -127,6 +309,16 @@
         {
             "label": "InvokePester: Full Test",
             "dependsOn":["InvokePester: PowerShell 7.6", "InvokePester: PowerShell 7.5", "InvokePester: PowerShell 7.4", "InvokePester: Windows PowerShell 5.1"],
+            "dependsOrder": "parallel",
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            },
+            "problemMatcher": "$pester"
+        },
+        {
+            "label": "InvokePester: Overall Test",
+            "dependsOn":["InvokePester: PowerShell 7.6", "InvokePester: PowerShell 7.5", "InvokePester: PowerShell 7.4", "InvokePester: PowerShell 7.3", "InvokePester: PowerShell 7.2", "InvokePester: PowerShell 7.1", "InvokePester: PowerShell 7.0", "InvokePester: PowerShell 6.2", "InvokePester: PowerShell 6.1", "InvokePester: PowerShell 6.0", "InvokePester: Windows PowerShell 5.1"],
             "dependsOrder": "parallel",
             "group": {
                 "kind": "test",
