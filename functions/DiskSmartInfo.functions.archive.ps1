@@ -48,7 +48,7 @@ function inUpdateArchive
 
         if ($attributes)
         {
-            $hash.Add("SmartData", $attributes)
+            $hash.Add('SmartData', $attributes)
             $archiveData.Add([PSCustomObject]$hash)
         }
     }

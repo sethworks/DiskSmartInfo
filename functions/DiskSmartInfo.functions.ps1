@@ -27,7 +27,7 @@ function Get-DiskSmartInfo
         [string[]]$Device,
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
-        [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
+        [ValidatePattern('^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$')]
         [string[]]$AttributeIDHex,
         [ArgumentCompleter([AttributeNameCompleter])]
         [string[]]$AttributeName,
@@ -50,7 +50,7 @@ function Get-DiskSmartInfo
         # Restrictions
         if ($IsMacOS)
         {
-            $message = "Platform is not supported."
+            $message = 'Platform is not supported.'
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -58,7 +58,7 @@ function Get-DiskSmartInfo
 
         if (-not $IsCoreCLR -and $Transport -eq 'SSHSession')
         {
-            $message = "PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier."
+            $message = 'PSSession with SSH transport is not supported in Windows PowerShell 5.1 and earlier.'
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotImplemented, $null)
             $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -73,7 +73,7 @@ function Get-DiskSmartInfo
             # ComputerName, Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -Transport CIMSession
             if ($Source -eq 'SmartCtl' -and ($CimSession -or $Transport -eq 'CIMSession'))
             {
-                $message = "CIMSession transport only supports CIM source."
+                $message = 'CIMSession transport only supports CIM source.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -83,7 +83,7 @@ function Get-DiskSmartInfo
             # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Source SmartCtl -ComputerName $cn
             if ($Source -eq 'SmartCtl' -and -not $Transport -and $ComputerName)
             {
-                $message = "Transport parameter is not specified and its default value is ""CIMSession"". CIMSession transport only supports CIM source."
+                $message = 'Transport parameter is not specified and its default value is "CIMSession". CIMSession transport only supports CIM source.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -93,7 +93,7 @@ function Get-DiskSmartInfo
             # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -Source CIM -ComputerName $cn
             if ($Transport -eq 'SSHClient' -and $Source -eq 'CIM' -and $ComputerName)
             {
-                $message = "SSHClient transport does not support CIM source."
+                $message = 'SSHClient transport does not support CIM source.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -103,7 +103,7 @@ function Get-DiskSmartInfo
             # Win32_DiskDrive, MSFT_Disk, MSFT_PhysicalDisk | Get-DiskSmartInfo -Transport SSHClient -ComputerName $cn
             if ($Transport -eq 'SSHClient' -and -not $Source -and $ComputerName)
             {
-                $message = "Source parameter is not specified and its default value is ""CIM"". SSHClient transport does not support CIM source."
+                $message = 'Source parameter is not specified and its default value is "CIM". SSHClient transport does not support CIM source.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -114,14 +114,14 @@ function Get-DiskSmartInfo
         {
             if ($Transport -eq 'CIMSession')
             {
-                $message = "CIMSession transport is not supported on this platform."
+                $message = 'CIMSession transport is not supported on this platform.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
             }
             elseif ($Transport -eq 'PSSession')
             {
-                $message = "PSSession transport is not supported on this platform."
+                $message = 'PSSession transport is not supported on this platform.'
                 $exception = [System.Exception]::new($message)
                 $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                 $PSCmdlet.ThrowTerminatingError($errorRecord)
@@ -131,31 +131,31 @@ function Get-DiskSmartInfo
         # Notifications
         if ($Credential -and -not $ComputerName -and -not $PSCmdlet.MyInvocation.ExpectingInput)
         {
-            Write-Warning -Message "The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter."
+            Write-Warning -Message 'The -Credential parameter is used only for connecting to computers, listed or bound to the -ComputerName parameter.'
         }
         elseif ($Credential -and (($Transport -eq 'SSHSession') -or ($IsLinux -and -not $Transport)))
         {
-            Write-Warning -Message "The -Credential parameter is not used with SSHSession transport."
+            Write-Warning -Message 'The -Credential parameter is not used with SSHSession transport.'
         }
 
         if ($Credential -and $Transport -eq 'SSHClient')
         {
-            Write-Warning -Message "The -Credential parameter is not used with SSHClient transport."
+            Write-Warning -Message 'The -Credential parameter is not used with SSHClient transport.'
         }
 
         if ($SSHClientSudo -and $Transport -ne 'SSHClient')
         {
-            Write-Warning -Message "The -SSHClientSudo parameter is only used with SSHClient transport."
+            Write-Warning -Message 'The -SSHClientSudo parameter is only used with SSHClient transport.'
         }
 
         if ($SSHClientOption -and $Transport -ne 'SSHClient')
         {
-            Write-Warning -Message "The -SSHClientOption parameter is only used with SSHClient transport."
+            Write-Warning -Message 'The -SSHClientOption parameter is only used with SSHClient transport.'
         }
 
         if ($SmartCtlOption -and ((-not $IsLinux -and $Source -ne 'SmartCtl') -or ($IsLinux -and $Source -eq 'CIM')))
         {
-            Write-Warning -Message "The -SmartCtlOption parameter is only used with SmartCtl source."
+            Write-Warning -Message 'The -SmartCtlOption parameter is only used with SmartCtl source.'
         }
 
         # Defaults
@@ -494,7 +494,7 @@ function Get-DiskSmartInfo
                 }
                 elseif ($IsLinux)
                 {
-                    $message = "CIM source is not supported on this platform."
+                    $message = 'CIM source is not supported on this platform.'
                     $exception = [System.Exception]::new($message)
                     $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::InvalidArgument, $null)
                     $PSCmdlet.WriteError($errorRecord)

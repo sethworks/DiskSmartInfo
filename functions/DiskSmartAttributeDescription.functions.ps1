@@ -5,7 +5,7 @@ function Get-DiskSmartAttributeDescription
         [ValidateRange(1, 255)]
         [int[]]$AttributeID,
         [Parameter(Position=1)]
-        [ValidatePattern("^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$")]
+        [ValidatePattern('^(0?[1-9A-F])|([1-9A-F])([0-9A-F])$')]
         [string[]]$AttributeIDHex,
         [Parameter(Position=2)]
         [ArgumentCompleter([AttributeNameCompleter])]

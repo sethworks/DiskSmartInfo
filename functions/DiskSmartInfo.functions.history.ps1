@@ -37,7 +37,7 @@ function inUpdateHistoricalData
 
         if ($attributes)
         {
-            $hash.Add("SmartData", $attributes)
+            $hash.Add('SmartData', $attributes)
             $historicalData.Add([PSCustomObject]$hash)
         }
     }
