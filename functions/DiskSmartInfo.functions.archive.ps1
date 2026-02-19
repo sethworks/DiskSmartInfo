@@ -48,7 +48,7 @@ function inUpdateArchive
 
         if ($attributes)
         {
-            $hash.Add("SmartData", $attributes)
+            $hash.Add('SmartData', $attributes)
             $archiveData.Add([PSCustomObject]$hash)
         }
     }
@@ -81,7 +81,7 @@ function inGetArchiveDataFileName
         $filename = "localhost$($dateTime.ToString('_yyyy-MM-dd_HH-mm-ss')).json"
     }
 
-    if ($IsCoreCLR)
+    if ($IsCoreCLR -and ($PSVersionTable.PSVersion.Major -ge 7 -or $PSVersionTable.PSVersion.Minor -ge 1))
     {
         if ([System.IO.Path]::IsPathFullyQualified($Config.ArchivePath))
         {
@@ -92,7 +92,7 @@ function inGetArchiveDataFileName
             $folder = Join-Path -Path (Split-Path -Path $PSScriptRoot) -ChildPath $Config.ArchivePath
         }
     }
-    # .NET Framework version 4 and lower does not have [System.IO.Path]::IsPathFullyQualified method
+    # .NET Framework 4 (Windows PowerShell 5.1) and .NET Core 2.0 (PowerShell 6.0) and lower do not have [System.IO.Path]::IsPathFullyQualified method
     else
     {
         $pathroot = [System.IO.Path]::GetPathRoot($Config.ArchivePath)

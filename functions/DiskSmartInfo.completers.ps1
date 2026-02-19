@@ -19,7 +19,7 @@ class AttributeNameCompleter : IArgumentCompleter
             $attributeNames = $Script:descriptions.AttributeName
         }
 
-        $result = New-Object -TypeName "System.Collections.Generic.List[CompletionResult]"
+        $result = New-Object -TypeName 'System.Collections.Generic.List[CompletionResult]'
 
         [System.Collections.Generic.List[String]]$valuesToExclude = $null
 
@@ -66,7 +66,7 @@ class AttributeNameCompleter : IArgumentCompleter
                     $id = ($Script:descriptions.Find([Predicate[PSCustomObject]]{$args[0].AttributeName -eq $completionResult})).AttributeID
                 }
 
-                if ($completionResult.Contains(" "))
+                if ($completionResult.Contains(' '))
                 {
                     $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${id}: $completionResult"))
                 }
@@ -90,7 +90,7 @@ class DiskCompleter : IArgumentCompleter
         [System.Collections.IDictionary] $fakeBoundParameters
     )
     {
-        $result = New-Object -TypeName "System.Collections.Generic.List[CompletionResult]"
+        $result = New-Object -TypeName 'System.Collections.Generic.List[CompletionResult]'
         [System.Collections.Generic.List[String]]$valuesToExclude = $null
 
         $instanceParameters = @{
@@ -201,7 +201,7 @@ class DiskCompleter : IArgumentCompleter
                 if ($completionResult -like "$wordToComplete*" -and $completionResult -notin $valuesToExclude)
                 {
                     $index = ($diskDrives.Where{$_.Model -eq $completionResult}).Index
-                    if ($completionResult.Contains(" "))
+                    if ($completionResult.Contains(' '))
                     {
                         $result.Add([CompletionResult]::new("'$completionResult'", $completionResult, [CompletionResultType]::ParameterValue, "${index}: $completionResult"))
                     }

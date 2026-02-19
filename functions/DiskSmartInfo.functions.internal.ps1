@@ -162,20 +162,20 @@ function inGetSmartDataStructureCIM
 
                 if ($attributeID)
                 {
-                    $attribute.Add("ID", [byte]$attributeID)
-                    $attribute.Add("IDHex", [string]$attributeID.ToString("X"))
-                    $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
-                    $attribute.Add("Threshold", [byte]$thresholdsData[$attributeStart + 1])
-                    $attribute.Add("Value", [byte]$smartData[$attributeStart + 3])
-                    $attribute.Add("Worst", [byte]$smartData[$attributeStart + 4])
-                    $attribute.Add("Data", $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
+                    $attribute.Add('ID', [byte]$attributeID)
+                    $attribute.Add('IDHex', [string]$attributeID.ToString('X'))
+                    $attribute.Add('Name', [string]$actualAttributesList.Where{$_.AttributeID -eq $attributeID}.AttributeName)
+                    $attribute.Add('Threshold', [byte]$thresholdsData[$attributeStart + 1])
+                    $attribute.Add('Value', [byte]$smartData[$attributeStart + 3])
+                    $attribute.Add('Worst', [byte]$smartData[$attributeStart + 4])
+                    $attribute.Add('Data', $(inGetAttributeData -actualAttributesList $actualAttributesList -smartData $smartData -attributeStart $attributeStart))
 
                     $attributes += $attribute
                 }
             }
 
-            $hash.Add("SmartData", $attributes)
-            $hash.Add("AuxiliaryData", @{BytesPerSector=$diskDrive.BytesPerSector})
+            $hash.Add('SmartData', $attributes)
+            $hash.Add('AuxiliaryData', @{BytesPerSector=$diskDrive.BytesPerSector})
 
             $hostSmartData.DisksSmartData += $hash
         }
@@ -241,7 +241,6 @@ function inGetSourceSmartDataCtl
 
         if (Get-Command -Name 'smartctl' -ErrorAction SilentlyContinue)
         {
-
             $sbs = inGetSmartCtlCommand -Sudo $IsLinux -SmartCtlOptions $SmartCtlOptions
 
             $devices = Invoke-Command -ScriptBlock { smartctl --scan }
@@ -266,7 +265,7 @@ function inGetSourceSmartDataCtl
         }
         else
         {
-            $message = "SmartCtl utility is not found."
+            $message = 'SmartCtl utility is not found.'
             $exception = [System.Exception]::new($message)
             $errorRecord = [System.Management.Automation.ErrorRecord]::new($exception, $message, [System.Management.Automation.ErrorCategory]::NotInstalled, $null)
             $PSCmdlet.WriteError($errorRecord)
@@ -411,38 +410,38 @@ function inGetSmartDataStructureCtl
 
                         if ($entry -match '^\s*(?<id>\S+)\s+(?<name>\S+)\s+\S+\s+(?<value>\S+)\s+(?<worst>\S+)\s+(?<threshold>\S+)\s+\S+\s+\S+\s+\S+\s+(?<data>\S+.*)$')
                         {
-                            $attribute.Add("ID", [byte]$Matches.id)
-                            $attribute.Add("IDHex", [string]($attribute.ID.ToString("X")))
+                            $attribute.Add('ID', [byte]$Matches.id)
+                            $attribute.Add('IDHex', [string]($attribute.ID.ToString('X')))
 
                             if ($Config.ReplaceSmartCtlAttributeNames)
                             {
-                                $attribute.Add("Name", [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
+                                $attribute.Add('Name', [string]$actualAttributesList.Where{$_.AttributeID -eq $attribute.ID}.AttributeName)
                             }
                             else
                             {
-                                $attribute.Add("Name", [string]$Matches.name)
+                                $attribute.Add('Name', [string]$Matches.name)
                             }
 
-                            $attribute.Add("Threshold", [byte]$Matches.threshold)
-                            $attribute.Add("Value", [byte]$Matches.value)
-                            $attribute.Add("Worst", [byte]$Matches.worst)
+                            $attribute.Add('Threshold', [byte]$Matches.threshold)
+                            $attribute.Add('Value', [byte]$Matches.value)
+                            $attribute.Add('Worst', [byte]$Matches.worst)
 
                             $sourcedata = $Matches.data
 
                             # 32 (Min/Max 18/40)
                             if ($sourcedata -match '^(?<data>\d+) \(Min/Max (?<min>\d+)/(?<max>\d+)\)$')
                             {
-                                $attribute.Add("Data", @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
+                                $attribute.Add('Data', @([long]$Matches.data, [long]$Matches.min, [long]$Matches.max))
                             }
                             # 10/11
                             elseif ($sourcedata -match '^(?<first>\d+)/(?<second>\d+)$')
                             {
-                                $attribute.Add("Data", @([long]$Matches.first, [long]$Matches.second))
+                                $attribute.Add('Data', @([long]$Matches.first, [long]$Matches.second))
                             }
                             # 1
                             else
                             {
-                                $attribute.Add("Data", [long]$Matches.data)
+                                $attribute.Add('Data', [long]$Matches.data)
                             }
 
                             $attributes += $attribute
@@ -450,7 +449,7 @@ function inGetSmartDataStructureCtl
                     }
                 }
 
-                $hash.Add("SmartData", $attributes)
+                $hash.Add('SmartData', $attributes)
 
                 if ($diskSmartData.diskSmartData -match '^Sector sizes?:' | ForEach-Object { $PSItem -match '^Sector sizes?:\s+(?<sectorsize>\d+).*$' })
                 {
@@ -460,7 +459,7 @@ function inGetSmartDataStructureCtl
                 {
                     $sectorSize = $null
                 }
-                $hash.Add("AuxiliaryData", @{BytesPerSector=$sectorSize})
+                $hash.Add('AuxiliaryData', @{BytesPerSector=$sectorSize})
             }
 
             elseif ($hash.DiskType -eq 'NVMe')
@@ -479,15 +478,15 @@ function inGetSmartDataStructureCtl
 
                         if ($entry -match '^\s*(?<name>.+):\s+(?<data>\S+.*)$')
                         {
-                            $attribute.Add("Name", [string]$Matches.name)
-                            $attribute.Add("Data", [string]$Matches.data)
+                            $attribute.Add('Name', [string]$Matches.name)
+                            $attribute.Add('Data', [string]$Matches.data)
 
                             $attributes += $attribute
                         }
                     }
                 }
 
-                $hash.Add("SmartData", $attributes)
+                $hash.Add('SmartData', $attributes)
             }
 
             $hostSmartData.DisksSmartData += $hash
@@ -586,16 +585,16 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
+                                        $attribute.Add('DataHistory', $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
                                     }
 
                                     if ($Convert)
                                     {
-                                        $attribute.Add("DataConverted", $(inConvertData -actualAttributesList $actualAttributesList -attribute $attribute))
+                                        $attribute.Add('DataConverted', $(inConvertData -actualAttributesList $actualAttributesList -attribute $attribute))
                                     }
 
                                     $attributeObject = [PSCustomObject]$attribute
-                                    $attributeObject | Add-Member -TypeName "DiskSmartAttribute"
+                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttribute'
 
                                     if ($ShowHistory -and $Convert)
                                     {
@@ -637,11 +636,11 @@ function inGetDiskSmartInfo
 
                                     if ($ShowHistory)
                                     {
-                                        $attribute.Add("DataHistory", $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
+                                        $attribute.Add('DataHistory', $(inGetAttributeHistoricalData -diskHistoricalData $diskHistoricalData -attribute $attribute -diskType $diskSmartData.DiskType))
                                     }
 
                                     $attributeObject = [PSCustomObject]$attribute
-                                    $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMe"
+                                    $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMe'
 
                                     if ($ShowHistory)
                                     {
@@ -660,7 +659,7 @@ function inGetDiskSmartInfo
                     {
                         if (-not $AttributeProperties)
                         {
-                            $hash.Add("SmartData", $attributes)
+                            $hash.Add('SmartData', $attributes)
                             Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttribute[]'
                         }
                         else
@@ -669,7 +668,7 @@ function inGetDiskSmartInfo
                             $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
                             $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
 
-                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
+                            $hash.Add('SmartData', (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
 
                             Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeCustom[]'
                             Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
@@ -679,7 +678,7 @@ function inGetDiskSmartInfo
                     {
                         if (-not $AttributeProperties)
                         {
-                            $hash.Add("SmartData", $attributes)
+                            $hash.Add('SmartData', $attributes)
                             Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMe[]'
                         }
                         else
@@ -688,7 +687,7 @@ function inGetDiskSmartInfo
                             $scriptBlockString = '$this | Format-Table -Property ' + $formatProperties
                             $formatScriptBlock = [scriptblock]::Create($scriptBlockString)
 
-                            $hash.Add("SmartData", (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties.Where{$PSItem.ToString() -in 'AttributeName', 'Data', 'History'} -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
+                            $hash.Add('SmartData', (inSelectAttributeProperties -attributes $attributes -properties $AttributeProperties.Where{$PSItem.ToString() -in 'AttributeName', 'Data', 'History'} -formatScriptBlock $formatScriptBlock -diskType $diskSmartData.DiskType))
 
                             Add-Member -InputObject $hash.SmartData -TypeName 'DiskSmartAttributeNVMeCustom[]'
                             Add-Member -InputObject $hash.SmartData -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
@@ -697,11 +696,11 @@ function inGetDiskSmartInfo
                     }
 
                     $diskSmartInfo = [PSCustomObject]$hash
-                    $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo"
+                    $diskSmartInfo | Add-Member -TypeName 'DiskSmartInfo'
 
                     if ($ShowHistory)
                     {
-                        $diskSmartInfo | Add-Member -TypeName "DiskSmartInfo#History"
+                        $diskSmartInfo | Add-Member -TypeName 'DiskSmartInfo#History'
                     }
 
                     $diskSmartInfo

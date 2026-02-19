@@ -42,11 +42,11 @@ function inSelectAttributeProperties
 
         if ($diskType -eq 'ATA')
         {
-            $attributeObject | Add-Member -TypeName "DiskSmartAttributeCustom"
+            $attributeObject | Add-Member -TypeName 'DiskSmartAttributeCustom'
         }
         elseif ($diskType -eq 'NVMe')
         {
-            $attributeObject | Add-Member -TypeName "DiskSmartAttributeNVMeCustom"
+            $attributeObject | Add-Member -TypeName 'DiskSmartAttributeNVMeCustom'
         }
 
         $attributeObject | Add-Member -MemberType ScriptMethod -Name FormatTable -Value $formatScriptBlock
